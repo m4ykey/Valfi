@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".feature_album.presentation.album.AlbumStatisticsFragment">
+    tools:context=".feature_album.presentation.ui.AlbumStatisticsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         app:layout_constraintTop_toTopOf="parent"

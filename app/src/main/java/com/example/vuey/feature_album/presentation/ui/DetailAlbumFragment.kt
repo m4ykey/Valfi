@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.presentation.album
+package com.example.vuey.feature_album.presentation.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -21,9 +21,9 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.ExternalUrls
-import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.Tracks
-import com.example.vuey.feature_album.data.remote.model.spotify.artist.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.NetworkStateMonitor
@@ -290,14 +290,7 @@ class DetailAlbumFragment : Fragment() {
                                                 val artistName =
                                                     albumDetail.artistList[0].artistName
                                                 val artistId = albumDetail.artistList[0].id
-                                                setOnClickListener {
-                                                    val action =
-                                                        DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
-                                                            artistId = artistId,
-                                                            artistName = artistName
-                                                        )
-                                                    findNavController().navigate(action)
-                                                }
+                                                setOnClickListener {}
                                             }
                                         } else {
                                             txtArtist.setOnClickListener {
@@ -343,6 +336,7 @@ class DetailAlbumFragment : Fragment() {
                                     trackListAdapter.submitTrack(
                                         trackList.tracks.items
                                     )
+                                    Log.i("TrackSize", "${trackList.tracks.items.size}")
                                 }
 
                                 val artistEntity = albumDetail.artistList.map { artist ->

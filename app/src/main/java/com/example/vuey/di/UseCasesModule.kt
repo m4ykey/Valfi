@@ -1,10 +1,8 @@
 package com.example.vuey.di
 
-import com.example.vuey.feature_album.data.repository.ArtistRepository
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumDetailUseCase
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumSearchUseCase
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.ArtistUseCase
+import com.example.vuey.feature_album.domain.use_cases.AlbumDetailUseCase
+import com.example.vuey.feature_album.domain.use_cases.AlbumSearchUseCase
+import com.example.vuey.feature_album.domain.use_cases.AlbumUseCases
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieCastUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieSearchUseCase
@@ -26,15 +24,6 @@ object UseCasesModule {
         return AlbumUseCases(
             getAlbumSearchUseCase,
             getAlbumDetailUseCase,
-        )
-    }
-
-    @Provides
-    fun provideArtistUseCase(
-        repository: ArtistRepository
-    ) : ArtistUseCase {
-        return ArtistUseCase(
-            repository
         )
     }
 

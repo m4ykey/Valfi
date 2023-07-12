@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.example.vuey.feature_album.presentation.album.AlbumFragment"
+        android:name="com.example.vuey.feature_album.presentation.ui.AlbumFragment"
         android:label="fragment_album"
         tools:layout="@layout/fragment_album" >
         <action
@@ -22,22 +22,19 @@
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
-        android:name="com.example.vuey.feature_album.presentation.album.DetailAlbumFragment"
+        android:name="com.example.vuey.feature_album.presentation.ui.DetailAlbumFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_album_detail">
         <argument
             android:name="albumEntity"
             app:argType="com.example.vuey.feature_album.data.local.entity.AlbumEntity" />
-        <action
-            android:id="@+id/action_albumDetailFragment_to_artistAlbumFragment"
-            app:destination="@id/artistAlbumFragment" />
         <argument
             android:name="album"
-            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album" />
+            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album.Album" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
-        android:name="com.example.vuey.feature_album.presentation.album.SearchAlbumFragment"
+        android:name="com.example.vuey.feature_album.presentation.ui.SearchAlbumFragment"
         android:label="fragment_search_album"
         tools:layout="@layout/fragment_search_album" >
         <argument
@@ -85,33 +82,9 @@
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"
-        android:name="com.example.vuey.feature_album.presentation.album.AlbumStatisticsFragment"
+        android:name="com.example.vuey.feature_album.presentation.ui.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics" />
-    <fragment
-        android:id="@+id/artistAlbumFragment"
-        android:name="com.example.vuey.feature_album.presentation.artist.ArtistAlbumFragment"
-        android:label="fragment_artist_album"
-        tools:layout="@layout/fragment_artist_album" >
-        <argument
-            android:name="artistId"
-            app:argType="string" />
-        <argument
-            android:name="artistName"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_artistAlbumFragment_to_artistBioFragment"
-            app:destination="@id/artistBioFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/artistBioFragment"
-        android:name="com.example.vuey.feature_album.presentation.artist.ArtistBioFragment"
-        android:label="fragment_artist_bio"
-        tools:layout="@layout/fragment_artist_bio" >
-        <argument
-            android:name="artistData"
-            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.artist.ArtistData" />
-    </fragment>
     <fragment
         android:id="@+id/movieStatisticsFragment"
         android:name="com.example.vuey.feature_movie.presentation.MovieStatisticsFragment"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".feature_album.presentation.album.SearchAlbumFragment">
+    tools:context=".feature_album.presentation.ui.SearchAlbumFragment">
 
     <LinearLayout
         app:layout_constraintStart_toStartOf="parent"

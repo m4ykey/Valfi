@@ -3,10 +3,10 @@ package com.example.vuey.feature_album.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.repository.AlbumRepository
+import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
+import com.example.vuey.feature_album.domain.use_cases.AlbumUseCases
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

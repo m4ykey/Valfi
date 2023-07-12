@@ -3,9 +3,10 @@ package com.example.vuey.feature_album.data.repository
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
-import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.AlbumDetail
-import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
+import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

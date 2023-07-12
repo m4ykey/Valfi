@@ -1,7 +1,10 @@
 package com.example.vuey.util.utils
 
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Image
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 
@@ -38,23 +41,24 @@ fun AlbumEntity.toAlbum() : Album {
         id = this.id,
         totalTracks = this.totalTracks,
         artistList = this.artistList.map { artist ->
-            Album.Artist(
+            Artist(
                 artistName = artist.name,
                 id = artist.id,
-                externalUrls = Album.ExternalUrls(
+                externalUrls = ExternalUrls(
                     spotify = this.externalUrls.spotify
                 )
             )
         },
-        externalUrls = Album.ExternalUrls(
+        externalUrls = ExternalUrls(
             spotify = this.externalUrls.spotify
         ),
         imageList = listOf(
-            Album.Image(
+            Image(
             height = 640,
             width = 640,
             url = albumCover.url
-        ))
+        )
+        )
     )
 }
 

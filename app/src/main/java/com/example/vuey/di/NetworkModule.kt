@@ -1,7 +1,6 @@
 package com.example.vuey.di
 
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
-import com.example.vuey.feature_album.data.remote.api.ArtistApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
 import com.example.vuey.feature_album.data.remote.token.LastFmInterceptor
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
@@ -54,20 +53,6 @@ object NetworkModule {
             .readTimeout(2, TimeUnit.MINUTES)
             .connectTimeout(2, TimeUnit.MINUTES)
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideLastFmRetrofit(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
-    ) : ArtistApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.LAST_FM_BASE_URL)
-            .client(httpClient)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
-            .create(ArtistApi::class.java)
     }
 
     @Provides

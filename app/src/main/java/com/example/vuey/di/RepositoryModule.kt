@@ -1,9 +1,7 @@
 package com.example.vuey.di
 
-import com.example.vuey.feature_album.data.repository.AlbumRepository
+import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.feature_album.data.repository.AlbumRepositoryImpl
-import com.example.vuey.feature_album.data.repository.ArtistRepository
-import com.example.vuey.feature_album.data.repository.ArtistRepositoryImpl
 import com.example.vuey.feature_movie.data.repository.MovieRepository
 import com.example.vuey.feature_movie.data.repository.MovieRepositoryImpl
 import dagger.Module
@@ -23,11 +21,6 @@ object RepositoryModule {
     @Provides
     fun provideMovieRepository(movieRepository : MovieRepositoryImpl) : MovieRepository {
         return movieRepository
-    }
-
-    @Provides
-    fun provideArtistRepository(artistRepository: ArtistRepositoryImpl) : ArtistRepository {
-        return artistRepository
     }
 
 }

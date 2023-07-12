@@ -1,6 +1,5 @@
-package com.example.vuey.feature_album.data.remote.model.spotify.album_detail
+package com.example.vuey.feature_album.data.remote.model.spotify.album
 
-import com.example.vuey.feature_album.data.remote.model.spotify.artist.Artist
 import com.google.gson.annotations.SerializedName
 
 data class Tracks(

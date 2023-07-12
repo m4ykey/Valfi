@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.presentation.album
+package com.example.vuey.feature_album.presentation.ui
 
 import android.os.Bundle
 import android.os.Handler

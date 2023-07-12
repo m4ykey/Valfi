@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vuey.feature_album.data.remote.model.spotify.artist.Artist
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
-import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.Tracks
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 import com.example.vuey.util.utils.DiffUtils
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
