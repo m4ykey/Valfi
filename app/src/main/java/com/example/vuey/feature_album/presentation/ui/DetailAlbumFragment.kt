@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -290,7 +291,13 @@ class DetailAlbumFragment : Fragment() {
                                                 val artistName =
                                                     albumDetail.artistList[0].artistName
                                                 val artistId = albumDetail.artistList[0].id
-                                                setOnClickListener {}
+                                                setOnClickListener {
+                                                    val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistFragment(
+                                                        artistName = artistName,
+                                                        artistId = artistId
+                                                    )
+                                                    it.findNavController().navigate(action)
+                                                }
                                             }
                                         } else {
                                             txtArtist.setOnClickListener {
@@ -336,7 +343,6 @@ class DetailAlbumFragment : Fragment() {
                                     trackListAdapter.submitTrack(
                                         trackList.tracks.items
                                     )
-                                    Log.i("TrackSize", "${trackList.tracks.items.size}")
                                 }
 
                                 val artistEntity = albumDetail.artistList.map { artist ->

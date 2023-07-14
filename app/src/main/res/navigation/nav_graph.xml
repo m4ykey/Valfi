@@ -97,5 +97,12 @@
         android:id="@+id/artistFragment"
         android:name="com.example.vuey.feature_artist.presentation.ui.ArtistFragment"
         android:label="fragment_artist"
-        tools:layout="@layout/fragment_artist" />
+        tools:layout="@layout/fragment_artist" >
+        <argument
+            android:name="artistId"
+            app:argType="string" />
+        <argument
+            android:name="artistName"
+            app:argType="string" />
+    </fragment>
 </navigation>

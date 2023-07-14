@@ -4,7 +4,7 @@ import com.example.vuey.feature_artist.data.remote.model.last_fm.ArtistLastFm
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ArtistApi {
+interface ArtistBioApi {
 
     @GET("2.0/?method=artist.getinfo")
     suspend fun getArtistBio(

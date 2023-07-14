@@ -4,6 +4,8 @@ import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
 import com.example.vuey.feature_album.data.remote.token.LastFmInterceptor
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
+import com.example.vuey.feature_artist.data.remote.api.ArtistBioApi
+import com.example.vuey.feature_artist.data.remote.api.ArtistInfoApi
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
 import com.example.vuey.util.Constants
@@ -93,6 +95,34 @@ object NetworkModule {
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(MovieApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideArtistInfoApi(
+        httpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ) : ArtistInfoApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.SPOTIFY_BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+            .create(ArtistInfoApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideArtistBioApi(
+        httpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ) : ArtistBioApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.LAST_FM_BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+            .create(ArtistBioApi::class.java)
     }
 
 }

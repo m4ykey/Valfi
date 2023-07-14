@@ -3,6 +3,9 @@ package com.example.vuey.di
 import com.example.vuey.feature_album.domain.use_cases.AlbumDetailUseCase
 import com.example.vuey.feature_album.domain.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.domain.use_cases.AlbumUseCases
+import com.example.vuey.feature_artist.domain.usecase.ArtistBioUseCase
+import com.example.vuey.feature_artist.domain.usecase.ArtistInfoUseCase
+import com.example.vuey.feature_artist.domain.usecase.ArtistUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieCastUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieSearchUseCase
@@ -20,7 +23,7 @@ object UseCasesModule {
     fun provideAlbumUseCases(
         getAlbumSearchUseCase: AlbumSearchUseCase,
         getAlbumDetailUseCase: AlbumDetailUseCase,
-    ) : AlbumUseCases {
+    ): AlbumUseCases {
         return AlbumUseCases(
             getAlbumSearchUseCase,
             getAlbumDetailUseCase,
@@ -32,11 +35,23 @@ object UseCasesModule {
         getMovieSearchUseCase: MovieSearchUseCase,
         getMovieDetailUseCase: MovieDetailUseCase,
         getMovieCastUseCase: MovieCastUseCase
-    ) : MovieUseCases {
+    ): MovieUseCases {
         return MovieUseCases(
             getMovieSearchUseCase,
             getMovieDetailUseCase,
             getMovieCastUseCase
         )
     }
+
+    @Provides
+    fun provideArtistUseCase(
+        getArtistBioUseCase: ArtistBioUseCase,
+        getArtistInfoUseCase: ArtistInfoUseCase
+    ): ArtistUseCase {
+        return ArtistUseCase(
+            getArtistInfoUseCase,
+            getArtistBioUseCase
+        )
+    }
+
 }
