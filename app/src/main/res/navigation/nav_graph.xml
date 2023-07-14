@@ -31,6 +31,9 @@
         <argument
             android:name="album"
             app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album.Album" />
+        <action
+            android:id="@+id/action_albumDetailFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
@@ -90,4 +93,9 @@
         android:name="com.example.vuey.feature_movie.presentation.MovieStatisticsFragment"
         android:label="fragment_movie_statistics"
         tools:layout="@layout/fragment_movie_statistics" />
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.example.vuey.feature_artist.presentation.ui.ArtistFragment"
+        android:label="fragment_artist"
+        tools:layout="@layout/fragment_artist" />
 </navigation>

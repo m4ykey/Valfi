@@ -35,4 +35,6 @@
     <string name="what_did_you_watch_today">What did you watch today?</string>
     <string name="search_movie">Search movie</string>
     <string name="watched_movies">Watched movies</string>
+    <string name="popularity">Popularity</string>
+    <string name="followers">Followers</string>
 </resources>
