@@ -1,44 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutAlbum"
     app:strokeWidth="1dp"
-    android:backgroundTint="@color/background"
+    android:backgroundTint="@color/black"
     android:layout_marginBottom="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/imgPlayPreview"
-            android:src="@drawable/ic_play_arrow"
-            app:tint="@color/white"
-            android:padding="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
         <androidx.cardview.widget.CardView
-            app:layout_constraintStart_toEndOf="@+id/imgPlayPreview"
+            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/cardViewImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:cardElevation="0dp"
             app:cardCornerRadius="10dp"
             android:layout_margin="10dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp">
+            android:layout_width="60dp"
+            android:layout_height="60dp">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:background="@color/white"
                 android:scaleType="centerCrop"
                 android:id="@+id/imgAlbum"
@@ -83,4 +71,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

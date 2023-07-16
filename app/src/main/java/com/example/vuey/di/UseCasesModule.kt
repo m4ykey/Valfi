@@ -5,6 +5,7 @@ import com.example.vuey.feature_album.domain.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.domain.use_cases.AlbumUseCases
 import com.example.vuey.feature_artist.domain.usecase.ArtistBioUseCase
 import com.example.vuey.feature_artist.domain.usecase.ArtistInfoUseCase
+import com.example.vuey.feature_artist.domain.usecase.ArtistTopTracksUseCase
 import com.example.vuey.feature_artist.domain.usecase.ArtistUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieCastUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
@@ -46,11 +47,13 @@ object UseCasesModule {
     @Provides
     fun provideArtistUseCase(
         getArtistBioUseCase: ArtistBioUseCase,
-        getArtistInfoUseCase: ArtistInfoUseCase
+        getArtistInfoUseCase: ArtistInfoUseCase,
+        getArtistTopTracksUseCase: ArtistTopTracksUseCase
     ): ArtistUseCase {
         return ArtistUseCase(
             getArtistInfoUseCase,
-            getArtistBioUseCase
+            getArtistBioUseCase,
+            getArtistTopTracksUseCase
         )
     }
 

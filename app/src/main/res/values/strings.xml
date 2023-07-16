@@ -41,4 +41,5 @@
     <string name="about">About</string>
     <string name="genre_list_is_empty">Genre list is empty</string>
     <string name="no_informations">No informations</string>
+    <string name="top_tracks">Top Tracks</string>
 </resources>

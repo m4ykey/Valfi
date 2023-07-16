@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_artist.domain.usecase.ArtistUseCase
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistBioUiState
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistInfoUiState
+import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistTopTracksUiState
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,37 @@ class ArtistViewModel @Inject constructor(
 
     private val _artistInfoUiState = MutableStateFlow(ArtistInfoUiState())
     val artistInfoUiState : StateFlow<ArtistInfoUiState> = _artistInfoUiState
+
+    private val _artistTopTracksUiState = MutableStateFlow(ArtistTopTracksUiState())
+    val artistTopTracksUiState : StateFlow<ArtistTopTracksUiState> = _artistTopTracksUiState
+
+    suspend fun getArtistTopTracks(artistId: String) {
+        useCase.getArtistTopTracksUseCase(artistId).onEach { result ->
+            when (result) {
+                is Resource.Failure -> {
+                    _artistTopTracksUiState.value = artistTopTracksUiState.value.copy(
+                        isLoading = false,
+                        isError = result.message ?: "Unknown error",
+                        topTracksData = result.data ?: emptyList()
+                    )
+                }
+
+                is Resource.Success -> {
+                    _artistTopTracksUiState.value = artistTopTracksUiState.value.copy(
+                        isLoading = false,
+                        topTracksData = result.data ?: emptyList()
+                    )
+                }
+
+                is Resource.Loading -> {
+                    _artistTopTracksUiState.value = artistTopTracksUiState.value.copy(
+                        isLoading = true,
+                        topTracksData = result.data ?: emptyList()
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 
     suspend fun getArtistInfo(artistId : String) {
         useCase.getArtistInfoUseCase(artistId).onEach { result ->
