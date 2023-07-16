@@ -38,4 +38,8 @@
     <string name="watched_movies">Obejrzanych filmów</string>
     <string name="popularity">Popularity</string>
     <string name="followers">Followers</string>
+    <string name="genres">Gatunki</string>
+    <string name="about">Informacje</string>
+    <string name="genre_list_is_empty">List gatunków jest pusta</string>
+    <string name="no_informations">Brak informacji</string>
 </resources>

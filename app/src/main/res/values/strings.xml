@@ -37,4 +37,8 @@
     <string name="watched_movies">Watched movies</string>
     <string name="popularity">Popularity</string>
     <string name="followers">Followers</string>
+    <string name="genres">Genres</string>
+    <string name="about">About</string>
+    <string name="genre_list_is_empty">Genre list is empty</string>
+    <string name="no_informations">No informations</string>
 </resources>

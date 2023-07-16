@@ -6,5 +6,6 @@ data class ArtistInfo(
     val id: String,
     val images: List<Image>,
     val name: String,
-    val popularity: Int
+    val popularity: Int,
+    val genres : List<String>
 )
