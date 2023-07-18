@@ -6,11 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +44,8 @@ class ArtistFragment : Fragment() {
 
     private val args: ArtistFragmentArgs by navArgs()
 
+    private var isExpanded = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,12 +82,13 @@ class ArtistFragment : Fragment() {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
             linearLayoutAbout.setOnClickListener {
-                if (txtContentFull.visibility == View.GONE) {
-                    txtContent.visibility = View.GONE
-                    txtContentFull.visibility = View.VISIBLE
-                } else {
+                isExpanded = !isExpanded
+                if (isExpanded) {
                     txtContent.visibility = View.VISIBLE
                     txtContentFull.visibility = View.GONE
+                } else {
+                    txtContent.visibility = View.GONE
+                    txtContentFull.visibility = View.VISIBLE
                 }
             }
         }
@@ -139,39 +137,8 @@ class ArtistFragment : Fragment() {
 
                                 val artistInfo = uiState.artistBioData
 
-                                val fulltext = artistInfo.bio.content
-                                val spannableString = SpannableString(fulltext)
-
-                                val start = fulltext.indexOf("<a")
-                                val end = fulltext.indexOf("</a>") + "</a>".length
-
-                                val clickableText = object : ClickableSpan() {
-                                    override fun onClick(widget: View) {
-                                        val url = "https://www.last.fm/music/${args.artistName}"
-                                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                                    }
-
-                                    override fun updateDrawState(ds: TextPaint) {
-                                        super.updateDrawState(ds)
-
-                                        ds.isUnderlineText = true
-                                        ds.color = Color.GREEN
-                                    }
-                                }
-
-                                spannableString.setSpan(
-                                    clickableText,
-                                    start,
-                                    end,
-                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                                )
-
                                 txtContent.text = artistInfo.bio.content
-                                txtContentFull.apply {
-                                    text = spannableString
-                                    movementMethod = LinkMovementMethod.getInstance()
-                                    highlightColor = Color.TRANSPARENT
-                                }
+                                txtContentFull.text = artistInfo.bio.content
 
                                 if (artistInfo.bio.content.isEmpty()) {
                                     txtContent.visibility = View.GONE
