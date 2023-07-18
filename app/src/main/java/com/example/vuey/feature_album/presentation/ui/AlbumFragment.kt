@@ -68,7 +68,6 @@ class AlbumFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {
-                        searchAlbumInDatabase()
                         linearLayoutHide.visibility = View.VISIBLE
                         imgHide.setOnClickListener {
                             linearLayoutHide.visibility = View.GONE
@@ -103,11 +102,6 @@ class AlbumFragment : Fragment() {
             addItem.icon.let {
                 MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
             }
-        }
-    }
-
-    private fun searchAlbumInDatabase() {
-        with(binding) {
         }
     }
 
