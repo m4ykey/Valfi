@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,9 +27,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.NetworkStateMonitor
-import com.example.vuey.util.network.SpotifyError
 import com.example.vuey.util.utils.DateUtils
-import com.example.vuey.util.utils.getSpotifyErrorMessage
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -233,16 +230,7 @@ class DetailAlbumFragment : Fragment() {
 
                             uiState.isError?.isNotEmpty() == true -> {
                                 progressBar.visibility = View.GONE
-                                val error = getSpotifyErrorMessage(uiState.isError)
-                                if (error != SpotifyError.code200) {
-                                    showSnackbar(
-                                        requireView(),
-                                        error,
-                                        Snackbar.LENGTH_LONG
-                                    )
-                                } else {
-                                    Log.i("Error", "Error 200 occurred $error")
-                                }
+                                showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
                             }
 
                             uiState.detailAlbumData != null -> {

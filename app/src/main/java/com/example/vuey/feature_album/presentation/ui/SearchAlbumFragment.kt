@@ -2,7 +2,6 @@ package com.example.vuey.feature_album.presentation.ui
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +16,6 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.example.vuey.util.network.SpotifyError
-import com.example.vuey.util.utils.getSpotifyErrorMessage
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -94,17 +91,7 @@ class SearchAlbumFragment : Fragment() {
                             }
                             uiState.isError?.isNotEmpty() == true -> {
                                 progressBar.visibility = View.GONE
-                                val error = getSpotifyErrorMessage(uiState.isError)
-                                Log.i("Error", "observeSearchAlbum: $error")
-                                if (error != SpotifyError.code200) {
-                                    showSnackbar(
-                                        requireView(),
-                                        error,
-                                        Snackbar.LENGTH_LONG
-                                    )
-                                } else {
-                                    Log.i("Error", "Error 200 occurred $error")
-                                }
+                                showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
                             }
                         }
                     }
