@@ -233,9 +233,16 @@ class DetailMovieFragment : Fragment() {
 
                             with(binding) {
 
-                                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdropPath) {
-                                    crossfade(true)
-                                    crossfade(500)
+                                if (!movieDetail.backdropPath.isNullOrEmpty()) {
+                                    imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdropPath) {
+                                        crossfade(true)
+                                        crossfade(500)
+                                    }
+                                } else {
+                                    imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.posterPath) {
+                                        crossfade(true)
+                                        crossfade(500)
+                                    }
                                 }
 
                                 if (movieDetail.spokenLanguages.isEmpty()) {
@@ -243,20 +250,32 @@ class DetailMovieFragment : Fragment() {
                                 }
 
                                 txtMovieTitle.text = movieDetail.title
-                                txtOverview.text = movieDetail.overview
-                                txtOverviewFull.text = movieDetail.overview
-                                txtInfo.text = "$movieRuntime • $genreList • ${
-                                    DateUtils.formatAirDate(movieDetail.releaseDate)
-                                }"
+                                txtOverview.text = movieDetail.overview.ifEmpty {
+                                    args.movie.overview
+                                }
+                                txtOverviewFull.text = movieDetail.overview.ifEmpty {
+                                    args.movie.overview
+                                }
+
+                                txtInfo.text = if (movieRuntime.isEmpty()) {
+                                    "$genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                } else if (genreList.isEmpty()) {
+                                    "$movieRuntime • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                } else if (movieDetail.releaseDate.isEmpty()) {
+                                    "$movieRuntime • $genreList"
+                                } else {
+                                    "$movieRuntime • $genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                }
+
                                 txtSpokenLanguages.text =
                                     movieDetail.spokenLanguages.joinToString(separator = ", ") { it.name }
                                 txtVoteAverage.text = movieDetail.voteAverage.formatVoteAverage()
 
                                 val movieEntity = MovieEntity(
-                                    movieBackdropPath = movieDetail.backdropPath,
+                                    movieBackdropPath = movieDetail.backdropPath.toString(),
                                     movieId = movieDetail.id,
                                     movieOverview = movieDetail.overview,
-                                    moviePosterPath = movieDetail.posterPath,
+                                    moviePosterPath = movieDetail.posterPath.toString(),
                                     movieReleaseDate = movieDetail.releaseDate,
                                     movieRuntime = movieDetail.runtime,
                                     movieTitle = movieDetail.title,

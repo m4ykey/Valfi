@@ -25,7 +25,7 @@ fun MovieList.toMovieEntity() : MovieEntity {
         movieGenreList = emptyList(),
         movieId = this.id,
         movieOverview = this.overview,
-        moviePosterPath = this.poster_path,
+        moviePosterPath = this.poster_path.toString(),
         movieReleaseDate = this.release_date,
         movieRuntime = 0,
         movieSpokenLanguage = emptyList(),
