@@ -18,8 +18,8 @@ object Constants {
 
     const val MOVIE_TABLE_NAME = "movie_table"
 
-    const val CHANNEL_ID = "channelId"
-
     const val LAST_FM_BASE_URL = "https://ws.audioscrobbler.com/"
+
+    const val YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/"
 
 }
