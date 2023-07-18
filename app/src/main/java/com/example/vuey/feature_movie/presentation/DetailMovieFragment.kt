@@ -250,12 +250,11 @@ class DetailMovieFragment : Fragment() {
                                 }
 
                                 txtMovieTitle.text = movieDetail.title
-                                txtOverview.text = movieDetail.overview.ifEmpty {
+                                val movieOverview = movieDetail.overview.ifEmpty {
                                     args.movie.overview
                                 }
-                                txtOverviewFull.text = movieDetail.overview.ifEmpty {
-                                    args.movie.overview
-                                }
+                                txtOverview.text = movieOverview
+                                txtOverviewFull.text = movieOverview
 
                                 txtInfo.text = if (movieRuntime.isEmpty()) {
                                     "$genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
@@ -274,7 +273,7 @@ class DetailMovieFragment : Fragment() {
                                 val movieEntity = MovieEntity(
                                     movieBackdropPath = movieDetail.backdropPath.toString(),
                                     movieId = movieDetail.id,
-                                    movieOverview = movieDetail.overview,
+                                    movieOverview = movieOverview,
                                     moviePosterPath = movieDetail.posterPath.toString(),
                                     movieReleaseDate = movieDetail.releaseDate,
                                     movieRuntime = movieDetail.runtime,
