@@ -11,6 +11,9 @@ import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieCastU
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieSearchUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieUseCases
+import com.example.vuey.feature_music_player.domain.use_case.YoutubeMusicNameUseCase
+import com.example.vuey.feature_music_player.domain.use_case.YoutubeUseCase
+import com.example.vuey.feature_music_player.domain.use_case.YoutubeVideoUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,6 +57,17 @@ object UseCasesModule {
             getArtistInfoUseCase,
             getArtistBioUseCase,
             getArtistTopTracksUseCase
+        )
+    }
+
+    @Provides
+    fun provideYoutubeUseCase(
+        getYoutubeVideoUseCase: YoutubeVideoUseCase,
+        getYoutubeMusicNameUseCase: YoutubeMusicNameUseCase
+    ) : YoutubeUseCase {
+        return YoutubeUseCase(
+            getYoutubeVideoUseCase = getYoutubeVideoUseCase,
+            getYoutubeMusicNameUseCase = getYoutubeMusicNameUseCase
         )
     }
 

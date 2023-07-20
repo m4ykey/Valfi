@@ -2,14 +2,18 @@ package com.example.vuey.feature_album.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
+import com.example.vuey.feature_music_player.presentation.ui.SelectMusicFragment
 import com.example.vuey.util.utils.DiffUtils
 
-class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
+class TrackListAdapter(
+    private val fragmentManager : FragmentManager
+) : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
 
     private var tracks = listOf<Tracks.AlbumItem>()
 
@@ -20,12 +24,12 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
         notifyDataSetChanged()
     }
 
-    class TrackViewHolder(private val binding: LayoutAlbumTrackListBinding) :
+    inner class TrackViewHolder(private val binding: LayoutAlbumTrackListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(trackResult: Tracks.AlbumItem) {
             with(binding) {
 
-                val artistList : List<Artist> = trackResult.artistList
+                val artistList: List<Artist> = trackResult.artistList
                 val artists = artistList.joinToString(separator = ", ") { it.artistName }
                 txtArtist.text = artists
                 txtTrackName.text = trackResult.trackName
@@ -33,6 +37,11 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
                 val seconds = trackResult.durationMs / 1000
                 val trackDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
                 txtDuration.text = trackDuration
+
+                linearLayoutTracks.setOnClickListener {
+                    val selectMusicFragment = SelectMusicFragment.newInstance(trackResult.trackName)
+                    selectMusicFragment.show(fragmentManager, "SelectMusicFragment")
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.example.vuey.di
 
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
-import com.example.vuey.feature_album.data.remote.api.YoutubeApi
 import com.example.vuey.feature_album.data.remote.token.LastFmInterceptor
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.feature_music_player.data.remote.token.YoutubeInterceptor
@@ -10,6 +9,7 @@ import com.example.vuey.feature_artist.data.remote.api.ArtistLastFmApi
 import com.example.vuey.feature_artist.data.remote.api.ArtistSpotifyApi
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
+import com.example.vuey.feature_music_player.data.remote.api.YoutubeApi
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
