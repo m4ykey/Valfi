@@ -44,8 +44,6 @@ class ArtistFragment : Fragment() {
 
     private val args: ArtistFragmentArgs by navArgs()
 
-    private var isExpanded = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,13 +80,12 @@ class ArtistFragment : Fragment() {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
             linearLayoutAbout.setOnClickListener {
-                isExpanded = !isExpanded
-                if (isExpanded) {
-                    txtContent.visibility = View.VISIBLE
-                    txtContentFull.visibility = View.GONE
-                } else {
+                if (txtContentFull.visibility == View.GONE) {
                     txtContent.visibility = View.GONE
                     txtContentFull.visibility = View.VISIBLE
+                } else {
+                    txtContent.visibility = View.VISIBLE
+                    txtContentFull.visibility = View.GONE
                 }
             }
         }
@@ -110,7 +107,6 @@ class ArtistFragment : Fragment() {
                                 showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
                             }
                             uiState.topTracksData.isNotEmpty() -> {
-
                                 topTracksAdapter.submitTopTracks(uiState.topTracksData)
                             }
                         }
