@@ -8,6 +8,7 @@ import com.example.vuey.feature_artist.data.remote.api.ArtistLastFmApi
 import com.example.vuey.feature_artist.data.remote.api.ArtistSpotifyApi
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
+import com.example.vuey.feature_music_player.data.remote.api.YoutubeApi
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -124,4 +125,19 @@ object NetworkModule {
             .build()
             .create(ArtistLastFmApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideYoutubeApi(
+        httpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ) : YoutubeApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.YOUTUBE_BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+            .create(YoutubeApi::class.java)
+    }
+
 }
