@@ -107,6 +107,10 @@ class ArtistFragment : Fragment() {
                                 showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
                             }
                             uiState.topTracksData.isNotEmpty() -> {
+                                if (uiState.topTracksData.isEmpty()) {
+                                    txtEmptyTopTracks.visibility = View.VISIBLE
+                                    recyclerViewTopTracks.visibility = View.GONE
+                                }
                                 topTracksAdapter.submitTopTracks(uiState.topTracksData)
                             }
                         }

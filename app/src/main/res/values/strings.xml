@@ -43,4 +43,5 @@
     <string name="no_informations">No information\'s</string>
     <string name="top_tracks">Top Tracks</string>
     <string name="artist_image">Artist Image</string>
+    <string name="top_tracks_list_is_empty">Top tracks list is empty</string>
 </resources>

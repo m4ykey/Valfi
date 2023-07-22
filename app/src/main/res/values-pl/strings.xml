@@ -44,4 +44,5 @@
     <string name="no_informations">Brak informacji</string>
     <string name="top_tracks">Popularne utwory</string>
     <string name="artist_image">Zdjęcie artysty</string>
+    <string name="top_tracks_list_is_empty">Brak popularnych utworów</string>
 </resources>
