@@ -2,18 +2,16 @@ package com.example.vuey.feature_album.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
-import com.example.vuey.feature_music_player.presentation.ui.SelectMusicFragment
+import com.example.vuey.feature_album.presentation.ui.DetailAlbumFragmentDirections
 import com.example.vuey.util.utils.DiffUtils
 
-class TrackListAdapter(
-    private val fragmentManager : FragmentManager
-) : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
+class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
 
     private var tracks = listOf<Tracks.AlbumItem>()
 
@@ -39,8 +37,10 @@ class TrackListAdapter(
                 txtDuration.text = trackDuration
 
                 linearLayoutTracks.setOnClickListener {
-                    val selectMusicFragment = SelectMusicFragment.newInstance(trackResult.trackName)
-                    selectMusicFragment.show(fragmentManager, "SelectMusicFragment")
+                    val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToSelectMusicFragment(
+                        musicName = trackResult.trackName
+                    )
+                    it.findNavController().navigate(action)
                 }
             }
         }

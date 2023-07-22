@@ -9,6 +9,7 @@ import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
@@ -60,26 +61,15 @@ class AlbumRepositoryImpl @Inject constructor(
 
             try {
                 val albumResponse = albumApi.searchAlbum(
-                    token = "Bearer ${spotifyInterceptor.getAccessToken()}",
-                    query = albumName
+                    query = albumName,
+                    token = "Bearer ${spotifyInterceptor.getAccessToken()}"
                 ).albums.items
                 emit(Resource.Success(albumResponse))
-
-            } catch (e: HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
-            } catch (e: IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
+            } catch (e : HttpException) {
+                throw IOException(e.localizedMessage ?: "An unexpected error occurred")
             }
+        }.catch { e ->
+            emit(Resource.Failure(message = e.localizedMessage ?: "No internet connection"))
         }
     }
 
@@ -94,20 +84,10 @@ class AlbumRepositoryImpl @Inject constructor(
                 )
                 emit(Resource.Success(albumResponse))
             } catch (e: HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
-            } catch (e: IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
+                throw IOException(e.localizedMessage ?: "An unexpected error occurred")
             }
+        }.catch { e ->
+            emit(Resource.Failure(message = e.localizedMessage ?: "No internet connection"))
         }
     }
 }

@@ -4,12 +4,10 @@ import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
 import com.example.vuey.feature_album.data.remote.token.LastFmInterceptor
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
-import com.example.vuey.feature_music_player.data.remote.token.YoutubeInterceptor
 import com.example.vuey.feature_artist.data.remote.api.ArtistLastFmApi
 import com.example.vuey.feature_artist.data.remote.api.ArtistSpotifyApi
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
-import com.example.vuey.feature_music_player.data.remote.api.YoutubeApi
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -25,10 +23,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideYoutubeInteceptor() : YoutubeInterceptor = YoutubeInterceptor()
 
     @Provides
     @Singleton
@@ -53,10 +47,8 @@ object NetworkModule {
         spotifyInterceptor: SpotifyInterceptor,
         tmdbInterceptor: TmdbInterceptor,
         lastFmInterceptor: LastFmInterceptor,
-        youtubeInterceptor: YoutubeInterceptor
     ) : OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(youtubeInterceptor)
             .addInterceptor(tmdbInterceptor)
             .addInterceptor(spotifyInterceptor)
             .addInterceptor(lastFmInterceptor)
@@ -132,19 +124,4 @@ object NetworkModule {
             .build()
             .create(ArtistLastFmApi::class.java)
     }
-
-    @Provides
-    @Singleton
-    fun provideYoutubeApi(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
-    ) : YoutubeApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.YOUTUBE_BASE_URL)
-            .addConverterFactory(gsonConverterFactory)
-            .client(httpClient)
-            .build()
-            .create(YoutubeApi::class.java)
-    }
-
 }

@@ -45,7 +45,7 @@ class DetailAlbumFragment : Fragment() {
 
     private val detailViewModel: AlbumViewModel by viewModels()
     private val arguments: DetailAlbumFragmentArgs by navArgs()
-    private val trackListAdapter by lazy { TrackListAdapter(parentFragmentManager) }
+    private val trackListAdapter by lazy { TrackListAdapter() }
     private var isAlbumSaved = false
 
     private lateinit var connectivityManager: ConnectivityManager
