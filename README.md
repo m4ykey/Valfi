@@ -29,7 +29,7 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [X] Notifications
 - [X] Improve UX/UI
 - [X] Statistic Screen
-- [ ] Artist Fragment UI
+- [X] Artist Fragment UI
 - [ ] Actor Fragment 
 
 ## Tech
