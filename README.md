@@ -42,4 +42,3 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [Gson](https://github.com/google/gson)
 - [Coil](https://coil-kt.github.io/coil/)
 - [SwipeRefreshLayout](https://developer.android.com/develop/ui/views/touch-and-input/swipe/add-swipe-interface)
-- [Palette](https://developer.android.com/develop/ui/views/graphics/palette-colors)
