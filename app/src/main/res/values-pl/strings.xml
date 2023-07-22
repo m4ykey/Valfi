@@ -42,5 +42,6 @@
     <string name="about">Informacje</string>
     <string name="genre_list_is_empty">List gatunków jest pusta</string>
     <string name="no_informations">Brak informacji</string>
-    <string name="top_tracks">Top Tracks</string>
+    <string name="top_tracks">Popularne utwory</string>
+    <string name="artist_image">Zdjęcie artysty</string>
 </resources>

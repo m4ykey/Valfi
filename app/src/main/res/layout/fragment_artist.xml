@@ -20,11 +20,20 @@
             android:scaleType="centerCrop"
             tools:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
+            android:layout_height="250dp"
+            android:contentDescription="@string/artist_image" />
+
+        <View
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/imgArtist"
+            android:background="@drawable/movie_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
 
         <TextView
             android:id="@+id/txtArtist"
-            app:layout_constraintBottom_toBottomOf="@id/imgArtist"
+            app:layout_constraintTop_toBottomOf="@+id/imgArtist"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="10dp"
             tools:text="Artist"
@@ -32,7 +41,7 @@
             android:shadowRadius="2"
             android:shadowDy="2"
             android:shadowDx="2"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:fontFamily="@font/cabin_semibold"
             android:shadowColor="@color/black"
             android:layout_width="wrap_content"
@@ -60,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/imgArtist"
+            app:layout_constraintTop_toBottomOf="@id/txtArtist"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="10dp"
             android:text="@string/genres"

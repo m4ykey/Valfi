@@ -9,6 +9,7 @@ import com.example.vuey.feature_artist.data.remote.model.spotify.top_tracks.Trac
 import com.example.vuey.feature_artist.domain.repository.ArtistRepository
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
@@ -26,21 +27,11 @@ class ArtistRepositoryImpl @Inject constructor(
             try {
                 val artistResponse = artistBioApi.getArtistBio(artistName = artistName).artist
                 emit(Resource.Success(artistResponse))
-            } catch (e : IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
             } catch (e : HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
+                throw IOException(e.localizedMessage ?: "An unexpected error occurred")
             }
+        }.catch { e ->
+            emit(Resource.Failure(message = e.localizedMessage ?: "No internet connection"))
         }
     }
 
@@ -54,21 +45,11 @@ class ArtistRepositoryImpl @Inject constructor(
                     token = "Bearer ${spotifyInterceptor.getAccessToken()}"
                 ).tracks
                 emit(Resource.Success(topTracksResponse))
-            } catch (e : IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
             } catch (e : HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
+                throw IOException(e.localizedMessage ?: "An unexpected error occurred")
             }
+        }.catch { e ->
+            emit(Resource.Failure(message = e.localizedMessage ?: "No internet connection"))
         }
     }
 
@@ -82,21 +63,11 @@ class ArtistRepositoryImpl @Inject constructor(
                     token = "Bearer ${spotifyInterceptor.getAccessToken()}",
                 )
                 emit(Resource.Success(artistResponse))
-            } catch (e : IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
             } catch (e : HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
+                throw IOException(e.localizedMessage ?: "An unexpected error occurred")
             }
+        }.catch { e ->
+            emit(Resource.Failure(message = e.localizedMessage ?: "No internet connection"))
         }
     }
 }

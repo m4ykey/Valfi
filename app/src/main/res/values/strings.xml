@@ -42,6 +42,5 @@
     <string name="genre_list_is_empty">Genre list is empty</string>
     <string name="no_informations">No information\'s</string>
     <string name="top_tracks">Top Tracks</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="artist_image">Artist Image</string>
 </resources>
