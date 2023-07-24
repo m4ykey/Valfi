@@ -8,9 +8,7 @@ import com.example.vuey.feature_artist.data.remote.api.ArtistLastFmApi
 import com.example.vuey.feature_artist.data.remote.api.ArtistSpotifyApi
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
-import com.example.vuey.feature_music_player.data.remote.api.YoutubeApi
 import com.example.vuey.core.common.Constants
-import com.example.vuey.feature_music_player.data.remote.token.YoutubeInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -31,9 +29,6 @@ object NetworkModule {
     fun provideTmdbInterceptor() : TmdbInterceptor = TmdbInterceptor()
 
     @Provides
-    fun provideYoutubeInterceptor() : YoutubeInterceptor = YoutubeInterceptor()
-
-    @Provides
     @Singleton
     fun provideLastFmInterceptor() : LastFmInterceptor = LastFmInterceptor()
 
@@ -51,11 +46,9 @@ object NetworkModule {
     fun provideOkHttpClient(
         spotifyInterceptor: SpotifyInterceptor,
         tmdbInterceptor: TmdbInterceptor,
-        lastFmInterceptor: LastFmInterceptor,
-        youtubeInterceptor: YoutubeInterceptor
+        lastFmInterceptor: LastFmInterceptor
     ) : OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(youtubeInterceptor)
             .addInterceptor(tmdbInterceptor)
             .addInterceptor(spotifyInterceptor)
             .addInterceptor(lastFmInterceptor)
@@ -130,20 +123,6 @@ object NetworkModule {
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(ArtistLastFmApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideYoutubeApi(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
-    ) : YoutubeApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.YOUTUBE_BASE_URL)
-            .client(httpClient)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
-            .create(YoutubeApi::class.java)
     }
 
 }
