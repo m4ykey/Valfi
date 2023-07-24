@@ -2,12 +2,11 @@ package com.example.vuey.feature_album.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
-import com.example.vuey.feature_album.domain.use_cases.AlbumUseCases
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
-import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val useCases: AlbumUseCases,
     private val repository: AlbumRepository
 ) : ViewModel() {
 
@@ -75,7 +73,7 @@ class AlbumViewModel @Inject constructor(
     }
 
     suspend fun getAlbumDetail(albumId: String) {
-        useCases.getAlbumDetailUseCase(albumId).onEach { result ->
+        repository.getAlbum(albumId).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _albumDetailUiState.value = albumDetailUiState.value.copy(
@@ -103,7 +101,7 @@ class AlbumViewModel @Inject constructor(
     }
 
     suspend fun searchAlbum(albumName: String) {
-        useCases.getAlbumSearchUseCase(albumName).onEach { result ->
+        repository.searchAlbum(albumName).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _albumSearchUiState.value = albumSearchUiState.value.copy(

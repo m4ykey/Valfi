@@ -12,12 +12,12 @@ import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
-import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
-import com.example.vuey.util.utils.DateUtils
-import com.example.vuey.util.utils.DiffUtils
-import com.example.vuey.util.utils.formatVoteAverage
-import com.example.vuey.util.utils.toMovie
-import com.example.vuey.util.utils.toMovieEntity
+import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.core.common.utils.DateUtils
+import com.example.vuey.core.common.utils.DiffUtils
+import com.example.vuey.core.common.utils.formatVoteAverage
+import com.example.vuey.core.common.utils.toMovie
+import com.example.vuey.core.common.utils.toMovieEntity
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 

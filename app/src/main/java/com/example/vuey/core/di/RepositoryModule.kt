@@ -1,4 +1,4 @@
-package com.example.vuey.di
+package com.example.vuey.core.di
 
 import com.example.vuey.feature_album.data.repository.AlbumRepositoryImpl
 import com.example.vuey.feature_album.domain.repository.AlbumRepository

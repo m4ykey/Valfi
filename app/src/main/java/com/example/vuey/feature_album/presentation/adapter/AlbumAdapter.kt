@@ -12,9 +12,9 @@ import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.presentation.ui.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.ui.SearchAlbumFragmentDirections
-import com.example.vuey.util.utils.DiffUtils
-import com.example.vuey.util.utils.toAlbum
-import com.example.vuey.util.utils.toAlbumEntity
+import com.example.vuey.core.common.utils.DiffUtils
+import com.example.vuey.core.common.utils.toAlbum
+import com.example.vuey.core.common.utils.toAlbumEntity
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 

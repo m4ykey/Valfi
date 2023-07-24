@@ -8,7 +8,7 @@ import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieU
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieUseCases
-import com.example.vuey.util.network.Resource
+import com.example.vuey.core.common.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

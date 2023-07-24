@@ -7,7 +7,7 @@ import com.example.vuey.feature_artist.data.remote.model.last_fm.ArtistBio
 import com.example.vuey.feature_artist.data.remote.model.spotify.artist.ArtistInfo
 import com.example.vuey.feature_artist.data.remote.model.spotify.top_tracks.Track
 import com.example.vuey.feature_artist.domain.repository.ArtistRepository
-import com.example.vuey.util.network.Resource
+import com.example.vuey.core.common.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

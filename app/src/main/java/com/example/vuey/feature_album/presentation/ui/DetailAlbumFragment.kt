@@ -26,9 +26,9 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUr
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.example.vuey.util.network.NetworkStateMonitor
-import com.example.vuey.util.utils.DateUtils
-import com.example.vuey.util.utils.showSnackbar
+import com.example.vuey.core.common.network.NetworkStateMonitor
+import com.example.vuey.core.common.utils.DateUtils
+import com.example.vuey.core.common.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

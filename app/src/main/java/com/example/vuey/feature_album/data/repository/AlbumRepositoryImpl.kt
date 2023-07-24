@@ -7,7 +7,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumDetai
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
-import com.example.vuey.util.network.Resource
+import com.example.vuey.core.common.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

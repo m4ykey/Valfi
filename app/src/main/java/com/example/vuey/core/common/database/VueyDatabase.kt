@@ -1,4 +1,4 @@
-package com.example.vuey.util.database
+package com.example.vuey.core.common.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -9,7 +9,7 @@ import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_movie.data.local.converter.MovieConverter
 import com.example.vuey.feature_movie.data.local.dao.MovieDao
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
-import com.example.vuey.util.Constants.DATABASE_VERSION
+import com.example.vuey.core.common.Constants.DATABASE_VERSION
 
 @Database(
     entities = [

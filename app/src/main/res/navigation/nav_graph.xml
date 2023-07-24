@@ -34,9 +34,6 @@
         <action
             android:id="@+id/action_albumDetailFragment_to_artistFragment"
             app:destination="@id/artistFragment" />
-        <action
-            android:id="@+id/action_albumDetailFragment_to_selectMusicFragment"
-            app:destination="@id/selectMusicFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
@@ -106,27 +103,6 @@
             app:argType="string" />
         <argument
             android:name="artistName"
-            app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/selectMusicFragment"
-        android:name="com.example.vuey.feature_music_player.presentation.ui.SelectMusicFragment"
-        android:label="fragment_select_music"
-        tools:layout="@layout/fragment_select_music" >
-        <action
-            android:id="@+id/action_selectMusicFragment_to_musicPlayerFragment"
-            app:destination="@id/musicPlayerFragment" />
-        <argument
-            android:name="musicName"
-            app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/musicPlayerFragment"
-        android:name="com.example.vuey.feature_music_player.presentation.ui.MusicPlayerFragment"
-        android:label="fragment_music_player"
-        tools:layout="@layout/fragment_music_player" >
-        <argument
-            android:name="musicId"
             app:argType="string" />
     </fragment>
 </navigation>

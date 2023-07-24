@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.databinding.LayoutCastBinding
 import com.example.vuey.feature_movie.data.remote.model.MovieCast
-import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
-import com.example.vuey.util.utils.DiffUtils
+import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.core.common.utils.DiffUtils
 
 class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vuey.databinding.LayoutArtistGenreBinding
-import com.example.vuey.util.utils.DiffUtils
+import com.example.vuey.core.common.utils.DiffUtils
 
 class GenreAdapter : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
 

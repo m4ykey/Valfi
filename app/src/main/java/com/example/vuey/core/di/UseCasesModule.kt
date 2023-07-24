@@ -1,8 +1,5 @@
-package com.example.vuey.di
+package com.example.vuey.core.di
 
-import com.example.vuey.feature_album.domain.use_cases.AlbumDetailUseCase
-import com.example.vuey.feature_album.domain.use_cases.AlbumSearchUseCase
-import com.example.vuey.feature_album.domain.use_cases.AlbumUseCases
 import com.example.vuey.feature_artist.domain.usecase.ArtistBioUseCase
 import com.example.vuey.feature_artist.domain.usecase.ArtistInfoUseCase
 import com.example.vuey.feature_artist.domain.usecase.ArtistTopTracksUseCase
@@ -19,17 +16,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCasesModule {
-
-    @Provides
-    fun provideAlbumUseCases(
-        getAlbumSearchUseCase: AlbumSearchUseCase,
-        getAlbumDetailUseCase: AlbumDetailUseCase,
-    ): AlbumUseCases {
-        return AlbumUseCases(
-            getAlbumSearchUseCase,
-            getAlbumDetailUseCase,
-        )
-    }
 
     @Provides
     fun provideMovieUseCases(

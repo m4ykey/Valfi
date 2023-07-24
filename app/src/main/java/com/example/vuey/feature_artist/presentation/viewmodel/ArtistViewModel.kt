@@ -6,7 +6,7 @@ import com.example.vuey.feature_artist.domain.usecase.ArtistUseCase
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistBioUiState
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistInfoUiState
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistTopTracksUiState
-import com.example.vuey.util.network.Resource
+import com.example.vuey.core.common.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.example.vuey.util.network
+package com.example.vuey.core.common.network
 
 import android.net.ConnectivityManager
 import android.net.Network

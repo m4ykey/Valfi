@@ -8,7 +8,7 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutTopTracksBinding
 import com.example.vuey.feature_artist.data.remote.model.spotify.top_tracks.Track
-import com.example.vuey.util.utils.DiffUtils
+import com.example.vuey.core.common.utils.DiffUtils
 
 class TopTracksAdapter : RecyclerView.Adapter<TopTracksAdapter.TopTracksViewHolder>() {
 

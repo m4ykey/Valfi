@@ -6,7 +6,7 @@ import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.model.MovieCast
 import com.example.vuey.feature_movie.data.remote.model.MovieDetail
 import com.example.vuey.feature_movie.data.remote.model.MovieList
-import com.example.vuey.util.network.Resource
+import com.example.vuey.core.common.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -54,7 +54,8 @@ class MovieRepositoryImpl @Inject constructor(
                     )
                 )
             } catch (e : HttpException) {
-                emit(Resource.Failure(
+                emit(
+                    Resource.Failure(
                     message = e.localizedMessage ?: "An unexpected error occurred",
                     data = null
                 ))
@@ -70,12 +71,14 @@ class MovieRepositoryImpl @Inject constructor(
                 val movieResponse = movieApi.getMovieDetail(movieId)
                 emit(Resource.Success(movieResponse))
             } catch (e : IOException) {
-                emit(Resource.Failure(
+                emit(
+                    Resource.Failure(
                     message = e.localizedMessage ?: "No internet connection",
                     data = null
                 ))
             } catch (e : HttpException) {
-                emit(Resource.Failure(
+                emit(
+                    Resource.Failure(
                     data = null,
                     message = e.localizedMessage ?: "An unexpected error occurred"
                 ))
@@ -91,12 +94,14 @@ class MovieRepositoryImpl @Inject constructor(
                 val movieResponse = movieApi.getMovieCast(movieId).cast
                 emit(Resource.Success(movieResponse))
             } catch (e : IOException) {
-                emit(Resource.Failure(
+                emit(
+                    Resource.Failure(
                     message = e.localizedMessage ?: "No internet connection",
                     data = null
                 ))
             } catch (e : HttpException) {
-                emit(Resource.Failure(
+                emit(
+                    Resource.Failure(
                     data = null,
                     message = e.localizedMessage ?: "An unexpected error occurred"
                 ))

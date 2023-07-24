@@ -1,4 +1,4 @@
-package com.example.vuey.util
+package com.example.vuey.core.common
 
 object Constants {
 
@@ -20,6 +20,6 @@ object Constants {
 
     const val LAST_FM_BASE_URL = "https://ws.audioscrobbler.com/"
 
-    const val YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/"
+    const val YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 }

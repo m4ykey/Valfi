@@ -24,7 +24,7 @@ import com.example.vuey.databinding.FragmentArtistBinding
 import com.example.vuey.feature_artist.presentation.adapter.GenreAdapter
 import com.example.vuey.feature_artist.presentation.adapter.TopTracksAdapter
 import com.example.vuey.feature_artist.presentation.viewmodel.ArtistViewModel
-import com.example.vuey.util.utils.showSnackbar
+import com.example.vuey.core.common.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

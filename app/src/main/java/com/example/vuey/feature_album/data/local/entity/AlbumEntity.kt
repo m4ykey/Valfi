@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.vuey.util.Constants.ALBUM_TABLE_NAME
-import com.example.vuey.util.Constants.ARTIST_TABLE_NAME
-import com.example.vuey.util.Constants.TRACK_TABLE_NAME
+import com.example.vuey.core.common.Constants.ALBUM_TABLE_NAME
+import com.example.vuey.core.common.Constants.ARTIST_TABLE_NAME
+import com.example.vuey.core.common.Constants.TRACK_TABLE_NAME
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

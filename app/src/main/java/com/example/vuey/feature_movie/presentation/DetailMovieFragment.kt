@@ -21,11 +21,11 @@ import com.example.vuey.databinding.FragmentDetailMovieBinding
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
-import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
-import com.example.vuey.util.network.NetworkStateMonitor
-import com.example.vuey.util.utils.DateUtils
-import com.example.vuey.util.utils.formatVoteAverage
-import com.example.vuey.util.utils.showSnackbar
+import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.core.common.network.NetworkStateMonitor
+import com.example.vuey.core.common.utils.DateUtils
+import com.example.vuey.core.common.utils.formatVoteAverage
+import com.example.vuey.core.common.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

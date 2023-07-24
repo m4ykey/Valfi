@@ -1,4 +1,4 @@
-package com.example.vuey.di
+package com.example.vuey.core.di
 
 import android.content.Context
 import android.content.SharedPreferences

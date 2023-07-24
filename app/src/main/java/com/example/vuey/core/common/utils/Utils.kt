@@ -1,4 +1,4 @@
-package com.example.vuey.util.utils
+package com.example.vuey.core.common.utils
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
