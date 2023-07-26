@@ -4,7 +4,7 @@ import com.example.vuey.feature_album.data.repository.AlbumRepositoryImpl
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.feature_artist.data.repository.ArtistRepositoryImpl
 import com.example.vuey.feature_artist.domain.repository.ArtistRepository
-import com.example.vuey.feature_movie.data.repository.MovieRepository
+import com.example.vuey.feature_movie.domain.repository.MovieRepository
 import com.example.vuey.feature_movie.data.repository.MovieRepositoryImpl
 import dagger.Module
 import dagger.Provides

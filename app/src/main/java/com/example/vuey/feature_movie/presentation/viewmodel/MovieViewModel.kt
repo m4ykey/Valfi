@@ -2,13 +2,12 @@ package com.example.vuey.feature_movie.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
-import com.example.vuey.feature_movie.data.repository.MovieRepository
+import com.example.vuey.feature_movie.domain.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
-import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieUseCases
-import com.example.vuey.core.common.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,31 +19,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    private val useCase : MovieUseCases,
     private val repository: MovieRepository
 ) : ViewModel() {
 
-    private val _movieSearchUiState = MutableStateFlow(SearchMovieUiState())
+    private val _movieSearchUiState = MutableStateFlow<SearchMovieUiState>(SearchMovieUiState.Loading)
     val movieSearchUiState : StateFlow<SearchMovieUiState> = _movieSearchUiState
 
-    private val _movieDetailUiState = MutableStateFlow(DetailMovieUiState())
+    private val _movieDetailUiState = MutableStateFlow<DetailMovieUiState>(DetailMovieUiState.Loading)
     val movieDetailUiState : StateFlow<DetailMovieUiState> = _movieDetailUiState
 
-    private val _movieCastUiState = MutableStateFlow(CastMovieUiState())
+    private val _movieCastUiState = MutableStateFlow<CastMovieUiState>(CastMovieUiState.Loading)
     val movieCastUiState : StateFlow<CastMovieUiState> = _movieCastUiState
 
     private val _searchMovieInDatabase = MutableStateFlow<List<MovieEntity>>(emptyList())
     val searchMovieInDatabase : StateFlow<List<MovieEntity>> = _searchMovieInDatabase
 
     val allMovies = repository.getAllMovies()
-
-    fun searchMovieDatabase(movieTitle : String) {
-        viewModelScope.launch {
-            repository.searchMovieInDatabase(movieTitle).collect { movieList ->
-                _searchMovieInDatabase.emit(movieList)
-            }
-        }
-    }
 
     fun getTotalLength() : Flow<Int> {
         return repository.getTotalLength()
@@ -75,51 +65,47 @@ class MovieViewModel @Inject constructor(
     }
 
     suspend fun getMovieCast(movieId: Int) {
-        useCase.getMovieCastUseCase(movieId).onEach { result ->
+        repository.getMovieCast(movieId).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _movieCastUiState.value = movieCastUiState.value.copy(
-                        castMovieData = result.data ?: emptyList(),
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error"
+                    _movieCastUiState.tryEmit(
+                        CastMovieUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
                     )
                 }
                 is Resource.Success -> {
-                    _movieCastUiState.value = movieCastUiState.value.copy(
-                        castMovieData = result.data ?: emptyList(),
-                        isLoading = false,
+                    _movieCastUiState.tryEmit(
+                        CastMovieUiState.Success(
+                            castData = result.data ?: emptyList()
+                        )
                     )
                 }
                 is Resource.Loading -> {
-                    _movieCastUiState.value = movieCastUiState.value.copy(
-                        castMovieData = result.data ?: emptyList(),
-                        isLoading = true,
-                    )
+                    _movieCastUiState.tryEmit(CastMovieUiState.Loading)
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     suspend fun getMovieDetail(movieId : Int) {
-        useCase.getMovieDetailUseCase(movieId).onEach { result ->
+        repository.getMovieDetail(movieId).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _movieDetailUiState.value = movieDetailUiState.value.copy(
-                        detailMovieData = result.data,
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error"
+                    _movieDetailUiState.tryEmit(
+                        DetailMovieUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
                     )
                 }
                 is Resource.Loading -> {
-                    _movieDetailUiState.value = movieDetailUiState.value.copy(
-                        detailMovieData = result.data,
-                        isLoading = true,
-                    )
+                    _movieDetailUiState.tryEmit(DetailMovieUiState.Loading)
                 }
                 is Resource.Success -> {
-                    _movieDetailUiState.value = movieDetailUiState.value.copy(
-                        detailMovieData = result.data,
-                        isLoading = false,
+                    _movieDetailUiState.tryEmit(
+                        DetailMovieUiState.Success(
+                            movieData = result.data!!
+                        )
                     )
                 }
             }
@@ -127,26 +113,24 @@ class MovieViewModel @Inject constructor(
     }
 
     suspend fun searchMovie(movieName : String) {
-        useCase.getMovieSearchUseCase(movieName).onEach { result ->
+        repository.searchMovie(movieName).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _movieSearchUiState.value = movieSearchUiState.value.copy(
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error",
-                        searchMovieData = result.data ?: emptyList()
+                    _movieSearchUiState.tryEmit(
+                        SearchMovieUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
                     )
                 }
                 is Resource.Success -> {
-                    _movieSearchUiState.value = movieSearchUiState.value.copy(
-                        isLoading = false,
-                        searchMovieData = result.data ?: emptyList()
+                    _movieSearchUiState.tryEmit(
+                        SearchMovieUiState.Success(
+                            movieData = result.data ?: emptyList()
+                        )
                     )
                 }
                 is Resource.Loading -> {
-                    _movieSearchUiState.value = movieSearchUiState.value.copy(
-                        isLoading = true,
-                        searchMovieData = result.data ?: emptyList()
-                    )
+                    _movieSearchUiState.tryEmit(SearchMovieUiState.Loading)
                 }
             }
         }.launchIn(viewModelScope)

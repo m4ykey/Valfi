@@ -1,4 +1,4 @@
-package com.example.vuey.feature_movie.data.repository
+package com.example.vuey.feature_movie.domain.repository
 
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieCast

@@ -7,6 +7,7 @@ import com.example.vuey.feature_movie.data.remote.model.MovieCast
 import com.example.vuey.feature_movie.data.remote.model.MovieDetail
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 import com.example.vuey.core.common.network.Resource
+import com.example.vuey.feature_movie.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException

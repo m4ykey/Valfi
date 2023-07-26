@@ -26,6 +26,8 @@ import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.core.common.utils.DateUtils
 import com.example.vuey.core.common.utils.formatVoteAverage
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
+import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,17 +41,13 @@ class DetailMovieFragment : Fragment() {
 
     private var _binding: FragmentDetailMovieBinding? = null
     private val binding get() = _binding!!
-
     private val args: DetailMovieFragmentArgs by navArgs()
-
     private val viewModel: MovieViewModel by viewModels()
-
     private val castAdapter by lazy { CastAdapter() }
-
     private var isMovieSaved = false
 
-    private lateinit var connectivityManager : ConnectivityManager
-    private val networkStateMonitor : NetworkStateMonitor by lazy {
+    private lateinit var connectivityManager: ConnectivityManager
+    private val networkStateMonitor: NetworkStateMonitor by lazy {
         NetworkStateMonitor(connectivityManager)
     }
 
@@ -63,7 +61,8 @@ class DetailMovieFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         networkStateMonitor.startMonitoring()
     }
 
@@ -75,9 +74,10 @@ class DetailMovieFragment : Fragment() {
         hideBottomNavigation()
 
         lifecycleScope.launch {
-            viewModel.getMovieDetail(args.movie.id)
-            viewModel.getMovieCast(args.movie.id)
-
+            viewModel.apply {
+                getMovieDetail(args.movie.id)
+                getMovieCast(args.movie.id)
+            }
             binding.swipeRefresh.apply {
                 setOnRefreshListener {
                     launch {
@@ -198,40 +198,36 @@ class DetailMovieFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieDetailUiState.collect { uiState ->
-                    when {
-                        uiState.isLoading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-
-                        uiState.isError?.isNotEmpty() == true -> {
-                            binding.progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.isError.toString(),
-                                Snackbar.LENGTH_LONG
-                            )
-                        }
-
-                        uiState.detailMovieData != null -> {
-                            binding.progressBar.visibility = View.GONE
-
-                            val movieDetail = uiState.detailMovieData
-
-                            val genreList =
-                                movieDetail.genreList.joinToString(separator = ", ") { it.name }
-                            val movieHour = movieDetail.runtime / 60
-                            val movieMinute = movieDetail.runtime % 60
-                            val movieRuntime = if (movieHour == 0) {
-                                String.format("%d min", movieMinute)
-                            } else {
-                                String.format(
-                                    "%d ${getString(R.string.hour)} %d min",
-                                    movieHour,
-                                    movieMinute
-                                )
+                    with(binding) {
+                        when (uiState) {
+                            is DetailMovieUiState.Loading -> {
+                                progressBar.visibility = View.VISIBLE
                             }
 
-                            with(binding) {
+                            is DetailMovieUiState.Failure -> {
+                                progressBar.visibility = View.GONE
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                            }
+
+                            is DetailMovieUiState.Success -> {
+
+                                progressBar.visibility = View.GONE
+
+                                val movieDetail = uiState.movieData
+
+                                val genreList =
+                                    movieDetail.genreList.joinToString(separator = ", ") { it.name }
+                                val movieHour = movieDetail.runtime / 60
+                                val movieMinute = movieDetail.runtime % 60
+                                val movieRuntime = if (movieHour == 0) {
+                                    String.format("%d min", movieMinute)
+                                } else {
+                                    String.format(
+                                        "%d ${getString(R.string.hour)} %d min",
+                                        movieHour,
+                                        movieMinute
+                                    )
+                                }
 
                                 if (!movieDetail.backdropPath.isNullOrEmpty()) {
                                     imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdropPath) {
@@ -246,7 +242,8 @@ class DetailMovieFragment : Fragment() {
                                 }
 
                                 if (movieDetail.spokenLanguages.isEmpty()) {
-                                    txtSpokenLanguages.text = getString(R.string.languages_empty)
+                                    txtSpokenLanguages.text =
+                                        getString(R.string.languages_empty)
                                 }
 
                                 txtMovieTitle.text = movieDetail.title
@@ -263,12 +260,17 @@ class DetailMovieFragment : Fragment() {
                                 } else if (movieDetail.releaseDate.isEmpty()) {
                                     "$movieRuntime • $genreList"
                                 } else {
-                                    "$movieRuntime • $genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                    "$movieRuntime • $genreList • ${
+                                        DateUtils.formatAirDate(
+                                            movieDetail.releaseDate
+                                        )
+                                    }"
                                 }
 
                                 txtSpokenLanguages.text =
                                     movieDetail.spokenLanguages.joinToString(separator = ", ") { it.name }
-                                txtVoteAverage.text = movieDetail.voteAverage.formatVoteAverage()
+                                txtVoteAverage.text =
+                                    movieDetail.voteAverage.formatVoteAverage()
 
                                 val movieEntity = MovieEntity(
                                     movieBackdropPath = movieDetail.backdropPath.toString(),
@@ -321,26 +323,21 @@ class DetailMovieFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieCastUiState.collect { uiState ->
-                    when {
-                        uiState.isLoading -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.progressBarCast.visibility = View.VISIBLE
-                        }
-
-                        uiState.isError?.isNotEmpty() == true -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.progressBarCast.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.isError.toString(),
-                                Snackbar.LENGTH_LONG
-                            )
-                        }
-
-                        uiState.castMovieData.isNotEmpty() -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.progressBarCast.visibility = View.GONE
-                            castAdapter.submitCast(uiState.castMovieData)
+                    with(binding){
+                        when (uiState) {
+                            is CastMovieUiState.Loading -> {
+                                progressBar.visibility = View.GONE
+                                progressBarCast.visibility = View.VISIBLE }
+                            is CastMovieUiState.Failure -> {
+                                progressBar.visibility = View.GONE
+                                progressBarCast.visibility = View.GONE
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                            }
+                            is CastMovieUiState.Success -> {
+                                progressBar.visibility = View.GONE
+                                progressBarCast.visibility = View.GONE
+                                castAdapter.submitCast(uiState.castData)
+                            }
                         }
                     }
                 }

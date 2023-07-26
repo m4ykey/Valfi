@@ -17,6 +17,7 @@ import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,17 +80,17 @@ class SearchMovieFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieSearchUiState.collect { uiState ->
-                    when {
-                        uiState.isLoading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-                        uiState.isError?.isNotEmpty() == true -> {
-                            binding.progressBar.visibility = View.GONE
-                            showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
-                        }
-                        uiState.searchMovieData.isNotEmpty() -> {
-                            binding.progressBar.visibility = View.GONE
-                            movieAdapter.submitMovie(uiState.searchMovieData)
+                    with(binding) {
+                        when(uiState) {
+                            is SearchMovieUiState.Success -> {
+                                progressBar.visibility = View.GONE
+                                movieAdapter.submitMovie(uiState.movieData)
+                            }
+                            is SearchMovieUiState.Failure -> {
+                                progressBar.visibility = View.GONE
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                            }
+                            else -> {}
                         }
                     }
                 }
