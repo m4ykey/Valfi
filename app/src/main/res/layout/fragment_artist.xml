@@ -12,148 +12,107 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/imgArtist"
-            android:scaleType="centerCrop"
-            tools:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:contentDescription="@string/artist_image" />
-
-        <View
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/imgArtist"
-            android:background="@drawable/movie_gradient"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"/>
-
-        <TextView
-            android:id="@+id/txtArtist"
-            app:layout_constraintTop_toBottomOf="@+id/imgArtist"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            tools:text="Artist"
-            android:textColor="@color/white"
-            android:shadowRadius="2"
-            android:shadowDy="2"
-            android:shadowDx="2"
-            android:textSize="30sp"
-            android:fontFamily="@font/cabin_semibold"
-            android:shadowColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
         <com.google.android.material.appbar.AppBarLayout
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/appBar"
+            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:layout_width="match_parent"
                 android:id="@+id/toolbar"
                 app:menu="@menu/menu_artist"
-                app:navigationIconTint="@color/white"
                 app:navigationIcon="@drawable/ic_arrow_back"
-                android:layout_height="match_parent"/>
+                app:navigationIconTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
+        <androidx.cardview.widget.CardView
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@id/appBar"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:id="@+id/cardViewImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imgArtist"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/artist_image"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnFollow"
+            android:backgroundTint="@color/green"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/txtArtist"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            android:text="@string/genres"
-            android:fontFamily="@font/cabin"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:id="@+id/txtGenres"
-            android:textSize="20sp"/>
+            app:layout_constraintBottom_toBottomOf="@id/cardViewImage"
+            app:layout_constraintEnd_toEndOf="@id/cardViewImage"
+            android:text="@string/follow"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewGenre"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtGenres"
-            android:scrollbars="horizontal"
+        <TextView
+            android:shadowColor="@color/black"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:id="@+id/txtArtist"
+            android:textColor="@color/white"
+            android:fontFamily="@font/cabin_semibold"
+            android:textSize="18sp"
+            android:layout_margin="10dp"
+            tools:text="Frank Ocean"
+            app:layout_constraintStart_toStartOf="@id/cardViewImage"
+            app:layout_constraintBottom_toBottomOf="@id/cardViewImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/txtGenres"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/genre_list_is_empty"
-            app:layout_constraintBottom_toTopOf="@id/txtAbout"
-            tools:visibility="visible"
-            android:id="@+id/txtEmptyGenres"
-            android:visibility="gone"
-            android:textSize="16sp"
-            android:fontFamily="@font/cabin"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:id="@+id/txtAbout"
-            android:text="@string/about"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:fontFamily="@font/cabin"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewGenre"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
-
         <LinearLayout
             android:orientation="vertical"
-            android:id="@+id/linearLayoutAbout"
-            android:layout_margin="10dp"
+            android:id="@+id/linearLayoutTopTracks"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtAbout"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/txtContent"
-                android:maxLines="3"
-                android:ellipsize="end"
-                android:fontFamily="@font/cabin"
-                android:textColor="@color/text_grey"
-                tools:text="Myslovitz is a Polish alternative rock band, whose music incorporates elements of college rock, shoegazing, and - arguably - Britpop (Artur Rojek used to admit Suede as an influence), with a dose of melancholy. Although often dubbed the Polish Radiohead by critics, their music is actually more reminiscent of Coldplay and Travis or early Radiohead. From 2003, EMI Records has been attempting to establish them internationally, with considerable support from MTV Europe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/top_tracks"
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                android:fontFamily="@font/cabin_semibold"
+                android:textColor="@color/white"
+                android:id="@+id/txtTopTracks"/>
 
-            <TextView
-                android:fontFamily="@font/cabin"
-                android:textColor="@color/text_grey"
-                android:id="@+id/txtContentFull"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Myslovitz is a Polish alternative rock band, whose music incorporates elements of college rock, shoegazing, and - arguably - Britpop (Artur Rojek used to admit Suede as an influence), with a dose of melancholy. Although often dubbed the Polish Radiohead by critics, their music is actually more reminiscent of Coldplay and Travis or early Radiohead. From 2003, EMI Records has been attempting to establish them internationally, with considerable support from MTV Europe"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTopTracks"
+                app:layout_constraintTop_toBottomOf="@id/txtTopTracks"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_informations"
-                android:layout_gravity="center"
+                android:text="@string/top_tracks_list_is_empty"
                 tools:visibility="visible"
-                android:id="@+id/txtEmptyAbout"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:id="@+id/txtEmptyTopTracks"
                 android:visibility="gone"
                 android:textSize="16sp"
                 android:fontFamily="@font/cabin"
@@ -161,84 +120,46 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtStatistics"
-            android:text="@string/statistics"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:fontFamily="@font/cabin"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/linearLayoutAbout"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
-
         <LinearLayout
-            android:id="@+id/linearLayoutStatistics"
-            android:layout_margin="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtStatistics"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTopTracks"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/linearLayoutGenre">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/genres"
                 android:fontFamily="@font/cabin"
-                android:textColor="@color/text_grey"
-                android:textSize="16sp"
-                android:id="@+id/txtFollowers"
-                tools:text="Followers: 1111"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:id="@+id/txtGenres"
+                android:textSize="20sp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewGenre"
+                android:layout_marginStart="5dp"
+                android:scrollbars="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:fontFamily="@font/cabin"
-                android:textColor="@color/text_grey"
-                android:textSize="16sp"
-                android:id="@+id/txtPopularity"
-                tools:text=" • Popularity: 100"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/genre_list_is_empty"
+                tools:visibility="visible"
+                android:id="@+id/txtEmptyGenres"
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:fontFamily="@font/cabin"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/linearLayoutStatistics"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            android:text="@string/top_tracks"
-            android:fontFamily="@font/cabin"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:id="@+id/txtTopTracks"
-            android:textSize="20sp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewTopTracks"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtTopTracks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/top_tracks_list_is_empty"
-            app:layout_constraintTop_toBottomOf="@+id/txtTopTracks"
-            tools:visibility="visible"
-            android:layout_marginTop="10dp"
-            android:id="@+id/txtEmptyTopTracks"
-            android:visibility="gone"
-            android:textSize="16sp"
-            android:fontFamily="@font/cabin"
-            android:textColor="@color/white"/>
 
         <ProgressBar
             android:visibility="gone"

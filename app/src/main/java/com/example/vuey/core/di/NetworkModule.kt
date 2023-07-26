@@ -1,9 +1,7 @@
 package com.example.vuey.core.di
 
 import com.example.vuey.core.common.Constants
-import com.example.vuey.feature_album.data.remote.token.LastFmInterceptor
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
-import com.example.vuey.feature_artist.data.remote.api.ArtistLastFmApi
 import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
 import dagger.Module
 import dagger.Provides
@@ -27,10 +25,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLastFmInterceptor(): LastFmInterceptor = LastFmInterceptor()
-
-    @Provides
-    @Singleton
     fun provideGsonConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
@@ -46,13 +40,11 @@ object NetworkModule {
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         spotifyInterceptor: SpotifyInterceptor,
-        tmdbInterceptor: TmdbInterceptor,
-        lastFmInterceptor: LastFmInterceptor
+        tmdbInterceptor: TmdbInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(tmdbInterceptor)
         .addInterceptor(spotifyInterceptor)
-        .addInterceptor(lastFmInterceptor)
         .readTimeout(2, TimeUnit.MINUTES)
         .connectTimeout(2, TimeUnit.MINUTES)
         .build()
@@ -103,19 +95,4 @@ object NetworkModule {
             .client(httpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
-
-    @Provides
-    @Singleton
-    fun provideArtistBioApi(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
-    ): ArtistLastFmApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.LAST_FM_BASE_URL)
-            .client(httpClient)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
-            .create(ArtistLastFmApi::class.java)
-    }
-
 }

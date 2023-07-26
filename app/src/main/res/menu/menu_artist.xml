@@ -2,11 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/imgArtist"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_artist"
-        android:title="@string/artist"/>
-    <item android:title="@string/save_icon"
-        android:id="@+id/imgSave"
-        android:icon="@drawable/ic_save_outlined"
-        app:showAsAction="always"/>
+        android:title="@string/artist_page"/>
 </menu>

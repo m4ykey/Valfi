@@ -2,11 +2,10 @@ package com.example.vuey.feature_artist.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vuey.feature_artist.domain.usecase.ArtistUseCase
-import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistBioUiState
+import com.example.vuey.core.common.network.Resource
+import com.example.vuey.feature_artist.domain.repository.ArtistRepository
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistInfoUiState
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistTopTracksUiState
-import com.example.vuey.core.common.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,93 +15,60 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArtistViewModel @Inject constructor(
-    private val useCase : ArtistUseCase
+    private val repository : ArtistRepository
 ) : ViewModel() {
 
-    private val _artistBioUiState = MutableStateFlow(ArtistBioUiState())
-    val artistBioUiState : StateFlow<ArtistBioUiState> = _artistBioUiState
-
-    private val _artistInfoUiState = MutableStateFlow(ArtistInfoUiState())
+    private val _artistInfoUiState = MutableStateFlow<ArtistInfoUiState>(ArtistInfoUiState.Loading)
     val artistInfoUiState : StateFlow<ArtistInfoUiState> = _artistInfoUiState
 
-    private val _artistTopTracksUiState = MutableStateFlow(ArtistTopTracksUiState())
+    private val _artistTopTracksUiState = MutableStateFlow<ArtistTopTracksUiState>(ArtistTopTracksUiState.Loading)
     val artistTopTracksUiState : StateFlow<ArtistTopTracksUiState> = _artistTopTracksUiState
 
     suspend fun getArtistTopTracks(artistId: String) {
-        useCase.getArtistTopTracksUseCase(artistId).onEach { result ->
+        repository.getArtistTopTracks(artistId).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _artistTopTracksUiState.value = artistTopTracksUiState.value.copy(
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error",
-                        topTracksData = result.data ?: emptyList()
+                    _artistTopTracksUiState.tryEmit(
+                        ArtistTopTracksUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
                     )
                 }
 
                 is Resource.Success -> {
-                    _artistTopTracksUiState.value = artistTopTracksUiState.value.copy(
-                        isLoading = false,
-                        topTracksData = result.data ?: emptyList()
+                    _artistTopTracksUiState.tryEmit(
+                        ArtistTopTracksUiState.Success(
+                            topTracksData = result.data ?: emptyList()
+                        )
                     )
                 }
 
                 is Resource.Loading -> {
-                    _artistTopTracksUiState.value = artistTopTracksUiState.value.copy(
-                        isLoading = true,
-                        topTracksData = result.data ?: emptyList()
-                    )
+                    _artistTopTracksUiState.tryEmit(ArtistTopTracksUiState.Loading)
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     suspend fun getArtistInfo(artistId : String) {
-        useCase.getArtistInfoUseCase(artistId).onEach { result ->
+        repository.getArtistInfo(artistId).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _artistInfoUiState.value = artistInfoUiState.value.copy(
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error",
-                        artistInfoData = result.data
+                    _artistInfoUiState.tryEmit(
+                        ArtistInfoUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
                     )
                 }
                 is Resource.Success -> {
-                    _artistInfoUiState.value = artistInfoUiState.value.copy(
-                        isLoading = false,
-                        artistInfoData = result.data
+                    _artistInfoUiState.tryEmit(
+                        ArtistInfoUiState.Success(
+                            artistData = result.data!!
+                        )
                     )
                 }
                 is Resource.Loading -> {
-                    _artistInfoUiState.value = artistInfoUiState.value.copy(
-                        isLoading = true,
-                        artistInfoData = result.data
-                    )
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    suspend fun getArtistBio(artistName : String) {
-        useCase.getArtistBioUseCase(artistName).onEach { result ->
-            when (result) {
-                is Resource.Loading -> {
-                    _artistBioUiState.value = artistBioUiState.value.copy(
-                        isLoading = true,
-                        artistBioData = result.data
-                    )
-                }
-                is Resource.Success -> {
-                    _artistBioUiState.value = artistBioUiState.value.copy(
-                        isLoading = false,
-                        artistBioData = result.data
-                    )
-                }
-                is Resource.Failure -> {
-                    _artistBioUiState.value = artistBioUiState.value.copy(
-                        isLoading = false,
-                        artistBioData = result.data,
-                        isError = result.message ?: "Unknown error"
-                    )
+                    _artistInfoUiState.tryEmit(ArtistInfoUiState.Loading)
                 }
             }
         }.launchIn(viewModelScope)

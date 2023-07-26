@@ -25,6 +25,8 @@ import com.example.vuey.feature_artist.presentation.adapter.GenreAdapter
 import com.example.vuey.feature_artist.presentation.adapter.TopTracksAdapter
 import com.example.vuey.feature_artist.presentation.viewmodel.ArtistViewModel
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistInfoUiState
+import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistTopTracksUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +46,8 @@ class ArtistFragment : Fragment() {
 
     private val args: ArtistFragmentArgs by navArgs()
 
+    private var isFollowed = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,21 +61,14 @@ class ArtistFragment : Fragment() {
 
         lifecycleScope.launch {
             with(artistViewModel) {
-                getArtistBio(args.artistName) // lastfm
-                getArtistInfo(args.artistId) // spotify
-                getArtistTopTracks(args.artistId) // spotify
+                getArtistInfo(args.artistId)
+                getArtistTopTracks(args.artistId)
             }
         }
 
         with(binding) {
-            val artistSite = toolbar.menu.findItem(R.id.imgArtist)
-            val saveArtist = toolbar.menu.findItem(R.id.imgSave)
-            artistSite.icon.let {
-                MenuItemCompat.setIconTintList(artistSite, ColorStateList.valueOf(Color.WHITE))
-            }
-            saveArtist.icon.let {
-                MenuItemCompat.setIconTintList(saveArtist, ColorStateList.valueOf(Color.WHITE))
-            }
+            val artistPage = toolbar.menu.findItem(R.id.imgArtist)
+            artistPage.icon.let { MenuItemCompat.setIconTintList(artistPage, ColorStateList.valueOf(Color.WHITE)) }
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             recyclerViewTopTracks.adapter = topTracksAdapter
             recyclerViewGenre.apply {
@@ -79,20 +76,18 @@ class ArtistFragment : Fragment() {
                 layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
-            linearLayoutAbout.setOnClickListener {
-                if (txtContentFull.visibility == View.GONE) {
-                    txtContent.visibility = View.GONE
-                    txtContentFull.visibility = View.VISIBLE
+            btnFollow.setOnClickListener {
+                isFollowed = !isFollowed
+                if (isFollowed) {
+                    btnFollow.text = getString(R.string.followed)
                 } else {
-                    txtContent.visibility = View.VISIBLE
-                    txtContentFull.visibility = View.GONE
+                    btnFollow.text = getString(R.string.follow)
                 }
             }
         }
 
         hideBottomNavigation()
         observeArtistInfo()
-        observeArtistBio()
         observeArtistTopTracks()
     }
 
@@ -101,49 +96,18 @@ class ArtistFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 artistViewModel.artistTopTracksUiState.collect { uiState ->
                     with(binding) {
-                        when {
-                            uiState.isLoading -> { progressBar.visibility = View.VISIBLE }
-                            uiState.isError?.isNotEmpty() == true -> {
-                                showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
-                            }
-                            uiState.topTracksData.isNotEmpty() -> {
+                        when (uiState) {
+                            is ArtistTopTracksUiState.Success -> {
+                                progressBar.visibility = View.GONE
                                 if (uiState.topTracksData.isEmpty()) {
-                                    txtEmptyTopTracks.visibility = View.VISIBLE
                                     recyclerViewTopTracks.visibility = View.GONE
                                 }
                                 topTracksAdapter.submitTopTracks(uiState.topTracksData)
                             }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeArtistBio() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                artistViewModel.artistBioUiState.collect { uiState ->
-                    with(binding) {
-                        when {
-                            uiState.isLoading -> { progressBar.visibility = View.VISIBLE }
-
-                            uiState.isError?.isNotEmpty() == true -> {
-                                showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
-                            }
-                            uiState.artistBioData != null -> {
-
+                            is ArtistTopTracksUiState.Loading -> { progressBar.visibility = View.VISIBLE }
+                            is ArtistTopTracksUiState.Failure -> {
                                 progressBar.visibility = View.GONE
-
-                                val artistInfo = uiState.artistBioData
-
-                                txtContent.text = artistInfo.bio.content
-                                txtContentFull.text = artistInfo.bio.content
-
-                                if (artistInfo.bio.content.isEmpty()) {
-                                    txtContent.visibility = View.GONE
-                                    txtEmptyAbout.visibility = View.VISIBLE
-                                }
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
                             }
                         }
                     }
@@ -163,27 +127,19 @@ class ArtistFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 artistViewModel.artistInfoUiState.collect { uiState ->
                     with(binding) {
-                        when {
-                            uiState.isLoading -> {
-                                progressBar.visibility = View.VISIBLE
-                            }
-
-                            uiState.isError?.isNotEmpty() == true -> {}
-                            uiState.artistInfoData != null -> {
-
+                        when (uiState) {
+                            is ArtistInfoUiState.Loading -> { progressBar.visibility = View.VISIBLE }
+                            is ArtistInfoUiState.Success -> {
                                 progressBar.visibility = View.GONE
 
-                                val artistInfo = uiState.artistInfoData
-                                val image =
-                                    artistInfo.images.find { it.height == 640 && it.width == 640 }
+                                val artistInfo = uiState.artistData
+                                val image = artistInfo.images.find { it.height == 640 && it.width == 640 }
 
-                                imgArtist.load(image?.url)
+                                imgArtist.load(image?.url) {
+                                    crossfade(true)
+                                    crossfade(500)
+                                }
                                 txtArtist.text = artistInfo.name
-                                txtFollowers.text =
-                                    "${getString(R.string.followers)} : ${artistInfo.followers.total}" + " • " + "${
-                                        getString(R.string.popularity)
-                                    } : ${artistInfo.popularity}"
-
                                 if (artistInfo.genres.isEmpty()) {
                                     txtEmptyGenres.visibility = View.VISIBLE
                                 } else {
@@ -196,13 +152,13 @@ class ArtistFragment : Fragment() {
                                             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(artistInfo.external_urls.spotify)))
                                             true
                                         }
-                                        R.id.imgSave -> {
-                                            showSnackbar(requireView(), getString(R.string.added_to_library))
-                                            true
-                                        }
                                         else -> { false }
                                     }
                                 }
+                            }
+                            is ArtistInfoUiState.Failure -> {
+                                progressBar.visibility = View.GONE
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
                             }
                         }
                     }
