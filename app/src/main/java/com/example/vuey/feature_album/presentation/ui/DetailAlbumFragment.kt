@@ -264,12 +264,9 @@ class DetailAlbumFragment : Fragment() {
                                         if (isAvailable) {
                                             txtArtist.apply {
                                                 text = artistNames
-                                                val artistName =
-                                                    albumDetail.artistList[0].artistName
                                                 val artistId = albumDetail.artistList[0].id
                                                 setOnClickListener {
                                                     val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistFragment(
-                                                        artistName = artistName,
                                                         artistId = artistId
                                                     )
                                                     it.findNavController().navigate(action)

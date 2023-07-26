@@ -23,7 +23,6 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
-                app:menu="@menu/menu_artist"
                 app:navigationIcon="@drawable/ic_arrow_back"
                 app:navigationIconTint="@color/white"
                 android:layout_width="match_parent"
@@ -53,6 +52,7 @@
         </androidx.cardview.widget.CardView>
 
         <Button
+            android:fontFamily="@font/cabin"
             android:id="@+id/btnFollow"
             android:backgroundTint="@color/green"
             android:textColor="@color/white"
@@ -71,7 +71,7 @@
             android:id="@+id/txtArtist"
             android:textColor="@color/white"
             android:fontFamily="@font/cabin_semibold"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_margin="10dp"
             tools:text="Frank Ocean"
             app:layout_constraintStart_toStartOf="@id/cardViewImage"
@@ -101,7 +101,6 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewTopTracks"
                 app:layout_constraintTop_toBottomOf="@id/txtTopTracks"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

@@ -101,8 +101,5 @@
         <argument
             android:name="artistId"
             app:argType="string" />
-        <argument
-            android:name="artistName"
-            app:argType="string" />
     </fragment>
 </navigation>

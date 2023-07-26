@@ -1,15 +1,10 @@
 package com.example.vuey.feature_artist.presentation.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,14 +12,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
+import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentArtistBinding
 import com.example.vuey.feature_artist.presentation.adapter.GenreAdapter
 import com.example.vuey.feature_artist.presentation.adapter.TopTracksAdapter
 import com.example.vuey.feature_artist.presentation.viewmodel.ArtistViewModel
-import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistInfoUiState
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistTopTracksUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -67,10 +63,11 @@ class ArtistFragment : Fragment() {
         }
 
         with(binding) {
-            val artistPage = toolbar.menu.findItem(R.id.imgArtist)
-            artistPage.icon.let { MenuItemCompat.setIconTintList(artistPage, ColorStateList.valueOf(Color.WHITE)) }
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-            recyclerViewTopTracks.adapter = topTracksAdapter
+            recyclerViewTopTracks.apply {
+                adapter = topTracksAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
             recyclerViewGenre.apply {
                 adapter = genreAdapter
                 layoutManager =
@@ -133,27 +130,15 @@ class ArtistFragment : Fragment() {
                                 progressBar.visibility = View.GONE
 
                                 val artistInfo = uiState.artistData
-                                val image = artistInfo.images.find { it.height == 640 && it.width == 640 }
 
-                                imgArtist.load(image?.url) {
-                                    crossfade(true)
-                                    crossfade(500)
-                                }
+                                val artistImage = artistInfo.images.find { it.height == 640 && it.width == 640 }
+                                imgArtist.load(artistImage!!.url)
+
                                 txtArtist.text = artistInfo.name
                                 if (artistInfo.genres.isEmpty()) {
                                     txtEmptyGenres.visibility = View.VISIBLE
                                 } else {
                                     genreAdapter.submitGenre(artistInfo.genres)
-                                }
-
-                                toolbar.setOnMenuItemClickListener { menuItem ->
-                                    when (menuItem.itemId) {
-                                        R.id.imgArtist -> {
-                                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(artistInfo.external_urls.spotify)))
-                                            true
-                                        }
-                                        else -> { false }
-                                    }
                                 }
                             }
                             is ArtistInfoUiState.Failure -> {
