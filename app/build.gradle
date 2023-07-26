@@ -8,6 +8,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -19,7 +20,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "2.5.2"
+        versionName "2.5.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -100,7 +101,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf-ktx:20.4.0'
 
     // Room Database
-    kapt 'androidx.room:room-compiler:2.5.2'
+    ksp 'androidx.room:room-compiler:2.5.2'
     implementation 'androidx.room:room-runtime:2.5.2'
     implementation 'androidx.room:room-ktx:2.5.2'
 

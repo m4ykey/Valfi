@@ -21,10 +21,10 @@ class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepository
 ) : ViewModel() {
 
-    private val _albumSearchUiState = MutableStateFlow(SearchAlbumUiState())
+    private val _albumSearchUiState = MutableStateFlow<SearchAlbumUiState>(SearchAlbumUiState.Loading)
     val albumSearchUiState: StateFlow<SearchAlbumUiState> = _albumSearchUiState
 
-    private val _albumDetailUiState = MutableStateFlow(DetailAlbumUiState())
+    private val _albumDetailUiState = MutableStateFlow<DetailAlbumUiState>(DetailAlbumUiState.Loading)
     val albumDetailUiState: StateFlow<DetailAlbumUiState> = _albumDetailUiState
 
     private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
@@ -40,14 +40,6 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumCount(): Flow<Int> {
         return repository.getAlbumCount()
-    }
-
-    fun searchAlbumDatabase(albumName: String) {
-        viewModelScope.launch {
-            repository.searchAlbumInDatabase(albumName).collect { albumList ->
-                _searchAlbumInDatabase.emit(albumList)
-            }
-        }
     }
 
     val allAlbums = repository.getAllAlbums()
@@ -75,25 +67,21 @@ class AlbumViewModel @Inject constructor(
     suspend fun getAlbumDetail(albumId: String) {
         repository.getAlbum(albumId).onEach { result ->
             when (result) {
-                is Resource.Success -> {
-                    _albumDetailUiState.value = albumDetailUiState.value.copy(
-                        detailAlbumData = result.data,
-                        isLoading = false
-                    )
-                }
-
                 is Resource.Failure -> {
-                    _albumDetailUiState.value = albumDetailUiState.value.copy(
-                        detailAlbumData = result.data,
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error"
+                    _albumDetailUiState.tryEmit(
+                        DetailAlbumUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
                     )
                 }
-
                 is Resource.Loading -> {
-                    _albumDetailUiState.value = albumDetailUiState.value.copy(
-                        detailAlbumData = result.data,
-                        isLoading = true
+                    _albumDetailUiState.tryEmit(DetailAlbumUiState.Loading)
+                }
+                is Resource.Success -> {
+                    _albumDetailUiState.tryEmit(
+                        DetailAlbumUiState.Success(
+                            albumData = result.data!!
+                        )
                     )
                 }
             }
@@ -104,25 +92,23 @@ class AlbumViewModel @Inject constructor(
         repository.searchAlbum(albumName).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    _albumSearchUiState.value = albumSearchUiState.value.copy(
-                        searchAlbumData = result.data ?: emptyList(),
-                        isLoading = false
+                    _albumSearchUiState.tryEmit(
+                        SearchAlbumUiState.Success(
+                            albumData = result.data ?: emptyList()
+                        )
                     )
                 }
 
                 is Resource.Failure -> {
-                    _albumSearchUiState.value = albumSearchUiState.value.copy(
-                        searchAlbumData = result.data ?: emptyList(),
-                        isLoading = false,
-                        isError = result.message ?: "Unknown error"
-                    )
+                   _albumSearchUiState.tryEmit(
+                       SearchAlbumUiState.Failure(
+                           message = result.message ?: "Unknown error"
+                       )
+                   )
                 }
 
                 is Resource.Loading -> {
-                    _albumSearchUiState.value = albumSearchUiState.value.copy(
-                        searchAlbumData = result.data ?: emptyList(),
-                        isLoading = true
-                    )
+                    _albumSearchUiState.tryEmit(SearchAlbumUiState.Loading)
                 }
             }
         }.launchIn(viewModelScope)

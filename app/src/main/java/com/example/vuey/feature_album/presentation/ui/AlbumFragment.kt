@@ -75,13 +75,13 @@ class AlbumFragment : Fragment() {
                         true
                     }
 
-                    R.id.imgAdd -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
+                    R.id.imgStatistics -> {
+                        findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
                         true
                     }
 
-                    R.id.imgStatistics -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
+                    R.id.imgAdd -> {
+                        findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
                         true
                     }
 

@@ -17,6 +17,7 @@ import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,18 +82,17 @@ class SearchAlbumFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 searchViewModel.albumSearchUiState.collect { uiState ->
                     with(binding) {
-                        when {
-                            uiState.isLoading -> {
-                                progressBar.visibility = View.VISIBLE
-                            }
-                            uiState.searchAlbumData.isNotEmpty() -> {
+                        when (uiState) {
+                            is SearchAlbumUiState.Success -> {
                                 progressBar.visibility = View.GONE
-                                albumAdapter.submitAlbums(uiState.searchAlbumData)
+                                albumAdapter.submitAlbums(uiState.albumData)
                             }
-                            uiState.isError?.isNotEmpty() == true -> {
+                            is SearchAlbumUiState.Failure -> {
                                 progressBar.visibility = View.GONE
-                                showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
                             }
+
+                            else -> {}
                         }
                     }
                 }

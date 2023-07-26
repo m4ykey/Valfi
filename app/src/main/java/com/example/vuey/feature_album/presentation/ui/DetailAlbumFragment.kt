@@ -29,6 +29,7 @@ import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.core.common.utils.DateUtils
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -106,15 +107,11 @@ class DetailAlbumFragment : Fragment() {
                     Artist(
                         id = artistEntity.id,
                         artistName = artistEntity.name,
-                        externalUrls = ExternalUrls(
-                            spotify = artistEntity.externalUrls.spotify
-                        )
+                        externalUrls = ExternalUrls(spotify = artistEntity.externalUrls.spotify)
                     )
                 },
                 durationMs = trackEntity.durationMs,
-                externalUrls = ExternalUrls(
-                    spotify = albumDatabase.externalUrls.spotify
-                ),
+                externalUrls = ExternalUrls(spotify = albumDatabase.externalUrls.spotify),
                 albumType = albumDatabase.albumType
             )
         }
@@ -149,17 +146,11 @@ class DetailAlbumFragment : Fragment() {
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
                 if (isAlbumSaved) {
-                    showSnackbar(
-                        requireView(),
-                        getString(R.string.added_to_library)
-                    )
+                    showSnackbar(requireView(), getString(R.string.added_to_library))
                     imgSave.setImageResource(R.drawable.ic_save)
                     detailViewModel.insertAlbum(albumEntity)
                 } else {
-                    showSnackbar(
-                        requireView(),
-                        getString(R.string.removed_from_library)
-                    )
+                    showSnackbar(requireView(), getString(R.string.removed_from_library))
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     detailViewModel.deleteAlbum(albumEntity)
                 }
@@ -223,20 +214,17 @@ class DetailAlbumFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 detailViewModel.albumDetailUiState.collect { uiState ->
                     with(binding) {
-                        when {
-                            uiState.isLoading -> {
-                                progressBar.visibility = View.VISIBLE
-                            }
-
-                            uiState.isError?.isNotEmpty() == true -> {
+                        when (uiState) {
+                            is DetailAlbumUiState.Loading -> { progressBar.visibility = View.VISIBLE }
+                            is DetailAlbumUiState.Failure -> {
                                 progressBar.visibility = View.GONE
-                                showSnackbar(requireView(), "${uiState.isError}", Snackbar.LENGTH_LONG)
+                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
                             }
+                            is DetailAlbumUiState.Success -> {
 
-                            uiState.detailAlbumData != null -> {
                                 progressBar.visibility = View.GONE
 
-                                val albumDetail = uiState.detailAlbumData
+                                val albumDetail = uiState.albumData
 
                                 val albumCover =
                                     albumDetail.imageList.find { it.height == 640 && it.width == 640 }
