@@ -44,4 +44,6 @@
     <string name="follow">Obserwuj</string>
     <string name="followed">Obserwujesz</string>
     <string name="artist_page">Strona artysty</string>
+    <string name="something_empty_here">Coś tutaj pusto</string>
+    <string name="quickly_add_something_to_your_list">Szybko dodaj coś do swojej listy</string>
 </resources>

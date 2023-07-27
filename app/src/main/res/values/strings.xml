@@ -43,4 +43,6 @@
     <string name="follow">Follow</string>
     <string name="followed">Followed</string>
     <string name="artist_page">Artist Page</string>
+    <string name="something_empty_here">Something empty here</string>
+    <string name="quickly_add_something_to_your_list">Quickly add something to your list</string>
 </resources>

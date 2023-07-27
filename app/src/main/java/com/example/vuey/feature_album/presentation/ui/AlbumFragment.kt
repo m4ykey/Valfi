@@ -42,17 +42,22 @@ class AlbumFragment : Fragment() {
 
         with(binding) {
             albumRecyclerView.adapter = albumAdapter
-        }
-        lifecycleScope.launch {
-            coroutineScope {
-                albumViewModel.allAlbums.collect { albums ->
-                    albumAdapter.submitAlbums(albums)
-                }
-                albumViewModel.searchAlbumInDatabase.collect { albumList ->
-                    albumAdapter.submitAlbums(albumList)
+            lifecycleScope.launch {
+                coroutineScope {
+                    albumViewModel.allAlbums.collect { albums ->
+                        if (albums.isEmpty()) {
+                            linearLayoutHome.visibility = View.GONE
+                            layoutEmptyList.root.visibility = View.VISIBLE
+                        }
+                        albumAdapter.submitAlbums(albums)
+                    }
+                    albumViewModel.searchAlbumInDatabase.collect { albumList ->
+                        albumAdapter.submitAlbums(albumList)
+                    }
                 }
             }
         }
+
         setupNavigation()
         showBottomNavigation()
     }
