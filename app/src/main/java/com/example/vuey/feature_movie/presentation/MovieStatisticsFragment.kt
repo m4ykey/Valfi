@@ -1,10 +1,13 @@
 package com.example.vuey.feature_movie.presentation
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,6 +36,7 @@ class MovieStatisticsFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,7 +49,7 @@ class MovieStatisticsFragment : Fragment() {
             lifecycleScope.launch {
                 coroutineScope {
 
-                    val movieCount = viewModel.getMovieCount().firstOrNull() ?: 0
+                    val movieCountEndValue = viewModel.getMovieCount().firstOrNull() ?: 0
                     val totalTime = viewModel.getTotalLength().firstOrNull() ?: 0
 
                     val movieHour = totalTime / 60
@@ -60,7 +64,16 @@ class MovieStatisticsFragment : Fragment() {
                         )
                     }
 
-                    txtMovieCount.text = movieCount.toString()
+                    val valueAnimator = ValueAnimator.ofInt(0, movieCountEndValue)
+                    valueAnimator.apply {
+                        duration = 2000
+                        interpolator = AccelerateDecelerateInterpolator()
+                    }
+                    valueAnimator.addUpdateListener { animator ->
+                        val animatedValue = animator.animatedValue as Int
+                        txtMovieCount.text = if (animatedValue <= movieCountEndValue) animatedValue.toString() else movieCountEndValue.toString()
+                    }
+                    valueAnimator.start()
                     txtLength.text = movieRuntime
 
                 }
