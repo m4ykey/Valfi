@@ -1,9 +1,12 @@
 package com.example.vuey.feature_album.presentation.ui
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.lang.Integer.max
 
 @AndroidEntryPoint
 class AlbumStatisticsFragment : Fragment() {
@@ -33,6 +37,7 @@ class AlbumStatisticsFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,8 +50,8 @@ class AlbumStatisticsFragment : Fragment() {
             lifecycleScope.launch {
                 coroutineScope {
 
-                    val albumCount = viewModel.getAlbumCount().firstOrNull() ?: 0
-                    val totalTracks = viewModel.getTotalTracks().firstOrNull() ?: 0
+                    val albumCountEndValue = viewModel.getAlbumCount().firstOrNull() ?: 0
+                    val totalTracksEndValue = viewModel.getTotalTracks().firstOrNull() ?: 0
                     val totalLength = viewModel.getTotalLength().firstOrNull() ?: 0
 
                     val albumTimeHour = totalLength / (1000 * 60 * 60)
@@ -61,9 +66,19 @@ class AlbumStatisticsFragment : Fragment() {
                         String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
                     }
 
-                    txtAlbumsNumber.text = albumCount.toString()
-                    txtSongs.text = totalTracks.toString()
+                    val valueAnimator = ValueAnimator.ofInt(0, max(albumCountEndValue, totalTracksEndValue))
+                    valueAnimator.apply {
+                        duration = 2000
+                        interpolator = AccelerateDecelerateInterpolator()
+                    }
 
+                    valueAnimator.addUpdateListener { animator ->
+                        val animatedValue = animator.animatedValue as Int
+                        txtAlbumsNumber.text = if (animatedValue <= albumCountEndValue) animatedValue.toString() else albumCountEndValue.toString()
+                        txtSongs.text = if (animatedValue <= totalTracksEndValue) animatedValue.toString() else totalTracksEndValue.toString()
+                    }
+
+                    valueAnimator.start()
                 }
             }
         }
