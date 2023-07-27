@@ -45,14 +45,18 @@ class MovieFragment : Fragment() {
         showBottomNavigation()
         with(binding) {
             movieRecyclerView.adapter = movieAdapter
-        }
-        lifecycleScope.launch {
-            coroutineScope {
-                movieViewModel.allMovies.collect { movies ->
-                    movieAdapter.submitMovie(movies)
-                }
-                movieViewModel.searchMovieInDatabase.collect { movieList ->
-                    movieAdapter.submitMovie(movieList)
+            lifecycleScope.launch {
+                coroutineScope {
+                    movieViewModel.allMovies.collect { movies ->
+                        if (movies.isEmpty()) {
+                            linearLayoutHome.visibility = View.GONE
+                            layoutEmptyList.root.visibility = View.VISIBLE
+                        }
+                        movieAdapter.submitMovie(movies)
+                    }
+                    movieViewModel.searchMovieInDatabase.collect { movieList ->
+                        movieAdapter.submitMovie(movieList)
+                    }
                 }
             }
         }
