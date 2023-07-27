@@ -52,6 +52,7 @@
             android:text="@string/what_did_you_watch_today"/>
 
         <EditText
+            android:textCursorDrawable="@drawable/text_cursor"
             android:imeOptions="actionSearch"
             android:layout_marginTop="10dp"
             android:drawableTint="@color/text_grey"
