@@ -46,4 +46,5 @@
     <string name="artist_page">Strona artysty</string>
     <string name="something_empty_here">Coś tutaj pusto</string>
     <string name="quickly_add_something_to_your_list">Szybko dodaj coś do swojej listy</string>
+    <string name="it_looks_like_you_don_t_have_internet">Wygląda na to, że nie masz internetu</string>
 </resources>

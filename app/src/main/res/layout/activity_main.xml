@@ -19,6 +19,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
+    <TextView
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/it_looks_like_you_don_t_have_internet"
+        android:background="@color/red_snackbar"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:id="@+id/txtNoInternet"
+        tools:visibility="visible"
+        android:padding="5dp"
+        android:fontFamily="@font/cabin"
+        android:paddingStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

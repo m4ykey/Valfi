@@ -45,4 +45,5 @@
     <string name="artist_page">Artist Page</string>
     <string name="something_empty_here">Something empty here</string>
     <string name="quickly_add_something_to_your_list">Quickly add something to your list</string>
+    <string name="it_looks_like_you_don_t_have_internet">It looks like, you don\'t have internet</string>
 </resources>

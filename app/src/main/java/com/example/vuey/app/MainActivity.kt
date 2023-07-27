@@ -1,26 +1,73 @@
 package com.example.vuey.app
 
+import android.animation.ObjectAnimator
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.vuey.R
+import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var connectivityManager: ConnectivityManager
+    private val networkStateMonitor: NetworkStateMonitor by lazy {
+        NetworkStateMonitor(connectivityManager)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        connectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        networkStateMonitor.startMonitoring()
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
+
+        lifecycleScope.launch {
+            networkStateMonitor.isInternetAvailable.collect { isAvailable ->
+                if (isAvailable) {
+                    val slideOutAnimator = ObjectAnimator.ofFloat(
+                        binding.txtNoInternet,
+                        "translationY",
+                        0f,
+                        binding.txtNoInternet.height.toFloat()
+                    )
+                    slideOutAnimator.duration = 500
+                    slideOutAnimator.start()
+                    binding.txtNoInternet.visibility = View.GONE
+                } else {
+                    val slideInAnimator = ObjectAnimator.ofFloat(
+                        binding.txtNoInternet,
+                        "translationY",
+                        binding.txtNoInternet.height.toFloat(),
+                        0f
+                    )
+                    slideInAnimator.duration = 500
+                    slideInAnimator.start()
+                    binding.txtNoInternet.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        networkStateMonitor.stopMonitoring()
     }
 }
