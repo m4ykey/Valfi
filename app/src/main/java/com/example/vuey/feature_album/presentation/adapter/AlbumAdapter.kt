@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
-import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.presentation.ui.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.ui.SearchAlbumFragmentDirections

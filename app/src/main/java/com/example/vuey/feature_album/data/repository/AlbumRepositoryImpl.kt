@@ -1,13 +1,11 @@
 package com.example.vuey.feature_album.data.repository
 
-import com.example.vuey.feature_album.data.local.dao.AlbumDao
-import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
-import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumDetail
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumDetail
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
-import com.example.vuey.core.common.network.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -19,41 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class AlbumRepositoryImpl @Inject constructor(
     private val albumApi: AlbumApi,
-    private val albumDao: AlbumDao,
     private val spotifyInterceptor: SpotifyInterceptor
 ) : AlbumRepository {
-
-    override suspend fun insertAlbum(albumEntity: AlbumEntity) {
-        return albumDao.insertAlbum(albumEntity)
-    }
-
-    override suspend fun deleteAlbum(albumEntity: AlbumEntity) {
-        return albumDao.deleteAlbum(albumEntity)
-    }
-
-    override fun getAllAlbums(): Flow<List<AlbumEntity>> {
-        return albumDao.getAllAlbums()
-    }
-
-    override fun getAlbumById(albumId: String): Flow<AlbumEntity> {
-        return albumDao.getAlbumById(albumId)
-    }
-
-    override fun getAlbumCount(): Flow<Int> {
-        return albumDao.getAlbumCount()
-    }
-
-    override fun getTotalTracks(): Flow<Int> {
-        return albumDao.getTotalTracks()
-    }
-
-    override fun getTotalLength(): Flow<Int> {
-        return albumDao.getTotalLength()
-    }
-
-    override fun searchAlbumInDatabase(searchQuery: String): Flow<List<AlbumEntity>> {
-        return albumDao.searchAlbumInDatabase(searchQuery)
-    }
 
     override suspend fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {
