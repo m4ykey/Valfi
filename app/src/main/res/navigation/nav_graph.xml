@@ -81,7 +81,7 @@
             app:argType="com.example.vuey.feature_movie.data.remote.model.MovieList" />
         <argument
             android:name="movieEntity"
-            app:argType="com.example.vuey.feature_movie.data.local.entity.MovieEntity" />
+            app:argType="com.example.vuey.feature_movie.data.local.source.entity.MovieEntity" />
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"

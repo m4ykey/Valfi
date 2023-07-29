@@ -5,7 +5,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Image
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 
 fun MovieEntity.toMovie() : MovieList {

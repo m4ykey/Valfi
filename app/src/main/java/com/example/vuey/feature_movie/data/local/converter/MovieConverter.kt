@@ -1,7 +1,7 @@
 package com.example.vuey.feature_movie.data.local.converter
 
 import androidx.room.TypeConverter
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

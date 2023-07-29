@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentDetailMovieBinding
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL

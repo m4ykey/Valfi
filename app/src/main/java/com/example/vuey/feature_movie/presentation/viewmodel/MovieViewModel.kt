@@ -3,7 +3,8 @@ package com.example.vuey.feature_movie.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.core.common.network.Resource
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.MovieLocalDataSource
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.domain.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    private val repository: MovieRepository
+    private val repository: MovieRepository,
+    private val dataSource: MovieLocalDataSource
 ) : ViewModel() {
 
     private val _movieSearchUiState = MutableStateFlow<SearchMovieUiState>(SearchMovieUiState.Loading)
@@ -34,18 +36,18 @@ class MovieViewModel @Inject constructor(
     private val _searchMovieInDatabase = MutableStateFlow<List<MovieEntity>>(emptyList())
     val searchMovieInDatabase : StateFlow<List<MovieEntity>> = _searchMovieInDatabase
 
-    val allMovies = repository.getAllMovies()
+    val allMovies = dataSource.getAllMovies()
 
     fun getTotalLength() : Flow<Int> {
-        return repository.getTotalLength()
+        return dataSource.getTotalLength()
     }
 
     fun getMovieCount() : Flow<Int> {
-        return repository.getMovieCount()
+        return dataSource.getMovieCount()
     }
 
     fun getMovieById(movieId: Int) : Flow<MovieEntity> {
-        return repository.getMovieById(movieId)
+        return dataSource.getMovieById(movieId)
     }
 
     suspend fun refreshDetail(movieId : Int) {
@@ -54,13 +56,13 @@ class MovieViewModel @Inject constructor(
 
     fun insertMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
-            repository.insertMovie(movieEntity)
+            dataSource.insertMovie(movieEntity)
         }
     }
 
     fun deleteMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
-            repository.deleteMovie(movieEntity)
+            dataSource.deleteMovie(movieEntity)
         }
     }
 

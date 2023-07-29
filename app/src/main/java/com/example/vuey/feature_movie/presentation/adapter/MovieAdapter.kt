@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.databinding.LayoutMovieBinding
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections

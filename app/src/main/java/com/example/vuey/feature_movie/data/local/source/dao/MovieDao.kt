@@ -1,11 +1,11 @@
-package com.example.vuey.feature_movie.data.local.dao
+package com.example.vuey.feature_movie.data.local.source.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

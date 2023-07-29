@@ -1,4 +1,4 @@
-package com.example.vuey.feature_movie.data.local.entity
+package com.example.vuey.feature_movie.data.local.source.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
