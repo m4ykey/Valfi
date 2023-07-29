@@ -1,6 +1,6 @@
 package com.example.vuey.core.common.utils
 
-import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls

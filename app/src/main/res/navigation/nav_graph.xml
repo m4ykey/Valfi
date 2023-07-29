@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_album_detail">
         <argument
             android:name="albumEntity"
-            app:argType="com.example.vuey.feature_album.data.local.entity.AlbumEntity" />
+            app:argType="com.example.vuey.feature_album.data.local.source.entity.AlbumEntity" />
         <argument
             android:name="album"
             app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album.Album" />

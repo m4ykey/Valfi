@@ -20,7 +20,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
-import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
