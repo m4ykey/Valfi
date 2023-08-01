@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
+import com.example.vuey.core.common.utils.SearchUtil.calculateAlbumMatchingScore
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
@@ -116,22 +117,6 @@ class SearchAlbumFragment : Fragment() {
         val bottomNavigation =
             requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.visibility = View.GONE
-    }
-
-    private fun calculateAlbumMatchingScore(album: Album, query : String) : Double {
-        val albumTitle = album.albumName.lowercase(Locale.ROOT)
-        val queryLowercase = query.lowercase(Locale.ROOT)
-
-        val maxLength = maxOf(albumTitle.length, queryLowercase.length)
-        var matchingCharacters = 0
-
-        for (i in 0 until minOf(albumTitle.length, queryLowercase.length)) {
-            if (albumTitle[i] == queryLowercase[i]) {
-                matchingCharacters++
-            }
-        }
-
-        return matchingCharacters.toDouble() / maxLength
     }
 
     override fun onDestroy() {
