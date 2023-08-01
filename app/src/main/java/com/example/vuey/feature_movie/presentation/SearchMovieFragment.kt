@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
+import com.example.vuey.core.common.utils.SearchUtil
 import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
@@ -84,7 +85,17 @@ class SearchMovieFragment : Fragment() {
                         when(uiState) {
                             is SearchMovieUiState.Success -> {
                                 progressBar.visibility = View.GONE
-                                movieAdapter.submitMovie(uiState.movieData)
+                                val moviesWithScore = uiState.movieData.map { movie ->
+                                    movie to SearchUtil.calculateMovieMatchingScore(
+                                        movie,
+                                        etSearch.text.toString()
+                                    )
+                                }
+
+                                val sortedMovie = moviesWithScore.sortedByDescending { it.second }
+                                val sortedMovieList = sortedMovie.map { it.first }
+
+                                movieAdapter.submitMovie(sortedMovieList)
                             }
                             is SearchMovieUiState.Failure -> {
                                 progressBar.visibility = View.GONE
