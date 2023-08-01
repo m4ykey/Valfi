@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/albumFragment"
-        android:icon="@drawable/select_album"
+        android:icon="@drawable/ic_album_menu"
         android:title="@string/album"/>
     <item android:id="@+id/movieFragment"
         android:title="@string/movie"
-        android:icon="@drawable/select_movie"/>
+        android:icon="@drawable/ic_movie_menu"/>
 </menu>

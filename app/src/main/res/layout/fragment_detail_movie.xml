@@ -43,7 +43,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/imgBackdrop"
-                    android:background="@drawable/movie_gradient"/>
+                    android:background="@drawable/background_gradient"/>
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:layout_width="match_parent"

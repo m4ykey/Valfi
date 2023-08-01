@@ -34,33 +34,35 @@ class MainActivity : AppCompatActivity() {
             this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         networkStateMonitor.startMonitoring()
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        binding.bottomNavigation.setupWithNavController(navController)
+        with(binding) {
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            bottomNavigation.setupWithNavController(navController)
 
-        lifecycleScope.launch {
-            networkStateMonitor.isInternetAvailable.collect { isAvailable ->
-                if (isAvailable) {
-                    val slideOutAnimator = ObjectAnimator.ofFloat(
-                        binding.txtNoInternet,
-                        "translationY",
-                        0f,
-                        binding.txtNoInternet.height.toFloat()
-                    )
-                    slideOutAnimator.duration = 500
-                    slideOutAnimator.start()
-                    binding.txtNoInternet.visibility = View.GONE
-                } else {
-                    val slideInAnimator = ObjectAnimator.ofFloat(
-                        binding.txtNoInternet,
-                        "translationY",
-                        binding.txtNoInternet.height.toFloat(),
-                        0f
-                    )
-                    slideInAnimator.duration = 500
-                    slideInAnimator.start()
-                    binding.txtNoInternet.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                networkStateMonitor.isInternetAvailable.collect { isAvailable ->
+                    if (isAvailable) {
+                        val slideOutAnimator = ObjectAnimator.ofFloat(
+                            txtNoInternet,
+                            "translationY",
+                            0f,
+                            txtNoInternet.height.toFloat()
+                        )
+                        slideOutAnimator.duration = 500
+                        slideOutAnimator.start()
+                        txtNoInternet.visibility = View.GONE
+                    } else {
+                        val slideInAnimator = ObjectAnimator.ofFloat(
+                            txtNoInternet,
+                            "translationY",
+                            txtNoInternet.height.toFloat(),
+                            0f
+                        )
+                        slideInAnimator.duration = 500
+                        slideInAnimator.start()
+                        txtNoInternet.visibility = View.VISIBLE
+                    }
                 }
             }
         }

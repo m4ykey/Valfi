@@ -1,34 +1,49 @@
 package com.example.vuey.feature_album.data.remote.token
 
-import android.content.SharedPreferences
 import android.util.Base64
-import androidx.core.content.edit
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.vuey.BuildConfig.SPOTIFY_CLIENT_ID
 import com.example.vuey.BuildConfig.SPOTIFY_CLIENT_SECRET
 import com.example.vuey.feature_album.data.remote.api.AuthApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
 class SpotifyInterceptor @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
+    private val dataStore : DataStore<Preferences>,
     private val authApi: AuthApi
 ) : Interceptor {
 
-    private val accessTokenKey = "access_token"
-    private val expireTimeKey = "expire_time"
+    private val accessTokenKey = stringPreferencesKey("access_token")
+    private val expireTimeKey = longPreferencesKey("expire_token")
 
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
         val request = chain.request()
 
-        var accessToken = sharedPreferences.getString(accessTokenKey, null)
-        var expireTime = sharedPreferences.getLong(expireTimeKey, 0L)
+        var accessToken : String?
+        var expireTime: Long
+
+        dataStore.data.first().let { preferences ->
+            accessToken = preferences[accessTokenKey]
+            expireTime = preferences[expireTimeKey] ?: 0L
+        }
 
         if (accessToken == null || System.currentTimeMillis() > expireTime) {
             accessToken = getAccessToken()
             expireTime = System.currentTimeMillis() + 3600 * 1000 // 3600 seconds in milliseconds (1hour)
-            saveAccessToken(accessToken, expireTime)
+            saveAccessToken(accessToken!!, expireTime)
+        } else if (System.currentTimeMillis() > expireTime) {
+            // Token expired, remove the old token prom datastore
+            dataStore.edit { preferences ->
+                preferences.remove(accessTokenKey)
+                preferences.remove(expireTimeKey)
+            }
         }
 
         val newRequest = request.newBuilder()
@@ -38,10 +53,10 @@ class SpotifyInterceptor @Inject constructor(
         chain.proceed(newRequest)
     }
 
-    private fun saveAccessToken(accessToken: String, expireTime: Long) {
-        sharedPreferences.edit {
-            putString(accessTokenKey, accessToken)
-            putLong(expireTimeKey, expireTime)
+    private suspend fun saveAccessToken(accessToken: String, expireTime: Long) {
+        dataStore.edit { preferences ->
+            preferences[accessTokenKey] = accessToken
+            preferences[expireTimeKey] = expireTime
         }
     }
 
