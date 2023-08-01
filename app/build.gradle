@@ -64,7 +64,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.google.truth:truth:1.1.5'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
     implementation 'androidx.arch.core:core-testing:2.2.0'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -79,8 +79,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3')
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3')
 
     // Dagger - Hilt
     kapt 'com.google.dagger:hilt-compiler:2.47'

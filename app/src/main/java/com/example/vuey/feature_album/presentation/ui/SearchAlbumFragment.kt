@@ -13,15 +13,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
+import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
+import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class SearchAlbumFragment : Fragment() {
@@ -43,9 +45,10 @@ class SearchAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchAlbum()
+
         observeSearchAlbum()
         hideBottomNavigation()
+        searchAlbum()
 
         with(binding) {
             recyclerViewAlbum.adapter = albumAdapter
@@ -85,8 +88,17 @@ class SearchAlbumFragment : Fragment() {
                         when (uiState) {
                             is SearchAlbumUiState.Success -> {
                                 progressBar.visibility = View.GONE
-                                albumAdapter.submitAlbums(uiState.albumData)
+
+                                val albumsWithScore = uiState.albumData.map { album ->
+                                    album to calculateAlbumMatchingScore(album, etSearch.text.toString())
+                                }
+
+                                val sortedAlbum = albumsWithScore.sortedByDescending { it.second }
+                                val sortedAlbumList = sortedAlbum.map { it.first }
+
+                                albumAdapter.submitAlbums(sortedAlbumList)
                             }
+
                             is SearchAlbumUiState.Failure -> {
                                 progressBar.visibility = View.GONE
                                 showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
@@ -101,13 +113,29 @@ class SearchAlbumFragment : Fragment() {
     }
 
     private fun hideBottomNavigation() {
-        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        val bottomNavigation =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.visibility = View.GONE
+    }
+
+    private fun calculateAlbumMatchingScore(album: Album, query : String) : Double {
+        val albumTitle = album.albumName.lowercase(Locale.ROOT)
+        val queryLowercase = query.lowercase(Locale.ROOT)
+
+        val maxLength = maxOf(albumTitle.length, queryLowercase.length)
+        var matchingCharacters = 0
+
+        for (i in 0 until minOf(albumTitle.length, queryLowercase.length)) {
+            if (albumTitle[i] == queryLowercase[i]) {
+                matchingCharacters++
+            }
+        }
+
+        return matchingCharacters.toDouble() / maxLength
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 }
