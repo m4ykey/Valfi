@@ -1,8 +1,10 @@
 package com.example.vuey.feature_movie.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
@@ -54,6 +56,7 @@ class SearchMovieFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun searchMovie() {
         with(binding) {
             etSearch.addTextChangedListener {
@@ -64,6 +67,7 @@ class SearchMovieFragment : Fragment() {
 
                 if (searchMovie.isNotEmpty()) {
                     progressBar.visibility = View.VISIBLE
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_clear, 0)
                     searchHandler.postDelayed({
                         lifecycleScope.launch {
                             viewModel.searchMovie(searchMovie)
@@ -71,8 +75,20 @@ class SearchMovieFragment : Fragment() {
                         progressBar.visibility = View.GONE
                     }, 500)
                 } else {
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0,0, 0, 0)
                     progressBar.visibility = View.GONE
                 }
+            }
+
+            etSearch.setOnTouchListener { _, event ->
+                val drawableEnd = 2
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawX >= (etSearch.right - etSearch.compoundDrawables[drawableEnd].bounds.width())) {
+                        etSearch.text?.clear()
+                        return@setOnTouchListener true
+                    }
+                }
+                return@setOnTouchListener false
             }
         }
     }

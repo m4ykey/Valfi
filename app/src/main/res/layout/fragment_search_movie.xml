@@ -58,6 +58,7 @@
             android:drawableTint="@color/text_grey"
             android:textColorHint="@color/text_grey"
             android:maxLines="1"
+            android:drawableEnd="@drawable/ic_clear"
             android:inputType="text"
             android:hint="@string/search_movie"
             android:drawableStart="@drawable/ic_search"

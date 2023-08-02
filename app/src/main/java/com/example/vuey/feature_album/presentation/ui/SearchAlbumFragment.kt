@@ -1,8 +1,10 @@
 package com.example.vuey.feature_album.presentation.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
@@ -16,7 +18,6 @@ import com.example.vuey.R
 import com.example.vuey.core.common.utils.SearchUtil.calculateAlbumMatchingScore
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
-import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
@@ -24,7 +25,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @AndroidEntryPoint
 class SearchAlbumFragment : Fragment() {
@@ -58,6 +58,7 @@ class SearchAlbumFragment : Fragment() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun searchAlbum() {
         with(binding) {
             etSearch.addTextChangedListener {
@@ -68,6 +69,7 @@ class SearchAlbumFragment : Fragment() {
 
                 if (searchAlbum.isNotEmpty()) {
                     progressBar.visibility = View.VISIBLE
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_clear, 0)
                     searchHandler.postDelayed({
                         lifecycleScope.launch {
                             searchViewModel.searchAlbum(searchAlbum)
@@ -75,8 +77,20 @@ class SearchAlbumFragment : Fragment() {
                         progressBar.visibility = View.GONE
                     }, 500)
                 } else {
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0)
                     progressBar.visibility = View.GONE
                 }
+            }
+
+            etSearch.setOnTouchListener { v, event ->
+                val drawableEnd = 2
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawX >= (etSearch.right - etSearch.compoundDrawables[drawableEnd].bounds.width())) {
+                        etSearch.text?.clear()
+                        return@setOnTouchListener true
+                    }
+                }
+                return@setOnTouchListener false
             }
         }
     }

@@ -55,6 +55,7 @@
             android:textCursorDrawable="@drawable/text_cursor"
             android:imeOptions="actionSearch"
             android:textStyle="italic"
+            android:drawableEnd="@drawable/ic_clear"
             android:layout_marginTop="10dp"
             android:drawableTint="@color/text_grey"
             android:textColorHint="@color/text_grey"
