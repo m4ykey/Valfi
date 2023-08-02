@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,10 +25,10 @@ class AlbumViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _albumSearchUiState = MutableStateFlow<SearchAlbumUiState>(SearchAlbumUiState.Loading)
-    val albumSearchUiState: StateFlow<SearchAlbumUiState> = _albumSearchUiState
+    val albumSearchUiState = _albumSearchUiState.asStateFlow()
 
     private val _albumDetailUiState = MutableStateFlow<DetailAlbumUiState>(DetailAlbumUiState.Loading)
-    val albumDetailUiState: StateFlow<DetailAlbumUiState> = _albumDetailUiState
+    val albumDetailUiState = _albumDetailUiState.asStateFlow()
 
     private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
     val searchAlbumInDatabase: StateFlow<List<AlbumEntity>> = _searchAlbumInDatabase

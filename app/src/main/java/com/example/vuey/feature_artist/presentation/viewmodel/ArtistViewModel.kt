@@ -8,7 +8,7 @@ import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistInfo
 import com.example.vuey.feature_artist.presentation.viewmodel.uistate.ArtistTopTracksUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -19,10 +19,10 @@ class ArtistViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _artistInfoUiState = MutableStateFlow<ArtistInfoUiState>(ArtistInfoUiState.Loading)
-    val artistInfoUiState : StateFlow<ArtistInfoUiState> = _artistInfoUiState
+    val artistInfoUiState = _artistInfoUiState.asStateFlow()
 
     private val _artistTopTracksUiState = MutableStateFlow<ArtistTopTracksUiState>(ArtistTopTracksUiState.Loading)
-    val artistTopTracksUiState : StateFlow<ArtistTopTracksUiState> = _artistTopTracksUiState
+    val artistTopTracksUiState = _artistTopTracksUiState.asStateFlow()
 
     suspend fun getArtistTopTracks(artistId: String) {
         repository.getArtistTopTracks(artistId).onEach { result ->

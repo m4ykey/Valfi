@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -25,13 +26,13 @@ class MovieViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _movieSearchUiState = MutableStateFlow<SearchMovieUiState>(SearchMovieUiState.Loading)
-    val movieSearchUiState : StateFlow<SearchMovieUiState> = _movieSearchUiState
+    val movieSearchUiState = _movieSearchUiState.asStateFlow()
 
     private val _movieDetailUiState = MutableStateFlow<DetailMovieUiState>(DetailMovieUiState.Loading)
-    val movieDetailUiState : StateFlow<DetailMovieUiState> = _movieDetailUiState
+    val movieDetailUiState = _movieDetailUiState.asStateFlow()
 
     private val _movieCastUiState = MutableStateFlow<CastMovieUiState>(CastMovieUiState.Loading)
-    val movieCastUiState : StateFlow<CastMovieUiState> = _movieCastUiState
+    val movieCastUiState = _movieCastUiState.asStateFlow()
 
     private val _searchMovieInDatabase = MutableStateFlow<List<MovieEntity>>(emptyList())
     val searchMovieInDatabase : StateFlow<List<MovieEntity>> = _searchMovieInDatabase
