@@ -5,5 +5,5 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumDetai
 sealed class DetailAlbumUiState {
     data class Success(val albumData : AlbumDetail) : DetailAlbumUiState()
     data class Failure(val message : String) : DetailAlbumUiState()
-    object Loading : DetailAlbumUiState()
+    data object Loading : DetailAlbumUiState()
 }

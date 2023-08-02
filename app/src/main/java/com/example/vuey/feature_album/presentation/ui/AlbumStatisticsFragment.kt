@@ -1,7 +1,6 @@
 package com.example.vuey.feature_album.presentation.ui
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +36,6 @@ class AlbumStatisticsFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

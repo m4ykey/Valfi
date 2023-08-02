@@ -39,7 +39,7 @@ class SpotifyInterceptor @Inject constructor(
             expireTime = System.currentTimeMillis() + 3600 * 1000 // 3600 seconds in milliseconds (1hour)
             saveAccessToken(accessToken!!, expireTime)
         } else if (System.currentTimeMillis() > expireTime) {
-            // Token expired, remove the old token prom datastore
+            // Token expired, remove the old token from datastore
             dataStore.edit { preferences ->
                 preferences.remove(accessTokenKey)
                 preferences.remove(expireTimeKey)
