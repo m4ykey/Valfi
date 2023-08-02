@@ -102,7 +102,7 @@
                     android:ellipsize="end"
                     android:textSize="15sp"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/text_grey"
+                    android:textColor="@color/gray"
                     tools:text="Two lifelong friends find themselves at an impasse when one abruptly ends their relationship, with alarming consequences for both of them."/>
 
             </LinearLayout>

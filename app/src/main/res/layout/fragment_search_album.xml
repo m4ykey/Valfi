@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/cabin"
             android:layout_marginTop="5dp"
-            android:textColor="@color/text_grey"
+            android:textColor="@color/gray"
             android:textSize="16sp"
             android:text="@string/what_did_you_listen_to_today"/>
 
@@ -57,8 +57,8 @@
             android:textStyle="italic"
             android:drawableEnd="@drawable/ic_clear"
             android:layout_marginTop="10dp"
-            android:drawableTint="@color/text_grey"
-            android:textColorHint="@color/text_grey"
+            android:drawableTint="@color/gray"
+            android:textColorHint="@color/gray"
             android:maxLines="1"
             android:inputType="text"
             android:drawablePadding="10dp"

@@ -47,7 +47,7 @@
         <TextView
             android:fontFamily="@font/cabin"
             android:layout_marginTop="10dp"
-            android:textColor="@color/text_grey"
+            android:textColor="@color/gray"
             tools:text="EllieGouldingVEVO"
             android:textSize="12sp"
             android:maxLines="2"

@@ -128,7 +128,7 @@
                         android:fontFamily="@font/cabin"
                         android:id="@+id/txtInfo"
                         android:textSize="15sp"
-                        android:textColor="@color/text_grey"
+                        android:textColor="@color/gray"
                         tools:text="2h 24m • Action, Drama • 2022"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -150,7 +150,7 @@
                         android:ellipsize="end"
                         android:id="@+id/txtOverview"
                         android:fontFamily="@font/cabin"
-                        android:textColor="@color/text_grey"
+                        android:textColor="@color/gray"
                         tools:text="A ticking-time-bomb insomniac and a slippery soap salesman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -160,7 +160,7 @@
                         tools:visibility="visible"
                         android:id="@+id/txtOverviewFull"
                         android:fontFamily="@font/cabin"
-                        android:textColor="@color/text_grey"
+                        android:textColor="@color/gray"
                         tools:text="A ticking-time-bomb insomniac and a slippery soap salesman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -184,7 +184,7 @@
                 <TextView
                     android:id="@+id/txtSpokenLanguages"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/text_grey"
+                    android:textColor="@color/gray"
                     app:layout_constraintTop_toBottomOf="@id/txtLanguages"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -219,7 +219,7 @@
                     android:padding="30dp"
                     android:gravity="center"
                     android:text="@string/cast_is_empty"
-                    android:textColor="@color/text_grey"
+                    android:textColor="@color/gray"
                     android:textSize="16sp"
                     android:visibility="gone"
                     tools:visibility="visible" />

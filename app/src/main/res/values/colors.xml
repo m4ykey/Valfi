@@ -2,17 +2,9 @@
 <resources>
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
-
-    <color name="background">#B3000000</color>
-    <color name="app_bar_color">#242424</color>
-
-    <color name="search_edit_text_background">#0C0C0C</color>
-    <color name="text_grey">#CCCCCC</color>
-    <color name="search_edit_text_icon">#CCCCCC</color>
-
+    <color name="dark_gray">#242424</color>
+    <color name="gray">#CCCCCC</color>
     <color name="green">#32E875</color>
     <color name="red">#F44336</color>
-
-    <color name="red_snackbar">#AA0C00</color>
-    <color name="green_snackbar">#00A33C</color>
+    <color name="dark_red">#AA0C00</color>
 </resources>

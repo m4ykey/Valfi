@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/it_looks_like_you_don_t_have_internet"
-        android:background="@color/red_snackbar"
+        android:background="@color/dark_red"
         android:textColor="@color/white"
         android:visibility="gone"
         android:id="@+id/txtNoInternet"

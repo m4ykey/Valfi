@@ -57,8 +57,8 @@
 
             <EditText
                 android:imeOptions="actionSearch"
-                android:drawableTint="@color/text_grey"
-                android:textColorHint="@color/text_grey"
+                android:drawableTint="@color/gray"
+                android:textColorHint="@color/gray"
                 android:maxLines="1"
                 android:inputType="text"
                 android:hint="@string/search_album"
