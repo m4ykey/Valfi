@@ -81,11 +81,14 @@ class SearchMovieFragment : Fragment() {
             }
 
             etSearch.setOnTouchListener { _, event ->
-                val drawableEnd = 2
+                val drawableEndIndex = 2
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (etSearch.right - etSearch.compoundDrawables[drawableEnd].bounds.width())) {
-                        etSearch.text?.clear()
-                        return@setOnTouchListener true
+                    val drawableEnd = etSearch.compoundDrawables[drawableEndIndex]
+                    drawableEnd?.let {
+                        if (event.rawX >= (etSearch.right - it.bounds.width())) {
+                            etSearch.text?.clear()
+                            return@setOnTouchListener true
+                        }
                     }
                 }
                 return@setOnTouchListener false

@@ -82,12 +82,15 @@ class SearchAlbumFragment : Fragment() {
                 }
             }
 
-            etSearch.setOnTouchListener { v, event ->
-                val drawableEnd = 2
+            etSearch.setOnTouchListener { _, event ->
+                val drawableEndIndex = 2
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (etSearch.right - etSearch.compoundDrawables[drawableEnd].bounds.width())) {
-                        etSearch.text?.clear()
-                        return@setOnTouchListener true
+                    val drawableEnd = etSearch.compoundDrawables[drawableEndIndex]
+                    drawableEnd?.let {
+                        if (event.rawX >= (etSearch.right - it.bounds.width())) {
+                            etSearch.text?.clear()
+                            return@setOnTouchListener true
+                        }
                     }
                 }
                 return@setOnTouchListener false
