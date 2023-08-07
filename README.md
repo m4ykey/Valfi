@@ -1,16 +1,18 @@
 # Vuey
 
-<img src="logo.png" align="left" width="150" />
+<img src="logo.png" width="150" />
 
 Vuey is open source Album, Movies and TV Shows Tracker.
 
 ## Screenshots
 
+| Album List | Album Search | Album Detail |
+|:---:|:---:|:---:|
+| ![Album List](screenshots/album_list.jpg) | ![Album Search](screenshots/album_search.jpg) | ![Album Detail](screenshots/album_detail.jpg) |
 
-<div>
-  <img src="screenshots/album_detail.jpg" width="150" alt="Album Detail" />
-  <img src="screenshots/movie_detail.jpg" width="150" alt="Movie Detail" />
-</div>
+| Movie List | Movie Search | Movie Detail |
+|:---:|:---:|:---:|
+| ![Movie List](screenshots/movie_list.jpg) | ![Movie Search](screenshots/movie_search.jpg) | ![Movie Detail](screenshots/movie_detail.jpg) |
 
 ## Project Setup
 
