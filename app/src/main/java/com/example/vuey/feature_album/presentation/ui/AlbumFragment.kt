@@ -46,13 +46,10 @@ class AlbumFragment : Fragment() {
                 coroutineScope {
                     albumViewModel.allAlbums.collect { albums ->
                         if (albums.isEmpty()) {
-                            linearLayoutHome.visibility = View.GONE
+                            albumRecyclerView.visibility = View.GONE
                             layoutEmptyList.root.visibility = View.VISIBLE
                         }
                         albumAdapter.submitAlbums(albums)
-                    }
-                    albumViewModel.searchAlbumInDatabase.collect { albumList ->
-                        albumAdapter.submitAlbums(albumList)
                     }
                 }
             }
@@ -72,14 +69,6 @@ class AlbumFragment : Fragment() {
         with(binding) {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.imgSearch -> {
-                        linearLayoutHide.visibility = View.VISIBLE
-                        imgHide.setOnClickListener {
-                            linearLayoutHide.visibility = View.GONE
-                        }
-                        true
-                    }
-
                     R.id.imgStatistics -> {
                         findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
                         true
@@ -90,19 +79,13 @@ class AlbumFragment : Fragment() {
                         true
                     }
 
-                    else -> {
-                        false
-                    }
+                    else -> { false }
                 }
             }
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
-            val searchItem = toolbar.menu.findItem(R.id.imgSearch)
             val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
             statisticsItem.icon.let {
                 MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
-            }
-            searchItem.icon.let {
-                MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
             }
             addItem.icon.let {
                 MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))

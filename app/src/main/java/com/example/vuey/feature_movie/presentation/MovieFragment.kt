@@ -49,13 +49,10 @@ class MovieFragment : Fragment() {
                 coroutineScope {
                     movieViewModel.allMovies.collect { movies ->
                         if (movies.isEmpty()) {
-                            linearLayoutHome.visibility = View.GONE
+                            movieRecyclerView.visibility = View.GONE
                             layoutEmptyList.root.visibility = View.VISIBLE
                         }
                         movieAdapter.submitMovie(movies)
-                    }
-                    movieViewModel.searchMovieInDatabase.collect { movieList ->
-                        movieAdapter.submitMovie(movieList)
                     }
                 }
             }
@@ -66,13 +63,6 @@ class MovieFragment : Fragment() {
         with(binding) {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
-                    R.id.imgSearch -> {
-                        linearLayoutHide.visibility = View.VISIBLE
-                        imgHide.setOnClickListener {
-                            linearLayoutHide.visibility = View.GONE
-                        }
-                        true
-                    }
                     R.id.imgAdd -> {
                         findNavController().navigate(R.id.action_movieFragment_to_searchMovieFragment)
                         true
@@ -84,14 +74,10 @@ class MovieFragment : Fragment() {
                     else -> { false }
                 }
             }
-            val searchItem = toolbar.menu.findItem(R.id.imgSearch)
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
             val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
             statisticsItem.icon.let {
                 MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
-            }
-            searchItem.icon.let {
-                MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
             }
             addItem.icon.let {
                 MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))

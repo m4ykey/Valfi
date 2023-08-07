@@ -11,7 +11,6 @@ import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbu
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,9 +28,6 @@ class AlbumViewModel @Inject constructor(
 
     private val _albumDetailUiState = MutableStateFlow<DetailAlbumUiState>(DetailAlbumUiState.Loading)
     val albumDetailUiState = _albumDetailUiState.asStateFlow()
-
-    private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
-    val searchAlbumInDatabase: StateFlow<List<AlbumEntity>> = _searchAlbumInDatabase
 
     fun getTotalTracks(): Flow<Int> {
         return dataSource.getTotalTracks()

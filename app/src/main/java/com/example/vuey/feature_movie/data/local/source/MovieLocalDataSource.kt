@@ -9,7 +9,6 @@ interface MovieLocalDataSource {
     suspend fun deleteMovie(movieEntity: MovieEntity)
     fun getAllMovies() : Flow<List<MovieEntity>>
     fun getMovieById(movieId : Int) : Flow<MovieEntity>
-    fun searchMovieInDatabase(movieTitle : String) : Flow<List<MovieEntity>>
     fun getMovieCount() : Flow<Int>
     fun getTotalLength() : Flow<Int>
 

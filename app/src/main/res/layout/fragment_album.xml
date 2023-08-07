@@ -35,62 +35,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayoutHome"
-        app:layout_constraintTop_toBottomOf="@id/appBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/albumRecyclerView"
         android:layout_width="0dp"
+        app:layout_constraintTop_toBottomOf="@id/appBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="0dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/linearLayoutHide"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <EditText
-                android:imeOptions="actionSearch"
-                android:drawableTint="@color/gray"
-                android:textColorHint="@color/gray"
-                android:maxLines="1"
-                android:inputType="text"
-                android:hint="@string/search_album"
-                android:drawableEnd="@drawable/ic_search"
-                android:padding="10dp"
-                android:id="@+id/etSearch"
-                android:fontFamily="@font/cabin"
-                android:textColor="@color/white"
-                android:background="@drawable/edit_text_search_box"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
-
-            <ImageView
-                android:id="@+id/imgHide"
-                android:layout_margin="10dp"
-                app:tint="@color/white"
-                android:src="@drawable/ic_hide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/albumRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:layout_margin="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    </LinearLayout>
+        android:overScrollMode="never"
+        android:layout_margin="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <include
         android:id="@+id/layoutEmptyList"

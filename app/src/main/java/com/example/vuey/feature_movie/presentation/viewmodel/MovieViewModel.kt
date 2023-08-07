@@ -12,7 +12,6 @@ import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,9 +32,6 @@ class MovieViewModel @Inject constructor(
 
     private val _movieCastUiState = MutableStateFlow<CastMovieUiState>(CastMovieUiState.Loading)
     val movieCastUiState = _movieCastUiState.asStateFlow()
-
-    private val _searchMovieInDatabase = MutableStateFlow<List<MovieEntity>>(emptyList())
-    val searchMovieInDatabase : StateFlow<List<MovieEntity>> = _searchMovieInDatabase
 
     val allMovies = dataSource.getAllMovies()
 

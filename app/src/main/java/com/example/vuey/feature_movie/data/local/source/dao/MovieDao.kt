@@ -17,9 +17,6 @@ interface MovieDao {
     @Query("SELECT * FROM movie_table WHERE movieId = :movieId")
     fun getMovieById(movieId : Int) : Flow<MovieEntity>
 
-    @Query("SELECT * FROM movie_table WHERE movieTitle LIKE '%' ||:searchQuery||'%'")
-    fun searchMovieInDatabase(searchQuery : String) : Flow<List<MovieEntity>>
-
     @Query("SELECT SUM(movieRuntime) FROM movie_table")
     fun getTotalLength(): Flow<Int>
 

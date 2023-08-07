@@ -22,9 +22,6 @@ interface AlbumDao {
     @Query("SELECT SUM(albumLength) FROM album_table")
     fun getTotalLength(): Flow<Int>
 
-    @Query("SELECT * FROM album_table WHERE albumName LIKE '%' ||:searchQuery||'%'")
-    fun searchAlbumInDatabase(searchQuery: String): Flow<List<AlbumEntity>>
-
     @Delete
     suspend fun deleteAlbum(albumEntity: AlbumEntity)
 
