@@ -12,7 +12,7 @@ Vuey is open source Album, Movies and TV Shows Tracker.
 
 | Movie List | Movie Search | Movie Detail |
 |:---:|:---:|:---:|
-| ![Movie List](screenshots/movie_list.jpg) | ![Movie Search](screenshots/movie_search.jpg) | ![Movie Detail](screenshots/movie_detail.jpg) |
+| ![Movie List](screenshots/list_movie.jpg) | ![Movie Search](screenshots/movie_search.jpg) | ![Movie Detail](screenshots/movie_detail.jpg) |
 
 ## Project Setup
 
