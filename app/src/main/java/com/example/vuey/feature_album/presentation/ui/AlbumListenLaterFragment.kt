@@ -48,6 +48,10 @@ class AlbumListenLaterFragment : Fragment() {
             toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
             lifecycleScope.launch {
                 viewModel.allListenLaterAlbums.collect { album ->
+                    if (album.isEmpty()) {
+                        recyclerViewAlbum.visibility = View.GONE
+                        layoutEmptyList.root.visibility = View.VISIBLE
+                    }
                     listenLaterAdapter.submitAlbum(album)
                 }
             }

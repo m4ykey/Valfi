@@ -52,4 +52,6 @@
     <string name="removed_from_watch_later">Removed from Watch Later</string>
     <string name="for_later">For later</string>
     <string name="listen_later">Listen later</string>
+    <string name="there_nothing_here">There\'s nothing here</string>
+    <string name="you_have_nothing_for_later">You have nothing for later</string>
 </resources>
