@@ -29,6 +29,7 @@ import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.core.common.utils.DateUtils
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -48,6 +49,7 @@ class DetailAlbumFragment : Fragment() {
     private val arguments: DetailAlbumFragmentArgs by navArgs()
     private val trackListAdapter by lazy { TrackListAdapter() }
     private var isAlbumSaved = false
+    private var isListenLater = false
 
     private lateinit var connectivityManager: ConnectivityManager
     private val networkStateMonitor: NetworkStateMonitor by lazy {
@@ -355,6 +357,31 @@ class DetailAlbumFragment : Fragment() {
                                         )
                                     }
                                 )
+
+                                val listenLaterEntity = ListenLaterEntity(
+                                    albumId = albumDetail.id,
+                                    albumTitle = albumDetail.albumName,
+                                    albumImage = albumDetail.imageList.firstOrNull()?.let { image ->
+                                        ListenLaterEntity.ListenLaterImage(
+                                            width = 640,
+                                            height = 640,
+                                            url = image.url
+                                        )
+                                    }!!
+                                )
+
+                                imgTime.setOnClickListener {
+                                    isListenLater = !isListenLater
+                                    if (isListenLater) {
+                                        showSnackbar(requireView(), getString(R.string.added_to_listen_later))
+                                        imgTime.setImageResource(R.drawable.ic_time)
+                                        detailViewModel.insertAlbumToListenLater(listenLaterEntity)
+                                    } else {
+                                        showSnackbar(requireView(), getString(R.string.removed_from_listen_later))
+                                        imgTime.setImageResource(R.drawable.ic_time_outline)
+                                        detailViewModel.deleteAlbumToListenLater(listenLaterEntity)
+                                    }
+                                }
 
                                 imgSave.setOnClickListener {
                                     isAlbumSaved = !isAlbumSaved

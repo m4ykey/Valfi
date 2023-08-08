@@ -47,4 +47,10 @@
     <string name="something_empty_here">Coś tutaj pusto</string>
     <string name="quickly_add_something_to_your_list">Szybko dodaj coś do swojej listy</string>
     <string name="it_looks_like_you_don_t_have_internet">Wygląda na to, że nie masz internetu</string>
+    <string name="added_to_listen_later">Dodano do listy: Do posłuchania</string>
+    <string name="added_to_watch_later">Dodano do listy: Do obejrzenia</string>
+    <string name="removed_from_listen_later">Usunięto z listy: Do posłuchania</string>
+    <string name="removed_from_watch_later">Usunięto z listy: Do obejrzenia</string>
+    <string name="for_later">Na później</string>
+    <string name="listen_later">Posłuchaj później</string>
 </resources>

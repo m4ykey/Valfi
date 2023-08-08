@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/imgLater"
+        android:title="@string/for_later"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_time_outline"/>
+
     <item android:id="@+id/imgAdd"
         android:title="@string/add"
         app:showAsAction="ifRoom"

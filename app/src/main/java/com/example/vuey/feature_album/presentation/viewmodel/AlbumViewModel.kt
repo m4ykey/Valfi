@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_album.data.local.source.AlbumLocalDataSource
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
@@ -29,6 +30,25 @@ class AlbumViewModel @Inject constructor(
     private val _albumDetailUiState = MutableStateFlow<DetailAlbumUiState>(DetailAlbumUiState.Loading)
     val albumDetailUiState = _albumDetailUiState.asStateFlow()
 
+    val allAlbums = dataSource.getAllAlbums()
+    val allListenLaterAlbums = dataSource.getAllListenLaterAlbums()
+
+    fun insertAlbumToListenLater(listenLaterEntity: ListenLaterEntity) {
+        viewModelScope.launch {
+            dataSource.insertAlbumToListenLater(listenLaterEntity)
+        }
+    }
+
+    fun deleteAlbumToListenLater(listenLaterEntity: ListenLaterEntity) {
+        viewModelScope.launch {
+            dataSource.deleteAlbumToListenLater(listenLaterEntity)
+        }
+    }
+
+    fun getListenLaterAlbumById(albumId: String): Flow<ListenLaterEntity> {
+        return dataSource.getListenLaterAlbumById(albumId)
+    }
+
     fun getTotalTracks(): Flow<Int> {
         return dataSource.getTotalTracks()
     }
@@ -39,12 +59,6 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumCount(): Flow<Int> {
         return dataSource.getAlbumCount()
-    }
-
-    val allAlbums = dataSource.getAllAlbums()
-
-    suspend fun refreshDetail(albumId: String) {
-        getAlbumDetail(albumId)
     }
 
     fun insertAlbum(albumEntity: AlbumEntity) {
@@ -61,6 +75,10 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumById(albumId: String): Flow<AlbumEntity> {
         return dataSource.getAlbumById(albumId)
+    }
+
+    suspend fun refreshDetail(albumId: String) {
+        getAlbumDetail(albumId)
     }
 
     suspend fun getAlbumDetail(albumId: String) {

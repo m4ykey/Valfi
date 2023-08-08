@@ -1,6 +1,7 @@
 package com.example.vuey.feature_album.data.local.source
 
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumLocalDataSource {
@@ -12,5 +13,10 @@ interface AlbumLocalDataSource {
     fun getAlbumCount() : Flow<Int>
     fun getTotalTracks() : Flow<Int>
     fun getTotalLength() : Flow<Int>
+
+    suspend fun insertAlbumToListenLater(listenLaterEntity: ListenLaterEntity)
+    suspend fun deleteAlbumToListenLater(listenLaterEntity: ListenLaterEntity)
+    fun getAllListenLaterAlbums() : Flow<List<ListenLaterEntity>>
+    fun getListenLaterAlbumById(albumId : String) : Flow<ListenLaterEntity>
 
 }

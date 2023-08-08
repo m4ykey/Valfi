@@ -2,6 +2,7 @@ package com.example.vuey.feature_album.data.local.converter
 
 import androidx.room.TypeConverter
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -37,6 +38,17 @@ class AlbumConverter {
 
     @TypeConverter
     fun toImageJson(images : AlbumEntity.ImageEntity) : String {
+        return Gson().toJson(images)
+    }
+
+    @TypeConverter
+    fun fromImageListenLaterJson(json : String) : ListenLaterEntity.ListenLaterImage {
+        val type = object : TypeToken<ListenLaterEntity.ListenLaterImage>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    @TypeConverter
+    fun toImageListenLaterJson(images : ListenLaterEntity.ListenLaterImage) : String {
         return Gson().toJson(images)
     }
 

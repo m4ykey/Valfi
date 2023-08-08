@@ -46,4 +46,10 @@
     <string name="something_empty_here">Something empty here</string>
     <string name="quickly_add_something_to_your_list">Quickly add something to your list</string>
     <string name="it_looks_like_you_don_t_have_internet">It looks like, you don\'t have internet</string>
+    <string name="added_to_listen_later">Added to Listen Later</string>
+    <string name="added_to_watch_later">Added to Watch Later</string>
+    <string name="removed_from_listen_later">Removed from Listen Later</string>
+    <string name="removed_from_watch_later">Removed from Watch Later</string>
+    <string name="for_later">For later</string>
+    <string name="listen_later">Listen later</string>
 </resources>

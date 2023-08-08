@@ -2,6 +2,7 @@ package com.example.vuey.feature_album.data.local.source
 
 import com.example.vuey.feature_album.data.local.source.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -35,5 +36,21 @@ class AlbumLocalDataSourceImpl @Inject constructor(
 
     override fun getTotalLength(): Flow<Int> {
         return albumDao.getTotalLength()
+    }
+
+    override suspend fun insertAlbumToListenLater(listenLaterEntity: ListenLaterEntity) {
+        return albumDao.insertAlbumToListenLater(listenLaterEntity)
+    }
+
+    override suspend fun deleteAlbumToListenLater(listenLaterEntity: ListenLaterEntity) {
+        return albumDao.deleteAlbumToListenLater(listenLaterEntity)
+    }
+
+    override fun getAllListenLaterAlbums(): Flow<List<ListenLaterEntity>> {
+        return albumDao.getAllListenLaterAlbums()
+    }
+
+    override fun getListenLaterAlbumById(albumId: String): Flow<ListenLaterEntity> {
+        return albumDao.getListenLaterAlbumById(albumId)
     }
 }

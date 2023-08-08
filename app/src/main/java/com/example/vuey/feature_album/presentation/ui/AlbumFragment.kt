@@ -17,7 +17,6 @@ import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -43,14 +42,12 @@ class AlbumFragment : Fragment() {
         with(binding) {
             albumRecyclerView.adapter = albumAdapter
             lifecycleScope.launch {
-                coroutineScope {
-                    albumViewModel.allAlbums.collect { albums ->
-                        if (albums.isEmpty()) {
-                            albumRecyclerView.visibility = View.GONE
-                            layoutEmptyList.root.visibility = View.VISIBLE
-                        }
-                        albumAdapter.submitAlbums(albums)
+                albumViewModel.allAlbums.collect { albums ->
+                    if (albums.isEmpty()) {
+                        albumRecyclerView.visibility = View.GONE
+                        layoutEmptyList.root.visibility = View.VISIBLE
                     }
+                    albumAdapter.submitAlbums(albums)
                 }
             }
         }
@@ -69,6 +66,11 @@ class AlbumFragment : Fragment() {
         with(binding) {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
+                    R.id.imgLater -> {
+                        findNavController().navigate(R.id.action_albumFragment_to_albumListenLaterFragment)
+                        true
+                    }
+
                     R.id.imgStatistics -> {
                         findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
                         true
@@ -79,11 +81,17 @@ class AlbumFragment : Fragment() {
                         true
                     }
 
-                    else -> { false }
+                    else -> {
+                        false
+                    }
                 }
             }
+            val listenLaterItem = toolbar.menu.findItem(R.id.imgLater)
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
             val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
+            listenLaterItem.icon.let {
+                MenuItemCompat.setIconTintList(listenLaterItem, ColorStateList.valueOf(Color.WHITE))
+            }
             statisticsItem.icon.let {
                 MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
             }

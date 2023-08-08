@@ -2,6 +2,7 @@ package com.example.vuey.feature_album.data.local.source.dao
 
 import androidx.room.*
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,5 +28,17 @@ interface AlbumDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAlbum(albumEntity: AlbumEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAlbumToListenLater(listenLaterEntity: ListenLaterEntity)
+
+    @Delete
+    suspend fun deleteAlbumToListenLater(listenLaterEntity: ListenLaterEntity)
+
+    @Query("SELECT * FROM listen_later_table ORDER BY saveTime ASC")
+    fun getAllListenLaterAlbums() : Flow<List<ListenLaterEntity>>
+
+    @Query("SELECT * FROM listen_later_table WHERE albumId = :albumId")
+    fun getListenLaterAlbumById(albumId : String) : Flow<ListenLaterEntity>
 
 }

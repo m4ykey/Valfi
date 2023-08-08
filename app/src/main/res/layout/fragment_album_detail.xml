@@ -88,15 +88,32 @@
 
                 </LinearLayout>
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_save_outlined"
-                    app:tint="@color/white"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:id="@+id/imgSave"
-                    android:contentDescription="@string/save_icon" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_save_outlined"
+                        app:tint="@color/white"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/imgSave"
+                        android:contentDescription="@string/save_icon" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_time_outline"
+                        app:tint="@color/white"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/imgTime"
+                        android:contentDescription="@string/save_icon" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -10,11 +10,13 @@ import com.example.vuey.feature_movie.data.local.converter.MovieConverter
 import com.example.vuey.feature_movie.data.local.source.dao.MovieDao
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.core.common.Constants.DATABASE_VERSION
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 
 @Database(
     entities = [
         AlbumEntity::class,
-        MovieEntity::class
+        MovieEntity::class,
+        ListenLaterEntity::class
     ],
     version = DATABASE_VERSION,
     exportSchema = false
