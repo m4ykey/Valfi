@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_movie.data.local.source.MovieLocalDataSource
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.domain.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
@@ -34,6 +35,23 @@ class MovieViewModel @Inject constructor(
     val movieCastUiState = _movieCastUiState.asStateFlow()
 
     val allMovies = dataSource.getAllMovies()
+    val allWatchLaterMovies = dataSource.getAllWatchLaterMovies()
+
+    fun insertWatchLaterMovie(watchLaterEntity: WatchLaterEntity) {
+        viewModelScope.launch {
+            dataSource.insertWatchLaterMovie(watchLaterEntity)
+        }
+    }
+
+    fun deleteWatchLaterMovie(watchLaterEntity: WatchLaterEntity) {
+        viewModelScope.launch {
+            dataSource.deleteWatchLaterMovie(watchLaterEntity)
+        }
+    }
+
+    fun getWatchLaterMovieById(movieId: Int) : Flow<WatchLaterEntity> {
+        return dataSource.getWatchLaterMovieById(movieId)
+    }
 
     fun getTotalLength() : Flow<Int> {
         return dataSource.getTotalLength()
@@ -47,10 +65,6 @@ class MovieViewModel @Inject constructor(
         return dataSource.getMovieById(movieId)
     }
 
-    suspend fun refreshDetail(movieId : Int) {
-        getMovieDetail(movieId)
-    }
-
     fun insertMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
             dataSource.insertMovie(movieEntity)
@@ -61,6 +75,10 @@ class MovieViewModel @Inject constructor(
         viewModelScope.launch {
             dataSource.deleteMovie(movieEntity)
         }
+    }
+
+    suspend fun refreshDetail(movieId : Int) {
+        getMovieDetail(movieId)
     }
 
     suspend fun getMovieCast(movieId: Int) {

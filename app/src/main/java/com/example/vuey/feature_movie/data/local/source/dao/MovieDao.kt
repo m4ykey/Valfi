@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,5 +29,17 @@ interface MovieDao {
 
     @Delete
     suspend fun deleteMovie(movieEntity: MovieEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWatchLaterMovie(watchLaterEntity: WatchLaterEntity)
+
+    @Delete
+    suspend fun deleteWatchLaterMovie(watchLaterEntity: WatchLaterEntity)
+
+    @Query("SELECT * FROM watch_later_table ORDER BY saveTime ASC")
+    fun getAllWatchLaterMovies() : Flow<List<WatchLaterEntity>>
+
+    @Query("SELECT * FROM watch_later_table WHERE movieId = :movieId")
+    fun getWatchLaterMovieById(movieId: Int) : Flow<WatchLaterEntity>
 
 }

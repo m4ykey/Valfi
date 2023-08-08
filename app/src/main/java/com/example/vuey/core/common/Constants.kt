@@ -8,6 +8,7 @@ object Constants {
     const val TRACK_TABLE_NAME = "track_table"
     const val ARTIST_TABLE_NAME = "artist_table"
     const val LISTEN_LATER_TABLE = "listen_later_table"
+    const val WATCH_LATER_TABLE = "watch_later_table"
 
     const val DATABASE_VERSION = 2
 
