@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_albumDetailFragment_to_artistFragment"
             app:destination="@id/artistFragment" />
+        <argument
+            android:name="listenLaterEntity"
+            app:argType="com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
@@ -109,5 +112,9 @@
         android:id="@+id/albumListenLaterFragment"
         android:name="com.example.vuey.feature_album.presentation.ui.AlbumListenLaterFragment"
         android:label="fragment_album_listen_later"
-        tools:layout="@layout/fragment_album_listen_later" />
+        tools:layout="@layout/fragment_album_listen_later" >
+        <action
+            android:id="@+id/action_albumListenLaterFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
 </navigation>

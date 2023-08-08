@@ -90,6 +90,7 @@ class DetailAlbumFragment : Fragment() {
         }
 
         val albumDatabase = arguments.albumEntity
+        val listenLaterDatabase = arguments.listenLaterEntity
 
         detailViewModel.getAlbumById(albumDatabase.id).onEach { album ->
             isAlbumSaved = if (album == null) {
@@ -97,6 +98,16 @@ class DetailAlbumFragment : Fragment() {
                 false
             } else {
                 binding.imgSave.setImageResource(R.drawable.ic_save)
+                true
+            }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        detailViewModel.getListenLaterAlbumById(listenLaterDatabase.albumId).onEach { album ->
+            isListenLater = if (album == null) {
+                binding.imgTime.setImageResource(R.drawable.ic_time_outline)
+                false
+            } else {
+                binding.imgTime.setImageResource(R.drawable.ic_time)
                 true
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)
@@ -118,6 +129,12 @@ class DetailAlbumFragment : Fragment() {
             )
         }
         trackListAdapter.submitTrack(trackList)
+
+        val listenLaterEntity = ListenLaterEntity(
+            albumId = listenLaterDatabase.albumId,
+            albumTitle = listenLaterDatabase.albumTitle,
+            albumImage = listenLaterDatabase.albumImage
+        )
 
         val albumEntity = AlbumEntity(
             albumLength = albumDatabase.albumLength,
@@ -155,6 +172,19 @@ class DetailAlbumFragment : Fragment() {
                     showSnackbar(requireView(), getString(R.string.removed_from_library))
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     detailViewModel.deleteAlbum(albumEntity)
+                }
+            }
+
+            imgTime.setOnClickListener {
+                isListenLater = !isListenLater
+                if (isListenLater) {
+                    showSnackbar(requireView(), getString(R.string.added_to_listen_later))
+                    imgTime.setImageResource(R.drawable.ic_time)
+                    detailViewModel.insertAlbumToListenLater(listenLaterEntity)
+                } else {
+                    showSnackbar(requireView(), getString(R.string.removed_from_listen_later))
+                    imgTime.setImageResource(R.drawable.ic_time_outline)
+                    detailViewModel.deleteAlbumToListenLater(listenLaterEntity)
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.example.vuey.core.common.utils
 
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
@@ -8,7 +9,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.Image
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 
-fun MovieEntity.toMovie() : MovieList {
+fun MovieEntity.toMovie(): MovieList {
     return MovieList(
         id = movieId,
         overview = movieOverview,
@@ -19,7 +20,7 @@ fun MovieEntity.toMovie() : MovieList {
     )
 }
 
-fun MovieList.toMovieEntity() : MovieEntity {
+fun MovieList.toMovieEntity(): MovieEntity {
     return MovieEntity(
         movieBackdropPath = "",
         movieGenreList = emptyList(),
@@ -34,7 +35,7 @@ fun MovieList.toMovieEntity() : MovieEntity {
     )
 }
 
-fun AlbumEntity.toAlbum() : Album {
+fun AlbumEntity.toAlbum(): Album {
     return Album(
         albumType = this.albumType,
         albumName = this.albumName,
@@ -54,15 +55,15 @@ fun AlbumEntity.toAlbum() : Album {
         ),
         imageList = listOf(
             Image(
-            height = 640,
-            width = 640,
-            url = albumCover.url
-        )
+                height = 640,
+                width = 640,
+                url = albumCover.url
+            )
         )
     )
 }
 
-fun Album.toAlbumEntity() : AlbumEntity {
+fun Album.toAlbumEntity(): AlbumEntity {
     return AlbumEntity(
         albumName = this.albumName,
         albumType = this.albumType,
@@ -71,12 +72,66 @@ fun Album.toAlbumEntity() : AlbumEntity {
         releaseDate = "",
         totalTracks = this.totalTracks,
         externalUrls = AlbumEntity.ExternalUrlsEntity(
-            spotify = this.externalUrls.spotify
+            spotify = this.externalUrls!!.spotify
         ),
         albumCover = AlbumEntity.ImageEntity(
             height = 640,
             width = 640,
             url = ""
+        )
+    )
+}
+
+fun ListenLaterEntity.toAlbum() : Album {
+    return Album(
+        albumName = albumTitle,
+        albumType = "",
+        artistList = emptyList(),
+        id = albumId,
+        totalTracks = 0,
+        imageList = emptyList(),
+        externalUrls = null
+    )
+}
+
+fun ListenLaterEntity.toAlbumEntity() : AlbumEntity {
+    return AlbumEntity(
+        albumName = albumTitle,
+        albumType = "",
+        artistList = emptyList(),
+        id = albumId,
+        totalTracks = 0,
+        albumLength = 0,
+        releaseDate = "",
+        albumCover = AlbumEntity.ImageEntity(
+            height = 640,
+            width = 640,
+            url = ""
+        ),
+        externalUrls = AlbumEntity.ExternalUrlsEntity(spotify = "")
+    )
+}
+
+fun Album.toListenLaterEntity() : ListenLaterEntity {
+    return ListenLaterEntity(
+        albumId = this.id,
+        albumTitle = this.albumName,
+        albumImage = ListenLaterEntity.ListenLaterImage(
+            url = "",
+            width = 0,
+            height = 0
+        )
+    )
+}
+
+fun AlbumEntity.toListenLaterEntity() : ListenLaterEntity {
+    return ListenLaterEntity(
+        albumId = this.id,
+        albumTitle = this.albumName,
+        albumImage = ListenLaterEntity.ListenLaterImage(
+            url = "",
+            width = 0,
+            height = 0
         )
     )
 }

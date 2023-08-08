@@ -11,7 +11,7 @@ data class Album(
     @SerializedName("artists")
     val artistList: List<Artist>,
     @SerializedName("external_urls")
-    val externalUrls: ExternalUrls,
+    val externalUrls: ExternalUrls?,
     val id: String,
     @SerializedName("images")
     val imageList: List<Image>,

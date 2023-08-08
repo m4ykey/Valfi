@@ -7,14 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
+import com.example.vuey.core.common.utils.DiffUtils
+import com.example.vuey.core.common.utils.toAlbum
+import com.example.vuey.core.common.utils.toAlbumEntity
+import com.example.vuey.core.common.utils.toListenLaterEntity
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
 import com.example.vuey.feature_album.presentation.ui.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.ui.SearchAlbumFragmentDirections
-import com.example.vuey.core.common.utils.DiffUtils
-import com.example.vuey.core.common.utils.toAlbum
-import com.example.vuey.core.common.utils.toAlbumEntity
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
@@ -42,7 +43,8 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                         layoutAlbum.setOnClickListener {
                             val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
                                 album = album,
-                                albumEntity = album.toAlbumEntity()
+                                albumEntity = album.toAlbumEntity(),
+                                listenLaterEntity = album.toListenLaterEntity()
                             )
                             it.findNavController().navigate(action)
                         }
@@ -59,7 +61,8 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                         layoutAlbum.setOnClickListener {
                             val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(
                                 album = album.toAlbum(),
-                                albumEntity = album
+                                albumEntity = album,
+                                listenLaterEntity = album.toListenLaterEntity()
                             )
                             it.findNavController().navigate(action)
                         }

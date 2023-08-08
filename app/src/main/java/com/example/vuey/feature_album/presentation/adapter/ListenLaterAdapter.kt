@@ -2,12 +2,16 @@ package com.example.vuey.feature_album.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.core.common.utils.DiffUtils
+import com.example.vuey.core.common.utils.toAlbum
+import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.databinding.LayoutListenLaterBinding
 import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.presentation.ui.AlbumListenLaterFragmentDirections
 
 class ListenLaterAdapter : RecyclerView.Adapter<ListenLaterAdapter.ListenLaterViewHolder>() {
 
@@ -27,6 +31,14 @@ class ListenLaterAdapter : RecyclerView.Adapter<ListenLaterAdapter.ListenLaterVi
                 imgAlbum.load(album.albumImage.url) {
                     crossfade(true)
                     crossfade(500)
+                }
+                layoutAlbum.setOnClickListener {
+                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(
+                        album = album.toAlbum(),
+                        albumEntity = album.toAlbumEntity(),
+                        listenLaterEntity = album
+                    )
+                    it.findNavController().navigate(action)
                 }
             }
         }
