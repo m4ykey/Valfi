@@ -40,6 +40,12 @@
         <argument
             android:name="listenLaterEntity"
             app:argType="com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity" />
+        <argument
+            android:name="albumId"
+            app:argType="string" />
+        <argument
+            android:name="isFromAlbumListenLaterFragment"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"

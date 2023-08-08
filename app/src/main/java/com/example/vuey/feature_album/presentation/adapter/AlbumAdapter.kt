@@ -44,7 +44,9 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                             val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
                                 album = album,
                                 albumEntity = album.toAlbumEntity(),
-                                listenLaterEntity = album.toListenLaterEntity()
+                                listenLaterEntity = album.toListenLaterEntity(),
+                                albumId = album.id,
+                                isFromAlbumListenLaterFragment = false
                             )
                             it.findNavController().navigate(action)
                         }
@@ -62,7 +64,9 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                             val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(
                                 album = album.toAlbum(),
                                 albumEntity = album,
-                                listenLaterEntity = album.toListenLaterEntity()
+                                listenLaterEntity = album.toListenLaterEntity(),
+                                albumId = album.id,
+                                isFromAlbumListenLaterFragment = false
                             )
                             it.findNavController().navigate(action)
                         }

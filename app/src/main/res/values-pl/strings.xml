@@ -55,4 +55,6 @@
     <string name="listen_later">Posłuchaj później</string>
     <string name="there_nothing_here">Nic tutaj nie ma</string>
     <string name="you_have_nothing_for_later">Nie masz nic na później</string>
+    <string name="first_you_need_add_something_to_list">Najpierw musisz dodać coś do listy</string>
+    <string name="random_album">Losowy Album</string>
 </resources>

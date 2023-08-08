@@ -36,7 +36,9 @@ class ListenLaterAdapter : RecyclerView.Adapter<ListenLaterAdapter.ListenLaterVi
                     val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(
                         album = album.toAlbum(),
                         albumEntity = album.toAlbumEntity(),
-                        listenLaterEntity = album
+                        listenLaterEntity = album,
+                        albumId = album.albumId,
+                        isFromAlbumListenLaterFragment = true
                     )
                     it.findNavController().navigate(action)
                 }

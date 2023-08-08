@@ -44,6 +44,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/recyclerViewAlbum"/>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="10dp"
+        android:id="@+id/btnRandomAlbum"
+        app:icon="@drawable/ic_album"
+        app:iconTint="@color/white"
+        android:text="@string/random_album"
+        android:textColor="@color/white"
+        android:fontFamily="@font/cabin"
+        android:backgroundTint="@color/green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <include
         android:id="@+id/layoutEmptyList"
         android:visibility="gone"

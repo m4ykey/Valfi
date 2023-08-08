@@ -19,17 +19,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.vuey.R
+import com.example.vuey.core.common.network.NetworkStateMonitor
+import com.example.vuey.core.common.utils.DateUtils
+import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.example.vuey.core.common.network.NetworkStateMonitor
-import com.example.vuey.core.common.utils.DateUtils
-import com.example.vuey.core.common.utils.showSnackbar
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -77,8 +77,17 @@ class DetailAlbumFragment : Fragment() {
         observeDetailAlbum()
         hideBottomNavigation()
 
+        val albumDatabase = arguments.albumEntity
+        val listenLaterDatabase = arguments.listenLaterEntity
+
         lifecycleScope.launch {
-            detailViewModel.getAlbumDetail(arguments.album.id)
+            detailViewModel.apply {
+                if (arguments.isFromAlbumListenLaterFragment) {
+                    getAlbumDetail(arguments.albumId)
+                } else {
+                    getAlbumDetail(arguments.album.id)
+                }
+            }
             binding.swipeRefresh.apply {
                 setOnRefreshListener {
                     launch {
@@ -88,9 +97,6 @@ class DetailAlbumFragment : Fragment() {
                 }
             }
         }
-
-        val albumDatabase = arguments.albumEntity
-        val listenLaterDatabase = arguments.listenLaterEntity
 
         detailViewModel.getAlbumById(albumDatabase.id).onEach { album ->
             isAlbumSaved = if (album == null) {
