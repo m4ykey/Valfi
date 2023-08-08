@@ -63,6 +63,10 @@ class MovieFragment : Fragment() {
         with(binding) {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
+                    R.id.imgLater -> {
+                        findNavController().navigate(R.id.action_movieFragment_to_movieWatchLaterFragment)
+                        true
+                    }
                     R.id.imgAdd -> {
                         findNavController().navigate(R.id.action_movieFragment_to_searchMovieFragment)
                         true
@@ -74,8 +78,12 @@ class MovieFragment : Fragment() {
                     else -> { false }
                 }
             }
+            val laterItem = toolbar.menu.findItem(R.id.imgLater)
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
             val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
+            laterItem.icon.let {
+                MenuItemCompat.setIconTintList(laterItem, ColorStateList.valueOf(Color.WHITE))
+            }
             statisticsItem.icon.let {
                 MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
             }

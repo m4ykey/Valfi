@@ -7,6 +7,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Image
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 
 fun MovieEntity.toMovie(): MovieList {
@@ -133,5 +134,47 @@ fun AlbumEntity.toListenLaterEntity() : ListenLaterEntity {
             width = 0,
             height = 0
         )
+    )
+}
+
+fun MovieEntity.toWatchLaterEntity() : WatchLaterEntity {
+    return WatchLaterEntity(
+        movieId = this.movieId,
+        moviePosterPath = this.moviePosterPath,
+        movieTitle = this.movieTitle
+    )
+}
+
+fun MovieList.toWatchLaterEntity() : WatchLaterEntity {
+    return WatchLaterEntity(
+        movieTitle = this.title,
+        movieId = this.id,
+        moviePosterPath = this.poster_path.toString()
+    )
+}
+
+fun WatchLaterEntity.toMovie() : MovieList {
+    return MovieList(
+        id = this.movieId,
+        overview = "",
+        poster_path = this.moviePosterPath,
+        release_date = "",
+        title = this.movieTitle,
+        vote_average = 0.0
+    )
+}
+
+fun WatchLaterEntity.toMovieEntity() : MovieEntity {
+    return MovieEntity(
+        movieBackdropPath = "",
+        movieId = this.movieId,
+        moviePosterPath = this.moviePosterPath,
+        movieTitle = this.movieTitle,
+        movieGenreList = emptyList(),
+        movieOverview = "",
+        movieReleaseDate = "",
+        movieRuntime = 0,
+        movieSpokenLanguage = emptyList(),
+        movieVoteAverage = 0.0
     )
 }

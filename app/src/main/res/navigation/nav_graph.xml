@@ -73,6 +73,9 @@
         <action
             android:id="@+id/action_movieFragment_to_movieStatisticsFragment"
             app:destination="@id/movieStatisticsFragment" />
+        <action
+            android:id="@+id/action_movieFragment_to_movieWatchLaterFragment"
+            app:destination="@id/movieWatchLaterFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
@@ -94,6 +97,15 @@
         <argument
             android:name="movieEntity"
             app:argType="com.example.vuey.feature_movie.data.local.source.entity.MovieEntity" />
+        <argument
+            android:name="isFromMovieWatchLaterFragment"
+            app:argType="boolean" />
+        <argument
+            android:name="watchLaterEntity"
+            app:argType="com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity" />
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"
@@ -122,5 +134,14 @@
         <action
             android:id="@+id/action_albumListenLaterFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieWatchLaterFragment"
+        android:name="com.example.vuey.feature_movie.presentation.MovieWatchLaterFragment"
+        android:label="fragment_movie_watch_later"
+        tools:layout="@layout/fragment_movie_watch_later" >
+        <action
+            android:id="@+id/action_movieWatchLaterFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
     </fragment>
 </navigation>

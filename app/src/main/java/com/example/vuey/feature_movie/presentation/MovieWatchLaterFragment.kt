@@ -1,10 +1,10 @@
-package com.example.vuey.feature_album.presentation.ui
+package com.example.vuey.feature_movie.presentation
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -12,33 +12,33 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
-import com.example.vuey.core.common.utils.toAlbum
-import com.example.vuey.core.common.utils.toAlbumEntity
-import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
-import com.example.vuey.feature_album.presentation.adapter.ListenLaterAdapter
-import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
+import com.example.vuey.core.common.utils.toMovie
+import com.example.vuey.core.common.utils.toMovieEntity
+import com.example.vuey.databinding.FragmentMovieWatchLaterBinding
+import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.presentation.adapter.WatchLaterAdapter
+import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumListenLaterFragment : Fragment() {
+class MovieWatchLaterFragment : Fragment() {
 
-    private var _binding : FragmentAlbumListenLaterBinding? = null
+    private var _binding : FragmentMovieWatchLaterBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : AlbumViewModel by viewModels()
+    private val watchLaterAdapter by lazy { WatchLaterAdapter() }
 
-    private val listenLaterAdapter by lazy { ListenLaterAdapter() }
+    private val viewModel : MovieViewModel by viewModels()
 
-    private lateinit var currentAlbum : List<ListenLaterEntity>
+    private lateinit var currentMovie : List<WatchLaterEntity>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAlbumListenLaterBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieWatchLaterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,30 +48,30 @@ class AlbumListenLaterFragment : Fragment() {
         hideBottomNavigation()
 
         with(binding) {
-            recyclerViewAlbum.apply {
-                adapter = listenLaterAdapter
+            recyclerViewMovie.apply {
+                adapter = watchLaterAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)
             }
             toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
             lifecycleScope.launch {
-                viewModel.allListenLaterAlbums.collect { album ->
-                    if (album.isEmpty()) {
-                        recyclerViewAlbum.visibility = View.GONE
+                viewModel.allWatchLaterMovies.collect { movies ->
+                    if (movies.isEmpty()) {
+                        recyclerViewMovie.visibility = View.GONE
                         layoutEmptyList.root.visibility = View.VISIBLE
                     }
-                    listenLaterAdapter.submitAlbum(album)
-                    currentAlbum = album
+                    watchLaterAdapter.submitMovie(movies)
+                    currentMovie = movies
                 }
             }
-            btnRandomAlbum.setOnClickListener {
-                if (::currentAlbum.isInitialized && currentAlbum.isNotEmpty()) {
-                    val randomAlbum = currentAlbum.random()
-                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(
-                        albumId = randomAlbum.albumId,
-                        album = currentAlbum[0].toAlbum(),
-                        albumEntity = currentAlbum[0].toAlbumEntity(),
-                        listenLaterEntity = currentAlbum[0],
-                        isFromAlbumListenLaterFragment = true
+            btnRandomMovie.setOnClickListener {
+                if (::currentMovie.isInitialized && currentMovie.isNotEmpty()) {
+                    val randomMovie = currentMovie.random()
+                    val action = MovieWatchLaterFragmentDirections.actionMovieWatchLaterFragmentToDetailMovieFragment(
+                        movieEntity = currentMovie[0].toMovieEntity(),
+                        isFromMovieWatchLaterFragment = true,
+                        movieId = randomMovie.movieId,
+                        watchLaterEntity = currentMovie[0],
+                        movie = currentMovie[0].toMovie()
                     )
                     it.findNavController().navigate(action)
                 } else {

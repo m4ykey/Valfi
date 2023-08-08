@@ -10,7 +10,7 @@ object Constants {
     const val LISTEN_LATER_TABLE = "listen_later_table"
     const val WATCH_LATER_TABLE = "watch_later_table"
 
-    const val DATABASE_VERSION = 2
+    const val DATABASE_VERSION = 1
 
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/"
     const val SPOTIFY_AUTH_URL = "https://accounts.spotify.com/"

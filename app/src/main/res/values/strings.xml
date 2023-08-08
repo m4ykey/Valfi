@@ -55,5 +55,7 @@
     <string name="there_nothing_here">There\'s nothing here</string>
     <string name="you_have_nothing_for_later">You have nothing for later</string>
     <string name="first_you_need_add_something_to_list">First, you need to add something to the list</string>
-    <string name="random_album">Random Album</string>
+    <string name="random_album">Random album</string>
+    <string name="watch_later">Watch later</string>
+    <string name="random_movie">Random movie</string>
 </resources>

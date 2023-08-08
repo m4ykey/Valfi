@@ -26,6 +26,7 @@ import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.core.common.utils.DateUtils
 import com.example.vuey.core.common.utils.formatVoteAverage
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -45,6 +46,7 @@ class DetailMovieFragment : Fragment() {
     private val viewModel: MovieViewModel by viewModels()
     private val castAdapter by lazy { CastAdapter() }
     private var isMovieSaved = false
+    private var isWatchLater = false
 
     private lateinit var connectivityManager: ConnectivityManager
     private val networkStateMonitor: NetworkStateMonitor by lazy {
@@ -75,7 +77,7 @@ class DetailMovieFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.apply {
-                getMovieDetail(args.movie.id)
+                if (args.isFromMovieWatchLaterFragment) { getMovieDetail(args.movieId) } else { getMovieDetail(args.movie.id) }
                 getMovieCast(args.movie.id)
             }
             binding.swipeRefresh.apply {
@@ -86,6 +88,26 @@ class DetailMovieFragment : Fragment() {
                     }
                 }
             }
+
+            viewModel.getMovieById(args.movieEntity.movieId).onEach { movie ->
+                isMovieSaved = if (movie == null) {
+                    binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
+                    false
+                } else {
+                    binding.imgSave.setImageResource(R.drawable.ic_save)
+                    true
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+            viewModel.getWatchLaterMovieById(args.watchLaterEntity.movieId).onEach { movie ->
+                isWatchLater = if (movie == null) {
+                    binding.imgTime.setImageResource(R.drawable.ic_time_outline)
+                    false
+                } else {
+                    binding.imgTime.setImageResource(R.drawable.ic_time)
+                    true
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
             networkStateMonitor.isInternetAvailable.collect { isAvailable ->
                 if (isAvailable) {
@@ -116,6 +138,12 @@ class DetailMovieFragment : Fragment() {
             movieVoteAverage = movieDatabase.movieVoteAverage
         )
 
+        val watchLaterEntity = WatchLaterEntity(
+            movieId = args.watchLaterEntity.movieId,
+            moviePosterPath = args.watchLaterEntity.moviePosterPath,
+            movieTitle = args.watchLaterEntity.movieTitle
+        )
+
         val movieHour = movieDatabase.movieRuntime / 60
         val movieMinute = movieDatabase.movieRuntime % 60
         val movieRuntime = if (movieHour == 0) {
@@ -130,16 +158,6 @@ class DetailMovieFragment : Fragment() {
         val genreList = movieDatabase.movieGenreList.joinToString(separator = ", ") { it.genreName }
         val spokenLanguage =
             movieDatabase.movieSpokenLanguage.joinToString(separator = ", ") { it.spokenLanguageName }
-
-        viewModel.getMovieById(args.movieEntity.movieId).onEach { movie ->
-            isMovieSaved = if (movie == null) {
-                binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
-                false
-            } else {
-                binding.imgSave.setImageResource(R.drawable.ic_save)
-                true
-            }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         with(binding) {
 
@@ -179,6 +197,25 @@ class DetailMovieFragment : Fragment() {
                     showSnackbar(requireView(), getString(R.string.removed_from_library))
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     viewModel.deleteMovie(movieEntity)
+                }
+            }
+
+            imgTime.setOnClickListener {
+                isWatchLater = !isWatchLater
+                if (isWatchLater) {
+                    showSnackbar(
+                        requireView(),
+                        getString(R.string.added_to_watch_later)
+                    )
+                    imgTime.setImageResource(R.drawable.ic_time)
+                    viewModel.insertWatchLaterMovie(watchLaterEntity)
+                } else {
+                    showSnackbar(
+                        requireView(),
+                        getString(R.string.removed_from_watch_later)
+                    )
+                    imgTime.setImageResource(R.drawable.ic_time_outline)
+                    viewModel.deleteWatchLaterMovie(watchLaterEntity)
                 }
             }
 
@@ -309,6 +346,31 @@ class DetailMovieFragment : Fragment() {
                                         )
                                         imgSave.setImageResource(R.drawable.ic_save_outlined)
                                         viewModel.deleteMovie(movieEntity)
+                                    }
+                                }
+
+                                val watchLaterEntity = WatchLaterEntity(
+                                    movieId = movieDetail.id,
+                                    movieTitle = movieDetail.title,
+                                    moviePosterPath = movieDetail.posterPath.toString()
+                                )
+
+                                imgTime.setOnClickListener {
+                                    isWatchLater = !isWatchLater
+                                    if (isWatchLater) {
+                                        showSnackbar(
+                                            requireView(),
+                                            getString(R.string.added_to_watch_later)
+                                        )
+                                        imgTime.setImageResource(R.drawable.ic_time)
+                                        viewModel.insertWatchLaterMovie(watchLaterEntity)
+                                    } else {
+                                        showSnackbar(
+                                            requireView(),
+                                            getString(R.string.removed_from_watch_later)
+                                        )
+                                        imgTime.setImageResource(R.drawable.ic_time_outline)
+                                        viewModel.deleteWatchLaterMovie(watchLaterEntity)
                                     }
                                 }
                             }

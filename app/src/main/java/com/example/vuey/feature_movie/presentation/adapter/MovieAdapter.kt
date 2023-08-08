@@ -18,6 +18,7 @@ import com.example.vuey.core.common.utils.DiffUtils
 import com.example.vuey.core.common.utils.formatVoteAverage
 import com.example.vuey.core.common.utils.toMovie
 import com.example.vuey.core.common.utils.toMovieEntity
+import com.example.vuey.core.common.utils.toWatchLaterEntity
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -50,7 +51,10 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         layoutMovie.setOnClickListener {
                             val action = MovieFragmentDirections.actionMovieFragmentToDetailMovieFragment(
                                 movie = movie.toMovie(),
-                                movieEntity = movie
+                                movieEntity = movie,
+                                isFromMovieWatchLaterFragment = false,
+                                movieId = movie.movieId,
+                                watchLaterEntity = movie.toWatchLaterEntity()
                             )
                             it.findNavController().navigate(action)
                         }
@@ -71,7 +75,10 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         layoutMovie.setOnClickListener {
                             val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToDetailMovieFragment(
                                 movie = movie,
-                                movieEntity = movie.toMovieEntity()
+                                movieEntity = movie.toMovieEntity(),
+                                isFromMovieWatchLaterFragment = false,
+                                movieId = movie.id,
+                                watchLaterEntity = movie.toWatchLaterEntity()
                             )
                             it.findNavController().navigate(action)
                         }
