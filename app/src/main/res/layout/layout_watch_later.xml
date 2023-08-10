@@ -18,7 +18,8 @@
             android:id="@+id/imgMovie"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:contentDescription="@string/movie_poster" />
 
     </androidx.cardview.widget.CardView>
 
