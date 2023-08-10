@@ -7,7 +7,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import retrofit2.HttpException
 
-class SpotifyPagingSource(
+class AlbumPagingSource(
     private val albumApi: AlbumApi,
     private val query : String,
     private val spotifyInterceptor: SpotifyInterceptor
@@ -15,16 +15,8 @@ class SpotifyPagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, AlbumList>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            val prevKey = anchorPage?.prevKey
-            val nextKey = anchorPage?.nextKey
-
-            if (prevKey != null && prevKey in 0..50) {
-                return prevKey
-            } else if (nextKey != null && prevKey in 0..50) {
-                return nextKey
-            }
-            return null
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 

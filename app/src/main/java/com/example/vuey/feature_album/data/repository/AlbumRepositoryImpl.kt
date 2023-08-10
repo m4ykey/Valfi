@@ -9,7 +9,7 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList
 import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumDetail
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
-import com.example.vuey.feature_album.paging.SpotifyPagingSource
+import com.example.vuey.feature_album.paging.AlbumPagingSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -30,7 +30,7 @@ class AlbumRepositoryImpl @Inject constructor(
                 pageSize = 20,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { SpotifyPagingSource(albumApi, query = albumName, spotifyInterceptor = spotifyInterceptor) }
+            pagingSourceFactory = { AlbumPagingSource(albumApi, query = albumName, spotifyInterceptor = spotifyInterceptor) }
         ).flow
     }
 
