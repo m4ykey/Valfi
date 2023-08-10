@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vuey.core.common.utils.DiffUtils
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
-import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
@@ -25,9 +24,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
         fun bind(trackResult: Tracks.AlbumItem) {
             with(binding) {
 
-                val artistList: List<Artist> = trackResult.artistList
-                val artists = artistList.joinToString(separator = ", ") { it.artistName }
-                txtArtist.text = artists
+                txtArtist.text = trackResult.artistList.joinToString(separator = ", ") { it.artistName }
                 txtTrackName.text = trackResult.trackName
 
                 val seconds = trackResult.durationMs / 1000
