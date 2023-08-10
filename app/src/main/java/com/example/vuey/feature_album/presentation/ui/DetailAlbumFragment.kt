@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -31,7 +30,6 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -75,7 +73,6 @@ class DetailAlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeDetailAlbum()
-        hideBottomNavigation()
 
         val albumDatabase = arguments.albumEntity
         val listenLaterDatabase = arguments.listenLaterEntity
@@ -86,14 +83,6 @@ class DetailAlbumFragment : Fragment() {
                     getAlbumDetail(arguments.albumId)
                 } else {
                     getAlbumDetail(arguments.album.id)
-                }
-            }
-            binding.swipeRefresh.apply {
-                setOnRefreshListener {
-                    launch {
-                        detailViewModel.refreshDetail(arguments.album.id)
-                        isRefreshing = false
-                    }
                 }
             }
         }
@@ -297,29 +286,7 @@ class DetailAlbumFragment : Fragment() {
 
                                 txtAlbumName.text = albumDetail.albumName
                                 txtAlbumTime.text = albumLength
-                                lifecycleScope.launch {
-                                    networkStateMonitor.isInternetAvailable.collect { isAvailable ->
-                                        if (isAvailable) {
-                                            txtArtist.apply {
-                                                text = artistNames
-                                                val artistId = albumDetail.artistList[0].id
-                                                setOnClickListener {
-                                                    val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistFragment(
-                                                        artistId = artistId
-                                                    )
-                                                    it.findNavController().navigate(action)
-                                                }
-                                            }
-                                        } else {
-                                            txtArtist.setOnClickListener {
-                                                showSnackbar(
-                                                    requireView(),
-                                                    getString(R.string.artist_no_internet_connection)
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
+                                txtArtist.text = artistNames
 
                                 txtInfo.text =
                                     "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
@@ -445,16 +412,9 @@ class DetailAlbumFragment : Fragment() {
         }
     }
 
-    private fun hideBottomNavigation() {
-        val bottomNavigation =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
         networkStateMonitor.stopMonitoring()
     }
-
 }

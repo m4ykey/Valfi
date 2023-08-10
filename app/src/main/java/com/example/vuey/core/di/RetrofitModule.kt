@@ -2,7 +2,6 @@ package com.example.vuey.core.di
 
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
-import com.example.vuey.feature_artist.data.remote.api.ArtistSpotifyApi
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import dagger.Module
 import dagger.Provides
@@ -28,10 +27,5 @@ object RetrofitModule {
     @Provides
     fun provideMovieApi(@Named("Movie") retrofit: Retrofit) : MovieApi {
         return retrofit.create(MovieApi::class.java)
-    }
-
-    @Provides
-    fun provideSpotifyArtistApi(@Named("Artist") retrofit: Retrofit) : ArtistSpotifyApi {
-        return retrofit.create(ArtistSpotifyApi::class.java)
     }
 }

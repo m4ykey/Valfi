@@ -83,16 +83,4 @@ object NetworkModule {
             .client(httpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
-
-    @Provides
-    @Singleton
-    @Named("Artist")
-    fun provideArtistInfoApi(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
-    ): Retrofit = Retrofit.Builder()
-            .baseUrl(Constants.SPOTIFY_BASE_URL)
-            .client(httpClient)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
 }

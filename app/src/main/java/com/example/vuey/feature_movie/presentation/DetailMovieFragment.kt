@@ -17,19 +17,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.databinding.FragmentDetailMovieBinding
-import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
-import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
-import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.core.common.utils.DateUtils
 import com.example.vuey.core.common.utils.formatVoteAverage
 import com.example.vuey.core.common.utils.showSnackbar
+import com.example.vuey.databinding.FragmentDetailMovieBinding
+import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
+import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -73,20 +72,11 @@ class DetailMovieFragment : Fragment() {
 
         observeMovieDetail()
         observeMovieCast()
-        hideBottomNavigation()
 
         lifecycleScope.launch {
             viewModel.apply {
                 if (args.isFromMovieWatchLaterFragment) { getMovieDetail(args.movieId) } else { getMovieDetail(args.movie.id) }
                 getMovieCast(args.movie.id)
-            }
-            binding.swipeRefresh.apply {
-                setOnRefreshListener {
-                    launch {
-                        viewModel.refreshDetail(args.movie.id)
-                        isRefreshing = false
-                    }
-                }
             }
 
             viewModel.getMovieById(args.movieEntity.movieId).onEach { movie ->
@@ -405,12 +395,6 @@ class DetailMovieFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigation =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

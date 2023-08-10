@@ -16,12 +16,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.SearchUtil
+import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
-import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,7 +46,6 @@ class SearchMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeSearchMovie()
-        hideBottomNavigation()
         searchMovie()
 
         with(binding) {
@@ -126,11 +124,6 @@ class SearchMovieFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

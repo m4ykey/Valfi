@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumStatisticsBinding
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.firstOrNull
@@ -38,8 +37,6 @@ class AlbumStatisticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        hideBottomNavigation()
 
         with(binding) {
 
@@ -81,12 +78,6 @@ class AlbumStatisticsFragment : Fragment() {
             }
         }
 
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigation =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

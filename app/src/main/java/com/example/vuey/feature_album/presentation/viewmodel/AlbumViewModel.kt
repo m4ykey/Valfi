@@ -77,10 +77,6 @@ class AlbumViewModel @Inject constructor(
         return dataSource.getAlbumById(albumId)
     }
 
-    suspend fun refreshDetail(albumId: String) {
-        getAlbumDetail(albumId)
-    }
-
     suspend fun getAlbumDetail(albumId: String) {
         repository.getAlbum(albumId).onEach { result ->
             when (result) {

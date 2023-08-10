@@ -40,6 +40,25 @@ class MainActivity : AppCompatActivity() {
             val navController = navHostFragment.navController
             bottomNavigation.setupWithNavController(navController)
 
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                val fragmentsWithHiddenBottomNavigation = setOf(
+                    R.id.albumDetailFragment,
+                    R.id.searchAlbumFragment,
+                    R.id.albumStatisticsFragment,
+                    R.id.albumListenLaterFragment,
+                    R.id.detailMovieFragment,
+                    R.id.searchMovieFragment,
+                    R.id.movieStatisticsFragment,
+                    R.id.movieWatchLaterFragment
+                )
+
+                bottomNavigation.visibility = if (destination.id in fragmentsWithHiddenBottomNavigation) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            }
+
             lifecycleScope.launch {
                 networkStateMonitor.isInternetAvailable.collect { isAvailable ->
                     if (isAvailable) {

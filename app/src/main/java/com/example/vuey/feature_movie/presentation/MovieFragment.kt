@@ -15,7 +15,6 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -42,7 +41,6 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupNavigation()
-        showBottomNavigation()
         with(binding) {
             movieRecyclerView.adapter = movieAdapter
             lifecycleScope.launch {
@@ -91,11 +89,6 @@ class MovieFragment : Fragment() {
                 MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
             }
         }
-    }
-
-    private fun showBottomNavigation() {
-        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

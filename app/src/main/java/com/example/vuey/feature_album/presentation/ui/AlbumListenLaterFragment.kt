@@ -18,7 +18,6 @@ import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
 import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
 import com.example.vuey.feature_album.presentation.adapter.ListenLaterAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,8 +43,6 @@ class AlbumListenLaterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        hideBottomNavigation()
 
         with(binding) {
             recyclerViewAlbum.apply {
@@ -79,12 +76,6 @@ class AlbumListenLaterFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigation =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

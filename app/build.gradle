@@ -13,12 +13,12 @@ plugins {
 
 android {
     namespace 'com.example.vuey'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.vuey"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "2.7.2"
 
@@ -109,9 +109,6 @@ dependencies {
 
     // Coil
     implementation 'io.coil-kt:coil:2.4.0'
-
-    // SwipeToRefresh
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"

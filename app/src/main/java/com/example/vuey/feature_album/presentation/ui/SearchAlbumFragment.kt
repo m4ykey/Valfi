@@ -21,7 +21,6 @@ import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,9 +45,7 @@ class SearchAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         observeSearchAlbum()
-        hideBottomNavigation()
         searchAlbum()
 
         with(binding) {
@@ -128,12 +125,6 @@ class SearchAlbumFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigation =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

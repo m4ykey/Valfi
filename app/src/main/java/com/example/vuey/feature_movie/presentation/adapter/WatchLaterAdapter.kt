@@ -2,6 +2,7 @@ package com.example.vuey.feature_movie.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -40,6 +41,7 @@ class WatchLaterAdapter : RecyclerView.Adapter<WatchLaterAdapter.WatchLaterViewH
                         watchLaterEntity = movie,
                         movie = movie.toMovie()
                     )
+                    it.findNavController().navigate(action)
                 }
             }
         }

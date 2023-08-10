@@ -77,10 +77,6 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    suspend fun refreshDetail(movieId : Int) {
-        getMovieDetail(movieId)
-    }
-
     suspend fun getMovieCast(movieId: Int) {
         repository.getMovieCast(movieId).onEach { result ->
             when (result) {

@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieStatisticsBinding
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.firstOrNull
@@ -37,8 +36,6 @@ class MovieStatisticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        hideBottomNavigation()
 
         with(binding) {
 
@@ -78,12 +75,6 @@ class MovieStatisticsFragment : Fragment() {
             }
         }
 
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigation =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {
