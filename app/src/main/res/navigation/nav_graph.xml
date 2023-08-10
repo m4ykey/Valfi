@@ -33,7 +33,7 @@
             app:argType="com.example.vuey.feature_album.data.local.source.entity.AlbumEntity" />
         <argument
             android:name="album"
-            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album.Album" />
+            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList" />
         <argument
             android:name="listenLaterEntity"
             app:argType="com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity" />

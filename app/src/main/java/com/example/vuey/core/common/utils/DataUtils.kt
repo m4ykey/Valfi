@@ -2,7 +2,7 @@ package com.example.vuey.core.common.utils
 
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
 import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.album.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.spotify.album.Image
@@ -36,8 +36,8 @@ fun MovieList.toMovieEntity(): MovieEntity {
     )
 }
 
-fun AlbumEntity.toAlbum(): Album {
-    return Album(
+fun AlbumEntity.toAlbum(): AlbumList {
+    return AlbumList(
         albumType = this.albumType,
         albumName = this.albumName,
         id = this.id,
@@ -64,7 +64,7 @@ fun AlbumEntity.toAlbum(): Album {
     )
 }
 
-fun Album.toAlbumEntity(): AlbumEntity {
+fun AlbumList.toAlbumEntity(): AlbumEntity {
     return AlbumEntity(
         albumName = this.albumName,
         albumType = this.albumType,
@@ -83,8 +83,8 @@ fun Album.toAlbumEntity(): AlbumEntity {
     )
 }
 
-fun ListenLaterEntity.toAlbum() : Album {
-    return Album(
+fun ListenLaterEntity.toAlbum() : AlbumList {
+    return AlbumList(
         albumName = albumTitle,
         albumType = "",
         artistList = emptyList(),
@@ -113,7 +113,7 @@ fun ListenLaterEntity.toAlbumEntity() : AlbumEntity {
     )
 }
 
-fun Album.toListenLaterEntity() : ListenLaterEntity {
+fun AlbumList.toListenLaterEntity() : ListenLaterEntity {
     return ListenLaterEntity(
         albumId = this.id,
         albumTitle = this.albumName,

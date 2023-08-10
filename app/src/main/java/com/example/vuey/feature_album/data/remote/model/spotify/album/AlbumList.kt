@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Album(
+data class AlbumList(
     @SerializedName("album_type")
     val albumType: String,
     @SerializedName("artists")

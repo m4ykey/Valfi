@@ -15,10 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
-import com.example.vuey.core.common.utils.SearchUtil.calculateAlbumMatchingScore
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
-import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
+import com.example.vuey.feature_album.presentation.adapter.AlbumPagingAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
 import com.google.android.material.snackbar.Snackbar
@@ -32,7 +31,7 @@ class SearchAlbumFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val searchViewModel: AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumAdapter() }
+    private val albumAdapter by lazy { AlbumPagingAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,14 +103,9 @@ class SearchAlbumFragment : Fragment() {
                             is SearchAlbumUiState.Success -> {
                                 progressBar.visibility = View.GONE
 
-                                val albumsWithScore = uiState.albumData.map { album ->
-                                    album to calculateAlbumMatchingScore(album, etSearch.text.toString())
+                                uiState.albumData.collect { pagingData ->
+                                    albumAdapter.submitAlbum(pagingData)
                                 }
-
-                                val sortedAlbum = albumsWithScore.sortedByDescending { it.second }
-                                val sortedAlbumList = sortedAlbum.map { it.first }
-
-                                albumAdapter.submitAlbums(sortedAlbumList)
                             }
 
                             is SearchAlbumUiState.Failure -> {
