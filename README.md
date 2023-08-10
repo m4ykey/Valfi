@@ -31,8 +31,6 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [X] Notifications
 - [X] Improve UX/UI
 - [X] Statistic Screen
-- [X] Artist Fragment UI
-- [ ] Actor Fragment 
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
@@ -43,4 +41,3 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - [Gson](https://github.com/google/gson)
 - [Coil](https://coil-kt.github.io/coil/)
-- [SwipeRefreshLayout](https://developer.android.com/develop/ui/views/touch-and-input/swipe/add-swipe-interface)
