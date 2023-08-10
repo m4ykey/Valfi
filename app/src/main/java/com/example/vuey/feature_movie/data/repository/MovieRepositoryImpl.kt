@@ -3,7 +3,6 @@ package com.example.vuey.feature_movie.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.vuey.core.common.Constants
 import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_movie.data.paging.MoviePagingSource
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
@@ -25,7 +24,7 @@ class MovieRepositoryImpl @Inject constructor(
     override fun searchMovie(query: String): Flow<PagingData<MovieList>> {
         return Pager(
             config = PagingConfig(
-                pageSize = Constants.STARTING_PAGE_INDEX,
+                pageSize = 1,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { MoviePagingSource(movieApi, query) }
