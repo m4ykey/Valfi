@@ -16,7 +16,7 @@ import com.example.vuey.core.common.utils.toMovieEntity
 import com.example.vuey.core.common.utils.toWatchLaterEntity
 import com.example.vuey.databinding.LayoutMovieBinding
 import com.example.vuey.feature_movie.data.remote.model.MovieList
-import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
+import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
 
 class MoviePagingAdapter : PagingDataAdapter<MovieList, MoviePagingAdapter.MovieViewHolder>(MovieDiffUtil) {
 
@@ -54,7 +54,7 @@ class MoviePagingAdapter : PagingDataAdapter<MovieList, MoviePagingAdapter.Movie
                     txtReleaseDate.text = DateUtils.formatAirDate(movie.releaseDate)
                 }
                 layoutMovie.setOnClickListener {
-                    val action = MovieFragmentDirections.actionMovieFragmentToDetailMovieFragment(
+                    val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToDetailMovieFragment(
                         movie = movie,
                         movieEntity = movie.toMovieEntity(),
                         isFromMovieWatchLaterFragment = false,
