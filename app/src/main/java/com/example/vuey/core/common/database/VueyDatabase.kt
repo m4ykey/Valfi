@@ -3,10 +3,10 @@ package com.example.vuey.core.common.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.vuey.feature_album.data.local.converter.AlbumConverter
+import com.example.vuey.feature_album.data.local.source.converter.AlbumConverter
 import com.example.vuey.feature_album.data.local.source.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
-import com.example.vuey.feature_movie.data.local.converter.MovieConverter
+import com.example.vuey.feature_movie.data.local.source.converter.MovieConverter
 import com.example.vuey.feature_movie.data.local.source.dao.MovieDao
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.core.common.Constants.DATABASE_VERSION

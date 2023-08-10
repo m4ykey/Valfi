@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.data.local.converter
+package com.example.vuey.feature_album.data.local.source.converter
 
 import androidx.room.TypeConverter
 import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity

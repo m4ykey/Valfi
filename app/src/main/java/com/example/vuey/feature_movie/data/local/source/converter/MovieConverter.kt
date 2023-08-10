@@ -1,4 +1,4 @@
-package com.example.vuey.feature_movie.data.local.converter
+package com.example.vuey.feature_movie.data.local.source.converter
 
 import androidx.room.TypeConverter
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
