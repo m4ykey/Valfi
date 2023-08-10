@@ -1,6 +1,11 @@
 package com.example.vuey.feature_movie.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.vuey.core.common.Constants
 import com.example.vuey.core.common.network.Resource
+import com.example.vuey.feature_movie.data.paging.MoviePagingSource
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.model.MovieCast
 import com.example.vuey.feature_movie.data.remote.model.MovieDetail
@@ -17,20 +22,14 @@ class MovieRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi
 ) : MovieRepository {
 
-    override suspend fun searchMovie(query: String): Flow<Resource<List<MovieList>>> {
-        return flow {
-
-            emit(Resource.Loading())
-
-            try {
-                val movieResponse = movieApi.searchMovie(query).results
-                emit(Resource.Success(movieResponse))
-            } catch (e : HttpException) {
-                throw IOException(e.localizedMessage ?: "An unexpected error occurred")
-            }
-        }.catch { e ->
-            emit(Resource.Failure(message = e.localizedMessage ?: "No internet connection"))
-        }
+    override fun searchMovie(query: String): Flow<PagingData<MovieList>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = Constants.STARTING_PAGE_INDEX,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { MoviePagingSource(movieApi, query) }
+        ).flow
     }
 
     override suspend fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>> {

@@ -14,10 +14,10 @@ fun MovieEntity.toMovie(): MovieList {
     return MovieList(
         id = movieId,
         overview = movieOverview,
-        poster_path = moviePosterPath,
-        release_date = movieReleaseDate,
+        posterPath = moviePosterPath,
+        releaseDate = movieReleaseDate,
         title = movieTitle,
-        vote_average = movieVoteAverage
+        voteAverage = movieVoteAverage
     )
 }
 
@@ -27,12 +27,12 @@ fun MovieList.toMovieEntity(): MovieEntity {
         movieGenreList = emptyList(),
         movieId = this.id,
         movieOverview = this.overview,
-        moviePosterPath = this.poster_path.toString(),
-        movieReleaseDate = this.release_date,
+        moviePosterPath = this.posterPath.toString(),
+        movieReleaseDate = this.releaseDate,
         movieRuntime = 0,
         movieSpokenLanguage = emptyList(),
         movieTitle = this.title,
-        movieVoteAverage = this.vote_average
+        movieVoteAverage = this.voteAverage
     )
 }
 
@@ -149,7 +149,7 @@ fun MovieList.toWatchLaterEntity() : WatchLaterEntity {
     return WatchLaterEntity(
         movieTitle = this.title,
         movieId = this.id,
-        moviePosterPath = this.poster_path.toString()
+        moviePosterPath = this.posterPath.toString()
     )
 }
 
@@ -157,10 +157,10 @@ fun WatchLaterEntity.toMovie() : MovieList {
     return MovieList(
         id = this.movieId,
         overview = "",
-        poster_path = this.moviePosterPath,
-        release_date = "",
+        posterPath = this.moviePosterPath,
+        releaseDate = "",
         title = this.movieTitle,
-        vote_average = 0.0
+        voteAverage = 0.0
     )
 }
 

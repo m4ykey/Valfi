@@ -20,4 +20,6 @@ object Constants {
 
     const val MOVIE_TABLE_NAME = "movie_table"
 
+    const val STARTING_PAGE_INDEX = 1
+
 }

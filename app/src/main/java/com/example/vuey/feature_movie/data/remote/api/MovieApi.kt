@@ -13,7 +13,8 @@ interface MovieApi {
     @GET("search/movie")
     suspend fun searchMovie(
         @Query("query") query : String,
-        @Query("language") language : String = Locale.getDefault().language
+        @Query("language") language : String = Locale.getDefault().language,
+        @Query("page") page : Int
     ) : SearchMovie
 
     @GET("movie/{movie_id}")

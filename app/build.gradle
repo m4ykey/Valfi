@@ -114,6 +114,9 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     implementation "androidx.datastore:datastore:1.0.0"
 
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:3.2.0"
+
     // LeakCanary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.11'
 

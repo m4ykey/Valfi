@@ -15,10 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
-import com.example.vuey.core.common.utils.SearchUtil
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchMovieBinding
-import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
+import com.example.vuey.feature_movie.presentation.adapter.MoviePagingAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
 import com.google.android.material.snackbar.Snackbar
@@ -32,7 +31,7 @@ class SearchMovieFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel : MovieViewModel by viewModels()
-    private val movieAdapter by lazy { MovieAdapter() }
+    private val movieAdapter by lazy { MoviePagingAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,17 +101,10 @@ class SearchMovieFragment : Fragment() {
                         when(uiState) {
                             is SearchMovieUiState.Success -> {
                                 progressBar.visibility = View.GONE
-                                val moviesWithScore = uiState.movieData.map { movie ->
-                                    movie to SearchUtil.calculateMovieMatchingScore(
-                                        movie,
-                                        etSearch.text.toString()
-                                    )
+
+                                uiState.movieData.collect { pagingData ->
+                                    movieAdapter.submitMovie(pagingData)
                                 }
-
-                                val sortedMovie = moviesWithScore.sortedByDescending { it.second }
-                                val sortedMovieList = sortedMovie.map { it.first }
-
-                                movieAdapter.submitMovie(sortedMovieList)
                             }
                             is SearchMovieUiState.Failure -> {
                                 progressBar.visibility = View.GONE
