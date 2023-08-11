@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
-import com.example.vuey.feature_album.presentation.adapter.AlbumPagingAdapter
+import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +31,7 @@ class SearchAlbumFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val searchViewModel: AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumPagingAdapter() }
+    private val albumAdapter by lazy { AlbumAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,11 +101,7 @@ class SearchAlbumFragment : Fragment() {
                     with(binding) {
                         when (uiState) {
                             is SearchAlbumUiState.Success -> {
-                                progressBar.visibility = View.GONE
-
-                                uiState.albumData.collect { pagingData ->
-                                    albumAdapter.submitAlbum(pagingData)
-                                }
+                                albumAdapter.submitAlbums(uiState.albumData)
                             }
 
                             is SearchAlbumUiState.Failure -> {

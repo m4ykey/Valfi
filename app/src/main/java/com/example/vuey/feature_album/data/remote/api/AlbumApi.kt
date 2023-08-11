@@ -14,8 +14,8 @@ interface AlbumApi {
         @Query("q") query : String,
         @Query("type") type : String = "album",
         @Header("Authorization") token : String,
-        @Query("limit") limit : Int,
-        @Query("offset") offset : Int
+        @Query("limit") limit : Int = 50,
+        @Query("offset") offset : Int = 0
     ) : SearchAlbum
 
     @GET("v1/albums/{id}")

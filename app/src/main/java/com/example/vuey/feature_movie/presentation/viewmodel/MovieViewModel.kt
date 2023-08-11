@@ -125,14 +125,27 @@ class MovieViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun searchMovie(movieName : String) {
-        viewModelScope.launch {
-            try {
-                val searchResults = repository.searchMovie(movieName)
-                _movieSearchUiState.value = SearchMovieUiState.Success(searchResults)
-            } catch (e : Exception) {
-                _movieSearchUiState.value = SearchMovieUiState.Failure("Unknown error")
+    suspend fun searchMovie(movieName : String) {
+        repository.searchMovie(movieName).onEach { result ->
+            when (result) {
+                is Resource.Failure -> {
+                    _movieSearchUiState.tryEmit(
+                        SearchMovieUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
+                    )
+                }
+                is Resource.Success -> {
+                    _movieSearchUiState.tryEmit(
+                        SearchMovieUiState.Success(
+                            movieData = result.data ?: emptyList()
+                        )
+                    )
+                }
+                is Resource.Loading -> {
+                    _movieSearchUiState.tryEmit(SearchMovieUiState.Loading)
+                }
             }
-        }
+        }.launchIn(viewModelScope)
     }
 }

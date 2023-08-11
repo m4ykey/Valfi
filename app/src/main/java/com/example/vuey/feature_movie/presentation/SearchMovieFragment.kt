@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchMovieBinding
-import com.example.vuey.feature_movie.presentation.adapter.MoviePagingAdapter
+import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +31,7 @@ class SearchMovieFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel : MovieViewModel by viewModels()
-    private val movieAdapter by lazy { MoviePagingAdapter() }
+    private val movieAdapter by lazy { MovieAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,9 +102,7 @@ class SearchMovieFragment : Fragment() {
                             is SearchMovieUiState.Success -> {
                                 progressBar.visibility = View.GONE
 
-                                uiState.movieData.collect { pagingData ->
-                                    movieAdapter.submitMovie(pagingData)
-                                }
+                                movieAdapter.submitMovie(uiState.movieData)
                             }
                             is SearchMovieUiState.Failure -> {
                                 progressBar.visibility = View.GONE

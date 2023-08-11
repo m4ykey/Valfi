@@ -101,14 +101,40 @@ class AlbumViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun searchAlbum(albumName : String) {
-        viewModelScope.launch {
-            try {
-                val searchResults = repository.searchAlbum(albumName)
-                _albumSearchUiState.value = SearchAlbumUiState.Success(searchResults)
-            } catch (e : Exception) {
-                _albumSearchUiState.value = SearchAlbumUiState.Failure("Unknown error")
+    suspend fun searchAlbum(albumName: String) {
+        repository.searchAlbum(albumName).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    _albumSearchUiState.tryEmit(
+                        SearchAlbumUiState.Success(
+                            albumData = result.data ?: emptyList()
+                        )
+                    )
+                }
+
+                is Resource.Failure -> {
+                    _albumSearchUiState.tryEmit(
+                        SearchAlbumUiState.Failure(
+                            message = result.message ?: "Unknown error"
+                        )
+                    )
+                }
+
+                is Resource.Loading -> {
+                    _albumSearchUiState.tryEmit(SearchAlbumUiState.Loading)
+                }
             }
-        }
+        }.launchIn(viewModelScope)
     }
+
+//    fun searchAlbum(albumName : String) {
+//        viewModelScope.launch {
+//            try {
+//                val searchResults = repository.searchAlbum(albumName)
+//                _albumSearchUiState.value = SearchAlbumUiState.Success(searchResults)
+//            } catch (e : Exception) {
+//                _albumSearchUiState.value = SearchAlbumUiState.Failure("Unknown error")
+//            }
+//        }
+//    }
 }
