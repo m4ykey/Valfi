@@ -57,6 +57,4 @@
     <string name="random_album">Random album</string>
     <string name="watch_later">Watch later</string>
     <string name="random_movie">Random movie</string>
-    <string name="results_could_not_be_loaded">Results could not be loaded</string>
-    <string name="refresh">Refresh</string>
 </resources>

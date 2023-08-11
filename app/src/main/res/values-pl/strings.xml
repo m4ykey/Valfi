@@ -58,6 +58,4 @@
     <string name="random_album">Losowy album</string>
     <string name="watch_later">Obejrzyj później</string>
     <string name="random_movie">Losowy film</string>
-    <string name="results_could_not_be_loaded">Wyniki nie mogą zostać załadowane</string>
-    <string name="refresh">Odśwież</string>
 </resources>
