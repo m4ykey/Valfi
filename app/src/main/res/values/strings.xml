@@ -57,4 +57,5 @@
     <string name="random_album">Random album</string>
     <string name="watch_later">Watch later</string>
     <string name="random_movie">Random movie</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.vuey.feature_album.presentation.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +22,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
 
     inner class TrackViewHolder(private val binding: LayoutAlbumTrackListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(trackResult: Tracks.AlbumItem) {
+        fun bind(trackResult: Tracks.AlbumItem, isLastItem : Boolean) {
             with(binding) {
 
                 txtArtist.text = trackResult.artistList.joinToString(separator = ", ") { it.artistName }
@@ -30,6 +31,12 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
                 val seconds = trackResult.durationMs / 1000
                 val trackDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
                 txtDuration.text = trackDuration
+
+                if (isLastItem) {
+                    view1.visibility = View.GONE
+                } else {
+                    view1.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -42,7 +49,8 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+        val isLastItem = position == itemCount - 1
+        holder.bind(tracks[position], isLastItem)
     }
 
     override fun getItemCount(): Int {

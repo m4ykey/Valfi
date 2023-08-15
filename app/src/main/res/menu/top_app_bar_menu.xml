@@ -4,17 +4,21 @@
 
     <item android:id="@+id/imgLater"
         android:title="@string/for_later"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_time_outline"/>
 
     <item android:id="@+id/imgAdd"
         android:title="@string/add"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_playlist_add"/>
 
     <item android:id="@+id/imgStatistics"
         android:title="@string/statistics"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_analytics"/>
+
+    <item android:id="@+id/imgSettings"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 
 </menu>
