@@ -79,11 +79,8 @@ class DetailAlbumFragment : Fragment() {
 
         lifecycleScope.launch {
             detailViewModel.apply {
-                if (arguments.isFromAlbumListenLaterFragment) {
-                    getAlbumDetail(arguments.albumId)
-                } else {
-                    getAlbumDetail(arguments.album.id)
-                }
+                getAlbumDetail(arguments.albumId)
+                getAlbumDetail(albumDatabase.id)
             }
         }
 

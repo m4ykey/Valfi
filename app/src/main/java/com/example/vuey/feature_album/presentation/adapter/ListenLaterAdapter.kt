@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.core.common.utils.DiffUtils
-import com.example.vuey.core.common.utils.toAlbum
 import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.databinding.LayoutListenLaterBinding
 import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
@@ -34,11 +33,9 @@ class ListenLaterAdapter : RecyclerView.Adapter<ListenLaterAdapter.ListenLaterVi
                 }
                 layoutAlbum.setOnClickListener {
                     val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(
-                        album = album.toAlbum(),
                         albumEntity = album.toAlbumEntity(),
                         listenLaterEntity = album,
-                        albumId = album.albumId,
-                        isFromAlbumListenLaterFragment = true
+                        albumId = album.albumId
                     )
                     it.findNavController().navigate(action)
                 }

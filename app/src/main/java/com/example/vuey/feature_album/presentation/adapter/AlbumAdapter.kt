@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.DiffUtils
-import com.example.vuey.core.common.utils.toAlbum
 import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.core.common.utils.toListenLaterEntity
 import com.example.vuey.databinding.LayoutAlbumBinding
@@ -42,11 +41,9 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
                         layoutAlbum.setOnClickListener {
                             val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
-                                album = album,
                                 albumEntity = album.toAlbumEntity(),
                                 listenLaterEntity = album.toListenLaterEntity(),
-                                albumId = album.id,
-                                isFromAlbumListenLaterFragment = false
+                                albumId = album.id
                             )
                             it.findNavController().navigate(action)
                         }
@@ -62,11 +59,9 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.name }
                         layoutAlbum.setOnClickListener {
                             val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(
-                                album = album.toAlbum(),
                                 albumEntity = album,
                                 listenLaterEntity = album.toListenLaterEntity(),
-                                albumId = album.id,
-                                isFromAlbumListenLaterFragment = false
+                                albumId = album.id
                             )
                             it.findNavController().navigate(action)
                         }

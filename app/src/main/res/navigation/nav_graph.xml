@@ -32,17 +32,11 @@
             android:name="albumEntity"
             app:argType="com.example.vuey.feature_album.data.local.source.entity.AlbumEntity" />
         <argument
-            android:name="album"
-            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList" />
-        <argument
             android:name="listenLaterEntity"
             app:argType="com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity" />
         <argument
             android:name="albumId"
             app:argType="string" />
-        <argument
-            android:name="isFromAlbumListenLaterFragment"
-            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
@@ -89,20 +83,17 @@
         android:label="fragment_detail_movie"
         tools:layout="@layout/fragment_detail_movie" >
         <argument
-            android:name="movie"
-            app:argType="com.example.vuey.feature_movie.data.remote.model.MovieList" />
-        <argument
             android:name="movieEntity"
             app:argType="com.example.vuey.feature_movie.data.local.source.entity.MovieEntity" />
-        <argument
-            android:name="isFromMovieWatchLaterFragment"
-            app:argType="boolean" />
         <argument
             android:name="watchLaterEntity"
             app:argType="com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity" />
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <argument
+            android:name="movieOverview"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"

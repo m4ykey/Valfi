@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.core.common.Constants
 import com.example.vuey.core.common.utils.DiffUtils
-import com.example.vuey.core.common.utils.toMovie
 import com.example.vuey.core.common.utils.toMovieEntity
 import com.example.vuey.databinding.LayoutWatchLaterBinding
 import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
@@ -36,10 +35,9 @@ class WatchLaterAdapter : RecyclerView.Adapter<WatchLaterAdapter.WatchLaterViewH
                 layoutMovie.setOnClickListener {
                     val action = MovieWatchLaterFragmentDirections.actionMovieWatchLaterFragmentToDetailMovieFragment(
                         movieEntity = movie.toMovieEntity(),
-                        isFromMovieWatchLaterFragment = true,
                         movieId = movie.movieId,
                         watchLaterEntity = movie,
-                        movie = movie.toMovie()
+                        movieOverview = ""
                     )
                     it.findNavController().navigate(action)
                 }

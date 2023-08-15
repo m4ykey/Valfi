@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
-import com.example.vuey.core.common.utils.toAlbum
 import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
 import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
@@ -65,10 +64,8 @@ class AlbumListenLaterFragment : Fragment() {
                     val randomAlbum = currentAlbum.random()
                     val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(
                         albumId = randomAlbum.albumId,
-                        album = currentAlbum[0].toAlbum(),
                         albumEntity = currentAlbum[0].toAlbumEntity(),
-                        listenLaterEntity = currentAlbum[0],
-                        isFromAlbumListenLaterFragment = true
+                        listenLaterEntity = currentAlbum[0]
                     )
                     it.findNavController().navigate(action)
                 } else {

@@ -75,8 +75,9 @@ class DetailMovieFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.apply {
-                if (args.isFromMovieWatchLaterFragment) { getMovieDetail(args.movieId) } else { getMovieDetail(args.movie.id) }
-                getMovieCast(args.movie.id)
+                getMovieDetail(args.movieId)
+                getMovieDetail(args.movieEntity.movieId)
+                getMovieCast(args.movieId)
             }
 
             viewModel.getMovieById(args.movieEntity.movieId).onEach { movie ->
@@ -275,7 +276,7 @@ class DetailMovieFragment : Fragment() {
 
                                 txtMovieTitle.text = movieDetail.title
                                 val movieOverview = movieDetail.overview.ifEmpty {
-                                    args.movie.overview
+                                    args.movieOverview
                                 }
                                 txtOverview.text = movieOverview
                                 txtOverviewFull.text = movieOverview

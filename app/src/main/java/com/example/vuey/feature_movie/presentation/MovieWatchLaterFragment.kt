@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
-import com.example.vuey.core.common.utils.toMovie
 import com.example.vuey.core.common.utils.toMovieEntity
 import com.example.vuey.databinding.FragmentMovieWatchLaterBinding
 import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
@@ -65,10 +64,9 @@ class MovieWatchLaterFragment : Fragment() {
                     val randomMovie = currentMovie.random()
                     val action = MovieWatchLaterFragmentDirections.actionMovieWatchLaterFragmentToDetailMovieFragment(
                         movieEntity = currentMovie[0].toMovieEntity(),
-                        isFromMovieWatchLaterFragment = true,
                         movieId = randomMovie.movieId,
                         watchLaterEntity = currentMovie[0],
-                        movie = currentMovie[0].toMovie()
+                        movieOverview = ""
                     )
                     it.findNavController().navigate(action)
                 } else {

@@ -7,18 +7,17 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.core.common.utils.DateUtils
+import com.example.vuey.core.common.utils.DiffUtils
+import com.example.vuey.core.common.utils.formatVoteAverage
+import com.example.vuey.core.common.utils.toMovieEntity
+import com.example.vuey.core.common.utils.toWatchLaterEntity
 import com.example.vuey.databinding.LayoutMovieBinding
 import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
-import com.example.vuey.core.common.Constants.TMDB_IMAGE_ORIGINAL
-import com.example.vuey.core.common.utils.DateUtils
-import com.example.vuey.core.common.utils.DiffUtils
-import com.example.vuey.core.common.utils.formatVoteAverage
-import com.example.vuey.core.common.utils.toMovie
-import com.example.vuey.core.common.utils.toMovieEntity
-import com.example.vuey.core.common.utils.toWatchLaterEntity
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -50,11 +49,10 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         }
                         layoutMovie.setOnClickListener {
                             val action = MovieFragmentDirections.actionMovieFragmentToDetailMovieFragment(
-                                movie = movie.toMovie(),
                                 movieEntity = movie,
-                                isFromMovieWatchLaterFragment = false,
                                 movieId = movie.movieId,
-                                watchLaterEntity = movie.toWatchLaterEntity()
+                                watchLaterEntity = movie.toWatchLaterEntity(),
+                                movieOverview = movie.movieOverview
                             )
                             it.findNavController().navigate(action)
                         }
@@ -74,11 +72,10 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         }
                         layoutMovie.setOnClickListener {
                             val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToDetailMovieFragment(
-                                movie = movie,
                                 movieEntity = movie.toMovieEntity(),
-                                isFromMovieWatchLaterFragment = false,
                                 movieId = movie.id,
-                                watchLaterEntity = movie.toWatchLaterEntity()
+                                watchLaterEntity = movie.toWatchLaterEntity(),
+                                movieOverview = movie.overview
                             )
                             it.findNavController().navigate(action)
                         }
