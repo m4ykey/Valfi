@@ -10,8 +10,8 @@
     <string name="back">Wróć</string>
     <string name="cast">Obsada</string>
     <string name="spoken_languages">Obsługiwane języki</string>
-    <string name="cast_is_empty">Obsada jest pusta</string>
-    <string name="languages_empty">Lista języków jest pusta</string>
+    <string name="cast_is_empty">Obsada jest niedostępna</string>
+    <string name="languages_empty">Lista języków jest niedostępna</string>
     <string name="added_to_library">Dodano do biblioteki</string>
     <string name="removed_from_library">Usunięto z biblioteki</string>
     <string name="sec">sek.</string>

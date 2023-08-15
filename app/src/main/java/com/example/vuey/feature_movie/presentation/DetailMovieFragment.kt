@@ -76,7 +76,6 @@ class DetailMovieFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.apply {
                 getMovieDetail(args.movieId)
-                getMovieDetail(args.movieEntity.movieId)
                 getMovieCast(args.movieId)
             }
 

@@ -78,10 +78,7 @@ class DetailAlbumFragment : Fragment() {
         val listenLaterDatabase = arguments.listenLaterEntity
 
         lifecycleScope.launch {
-            detailViewModel.apply {
-                getAlbumDetail(arguments.albumId)
-                getAlbumDetail(albumDatabase.id)
-            }
+            detailViewModel.getAlbumDetail(arguments.albumId)
         }
 
         detailViewModel.getAlbumById(albumDatabase.id).onEach { album ->
