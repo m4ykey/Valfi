@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
@@ -48,7 +49,10 @@ class SearchAlbumFragment : Fragment() {
         searchAlbum()
 
         with(binding) {
-            recyclerViewAlbum.adapter = albumAdapter
+            recyclerViewAlbum.apply {
+                adapter = albumAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
             imgBack.setOnClickListener { findNavController().navigateUp() }
         }
 
