@@ -32,6 +32,7 @@ import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -81,7 +82,14 @@ class DetailAlbumFragment : Fragment() {
             detailViewModel.getAlbumDetail(arguments.albumId)
         }
 
-        detailViewModel.getAlbumById(albumDatabase.id).onEach { album ->
+        val combinedFlow = combine(
+            detailViewModel.getAlbumById(albumDatabase.id),
+            detailViewModel.getListenLaterAlbumById(listenLaterDatabase.albumId)
+        ) { album, listenLaterAlbum ->
+            Pair(album, listenLaterAlbum)
+        }
+
+        combinedFlow.onEach { (album, listenLaterAlbum) ->
             isAlbumSaved = if (album == null) {
                 binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
                 false
@@ -89,10 +97,8 @@ class DetailAlbumFragment : Fragment() {
                 binding.imgSave.setImageResource(R.drawable.ic_save)
                 true
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        detailViewModel.getListenLaterAlbumById(listenLaterDatabase.albumId).onEach { album ->
-            isListenLater = if (album == null) {
+            isListenLater = if (listenLaterAlbum == null) {
                 binding.imgTime.setImageResource(R.drawable.ic_time_outline)
                 false
             } else {
