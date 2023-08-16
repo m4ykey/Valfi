@@ -31,6 +31,7 @@ import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieU
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -79,26 +80,6 @@ class DetailMovieFragment : Fragment() {
                 getMovieCast(args.movieId)
             }
 
-            viewModel.getMovieById(args.movieEntity.movieId).onEach { movie ->
-                isMovieSaved = if (movie == null) {
-                    binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
-                    false
-                } else {
-                    binding.imgSave.setImageResource(R.drawable.ic_save)
-                    true
-                }
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel.getWatchLaterMovieById(args.watchLaterEntity.movieId).onEach { movie ->
-                isWatchLater = if (movie == null) {
-                    binding.imgTime.setImageResource(R.drawable.ic_time_outline)
-                    false
-                } else {
-                    binding.imgTime.setImageResource(R.drawable.ic_time)
-                    true
-                }
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
-
             networkStateMonitor.isInternetAvailable.collect { isAvailable ->
                 if (isAvailable) {
                     binding.recyclerViewTopCast.visibility = View.VISIBLE
@@ -114,6 +95,32 @@ class DetailMovieFragment : Fragment() {
         }
 
         val movieDatabase = args.movieEntity
+        val watchLaterDatabase = args.watchLaterEntity
+
+        val combinedFlow = combine(
+            viewModel.getMovieById(movieDatabase.movieId),
+            viewModel.getWatchLaterMovieById(watchLaterDatabase.movieId)
+        ) { movie, watchLaterMovie ->
+            Pair(movie, watchLaterMovie)
+        }
+
+        combinedFlow.onEach { (movie, watchLaterMovie) ->
+            isMovieSaved = if (movie == null) {
+                binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
+                false
+            } else {
+                binding.imgSave.setImageResource(R.drawable.ic_save)
+                true
+            }
+
+            isWatchLater = if (watchLaterMovie == null) {
+                binding.imgTime.setImageResource(R.drawable.ic_time_outline)
+                false
+            } else {
+                binding.imgTime.setImageResource(R.drawable.ic_time)
+                true
+            }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         val movieEntity = MovieEntity(
             movieBackdropPath = movieDatabase.movieBackdropPath,
@@ -129,9 +136,9 @@ class DetailMovieFragment : Fragment() {
         )
 
         val watchLaterEntity = WatchLaterEntity(
-            movieId = args.watchLaterEntity.movieId,
-            moviePosterPath = args.watchLaterEntity.moviePosterPath,
-            movieTitle = args.watchLaterEntity.movieTitle
+            movieId = watchLaterDatabase.movieId,
+            moviePosterPath = watchLaterDatabase.moviePosterPath,
+            movieTitle = watchLaterDatabase.movieTitle
         )
 
         val movieHour = movieDatabase.movieRuntime / 60
