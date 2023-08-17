@@ -32,9 +32,7 @@ import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @SuppressLint("SetTextI18n")
@@ -80,32 +78,24 @@ class DetailAlbumFragment : Fragment() {
 
         lifecycleScope.launch {
             detailViewModel.getAlbumDetail(arguments.albumId)
-        }
+            val album = detailViewModel.getAlbumById(albumDatabase.id).first()
+            val listenLater = detailViewModel.getListenLaterAlbumById(listenLaterDatabase.albumId).first()
 
-        val combinedFlow = combine(
-            detailViewModel.getAlbumById(albumDatabase.id),
-            detailViewModel.getListenLaterAlbumById(listenLaterDatabase.albumId)
-        ) { album, listenLaterAlbum ->
-            Pair(album, listenLaterAlbum)
-        }
+            isAlbumSaved = album != null
+            isListenLater = listenLater != null
 
-        combinedFlow.onEach { (album, listenLaterAlbum) ->
-            isAlbumSaved = if (album == null) {
-                binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
-                false
-            } else {
+            if (isAlbumSaved) {
                 binding.imgSave.setImageResource(R.drawable.ic_save)
-                true
+            } else {
+                binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
             }
 
-            isListenLater = if (listenLaterAlbum == null) {
-                binding.imgTime.setImageResource(R.drawable.ic_time_outline)
-                false
-            } else {
+            if (isListenLater) {
                 binding.imgTime.setImageResource(R.drawable.ic_time)
-                true
+            } else {
+                binding.imgTime.setImageResource(R.drawable.ic_time_outline)
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
         val trackList = albumDatabase.trackList.map { trackEntity ->
             Tracks.AlbumItem(
