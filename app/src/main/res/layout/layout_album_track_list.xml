@@ -53,11 +53,4 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/view1"
-        android:layout_marginTop="5dp"
-        android:background="#595959"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
-
 </LinearLayout>
