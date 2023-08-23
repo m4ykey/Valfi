@@ -30,10 +30,10 @@
         tools:layout="@layout/fragment_album_detail">
         <argument
             android:name="albumEntity"
-            app:argType="com.example.vuey.feature_album.data.local.source.entity.AlbumEntity" />
+            app:argType="com.example.vuey.feature_album.data.local.entity.AlbumEntity" />
         <argument
             android:name="listenLaterEntity"
-            app:argType="com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity" />
+            app:argType="com.example.vuey.feature_album.data.local.entity.ListenLaterEntity" />
         <argument
             android:name="albumId"
             app:argType="string" />
@@ -84,10 +84,10 @@
         tools:layout="@layout/fragment_detail_movie" >
         <argument
             android:name="movieEntity"
-            app:argType="com.example.vuey.feature_movie.data.local.source.entity.MovieEntity" />
+            app:argType="com.example.vuey.feature_movie.data.local.entity.MovieEntity" />
         <argument
             android:name="watchLaterEntity"
-            app:argType="com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity" />
+            app:argType="com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity" />
         <argument
             android:name="movieId"
             app:argType="integer" />

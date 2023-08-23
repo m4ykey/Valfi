@@ -23,8 +23,8 @@ import com.example.vuey.core.common.utils.DateUtils
 import com.example.vuey.core.common.utils.formatVoteAverage
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.databinding.FragmentDetailMovieBinding
-import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
-import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
@@ -69,85 +69,87 @@ class DetailMovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeMovieDetail()
-        observeMovieCast()
+        with(binding) {
 
-        val movieDatabase = args.movieEntity
-        val watchLaterDatabase = args.watchLaterEntity
+            observeMovieDetail()
+            observeMovieCast()
 
-        lifecycleScope.launch {
-            viewModel.apply {
-                getMovieDetail(args.movieId)
-                getMovieCast(args.movieId)
-            }
+            val movieDatabase = args.movieEntity
+            val watchLaterDatabase = args.watchLaterEntity
 
-            val movie = viewModel.getMovieById(movieDatabase.movieId).first()
-            val watchLater = viewModel.getWatchLaterMovieById(watchLaterDatabase.movieId).first()
+            lifecycleScope.launch {
+                viewModel.apply {
+                    getMovieDetail(args.movieId)
+                    getMovieCast(args.movieId)
+                }
 
-            isMovieSaved = movie != null
-            isWatchLater = watchLater != null
+                val movie = viewModel.getMovieById(movieDatabase.movieId).first()
+                val watchLater =
+                    viewModel.getWatchLaterMovieById(watchLaterDatabase.movieId).first()
 
-            if (isMovieSaved) {
-                binding.imgSave.setImageResource(R.drawable.ic_save)
-            } else {
-                binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
-            }
+                isMovieSaved = movie != null
+                isWatchLater = watchLater != null
 
-            if (isWatchLater) {
-                binding.imgTime.setImageResource(R.drawable.ic_time)
-            } else {
-                binding.imgTime.setImageResource(R.drawable.ic_time_outline)
-            }
-
-            networkStateMonitor.isInternetAvailable.collect { isAvailable ->
-                if (isAvailable) {
-                    binding.recyclerViewTopCast.visibility = View.VISIBLE
-                    binding.txtEmptyCast.visibility = View.GONE
+                if (isMovieSaved) {
+                    imgSave.setImageResource(R.drawable.ic_save)
                 } else {
-                    binding.recyclerViewTopCast.visibility = View.GONE
-                    binding.txtEmptyCast.apply {
-                        visibility = View.VISIBLE
-                        getString(R.string.cast_is_empty)
+                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                }
+
+                if (isWatchLater) {
+                    imgTime.setImageResource(R.drawable.ic_time)
+                } else {
+                    imgTime.setImageResource(R.drawable.ic_time_outline)
+                }
+
+                networkStateMonitor.isInternetAvailable.collect { isAvailable ->
+                    if (isAvailable) {
+                        recyclerViewTopCast.visibility = View.VISIBLE
+                        txtEmptyCast.visibility = View.GONE
+                    } else {
+                        recyclerViewTopCast.visibility = View.GONE
+                        txtEmptyCast.apply {
+                            visibility = View.VISIBLE
+                            getString(R.string.cast_is_empty)
+                        }
                     }
                 }
             }
-        }
 
-        val movieEntity = MovieEntity(
-            movieBackdropPath = movieDatabase.movieBackdropPath,
-            movieGenreList = movieDatabase.movieGenreList,
-            movieId = movieDatabase.movieId,
-            movieOverview = movieDatabase.movieOverview,
-            moviePosterPath = movieDatabase.moviePosterPath,
-            movieReleaseDate = movieDatabase.movieReleaseDate,
-            movieRuntime = movieDatabase.movieRuntime,
-            movieSpokenLanguage = movieDatabase.movieSpokenLanguage,
-            movieTitle = movieDatabase.movieTitle,
-            movieVoteAverage = movieDatabase.movieVoteAverage
-        )
-
-        val watchLaterEntity = WatchLaterEntity(
-            movieId = watchLaterDatabase.movieId,
-            moviePosterPath = watchLaterDatabase.moviePosterPath,
-            movieTitle = watchLaterDatabase.movieTitle
-        )
-
-        val movieHour = movieDatabase.movieRuntime / 60
-        val movieMinute = movieDatabase.movieRuntime % 60
-        val movieRuntime = if (movieHour == 0) {
-            String.format("%d min", movieMinute)
-        } else {
-            String.format(
-                "%d ${getString(R.string.hour)} %d min",
-                movieHour,
-                movieMinute
+            val movieEntity = MovieEntity(
+                movieBackdropPath = movieDatabase.movieBackdropPath,
+                movieGenreList = movieDatabase.movieGenreList,
+                movieId = movieDatabase.movieId,
+                movieOverview = movieDatabase.movieOverview,
+                moviePosterPath = movieDatabase.moviePosterPath,
+                movieReleaseDate = movieDatabase.movieReleaseDate,
+                movieRuntime = movieDatabase.movieRuntime,
+                movieSpokenLanguage = movieDatabase.movieSpokenLanguage,
+                movieTitle = movieDatabase.movieTitle,
+                movieVoteAverage = movieDatabase.movieVoteAverage
             )
-        }
-        val genreList = movieDatabase.movieGenreList.joinToString(separator = ", ") { it.genreName }
-        val spokenLanguage =
-            movieDatabase.movieSpokenLanguage.joinToString(separator = ", ") { it.spokenLanguageName }
 
-        with(binding) {
+            val watchLaterEntity = WatchLaterEntity(
+                movieId = watchLaterDatabase.movieId,
+                moviePosterPath = watchLaterDatabase.moviePosterPath,
+                movieTitle = watchLaterDatabase.movieTitle
+            )
+
+            val movieHour = movieDatabase.movieRuntime / 60
+            val movieMinute = movieDatabase.movieRuntime % 60
+            val movieRuntime = if (movieHour == 0) {
+                String.format("%d min", movieMinute)
+            } else {
+                String.format(
+                    "%d ${getString(R.string.hour)} %d min",
+                    movieHour,
+                    movieMinute
+                )
+            }
+            val genreList =
+                movieDatabase.movieGenreList.joinToString(separator = ", ") { it.genreName }
+            val spokenLanguage =
+                movieDatabase.movieSpokenLanguage.joinToString(separator = ", ") { it.spokenLanguageName }
 
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             recyclerViewTopCast.apply {
@@ -219,147 +221,145 @@ class DetailMovieFragment : Fragment() {
 
     }
 
-    private fun observeMovieDetail() {
+    private fun FragmentDetailMovieBinding.observeMovieDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieDetailUiState.collect { uiState ->
-                    with(binding) {
-                        when (uiState) {
-                            is DetailMovieUiState.Loading -> {
-                                progressBar.visibility = View.VISIBLE
+                    when (uiState) {
+                        is DetailMovieUiState.Loading -> {
+                            progressBar.visibility = View.VISIBLE
+                        }
+
+                        is DetailMovieUiState.Failure -> {
+                            progressBar.visibility = View.GONE
+                            showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                        }
+
+                        is DetailMovieUiState.Success -> {
+
+                            progressBar.visibility = View.GONE
+
+                            val movieDetail = uiState.movieData
+
+                            val genreList =
+                                movieDetail.genreList.joinToString(separator = ", ") { it.name }
+                            val movieHour = movieDetail.runtime / 60
+                            val movieMinute = movieDetail.runtime % 60
+                            val movieRuntime = if (movieHour == 0) {
+                                String.format("%d min", movieMinute)
+                            } else {
+                                String.format(
+                                    "%d ${getString(R.string.hour)} %d min",
+                                    movieHour,
+                                    movieMinute
+                                )
                             }
 
-                            is DetailMovieUiState.Failure -> {
-                                progressBar.visibility = View.GONE
-                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                            if (!movieDetail.backdropPath.isNullOrEmpty()) {
+                                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdropPath) {
+                                    crossfade(true)
+                                    crossfade(500)
+                                }
+                            } else {
+                                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.posterPath) {
+                                    crossfade(true)
+                                    crossfade(500)
+                                }
                             }
 
-                            is DetailMovieUiState.Success -> {
+                            if (movieDetail.spokenLanguages.isEmpty()) {
+                                txtSpokenLanguages.text =
+                                    getString(R.string.languages_empty)
+                            }
 
-                                progressBar.visibility = View.GONE
+                            txtMovieTitle.text = movieDetail.title
+                            val movieOverview = movieDetail.overview.ifEmpty {
+                                args.movieOverview
+                            }
+                            txtOverview.text = movieOverview
+                            txtOverviewFull.text = movieOverview
 
-                                val movieDetail = uiState.movieData
+                            txtInfo.text = if (movieRuntime.isEmpty()) {
+                                "$genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                            } else if (genreList.isEmpty()) {
+                                "$movieRuntime • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                            } else if (movieDetail.releaseDate.isEmpty()) {
+                                "$movieRuntime • $genreList"
+                            } else {
+                                "$movieRuntime • $genreList • ${
+                                    DateUtils.formatAirDate(
+                                        movieDetail.releaseDate
+                                    )
+                                }"
+                            }
 
-                                val genreList =
-                                    movieDetail.genreList.joinToString(separator = ", ") { it.name }
-                                val movieHour = movieDetail.runtime / 60
-                                val movieMinute = movieDetail.runtime % 60
-                                val movieRuntime = if (movieHour == 0) {
-                                    String.format("%d min", movieMinute)
-                                } else {
-                                    String.format(
-                                        "%d ${getString(R.string.hour)} %d min",
-                                        movieHour,
-                                        movieMinute
+                            txtSpokenLanguages.text =
+                                movieDetail.spokenLanguages.joinToString(separator = ", ") { it.name }
+                            txtVoteAverage.text =
+                                movieDetail.voteAverage.formatVoteAverage()
+
+                            val movieEntity = MovieEntity(
+                                movieBackdropPath = movieDetail.backdropPath.toString(),
+                                movieId = movieDetail.id,
+                                movieOverview = movieOverview,
+                                moviePosterPath = movieDetail.posterPath.toString(),
+                                movieReleaseDate = movieDetail.releaseDate,
+                                movieRuntime = movieDetail.runtime,
+                                movieTitle = movieDetail.title,
+                                movieVoteAverage = movieDetail.voteAverage,
+                                movieGenreList = movieDetail.genreList.map { genre ->
+                                    MovieEntity.GenreEntity(
+                                        genreName = genre.name
+                                    )
+                                },
+                                movieSpokenLanguage = movieDetail.spokenLanguages.map { language ->
+                                    MovieEntity.SpokenLanguageEntity(
+                                        spokenLanguageName = language.name
                                     )
                                 }
+                            )
 
-                                if (!movieDetail.backdropPath.isNullOrEmpty()) {
-                                    imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdropPath) {
-                                        crossfade(true)
-                                        crossfade(500)
-                                    }
+                            imgSave.setOnClickListener {
+                                isMovieSaved = !isMovieSaved
+                                if (isMovieSaved) {
+                                    showSnackbar(
+                                        requireView(),
+                                        getString(R.string.added_to_library)
+                                    )
+                                    imgSave.setImageResource(R.drawable.ic_save)
+                                    viewModel.insertMovie(movieEntity)
                                 } else {
-                                    imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.posterPath) {
-                                        crossfade(true)
-                                        crossfade(500)
-                                    }
+                                    showSnackbar(
+                                        requireView(),
+                                        getString(R.string.removed_from_library)
+                                    )
+                                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                    viewModel.deleteMovie(movieEntity)
                                 }
+                            }
 
-                                if (movieDetail.spokenLanguages.isEmpty()) {
-                                    txtSpokenLanguages.text =
-                                        getString(R.string.languages_empty)
-                                }
+                            val watchLaterEntity = WatchLaterEntity(
+                                movieId = movieDetail.id,
+                                movieTitle = movieDetail.title,
+                                moviePosterPath = movieDetail.posterPath.toString()
+                            )
 
-                                txtMovieTitle.text = movieDetail.title
-                                val movieOverview = movieDetail.overview.ifEmpty {
-                                    args.movieOverview
-                                }
-                                txtOverview.text = movieOverview
-                                txtOverviewFull.text = movieOverview
-
-                                txtInfo.text = if (movieRuntime.isEmpty()) {
-                                    "$genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
-                                } else if (genreList.isEmpty()) {
-                                    "$movieRuntime • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
-                                } else if (movieDetail.releaseDate.isEmpty()) {
-                                    "$movieRuntime • $genreList"
+                            imgTime.setOnClickListener {
+                                isWatchLater = !isWatchLater
+                                if (isWatchLater) {
+                                    showSnackbar(
+                                        requireView(),
+                                        getString(R.string.added_to_watch_later)
+                                    )
+                                    imgTime.setImageResource(R.drawable.ic_time)
+                                    viewModel.insertWatchLaterMovie(watchLaterEntity)
                                 } else {
-                                    "$movieRuntime • $genreList • ${
-                                        DateUtils.formatAirDate(
-                                            movieDetail.releaseDate
-                                        )
-                                    }"
-                                }
-
-                                txtSpokenLanguages.text =
-                                    movieDetail.spokenLanguages.joinToString(separator = ", ") { it.name }
-                                txtVoteAverage.text =
-                                    movieDetail.voteAverage.formatVoteAverage()
-
-                                val movieEntity = MovieEntity(
-                                    movieBackdropPath = movieDetail.backdropPath.toString(),
-                                    movieId = movieDetail.id,
-                                    movieOverview = movieOverview,
-                                    moviePosterPath = movieDetail.posterPath.toString(),
-                                    movieReleaseDate = movieDetail.releaseDate,
-                                    movieRuntime = movieDetail.runtime,
-                                    movieTitle = movieDetail.title,
-                                    movieVoteAverage = movieDetail.voteAverage,
-                                    movieGenreList = movieDetail.genreList.map { genre ->
-                                        MovieEntity.GenreEntity(
-                                            genreName = genre.name
-                                        )
-                                    },
-                                    movieSpokenLanguage = movieDetail.spokenLanguages.map { language ->
-                                        MovieEntity.SpokenLanguageEntity(
-                                            spokenLanguageName = language.name
-                                        )
-                                    }
-                                )
-
-                                imgSave.setOnClickListener {
-                                    isMovieSaved = !isMovieSaved
-                                    if (isMovieSaved) {
-                                        showSnackbar(
-                                            requireView(),
-                                            getString(R.string.added_to_library)
-                                        )
-                                        imgSave.setImageResource(R.drawable.ic_save)
-                                        viewModel.insertMovie(movieEntity)
-                                    } else {
-                                        showSnackbar(
-                                            requireView(),
-                                            getString(R.string.removed_from_library)
-                                        )
-                                        imgSave.setImageResource(R.drawable.ic_save_outlined)
-                                        viewModel.deleteMovie(movieEntity)
-                                    }
-                                }
-
-                                val watchLaterEntity = WatchLaterEntity(
-                                    movieId = movieDetail.id,
-                                    movieTitle = movieDetail.title,
-                                    moviePosterPath = movieDetail.posterPath.toString()
-                                )
-
-                                imgTime.setOnClickListener {
-                                    isWatchLater = !isWatchLater
-                                    if (isWatchLater) {
-                                        showSnackbar(
-                                            requireView(),
-                                            getString(R.string.added_to_watch_later)
-                                        )
-                                        imgTime.setImageResource(R.drawable.ic_time)
-                                        viewModel.insertWatchLaterMovie(watchLaterEntity)
-                                    } else {
-                                        showSnackbar(
-                                            requireView(),
-                                            getString(R.string.removed_from_watch_later)
-                                        )
-                                        imgTime.setImageResource(R.drawable.ic_time_outline)
-                                        viewModel.deleteWatchLaterMovie(watchLaterEntity)
-                                    }
+                                    showSnackbar(
+                                        requireView(),
+                                        getString(R.string.removed_from_watch_later)
+                                    )
+                                    imgTime.setImageResource(R.drawable.ic_time_outline)
+                                    viewModel.deleteWatchLaterMovie(watchLaterEntity)
                                 }
                             }
                         }
@@ -369,25 +369,26 @@ class DetailMovieFragment : Fragment() {
         }
     }
 
-    private fun observeMovieCast() {
+    private fun FragmentDetailMovieBinding.observeMovieCast() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieCastUiState.collect { uiState ->
-                    with(binding){
-                        when (uiState) {
-                            is CastMovieUiState.Loading -> {
-                                progressBar.visibility = View.GONE
-                                progressBarCast.visibility = View.VISIBLE }
-                            is CastMovieUiState.Failure -> {
-                                progressBar.visibility = View.GONE
-                                progressBarCast.visibility = View.GONE
-                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
-                            }
-                            is CastMovieUiState.Success -> {
-                                progressBar.visibility = View.GONE
-                                progressBarCast.visibility = View.GONE
-                                castAdapter.submitCast(uiState.castData)
-                            }
+                    when (uiState) {
+                        is CastMovieUiState.Loading -> {
+                            progressBar.visibility = View.GONE
+                            progressBarCast.visibility = View.VISIBLE
+                        }
+
+                        is CastMovieUiState.Failure -> {
+                            progressBar.visibility = View.GONE
+                            progressBarCast.visibility = View.GONE
+                            showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                        }
+
+                        is CastMovieUiState.Success -> {
+                            progressBar.visibility = View.GONE
+                            progressBarCast.visibility = View.GONE
+                            castAdapter.submitCast(uiState.castData)
                         }
                     }
                 }

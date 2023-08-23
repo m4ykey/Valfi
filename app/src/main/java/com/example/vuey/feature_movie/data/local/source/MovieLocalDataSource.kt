@@ -1,7 +1,7 @@
 package com.example.vuey.feature_movie.data.local.source
 
-import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
-import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity
 import kotlinx.coroutines.flow.Flow
 
 interface MovieLocalDataSource {

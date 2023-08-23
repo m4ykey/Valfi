@@ -17,8 +17,4 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_analytics"/>
 
-    <item android:id="@+id/imgSettings"
-        android:title="@string/settings"
-        app:showAsAction="never"/>
-
 </menu>

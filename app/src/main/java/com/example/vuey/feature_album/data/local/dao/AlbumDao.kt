@@ -1,8 +1,8 @@
-package com.example.vuey.feature_album.data.local.source.dao
+package com.example.vuey.feature_album.data.local.dao
 
 import androidx.room.*
-import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.ListenLaterEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

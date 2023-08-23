@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_movie.data.local.source.MovieLocalDataSource
-import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
-import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.domain.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState

@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.example.vuey.core.common.Constants.DATABASE_NAME
 import com.example.vuey.core.common.database.VueyDatabase
-import com.example.vuey.feature_album.data.local.source.dao.AlbumDao
-import com.example.vuey.feature_movie.data.local.source.dao.MovieDao
+import com.example.vuey.feature_album.data.local.dao.AlbumDao
+import com.example.vuey.feature_movie.data.local.dao.MovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

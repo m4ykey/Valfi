@@ -27,10 +27,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchMovieFragment : Fragment() {
 
-    private var _binding : FragmentSearchMovieBinding? = null
+    private var _binding: FragmentSearchMovieBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : MovieViewModel by viewModels()
+    private val viewModel: MovieViewModel by viewModels()
     private val movieAdapter by lazy { MovieAdapter() }
 
     override fun onCreateView(
@@ -44,72 +44,66 @@ class SearchMovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeSearchMovie()
-        searchMovie()
-
         with(binding) {
+            observeSearchMovie()
+            searchMovie()
             imgBack.setOnClickListener { findNavController().navigateUp() }
             recyclerViewMovie.adapter = movieAdapter
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun searchMovie() {
-        with(binding) {
-            etSearch.addTextChangedListener {
-                val searchHandler = Handler()
-                searchHandler.removeCallbacksAndMessages(null)
+    private fun FragmentSearchMovieBinding.searchMovie() {
+        etSearch.addTextChangedListener {
+            val searchHandler = Handler()
+            searchHandler.removeCallbacksAndMessages(null)
 
-                val searchMovie = etSearch.text.toString()
+            val searchMovie = etSearch.text.toString()
 
-                if (searchMovie.isNotEmpty()) {
-                    progressBar.visibility = View.VISIBLE
-                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_clear, 0)
-                    searchHandler.postDelayed({
-                        lifecycleScope.launch {
-                            viewModel.searchMovie(searchMovie)
-                        }
-                        progressBar.visibility = View.GONE
-                    }, 500)
-                } else {
-                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0,0, 0, 0)
+            if (searchMovie.isNotEmpty()) {
+                progressBar.visibility = View.VISIBLE
+                etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
+                searchHandler.postDelayed({
+                    lifecycleScope.launch {
+                        viewModel.searchMovie(searchMovie)
+                    }
                     progressBar.visibility = View.GONE
-                }
+                }, 500)
+            } else {
+                etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                progressBar.visibility = View.GONE
             }
+        }
 
-            etSearch.setOnTouchListener { _, event ->
-                val drawableEndIndex = 2
-                if (event.action == MotionEvent.ACTION_UP) {
-                    val drawableEnd = etSearch.compoundDrawables[drawableEndIndex]
-                    drawableEnd?.let {
-                        if (event.rawX >= (etSearch.right - it.bounds.width())) {
-                            etSearch.text?.clear()
-                            return@setOnTouchListener true
-                        }
+        etSearch.setOnTouchListener { _, event ->
+            val drawableEndIndex = 2
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEnd = etSearch.compoundDrawables[drawableEndIndex]
+                drawableEnd?.let {
+                    if (event.rawX >= (etSearch.right - it.bounds.width())) {
+                        etSearch.text?.clear()
+                        return@setOnTouchListener true
                     }
                 }
-                return@setOnTouchListener false
             }
+            return@setOnTouchListener false
         }
     }
 
-    private fun observeSearchMovie() {
+    private fun FragmentSearchMovieBinding.observeSearchMovie() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieSearchUiState.collect { uiState ->
-                    with(binding) {
-                        when(uiState) {
-                            is SearchMovieUiState.Success -> {
-                                progressBar.visibility = View.GONE
-
-                                movieAdapter.submitMovie(uiState.movieData)
-                            }
-                            is SearchMovieUiState.Failure -> {
-                                progressBar.visibility = View.GONE
-                                showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
-                            }
-                            else -> {}
+                    when (uiState) {
+                        is SearchMovieUiState.Success -> {
+                            progressBar.visibility = View.GONE
+                            movieAdapter.submitMovie(uiState.movieData)
                         }
+                        is SearchMovieUiState.Failure -> {
+                            progressBar.visibility = View.GONE
+                            showSnackbar(requireView(), uiState.message, Snackbar.LENGTH_LONG)
+                        }
+                        else -> {}
                     }
                 }
             }

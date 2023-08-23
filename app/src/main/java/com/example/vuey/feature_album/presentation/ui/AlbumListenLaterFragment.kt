@@ -14,7 +14,7 @@ import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.data.local.entity.ListenLaterEntity
 import com.example.vuey.feature_album.presentation.adapter.ListenLaterAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint

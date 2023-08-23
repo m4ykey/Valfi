@@ -14,7 +14,7 @@ import com.example.vuey.core.common.utils.formatVoteAverage
 import com.example.vuey.core.common.utils.toMovieEntity
 import com.example.vuey.core.common.utils.toWatchLaterEntity
 import com.example.vuey.databinding.LayoutMovieBinding
-import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections

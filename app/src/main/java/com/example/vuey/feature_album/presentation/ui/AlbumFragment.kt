@@ -39,6 +39,7 @@ class AlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            setupNavigation()
             albumRecyclerView.adapter = albumAdapter
             lifecycleScope.launch {
                 albumViewModel.allAlbums.collect { albums ->
@@ -50,46 +51,37 @@ class AlbumFragment : Fragment() {
                 }
             }
         }
-
-        setupNavigation()
     }
 
-    private fun setupNavigation() {
-        with(binding) {
-            toolbar.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.imgLater -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_albumListenLaterFragment)
-                        true
-                    }
-
-                    R.id.imgStatistics -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
-                        true
-                    }
-
-                    R.id.imgAdd -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
-                        true
-                    }
-
-                    else -> {
-                        false
-                    }
+    private fun FragmentAlbumBinding.setupNavigation() {
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.imgLater -> {
+                    findNavController().navigate(R.id.action_albumFragment_to_albumListenLaterFragment)
+                    true
                 }
+                R.id.imgStatistics -> {
+                    findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
+                    true
+                }
+                R.id.imgAdd -> {
+                    findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
+                    true
+                }
+                else -> { false }
             }
-            val listenLaterItem = toolbar.menu.findItem(R.id.imgLater)
-            val addItem = toolbar.menu.findItem(R.id.imgAdd)
-            val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
-            listenLaterItem.icon.let {
-                MenuItemCompat.setIconTintList(listenLaterItem, ColorStateList.valueOf(Color.WHITE))
-            }
-            statisticsItem.icon.let {
-                MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
-            }
-            addItem.icon.let {
-                MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
-            }
+        }
+        val listenLaterItem = toolbar.menu.findItem(R.id.imgLater)
+        val addItem = toolbar.menu.findItem(R.id.imgAdd)
+        val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
+        listenLaterItem.icon.let {
+            MenuItemCompat.setIconTintList(listenLaterItem, ColorStateList.valueOf(Color.WHITE))
+        }
+        statisticsItem.icon.let {
+            MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
+        }
+        addItem.icon.let {
+            MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
         }
     }
 

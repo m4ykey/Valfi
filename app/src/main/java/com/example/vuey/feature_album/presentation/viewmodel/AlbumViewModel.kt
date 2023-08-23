@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.core.common.network.Resource
 import com.example.vuey.feature_album.data.local.source.AlbumLocalDataSource
-import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.ListenLaterEntity
 import com.example.vuey.feature_album.domain.repository.AlbumRepository
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState

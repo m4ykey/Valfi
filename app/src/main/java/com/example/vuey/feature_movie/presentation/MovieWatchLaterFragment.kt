@@ -14,7 +14,7 @@ import com.example.vuey.R
 import com.example.vuey.core.common.utils.showSnackbar
 import com.example.vuey.core.common.utils.toMovieEntity
 import com.example.vuey.databinding.FragmentMovieWatchLaterBinding
-import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.presentation.adapter.WatchLaterAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint

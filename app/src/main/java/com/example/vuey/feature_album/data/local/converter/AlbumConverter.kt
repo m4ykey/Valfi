@@ -1,8 +1,8 @@
-package com.example.vuey.feature_album.data.local.source.converter
+package com.example.vuey.feature_album.data.local.converter
 
 import androidx.room.TypeConverter
-import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.ListenLaterEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

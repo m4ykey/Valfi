@@ -11,7 +11,7 @@ import com.example.vuey.core.common.utils.DiffUtils
 import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.core.common.utils.toListenLaterEntity
 import com.example.vuey.databinding.LayoutAlbumBinding
-import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList
 import com.example.vuey.feature_album.presentation.ui.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.ui.SearchAlbumFragmentDirections

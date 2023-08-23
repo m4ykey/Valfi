@@ -9,7 +9,7 @@ import coil.load
 import com.example.vuey.core.common.utils.DiffUtils
 import com.example.vuey.core.common.utils.toAlbumEntity
 import com.example.vuey.databinding.LayoutListenLaterBinding
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.data.local.entity.ListenLaterEntity
 import com.example.vuey.feature_album.presentation.ui.AlbumListenLaterFragmentDirections
 
 class ListenLaterAdapter : RecyclerView.Adapter<ListenLaterAdapter.ListenLaterViewHolder>() {

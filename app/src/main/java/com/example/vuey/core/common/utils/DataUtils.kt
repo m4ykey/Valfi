@@ -1,10 +1,10 @@
 package com.example.vuey.core.common.utils
 
-import com.example.vuey.feature_album.data.local.source.entity.AlbumEntity
-import com.example.vuey.feature_album.data.local.source.entity.ListenLaterEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.ListenLaterEntity
 import com.example.vuey.feature_album.data.remote.model.spotify.album.AlbumList
-import com.example.vuey.feature_movie.data.local.source.entity.MovieEntity
-import com.example.vuey.feature_movie.data.local.source.entity.WatchLaterEntity
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 
 fun MovieList.toMovieEntity(): MovieEntity {
@@ -75,7 +75,7 @@ fun AlbumEntity.toListenLaterEntity() : ListenLaterEntity {
     return ListenLaterEntity(
         albumId = this.id,
         albumTitle = this.albumName,
-        albumImage = ListenLaterEntity.ListenLaterImage(
+        albumImage = com.example.vuey.feature_album.data.local.entity.ListenLaterEntity.ListenLaterImage(
             url = "",
             width = 0,
             height = 0
