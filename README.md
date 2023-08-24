@@ -2,7 +2,7 @@
 
 <img src="logo.png" width="150" />
 
-Vuey is open source Album, Movies and TV Shows Tracker.
+Vuey is open source Album & Movies tracker. Users can easily add their favorite albums and movies or save them for later. The application uses data from [Spotify](https://open.spotify.com/) and [TMDB](https://www.themoviedb.org/), so you can easily add your favorite albums and movies, track the time you've spent listening and watching, monitor how many albums and movies you have in your collection, as well as how many songs you've managed to listen to.
 
 ## Screenshots
 
