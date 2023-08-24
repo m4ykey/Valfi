@@ -28,7 +28,6 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 5. Clean and rebuild project
 
 ## TODO
-- [X] Notifications
 - [X] Improve UX/UI
 - [X] Statistic Screen
 
@@ -41,3 +40,4 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - [Gson](https://github.com/google/gson)
 - [Coil](https://coil-kt.github.io/coil/)
+- [Jetpack Compose](https://developer.android.com/jetpack/compose?gclid=Cj0KCQjw_5unBhCMARIsACZyzS0SxKgOdVQUqYghH9-q0Pi0kceSc9fTKpHZlxiailjbD8rmqtfJvgUaAnypEALw_wcB&gclsrc=aw.ds)
