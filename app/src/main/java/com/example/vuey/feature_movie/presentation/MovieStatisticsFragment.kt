@@ -1,30 +1,51 @@
 package com.example.vuey.feature_movie.presentation
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieStatisticsBinding
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieStatisticsFragment : Fragment() {
 
-    private var _binding : FragmentMovieStatisticsBinding? = null
+    private var _binding: FragmentMovieStatisticsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : MovieViewModel by viewModels()
+    private val viewModel: MovieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,39 +59,14 @@ class MovieStatisticsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-
-            toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
-
-            lifecycleScope.launch {
-                coroutineScope {
-
-                    val movieCountEndValue = viewModel.getMovieCount().firstOrNull() ?: 0
-                    val totalTime = viewModel.getTotalLength().firstOrNull() ?: 0
-
-                    val movieHour = totalTime / 60
-                    val movieMinute = totalTime % 60
-                    val movieRuntime = if (totalTime == 0) {
-                        String.format("%d min", movieMinute)
-                    } else {
-                        String.format(
-                            "%d ${getString(R.string.hour)} %d min",
-                            movieHour,
-                            movieMinute
-                        )
+            composeView.setContent {
+                Scaffold(
+                    topBar = {
+                        MovieTopAppBar(navigateUp = { findNavController().navigateUp() })
                     }
-
-                    val valueAnimator = ValueAnimator.ofInt(0, movieCountEndValue)
-                    valueAnimator.apply {
-                        duration = 2000
-                        interpolator = AccelerateDecelerateInterpolator()
-                    }
-                    valueAnimator.addUpdateListener { animator ->
-                        val animatedValue = animator.animatedValue as Int
-                        txtMovieCount.text = if (animatedValue <= movieCountEndValue) animatedValue.toString() else movieCountEndValue.toString()
-                    }
-                    valueAnimator.start()
-                    txtLength.text = movieRuntime
-
+                ) { innerPadding ->
+                    Modifier.padding(innerPadding)
+                    StatisticsScreen(viewModel = viewModel)
                 }
             }
         }
@@ -81,4 +77,92 @@ class MovieStatisticsFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MovieTopAppBar(
+    navigateUp: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(id = R.string.statistics),
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.cabin))
+            )
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
+        modifier = modifier,
+        navigationIcon = {
+            IconButton(onClick = { navigateUp(R.id.movieFragment) }) {
+                Icon(
+                    contentDescription = stringResource(id = R.string.back),
+                    imageVector = Icons.Filled.ArrowBack,
+                    tint = Color.White
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun StatisticsScreen(
+    viewModel: MovieViewModel
+) {
+
+    val movieCount by viewModel.getMovieCount().collectAsState(initial = "")
+    val totalLength by viewModel.getTotalLength().collectAsState(initial = 0)
+
+    val hour = totalLength / 60
+    val minute = totalLength % 60
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = movieCount.toString(),
+            fontSize = 80.sp,
+            color = Color.White,
+            fontFamily = FontFamily(Font(R.font.cabin_semibold))
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = stringResource(id = R.string.watched_movies),
+            fontSize = 25.sp,
+            fontFamily = FontFamily(Font(R.font.cabin)),
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        CalculateMovieTime(
+            hour = hour,
+            minute = minute
+        )
+        Text(
+            text = stringResource(id = R.string.total_time),
+            color = Color.White,
+            fontSize = 17.sp,
+            fontFamily = FontFamily(Font(R.font.cabin))
+        )
+    }
+}
+
+@Composable
+fun CalculateMovieTime(hour : Int, minute : Int) {
+    val text = if (hour == 0) {
+        String.format("%d min", minute)
+    } else {
+        String.format("%d ${stringResource(R.string.hour)} %d min", hour, minute)
+    }
+    Text(
+        text = text,
+        fontSize = 40.sp,
+        color = Color.White,
+        fontFamily = FontFamily(Font(R.font.cabin_semibold))
+    )
 }

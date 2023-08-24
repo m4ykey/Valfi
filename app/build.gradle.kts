@@ -93,8 +93,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.47")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
 
     // OkHttpClient
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
@@ -130,5 +130,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.activity:activity-compose")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+    implementation("androidx.navigation:navigation-compose")
 
 }

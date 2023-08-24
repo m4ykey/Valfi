@@ -1,31 +1,51 @@
 package com.example.vuey.feature_album.presentation.ui
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumStatisticsBinding
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
-import java.lang.Integer.max
 
 @AndroidEntryPoint
 class AlbumStatisticsFragment : Fragment() {
 
-    private var _binding : FragmentAlbumStatisticsBinding? = null
+    private var _binding: FragmentAlbumStatisticsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : AlbumViewModel by viewModels()
+    private val viewModel: AlbumViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,49 +59,129 @@ class AlbumStatisticsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-
-            toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
-
-            lifecycleScope.launch {
-                coroutineScope {
-
-                    val albumCountEndValue = viewModel.getAlbumCount().firstOrNull() ?: 0
-                    val totalTracksEndValue = viewModel.getTotalTracks().firstOrNull() ?: 0
-                    val totalLength = viewModel.getTotalLength().firstOrNull() ?: 0
-
-                    val albumTimeHour = totalLength / (1000 * 60 * 60)
-                    val albumTimeMinute = (totalLength / (1000 * 60)) % 60
-                    val albumTimeSeconds = (totalLength / 1000) % 60
-
-                    txtLength.text = if (albumTimeHour == 0) {
-                        String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
-                    } else if (albumTimeMinute == 0){
-                        String.format("%d ${getString(R.string.hour)}", albumTimeHour)
-                    } else {
-                        String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
+            composeView.setContent {
+                Scaffold(
+                    topBar = {
+                        AlbumTopAppBar(navigateUp = { findNavController().navigateUp() })
                     }
-
-                    val valueAnimator = ValueAnimator.ofInt(0, max(albumCountEndValue, totalTracksEndValue))
-                    valueAnimator.apply {
-                        duration = 2000
-                        interpolator = AccelerateDecelerateInterpolator()
-                    }
-
-                    valueAnimator.addUpdateListener { animator ->
-                        val animatedValue = animator.animatedValue as Int
-                        txtAlbumsNumber.text = if (animatedValue <= albumCountEndValue) animatedValue.toString() else albumCountEndValue.toString()
-                        txtSongs.text = if (animatedValue <= totalTracksEndValue) animatedValue.toString() else totalTracksEndValue.toString()
-                    }
-
-                    valueAnimator.start()
+                ) { innerPadding ->
+                    Modifier.padding(innerPadding)
+                    StatisticsScreen(viewModel = viewModel)
                 }
             }
         }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlbumTopAppBar(
+    navigateUp: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(id = R.string.statistics),
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.cabin))
+            )
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
+        modifier = modifier,
+        navigationIcon = {
+            IconButton(onClick = { navigateUp(R.id.albumFragment) }) {
+                Icon(
+                    contentDescription = stringResource(id = R.string.back),
+                    imageVector = Icons.Filled.ArrowBack,
+                    tint = Color.White
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun StatisticsScreen(
+    viewModel: AlbumViewModel
+) {
+
+    val albumCount by viewModel.getAlbumCount().collectAsState(initial = "")
+    val totalTracks by viewModel.getTotalTracks().collectAsState(initial = "")
+    val totalLength by viewModel.getTotalLength().collectAsState(initial = 0)
+
+    val hour = totalLength / (1000 * 60 * 60)
+    val minute = (totalLength / (1000 * 60)) % 60
+    val second = (totalLength / 1000) % 60
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = albumCount.toString(),
+            fontSize = 80.sp,
+            fontFamily = FontFamily(Font(R.font.cabin_semibold)),
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = stringResource(id = R.string.listened_albums),
+            fontSize = 25.sp,
+            fontFamily = FontFamily(Font(R.font.cabin)),
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = totalTracks.toString(),
+            fontSize = 40.sp,
+            fontFamily = FontFamily(Font(R.font.cabin_semibold)),
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = stringResource(id = R.string.listened_songs),
+            color = Color.White,
+            fontSize = 17.sp,
+            fontFamily = FontFamily(Font(R.font.cabin))
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        CalculateAlbumTime(
+            hour = hour,
+            minute = minute,
+            second = second
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            color = Color.White,
+            text = stringResource(id = R.string.total_time),
+            fontSize = 17.sp,
+            fontFamily = FontFamily(Font(R.font.cabin))
+        )
+    }
+}
+
+@Composable
+fun CalculateAlbumTime(hour: Int, minute: Int, second: Int) {
+    val text = if (hour == 0) {
+        String.format("%d min %d ${stringResource(id = R.string.sec)}", minute, second)
+    } else if (minute == 0) {
+        String.format("%d ${stringResource(id = R.string.hour)}", hour)
+    } else {
+        String.format("%d ${stringResource(id = R.string.hour)} %d min", hour, minute)
+    }
+    Text(
+        text = text,
+        fontSize = 40.sp,
+        color = Color.White,
+        fontFamily = FontFamily(Font(R.font.cabin_semibold))
+    )
 }
