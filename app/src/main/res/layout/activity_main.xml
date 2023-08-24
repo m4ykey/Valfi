@@ -40,8 +40,11 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
         app:menu="@menu/bottom_menu"
+        android:background="@color/background"
+        app:itemIconTint="@color/bottom_nav_icon_color_selector"
+        app:itemActiveIndicatorStyle="@style/Custom.Indicator"
+        app:itemTextColor="@color/bottom_nav_text_color_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

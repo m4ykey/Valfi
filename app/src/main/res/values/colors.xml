@@ -2,8 +2,6 @@
 <resources>
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_gray">#242424</color>
-    <color name="gray">#CCCCCC</color>
     <color name="green">#32E875</color>
     <color name="red">#F44336</color>
     <color name="dark_red">#AA0C00</color>
@@ -16,5 +14,6 @@
     <color name="searchBoxBackground">#E5E4E2</color>
     <color name="blue">#6082B6</color>
     <color name="cardBackground">#F2F3F4</color>
+    <color name="bottomNavItemSelected">#E5E4E2</color>
 
 </resources>

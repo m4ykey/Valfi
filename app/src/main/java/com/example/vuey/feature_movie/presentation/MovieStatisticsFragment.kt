@@ -25,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -94,7 +93,7 @@ fun MovieTopAppBar(
                 fontFamily = FontFamily(Font(R.font.cabin))
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = colorResource(id = R.color.background)),
         modifier = modifier,
         navigationIcon = {
             IconButton(onClick = { navigateUp(R.id.movieFragment) }) {
