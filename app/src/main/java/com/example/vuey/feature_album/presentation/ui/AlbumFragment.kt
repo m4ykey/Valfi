@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
@@ -40,7 +41,10 @@ class AlbumFragment : Fragment() {
 
         with(binding) {
             setupNavigation()
-            albumRecyclerView.adapter = albumAdapter
+            with(albumRecyclerView) {
+                adapter = albumAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
             lifecycleScope.launch {
                 albumViewModel.allAlbums.collect { albums ->
                     if (albums.isEmpty()) {
