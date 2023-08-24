@@ -1,12 +1,9 @@
 package com.example.vuey.feature_album.presentation.ui
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -70,18 +67,6 @@ class AlbumFragment : Fragment() {
                 }
                 else -> { false }
             }
-        }
-        val listenLaterItem = toolbar.menu.findItem(R.id.imgLater)
-        val addItem = toolbar.menu.findItem(R.id.imgAdd)
-        val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
-        listenLaterItem.icon.let {
-            MenuItemCompat.setIconTintList(listenLaterItem, ColorStateList.valueOf(Color.WHITE))
-        }
-        statisticsItem.icon.let {
-            MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
-        }
-        addItem.icon.let {
-            MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
         }
     }
 

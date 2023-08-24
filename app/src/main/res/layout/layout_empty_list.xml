@@ -9,13 +9,14 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/thinking_face_emoji"/>
+        android:src="@drawable/thinking_face_emoji"
+        android:importantForAccessibility="no" />
 
     <TextView
         android:textSize="28sp"
         android:fontFamily="@font/cabin_semibold"
         android:layout_marginTop="30dp"
-        android:textColor="@color/white"
+        android:textColor="@color/textColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/something_empty_here"/>
@@ -23,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:fontFamily="@font/cabin"
-        android:textColor="@color/gray"
+        android:textColor="@color/textGray"
         android:textSize="18sp"
         android:layout_height="wrap_content"
         android:text="@string/quickly_add_something_to_your_list"/>

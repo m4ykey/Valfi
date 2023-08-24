@@ -126,15 +126,4 @@ class AlbumViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
-
-//    fun searchAlbum(albumName : String) {
-//        viewModelScope.launch {
-//            try {
-//                val searchResults = repository.searchAlbum(albumName)
-//                _albumSearchUiState.value = SearchAlbumUiState.Success(searchResults)
-//            } catch (e : Exception) {
-//                _albumSearchUiState.value = SearchAlbumUiState.Failure("Unknown error")
-//            }
-//        }
-//    }
 }

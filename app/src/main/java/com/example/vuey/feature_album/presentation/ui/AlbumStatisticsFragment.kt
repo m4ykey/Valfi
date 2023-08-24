@@ -25,7 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -88,18 +88,18 @@ fun AlbumTopAppBar(
         title = {
             Text(
                 text = stringResource(id = R.string.statistics),
-                color = Color.White,
+                color = colorResource(id = R.color.textColor),
                 fontFamily = FontFamily(Font(R.font.cabin))
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = colorResource(id = R.color.background)),
         modifier = modifier,
         navigationIcon = {
             IconButton(onClick = { navigateUp(R.id.albumFragment) }) {
                 Icon(
                     contentDescription = stringResource(id = R.string.back),
                     imageVector = Icons.Filled.ArrowBack,
-                    tint = Color.White
+                    tint = colorResource(id = R.color.menuIconTint)
                 )
             }
         }
@@ -122,7 +122,7 @@ fun StatisticsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(colorResource(id = R.color.background)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -130,26 +130,26 @@ fun StatisticsScreen(
             text = albumCount.toString(),
             fontSize = 80.sp,
             fontFamily = FontFamily(Font(R.font.cabin_semibold)),
-            color = Color.White
+            color = colorResource(id = R.color.textColor)
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = stringResource(id = R.string.listened_albums),
             fontSize = 25.sp,
             fontFamily = FontFamily(Font(R.font.cabin)),
-            color = Color.White
+            color = colorResource(id = R.color.textColor)
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = totalTracks.toString(),
             fontSize = 40.sp,
             fontFamily = FontFamily(Font(R.font.cabin_semibold)),
-            color = Color.White
+            color = colorResource(id = R.color.textColor)
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = stringResource(id = R.string.listened_songs),
-            color = Color.White,
+            color = colorResource(id = R.color.textColor),
             fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.cabin))
         )
@@ -161,7 +161,7 @@ fun StatisticsScreen(
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
-            color = Color.White,
+            color = colorResource(id = R.color.textColor),
             text = stringResource(id = R.string.total_time),
             fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.cabin))
@@ -181,7 +181,7 @@ fun CalculateAlbumTime(hour: Int, minute: Int, second: Int) {
     Text(
         text = text,
         fontSize = 40.sp,
-        color = Color.White,
+        color = colorResource(id = R.color.textColor),
         fontFamily = FontFamily(Font(R.font.cabin_semibold))
     )
 }

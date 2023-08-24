@@ -7,4 +7,12 @@
     <color name="green">#32E875</color>
     <color name="red">#F44336</color>
     <color name="dark_red">#AA0C00</color>
+
+    <color name="textColor">@color/black</color>
+    <color name="background">#FFFAFA</color>
+    <color name="textGray">#555555</color>
+    <color name="menuIconTint">@color/black</color>
+    <color name="progressBar">@color/black</color>
+    <color name="searchBoxBackground">#E5E4E2</color>
+
 </resources>

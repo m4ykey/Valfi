@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     tools:context=".feature_album.presentation.ui.SearchAlbumFragment">
 
     <LinearLayout
@@ -26,7 +26,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                app:tint="@color/white"
+                app:tint="@color/menuIconTint"
                 android:id="@+id/imgBack"
                 android:layout_marginEnd="10dp"
                 android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             <TextView
                 android:text="@string/browse"
                 android:textSize="26sp"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:fontFamily="@font/cabin_semibold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/cabin"
             android:layout_marginTop="5dp"
-            android:textColor="@color/gray"
+            android:textColor="@color/textGray"
             android:textSize="16sp"
             android:text="@string/what_did_you_listen_to_today"/>
 
@@ -58,8 +58,8 @@
             android:textStyle="italic"
             android:drawableEnd="@drawable/ic_clear"
             android:layout_marginTop="10dp"
-            android:drawableTint="@color/gray"
-            android:textColorHint="@color/gray"
+            android:drawableTint="@color/textGray"
+            android:textColorHint="@color/textGray"
             android:maxLines="1"
             android:inputType="text"
             android:drawablePadding="10dp"
@@ -68,7 +68,7 @@
             android:padding="10dp"
             android:id="@+id/etSearch"
             android:fontFamily="@font/cabin"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor"
             android:background="@drawable/edit_text_search_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

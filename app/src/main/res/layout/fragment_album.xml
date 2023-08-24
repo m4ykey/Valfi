@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     tools:context=".feature_album.presentation.ui.AlbumFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,7 +28,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="@font/cabin_semibold"
                 android:text="@string/library"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="20sp" />
 
         </com.google.android.material.appbar.MaterialToolbar>

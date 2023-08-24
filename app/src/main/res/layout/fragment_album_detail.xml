@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     tools:context=".feature_album.presentation.ui.DetailAlbumFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/white" />
+            app:navigationIconTint="@color/menuIconTint" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -68,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cabin_semibold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:textSize="18sp"
                     tools:text="Przykładowa nazwa albumu" />
 
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     android:textSize="16sp"
                     tools:text="Przykładowy artsyta" />
 
@@ -96,7 +96,7 @@
                     android:layout_marginBottom="5dp"
                     android:contentDescription="@string/save_icon"
                     android:src="@drawable/ic_save_outlined"
-                    app:tint="@color/white" />
+                    app:tint="@color/red" />
 
                 <ImageView
                     android:id="@+id/imgTime"
@@ -106,7 +106,7 @@
                     android:layout_marginBottom="5dp"
                     android:contentDescription="@string/save_icon"
                     android:src="@drawable/ic_time_outline"
-                    app:tint="@color/white" />
+                    app:tint="#6082B6" />
 
             </LinearLayout>
 
@@ -122,7 +122,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     android:textSize="15sp"
                     tools:text="Album • 2022 • Total tracks: 15" />
 
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     android:textSize="15sp"
                     tools:text="1h 10min" />
 
@@ -156,12 +156,14 @@
                     android:backgroundTint="@color/green"
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/artist"
+                    app:elevation="0dp"
                     android:textColor="@color/white"
                     app:icon="@drawable/ic_artist"
                     app:iconTint="@color/white" />
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/btnAlbum"
+                    app:elevation="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -193,7 +195,7 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/white"
+        android:indeterminateTint="@color/progressBar"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

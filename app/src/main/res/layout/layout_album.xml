@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/cabin_semibold"
             android:maxLines="2"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor"
             android:textSize="18sp"
             tools:text="Havana" />
 
@@ -43,7 +43,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/cabin"
             android:maxLines="1"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor"
             android:textSize="14sp"
             tools:text="Camila" />
 

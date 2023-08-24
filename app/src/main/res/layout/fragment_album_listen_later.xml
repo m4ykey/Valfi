@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".feature_album.presentation.ui.AlbumListenLaterFragment">
 
@@ -19,12 +19,12 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/white"
+            app:navigationIconTint="@color/menuIconTint"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="20sp"
                 android:fontFamily="@font/cabin"
                 android:text="@string/listen_later"
