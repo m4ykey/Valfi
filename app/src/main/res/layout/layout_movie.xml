@@ -4,8 +4,9 @@
     android:layout_height="wrap_content"
     android:id="@+id/layoutMovie"
     android:layout_marginBottom="10dp"
-    app:strokeWidth="1dp"
-    android:backgroundTint="@color/black"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    android:backgroundTint="@color/cardBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -70,7 +71,7 @@
                     android:textSize="13sp"
                     android:layout_marginStart="5dp"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:id="@+id/txtAverageVote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,7 +87,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:id="@+id/txtMovieTitle"
                     tools:text="Duchy Inisherin"
                     android:maxLines="1"
@@ -102,7 +103,7 @@
                     android:ellipsize="end"
                     android:textSize="15sp"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     tools:text="Two lifelong friends find themselves at an impasse when one abruptly ends their relationship, with alarming consequences for both of them."/>
 
             </LinearLayout>

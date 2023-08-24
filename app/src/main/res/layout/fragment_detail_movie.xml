@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     tools:context=".feature_movie.presentation.DetailMovieFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -33,7 +33,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:background="@drawable/background_gradient"
                 app:layout_constraintBottom_toBottomOf="@id/imgBackdrop"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:textSize="18sp"
                     tools:text="8.2" />
 
@@ -97,7 +97,7 @@
                 android:src="@drawable/ic_save_outlined"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgBackdrop"
-                app:tint="@color/white" />
+                app:tint="@color/red" />
 
             <ImageView
                 android:id="@+id/imgTime"
@@ -107,7 +107,8 @@
                 android:src="@drawable/ic_time_outline"
                 app:layout_constraintEnd_toStartOf="@+id/imgSave"
                 app:layout_constraintTop_toBottomOf="@+id/imgBackdrop"
-                app:tint="@color/white" />
+                app:tint="@color/blue"
+                android:importantForAccessibility="no" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutMovieInfo"
@@ -116,7 +117,7 @@
                 android:layout_margin="10dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/linearLayoutRating"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutRating">
 
                 <TextView
@@ -124,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cabin_semibold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:textSize="26sp"
                     tools:text="Dune" />
 
@@ -133,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     android:textSize="15sp"
                     tools:text="2h 24m • Action, Drama • 2022" />
 
@@ -156,7 +157,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/cabin"
                     android:maxLines="3"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     tools:text="A ticking-time-bomb insomniac and a slippery soap salesman" />
 
                 <TextView
@@ -164,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cabin"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/textGray"
                     android:visibility="gone"
                     tools:text="A ticking-time-bomb insomniac and a slippery soap salesman"
                     tools:visibility="visible" />
@@ -179,7 +180,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/cabin_semibold"
                 android:text="@string/spoken_languages"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -194,7 +195,7 @@
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/cabin"
                 android:textAlignment="viewStart"
-                android:textColor="@color/gray"
+                android:textColor="@color/textGray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtLanguages"
@@ -207,7 +208,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/cabin_semibold"
                 android:text="@string/cast"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@id/txtSpokenLanguages"
                 app:layout_constraintTop_toBottomOf="@id/txtSpokenLanguages" />
@@ -220,7 +221,7 @@
                 android:gravity="center"
                 android:padding="30dp"
                 android:text="@string/cast_is_empty"
-                android:textColor="@color/gray"
+                android:textColor="@color/textGray"
                 android:textSize="16sp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -243,7 +244,7 @@
                 android:id="@+id/progressBarCast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminateTint="@color/white"
+                android:indeterminateTint="@color/progressBar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

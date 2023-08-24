@@ -14,5 +14,7 @@
     <color name="menuIconTint">@color/black</color>
     <color name="progressBar">@color/black</color>
     <color name="searchBoxBackground">#E5E4E2</color>
+    <color name="blue">#6082B6</color>
+    <color name="cardBackground">#F2F3F4</color>
 
 </resources>

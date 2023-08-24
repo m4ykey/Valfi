@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".feature_movie.presentation.MovieFragment">
 
@@ -28,7 +28,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="@font/cabin_semibold"
                 android:text="@string/library"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="20sp" />
 
         </com.google.android.material.appbar.MaterialToolbar>

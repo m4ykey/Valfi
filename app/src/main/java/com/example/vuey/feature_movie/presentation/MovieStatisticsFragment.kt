@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -89,7 +90,7 @@ fun MovieTopAppBar(
         title = {
             Text(
                 text = stringResource(id = R.string.statistics),
-                color = Color.White,
+                color = colorResource(id = R.color.textColor),
                 fontFamily = FontFamily(Font(R.font.cabin))
             )
         },
@@ -100,7 +101,7 @@ fun MovieTopAppBar(
                 Icon(
                     contentDescription = stringResource(id = R.string.back),
                     imageVector = Icons.Filled.ArrowBack,
-                    tint = Color.White
+                    tint = colorResource(id = R.color.menuIconTint)
                 )
             }
         }
@@ -121,14 +122,14 @@ fun StatisticsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(colorResource(id = R.color.background)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = movieCount.toString(),
             fontSize = 80.sp,
-            color = Color.White,
+            color = colorResource(id = R.color.textColor),
             fontFamily = FontFamily(Font(R.font.cabin_semibold))
         )
         Spacer(modifier = Modifier.height(5.dp))
@@ -136,7 +137,7 @@ fun StatisticsScreen(
             text = stringResource(id = R.string.watched_movies),
             fontSize = 25.sp,
             fontFamily = FontFamily(Font(R.font.cabin)),
-            color = Color.White
+            color = colorResource(id = R.color.textColor)
         )
         Spacer(modifier = Modifier.height(20.dp))
         CalculateMovieTime(
@@ -145,7 +146,7 @@ fun StatisticsScreen(
         )
         Text(
             text = stringResource(id = R.string.total_time),
-            color = Color.White,
+            color = colorResource(id = R.color.textColor),
             fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.cabin))
         )
@@ -162,7 +163,7 @@ fun CalculateMovieTime(hour : Int, minute : Int) {
     Text(
         text = text,
         fontSize = 40.sp,
-        color = Color.White,
+        color = colorResource(id = R.color.textColor),
         fontFamily = FontFamily(Font(R.font.cabin_semibold))
     )
 }

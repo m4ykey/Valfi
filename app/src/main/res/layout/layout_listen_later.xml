@@ -31,7 +31,7 @@
         android:layout_gravity="center"
         android:id="@+id/txtAlbumTitle"
         android:ellipsize="end"
-        android:textColor="@color/white"
+        android:textColor="@color/textColor"
         android:fontFamily="@font/cabin"
         tools:text="Justice"
         android:layout_width="wrap_content"

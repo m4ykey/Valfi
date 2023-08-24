@@ -49,12 +49,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                         }
                     }
                     is AlbumEntity -> {
-                        val image = album.albumCover.copy(
-                            height = 640,
-                            width = 640,
-                            url = album.albumCover.url
-                        )
-                        imgAlbum.load(image.url) { error(R.drawable.album_error) }
+                        imgAlbum.load(album.albumCover.url) { error(R.drawable.album_error) }
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.name }
                         layoutAlbum.setOnClickListener {

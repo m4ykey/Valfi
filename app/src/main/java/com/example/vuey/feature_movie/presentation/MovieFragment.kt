@@ -1,11 +1,11 @@
 package com.example.vuey.feature_movie.presentation
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -80,13 +80,13 @@ class MovieFragment : Fragment() {
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
             val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
             laterItem.icon.let {
-                MenuItemCompat.setIconTintList(laterItem, ColorStateList.valueOf(Color.WHITE))
+                MenuItemCompat.setIconTintList(laterItem, ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.menuIconTint)))
             }
             statisticsItem.icon.let {
-                MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
+                MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.menuIconTint)))
             }
             addItem.icon.let {
-                MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
+                MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.menuIconTint)))
             }
         }
     }

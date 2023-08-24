@@ -106,7 +106,7 @@
                     android:layout_marginBottom="5dp"
                     android:contentDescription="@string/save_icon"
                     android:src="@drawable/ic_time_outline"
-                    app:tint="#6082B6" />
+                    app:tint="@color/blue" />
 
             </LinearLayout>
 

@@ -6,13 +6,11 @@
     <item android:id="@+id/imgLater"
         android:title="@string/for_later"
         app:showAsAction="ifRoom"
-        android:iconTint="@color/menuIconTint"
         android:icon="@drawable/ic_time_outline"
         tools:targetApi="o" />
 
     <item android:id="@+id/imgAdd"
         android:title="@string/add"
-        android:iconTint="@color/menuIconTint"
         app:showAsAction="always"
         android:icon="@drawable/ic_playlist_add"
         tools:targetApi="o" />
@@ -20,7 +18,6 @@
     <item android:id="@+id/imgStatistics"
         android:title="@string/statistics"
         app:showAsAction="always"
-        android:iconTint="@color/menuIconTint"
         android:icon="@drawable/ic_analytics"
         tools:targetApi="o" />
 
