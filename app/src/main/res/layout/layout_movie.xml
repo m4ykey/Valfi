@@ -6,7 +6,7 @@
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
-    android:backgroundTint="@color/cardBackground"
+    app:cardBackgroundColor="@android:color/transparent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
