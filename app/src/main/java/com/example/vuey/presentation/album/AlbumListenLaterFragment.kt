@@ -14,6 +14,7 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
 import com.example.vuey.presentation.album.adapter.ListenLaterAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
+import com.example.vuey.presentation.components.EmptyLaterListScreen
 import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.common.utils.toAlbumEntity
 import com.m4ykey.local.album.entity.ListenLaterEntity
@@ -53,7 +54,10 @@ class AlbumListenLaterFragment : Fragment() {
                 viewModel.allListenLaterAlbums.collect { album ->
                     if (album.isEmpty()) {
                         recyclerViewAlbum.visibility = View.GONE
-                        layoutEmptyList.root.visibility = View.VISIBLE
+                        with(composeView) {
+                            visibility = View.VISIBLE
+                            setContent { EmptyLaterListScreen() }
+                        }
                     }
                     listenLaterAdapter.submitAlbum(album)
                     currentAlbum = album

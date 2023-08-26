@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieBinding
+import com.example.vuey.presentation.components.EmptyListScreen
 import com.example.vuey.presentation.movie.adapter.MovieAdapter
 import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +49,10 @@ class MovieFragment : Fragment() {
                     movieViewModel.allMovies.collect { movies ->
                         if (movies.isEmpty()) {
                             movieRecyclerView.visibility = View.GONE
-                            layoutEmptyList.root.visibility = View.VISIBLE
+                            with(composeView) {
+                                visibility = View.VISIBLE
+                                setContent { EmptyListScreen() }
+                            }
                         }
                         movieAdapter.submitMovie(movies)
                     }

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieWatchLaterBinding
+import com.example.vuey.presentation.components.EmptyLaterListScreen
 import com.example.vuey.presentation.movie.adapter.WatchLaterAdapter
 import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
 import com.m4ykey.common.utils.showSnackbar
@@ -54,7 +55,10 @@ class MovieWatchLaterFragment : Fragment() {
                 viewModel.allWatchLaterMovies.collect { movies ->
                     if (movies.isEmpty()) {
                         recyclerViewMovie.visibility = View.GONE
-                        layoutEmptyList.root.visibility = View.VISIBLE
+                        with(composeView) {
+                            visibility = View.VISIBLE
+                            setContent { EmptyLaterListScreen() }
+                        }
                     }
                     watchLaterAdapter.submitMovie(movies)
                     currentMovie = movies

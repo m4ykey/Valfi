@@ -65,9 +65,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun getAlbumById(albumId: String): Flow<AlbumEntity> {
-        return repositoryLocal.getAlbumById(albumId)
-    }
+    fun getAlbumById(albumId: String): Flow<AlbumEntity> = repositoryLocal.getAlbumById(albumId)
 
     suspend fun getAlbumDetail(albumId: String) {
         repository.getAlbum(albumId).onEach { result ->

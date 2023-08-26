@@ -16,6 +16,7 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.presentation.album.adapter.AlbumAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
+import com.example.vuey.presentation.components.EmptyListScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,7 +50,10 @@ class AlbumFragment : Fragment() {
                 albumViewModel.allAlbums.collect { albums ->
                     if (albums.isEmpty()) {
                         albumRecyclerView.visibility = View.GONE
-                        layoutEmptyList.root.visibility = View.VISIBLE
+                        with(composeView) {
+                            visibility = View.VISIBLE
+                            setContent { EmptyListScreen() }
+                        }
                     }
                     albumAdapter.submitAlbums(albums)
                 }
