@@ -10,10 +10,10 @@ plugins {
 
 android {
     namespace = "com.m4ykey.remote"
-    compileSdk = 33
+    compileSdk = Configuration.compileSdk
 
     defaultConfig {
-        minSdk = 26
+        minSdk = Configuration.minSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -37,11 +37,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Configuration.javaVersion
+        targetCompatibility = Configuration.javaVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Configuration.javaVersion.toString()
     }
     buildFeatures {
         buildConfig = true

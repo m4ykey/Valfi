@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace = "com.example.vuey"
-    compileSdk = 34
+    compileSdk = Configuration.compileSdk
 
     defaultConfig {
-        applicationId = "com.example.vuey"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "2.8.2"
+        applicationId = Configuration.applicationId
+        minSdk = Configuration.minSdk
+        targetSdk = Configuration.targetSdk
+        versionCode = Configuration.versionCode
+        versionName = Configuration.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -34,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = Configuration.javaVersion
+        targetCompatibility = Configuration.javaVersion
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = Configuration.javaVersion.toString()
     }
     buildFeatures {
         buildConfig = true

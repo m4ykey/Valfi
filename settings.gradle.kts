@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         google()
@@ -15,7 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "Vuey"
 include(":app")
 include(":core:common")
-include(":core:di")
 include(":data:remote")
 include(":data:local")
 include(":repository")
