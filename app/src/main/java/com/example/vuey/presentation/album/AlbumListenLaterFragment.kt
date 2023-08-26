@@ -14,6 +14,7 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
 import com.example.vuey.presentation.album.adapter.ListenLaterAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
+import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.common.utils.toAlbumEntity
 import com.m4ykey.local.album.entity.ListenLaterEntity
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,12 +64,12 @@ class AlbumListenLaterFragment : Fragment() {
                     val randomAlbum = currentAlbum.random()
                     val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(
                         albumId = randomAlbum.albumId,
-                        albumEntity = currentAlbum[0].toAlbumEntity(),
-                        listenLaterEntity = currentAlbum[0]
+                        albumEntity = randomAlbum.toAlbumEntity(),
+                        listenLaterEntity = randomAlbum
                     )
                     it.findNavController().navigate(action)
                 } else {
-                    com.m4ykey.common.utils.showSnackbar(
+                    showSnackbar(
                         requireView(),
                         getString(R.string.first_you_need_add_something_to_list)
                     )

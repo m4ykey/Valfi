@@ -14,6 +14,8 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieWatchLaterBinding
 import com.example.vuey.presentation.movie.adapter.WatchLaterAdapter
 import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
+import com.m4ykey.common.utils.showSnackbar
+import com.m4ykey.common.utils.toMovie
 import com.m4ykey.common.utils.toMovieEntity
 import com.m4ykey.local.movie.entity.WatchLaterEntity
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,14 +64,13 @@ class MovieWatchLaterFragment : Fragment() {
                 if (::currentMovie.isInitialized && currentMovie.isNotEmpty()) {
                     val randomMovie = currentMovie.random()
                     val action = MovieWatchLaterFragmentDirections.actionMovieWatchLaterFragmentToDetailMovieFragment(
-                        movieEntity = currentMovie[0].toMovieEntity(),
-                        movieId = randomMovie.movieId,
-                        watchLaterEntity = currentMovie[0],
-                        movieOverview = ""
+                        movieEntity = randomMovie.toMovieEntity(),
+                        watchLaterEntity = randomMovie,
+                        movie = randomMovie.toMovie()
                     )
                     it.findNavController().navigate(action)
                 } else {
-                    com.m4ykey.common.utils.showSnackbar(
+                    showSnackbar(
                         requireView(),
                         getString(R.string.first_you_need_add_something_to_list)
                     )

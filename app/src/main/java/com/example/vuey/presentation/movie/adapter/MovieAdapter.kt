@@ -14,6 +14,7 @@ import com.m4ykey.common.Constants.TMDB_IMAGE_ORIGINAL
 import com.m4ykey.common.utils.DateUtils
 import com.m4ykey.common.utils.DiffUtils
 import com.m4ykey.common.utils.formatVoteAverage
+import com.m4ykey.common.utils.toMovie
 import com.m4ykey.common.utils.toMovieEntity
 import com.m4ykey.common.utils.toWatchLaterEntity
 import com.m4ykey.local.movie.entity.MovieEntity
@@ -50,9 +51,8 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         layoutMovie.setOnClickListener {
                             val action = MovieFragmentDirections.actionMovieFragmentToDetailMovieFragment(
                                 movieEntity = movie,
-                                movieId = movie.movieId,
-                                watchLaterEntity = movie.toWatchLaterEntity(),
-                                movieOverview = movie.movieOverview
+                                movie = movie.toMovie(),
+                                watchLaterEntity = movie.toWatchLaterEntity()
                             )
                             it.findNavController().navigate(action)
                         }
@@ -73,9 +73,8 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         layoutMovie.setOnClickListener {
                             val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToDetailMovieFragment(
                                 movieEntity = movie.toMovieEntity(),
-                                movieId = movie.id,
                                 watchLaterEntity = movie.toWatchLaterEntity(),
-                                movieOverview = movie.overview
+                                movie = movie
                             )
                             it.findNavController().navigate(action)
                         }

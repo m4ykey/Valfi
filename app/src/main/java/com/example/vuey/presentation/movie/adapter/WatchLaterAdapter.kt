@@ -9,6 +9,7 @@ import coil.load
 import com.example.vuey.databinding.LayoutWatchLaterBinding
 import com.example.vuey.presentation.movie.MovieWatchLaterFragmentDirections
 import com.m4ykey.common.Constants
+import com.m4ykey.common.utils.toMovie
 import com.m4ykey.common.utils.toMovieEntity
 import com.m4ykey.local.movie.entity.WatchLaterEntity
 
@@ -34,9 +35,8 @@ class WatchLaterAdapter : RecyclerView.Adapter<WatchLaterAdapter.WatchLaterViewH
                 layoutMovie.setOnClickListener {
                     val action = MovieWatchLaterFragmentDirections.actionMovieWatchLaterFragmentToDetailMovieFragment(
                         movieEntity = movie.toMovieEntity(),
-                        movieId = movie.movieId,
                         watchLaterEntity = movie,
-                        movieOverview = ""
+                        movie = movie.toMovie()
                     )
                     it.findNavController().navigate(action)
                 }

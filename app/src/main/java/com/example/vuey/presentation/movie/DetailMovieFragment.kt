@@ -25,6 +25,7 @@ import com.example.vuey.presentation.movie.viewmodel.ui_state.DetailMovieUiState
 import com.google.android.material.snackbar.Snackbar
 import com.m4ykey.common.Constants.TMDB_IMAGE_ORIGINAL
 import com.m4ykey.common.network.NetworkStateMonitor
+import com.m4ykey.common.utils.DateUtils
 import com.m4ykey.common.utils.formatVoteAverage
 import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.local.movie.entity.MovieEntity
@@ -78,8 +79,8 @@ class DetailMovieFragment : Fragment() {
 
             lifecycleScope.launch {
                 viewModel.apply {
-                    getMovieDetail(args.movieId)
-                    getMovieCast(args.movieId)
+                    getMovieDetail(args.movie.id)
+                    getMovieCast(args.movie.id)
                 }
 
                 val movie = viewModel.getMovieById(movieDatabase.movieId).first()
@@ -219,7 +220,7 @@ class DetailMovieFragment : Fragment() {
             txtOverviewFull.text = movieDatabase.movieOverview
             txtMovieTitle.text = movieDatabase.movieTitle
             txtInfo.text = "$movieRuntime • $genreList • ${
-                com.m4ykey.common.utils.DateUtils.formatAirDate(movieDatabase.movieReleaseDate)
+                DateUtils.formatAirDate(movieDatabase.movieReleaseDate)
             }"
             txtSpokenLanguages.text = spokenLanguage
         }
@@ -283,20 +284,20 @@ class DetailMovieFragment : Fragment() {
 
                             txtMovieTitle.text = movieDetail.title
                             val movieOverview = movieDetail.overview.ifEmpty {
-                                args.movieOverview
+                                args.movie.overview
                             }
                             txtOverview.text = movieOverview
                             txtOverviewFull.text = movieOverview
 
                             txtInfo.text = if (movieRuntime.isEmpty()) {
-                                "$genreList • ${com.m4ykey.common.utils.DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                "$genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
                             } else if (genreList.isEmpty()) {
-                                "$movieRuntime • ${com.m4ykey.common.utils.DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                "$movieRuntime • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
                             } else if (movieDetail.releaseDate.isEmpty()) {
                                 "$movieRuntime • $genreList"
                             } else {
                                 "$movieRuntime • $genreList • ${
-                                    com.m4ykey.common.utils.DateUtils.formatAirDate(
+                                    DateUtils.formatAirDate(
                                         movieDetail.releaseDate
                                     )
                                 }"

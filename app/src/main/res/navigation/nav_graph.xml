@@ -89,11 +89,8 @@
             android:name="watchLaterEntity"
             app:argType="com.m4ykey.local.movie.entity.WatchLaterEntity" />
         <argument
-            android:name="movieId"
-            app:argType="integer" />
-        <argument
-            android:name="movieOverview"
-            app:argType="string" />
+            android:name="movie"
+            app:argType="com.m4ykey.remote.movie.model.MovieList" />
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"

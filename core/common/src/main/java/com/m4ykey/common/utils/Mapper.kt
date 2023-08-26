@@ -91,6 +91,17 @@ fun MovieEntity.toWatchLaterEntity() : WatchLaterEntity {
     )
 }
 
+fun MovieEntity.toMovie() : MovieList {
+    return MovieList(
+        id = this.movieId,
+        overview = this.movieOverview,
+        posterPath = this.moviePosterPath,
+        releaseDate = this.movieReleaseDate,
+        title = this.movieTitle,
+        voteAverage = this.movieVoteAverage
+    )
+}
+
 fun MovieList.toWatchLaterEntity() : WatchLaterEntity {
     return WatchLaterEntity(
         movieTitle = this.title,
@@ -111,5 +122,16 @@ fun WatchLaterEntity.toMovieEntity() : MovieEntity {
         movieRuntime = 0,
         movieSpokenLanguage = emptyList(),
         movieVoteAverage = 0.0
+    )
+}
+
+fun WatchLaterEntity.toMovie() : MovieList {
+    return MovieList(
+        id = this.movieId,
+        overview = "",
+        posterPath = this.moviePosterPath,
+        releaseDate = "",
+        title = this.movieTitle,
+        voteAverage = 0.0
     )
 }
