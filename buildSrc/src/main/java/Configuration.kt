@@ -10,6 +10,4 @@ object Configuration {
     const val versionName = "2.9.0"
     const val versionCode = 2
 
-    val javaVersion = JavaVersion.VERSION_17
-
 }
