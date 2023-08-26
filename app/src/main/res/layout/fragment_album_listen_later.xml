@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".feature_album.presentation.ui.AlbumListenLaterFragment">
+    tools:context=".presentation.album.AlbumListenLaterFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         app:layout_constraintTop_toTopOf="parent"

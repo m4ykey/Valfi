@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".feature_movie.presentation.MovieFragment">
+    tools:context=".presentation.movie.MovieFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"

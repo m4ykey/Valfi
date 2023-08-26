@@ -5,10 +5,10 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.vuey.feature_album.data.local.dao.AlbumDao
-import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.core.common.database.VueyDatabase
 import com.google.common.truth.Truth.assertThat
+import com.m4ykey.local.album.dao.AlbumDao
+import com.m4ykey.local.album.entity.AlbumEntity
+import com.m4ykey.local.database.VueyDatabase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After

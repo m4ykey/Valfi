@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.example.vuey.feature_album.presentation.ui.AlbumFragment"
+        android:name="com.example.vuey.presentation.album.AlbumFragment"
         android:label="fragment_album"
         tools:layout="@layout/fragment_album" >
         <action
@@ -25,22 +25,22 @@
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
-        android:name="com.example.vuey.feature_album.presentation.ui.DetailAlbumFragment"
+        android:name="com.example.vuey.presentation.album.DetailAlbumFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_album_detail">
         <argument
             android:name="albumEntity"
-            app:argType="com.example.vuey.feature_album.data.local.entity.AlbumEntity" />
+            app:argType="com.m4ykey.local.album.entity.AlbumEntity" />
         <argument
             android:name="listenLaterEntity"
-            app:argType="com.example.vuey.feature_album.data.local.entity.ListenLaterEntity" />
+            app:argType="com.m4ykey.local.album.entity.ListenLaterEntity" />
         <argument
             android:name="albumId"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
-        android:name="com.example.vuey.feature_album.presentation.ui.SearchAlbumFragment"
+        android:name="com.example.vuey.presentation.album.SearchAlbumFragment"
         android:label="fragment_search_album"
         tools:layout="@layout/fragment_search_album" >
         <argument
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieFragment"
-        android:name="com.example.vuey.feature_movie.presentation.MovieFragment"
+        android:name="com.example.vuey.presentation.movie.MovieFragment"
         android:label="fragment_movie"
         tools:layout="@layout/fragment_movie" >
         <action
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
-        android:name="com.example.vuey.feature_movie.presentation.SearchMovieFragment"
+        android:name="com.example.vuey.presentation.movie.SearchMovieFragment"
         android:label="fragment_search_movie"
         tools:layout="@layout/fragment_search_movie" >
         <action
@@ -79,15 +79,15 @@
     </fragment>
     <fragment
         android:id="@+id/detailMovieFragment"
-        android:name="com.example.vuey.feature_movie.presentation.DetailMovieFragment"
+        android:name="com.example.vuey.presentation.movie.DetailMovieFragment"
         android:label="fragment_detail_movie"
         tools:layout="@layout/fragment_detail_movie" >
         <argument
             android:name="movieEntity"
-            app:argType="com.example.vuey.feature_movie.data.local.entity.MovieEntity" />
+            app:argType="com.m4ykey.local.movie.entity.MovieEntity" />
         <argument
             android:name="watchLaterEntity"
-            app:argType="com.example.vuey.feature_movie.data.local.entity.WatchLaterEntity" />
+            app:argType="com.m4ykey.local.movie.entity.WatchLaterEntity" />
         <argument
             android:name="movieId"
             app:argType="integer" />
@@ -97,17 +97,17 @@
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"
-        android:name="com.example.vuey.feature_album.presentation.ui.AlbumStatisticsFragment"
+        android:name="com.example.vuey.presentation.album.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics" />
     <fragment
         android:id="@+id/movieStatisticsFragment"
-        android:name="com.example.vuey.feature_movie.presentation.MovieStatisticsFragment"
+        android:name="com.example.vuey.presentation.movie.MovieStatisticsFragment"
         android:label="fragment_movie_statistics"
         tools:layout="@layout/fragment_movie_statistics" />
     <fragment
         android:id="@+id/albumListenLaterFragment"
-        android:name="com.example.vuey.feature_album.presentation.ui.AlbumListenLaterFragment"
+        android:name="com.example.vuey.presentation.album.AlbumListenLaterFragment"
         android:label="fragment_album_listen_later"
         tools:layout="@layout/fragment_album_listen_later" >
         <action
@@ -116,7 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieWatchLaterFragment"
-        android:name="com.example.vuey.feature_movie.presentation.MovieWatchLaterFragment"
+        android:name="com.example.vuey.presentation.movie.MovieWatchLaterFragment"
         android:label="fragment_movie_watch_later"
         tools:layout="@layout/fragment_movie_watch_later" >
         <action

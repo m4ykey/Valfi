@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".feature_album.presentation.ui.AlbumStatisticsFragment">
+    tools:context=".presentation.album.AlbumStatisticsFragment">
 
     <androidx.compose.ui.platform.ComposeView
         android:layout_width="0dp"

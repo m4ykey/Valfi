@@ -5,9 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.vuey.feature_movie.data.local.dao.MovieDao
-import com.example.vuey.feature_movie.data.local.entity.MovieEntity
-import com.example.vuey.core.common.database.VueyDatabase
+import com.m4ykey.local.movie.dao.MovieDao
+import com.m4ykey.local.movie.entity.MovieEntity
+import com.m4ykey.local.database.VueyDatabase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

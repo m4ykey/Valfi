@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black"
-    tools:context=".feature_movie.presentation.MovieStatisticsFragment">
+    tools:context=".presentation.movie.MovieStatisticsFragment">
 
     <androidx.compose.ui.platform.ComposeView
         android:layout_width="0dp"

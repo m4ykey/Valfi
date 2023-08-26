@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".feature_movie.presentation.DetailMovieFragment">
+    tools:context=".presentation.movie.DetailMovieFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

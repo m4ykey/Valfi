@@ -1,16 +1,12 @@
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -19,19 +15,12 @@ android {
 
     defaultConfig {
         applicationId = "com.example.vuey"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "2.8.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        val properties = Properties()
-        properties.load(rootProject.file("local.properties").inputStream())
-
-        buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("TMDB_API_KEY")}\"")
-        buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"${properties.getProperty("SPOTIFY_CLIENT_ID")}\"")
-        buildConfigField("String", "SPOTIFY_CLIENT_SECRET", "\"${properties.getProperty("SPOTIFY_CLIENT_SECRET")}\"")
 
     }
 
@@ -63,73 +52,62 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(project(":core:common"))
+    implementation(project(":data:local"))
+    implementation(project(":data:remote"))
+    implementation(project(":repository"))
 
-    testImplementation("junit:junit:4.13.2")
-    implementation("com.google.truth:truth:1.1.5")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    implementation("androidx.arch.core:core-testing:2.2.0")
+    implementation(AndroidX.core)
+    implementation(AndroidX.appCompat)
+    implementation(AndroidX.material)
+    implementation(AndroidX.constraintLayout)
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(TestImplementation.junit)
+    implementation(Testing.truth)
+    implementation(Coroutines.test)
+    implementation(Testing.coreTesting)
 
-    // Retrofit
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    androidTestImplementation(AndroidTestImplementation.extJUnit)
+    androidTestImplementation(AndroidTestImplementation.espresso)
 
     // Kotlin Lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation(Lifecycle.viewModel)
+    implementation(Lifecycle.runtime)
+
+    // Room
+    implementation(Room.ktx)
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(Coroutines.core)
+    implementation(Coroutines.android)
 
     // Dagger - Hilt
-    kapt("com.google.dagger:hilt-compiler:2.47")
-    implementation("com.google.dagger:hilt-android:2.47")
+    kapt(DaggerHilt.compiler)
+    implementation(DaggerHilt.android)
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
-
-    // OkHttpClient
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
+    implementation(Navigation.fragment)
+    implementation(Navigation.ui)
 
     // Firebase
-    implementation("com.google.firebase:firebase-crashlytics-ktx:18.4.0")
-    implementation("com.google.firebase:firebase-analytics-ktx:21.3.0")
-    implementation("com.google.firebase:firebase-perf-ktx:20.4.0")
-
-    // Room Database
-    ksp("androidx.room:room-compiler:2.5.2")
-    implementation("androidx.room:room-runtime:2.5.2")
-    implementation("androidx.room:room-ktx:2.5.2")
-
-    // Gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(platform(Firebase.firebaseBom))
+    implementation(Firebase.firebaseAnalytics)
+    implementation(Firebase.firebaseCrashlytics)
+    implementation(Firebase.firebasePerf)
 
     // Coil
-    implementation("io.coil-kt:coil:2.4.0")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore:1.0.0")
+    implementation(Coil.coil)
+    implementation(Coil.coilCompose)
 
     // Jetpack Compose
-    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.activity:activity-compose")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
-    implementation("androidx.navigation:navigation-compose")
+    implementation(platform(Compose.composeBom))
+    implementation(Compose.composeMaterial)
+    implementation(Compose.composeUiToolingPreview)
+    debugImplementation(Compose.composeUiTooling)
+    implementation(Compose.composeUi)
+    implementation(Compose.composeIcons)
+    implementation(Compose.composeActivity)
+    implementation(Compose.composeViewModel)
+    implementation(Compose.composeNavigation)
 
 }

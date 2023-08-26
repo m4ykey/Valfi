@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.vuey.R
-import com.example.vuey.core.common.network.NetworkStateMonitor
 import com.example.vuey.databinding.ActivityMainBinding
+import com.m4ykey.common.network.NetworkStateMonitor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
