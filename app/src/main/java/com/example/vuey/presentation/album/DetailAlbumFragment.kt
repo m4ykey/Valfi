@@ -220,22 +220,27 @@ class DetailAlbumFragment : Fragment() {
                 crossfade(1000)
             }
 
-            btnAlbum.setOnClickListener {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(albumDatabase.externalUrls.spotify)
+            with(btnAlbum) {
+                elevation = 0f
+                setOnClickListener {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(albumDatabase.externalUrls.spotify)
+                        )
                     )
-                )
+                }
             }
-
-            btnArtist.setOnClickListener {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(albumDatabase.artistList[0].externalUrls.spotify)
+            with(btnArtist) {
+                setOnClickListener {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(albumDatabase.artistList[0].externalUrls.spotify)
+                        )
                     )
-                )
+                }
+                elevation = 0f
             }
         }
     }

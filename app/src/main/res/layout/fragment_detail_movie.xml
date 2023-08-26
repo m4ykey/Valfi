@@ -97,7 +97,7 @@
                 android:src="@drawable/ic_save_outlined"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgBackdrop"
-                app:tint="@color/red" />
+                app:tint="@color/menuIconTint" />
 
             <ImageView
                 android:id="@+id/imgTime"
@@ -107,7 +107,7 @@
                 android:src="@drawable/ic_time_outline"
                 app:layout_constraintEnd_toStartOf="@+id/imgSave"
                 app:layout_constraintTop_toBottomOf="@+id/imgBackdrop"
-                app:tint="@color/blue"
+                app:tint="@color/menuIconTint"
                 android:importantForAccessibility="no" />
 
             <LinearLayout
