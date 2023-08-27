@@ -27,15 +27,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGsonConverterFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
-    }
+    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
 
     @Provides
     @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     @Provides
     @Singleton
@@ -47,8 +44,9 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .addInterceptor(tmdbInterceptor)
         .addInterceptor(spotifyInterceptor)
-        .readTimeout(2, TimeUnit.MINUTES)
-        .connectTimeout(2, TimeUnit.MINUTES)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
 
