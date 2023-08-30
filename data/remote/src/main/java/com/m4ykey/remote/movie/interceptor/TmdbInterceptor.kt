@@ -1,4 +1,4 @@
-package com.m4ykey.remote.movie.token
+package com.m4ykey.remote.movie.interceptor
 
 import com.m4ykey.remote.BuildConfig.TMDB_API_KEY
 import okhttp3.Interceptor
@@ -10,7 +10,6 @@ class TmdbInterceptor : Interceptor {
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer $TMDB_API_KEY")
             .build()
-
         return chain.proceed(request)
     }
 

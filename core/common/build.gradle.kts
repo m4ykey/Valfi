@@ -39,18 +39,18 @@ dependencies {
     implementation(project(":data:local"))
     implementation(project(":data:remote"))
 
-    implementation(AndroidX.core)
-    implementation(AndroidX.appCompat)
-    implementation(AndroidX.material)
+    implementation(AndroidX.Core.core)
+    implementation(AndroidX.Core.appCompat)
+    implementation(AndroidX.Core.material)
 
-    testImplementation(TestImplementation.junit)
-    implementation(Testing.coreTesting)
+    testImplementation(Test.TestImplementation.junit)
+    implementation(Test.Testing.coreTesting)
 
-    androidTestImplementation(AndroidTestImplementation.extJUnit)
-    androidTestImplementation(AndroidTestImplementation.espresso)
+    androidTestImplementation(Test.AndroidTestImplementation.extJUnit)
+    androidTestImplementation(Test.AndroidTestImplementation.espresso)
 
-    implementation(Room.ktx)
-    implementation(Room.runtime)
-    annotationProcessor(Room.compiler)
+    implementation(AndroidX.Room.ktx)
+    implementation(AndroidX.Room.runtime)
+    annotationProcessor(AndroidX.Room.compiler)
 
 }

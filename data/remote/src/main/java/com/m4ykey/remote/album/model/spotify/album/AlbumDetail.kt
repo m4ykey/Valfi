@@ -1,22 +1,24 @@
 package com.m4ykey.remote.album.model.spotify.album
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class AlbumDetail(
-    @SerializedName("album_type")
+    @field:Json(name = "album_type")
     val albumType: String,
-    @SerializedName("artists")
+    @field:Json(name = "artists")
     val artistList: List<Artist>,
-    @SerializedName("external_urls")
+    @field:Json(name = "external_urls")
     val externalUrls: ExternalUrls,
     val id: String,
-    @SerializedName("images")
+    @field:Json(name = "images")
     val imageList: List<Image>,
-    @SerializedName("name")
+    @field:Json(name = "name")
     val albumName: String,
-    @SerializedName("release_date")
+    @field:Json(name = "release_date")
     val releaseDate: String,
-    @SerializedName("total_tracks")
+    @field:Json(name = "total_tracks")
     val totalTracks: Int,
     val tracks: Tracks
 )

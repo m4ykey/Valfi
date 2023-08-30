@@ -1,10 +1,9 @@
 package com.m4ykey.remote.di
 
-import com.m4ykey.remote.Urls.SPOTIFY_AUTH_URL
-import com.m4ykey.remote.Urls.SPOTIFY_BASE_URL
-import com.m4ykey.remote.Urls.TMDB_BASE_URL
 import com.m4ykey.remote.album.token.SpotifyInterceptor
-import com.m4ykey.remote.movie.token.TmdbInterceptor
+import com.m4ykey.remote.movie.interceptor.TmdbInterceptor
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -27,12 +26,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     @Provides
     @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    fun provideMoshi() : Moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
+        .build()
 
     @Provides
     @Singleton
@@ -44,8 +45,8 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .addInterceptor(tmdbInterceptor)
         .addInterceptor(spotifyInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
@@ -53,34 +54,30 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("Auth")
-    fun provideSpotifyAuth(
-        gsonConverterFactory: GsonConverterFactory
-    ): Retrofit = Retrofit.Builder()
-            .addConverterFactory(gsonConverterFactory)
-            .baseUrl(SPOTIFY_AUTH_URL)
+    fun provideSpotifyAuth(): Retrofit = Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create())
+            .baseUrl("https://accounts.spotify.com/")
             .build()
 
     @Provides
     @Singleton
     @Named("Album")
     fun provideAlbumRetrofit(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
+        httpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
-            .baseUrl(SPOTIFY_BASE_URL)
+            .baseUrl("https://api.spotify.com/")
             .client(httpClient)
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
 
     @Provides
     @Singleton
     @Named("Movie")
     fun provideMovieRetrofit(
-        httpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
+        httpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
-            .baseUrl(TMDB_BASE_URL)
+            .baseUrl("https://api.themoviedb.org/3/")
             .client(httpClient)
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
 }

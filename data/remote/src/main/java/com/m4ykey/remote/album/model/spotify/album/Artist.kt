@@ -1,14 +1,16 @@
 package com.m4ykey.remote.album.model.spotify.album
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class Artist(
-    @SerializedName("external_urls")
+    @field:Json(name = "external_urls")
     val externalUrls: ExternalUrls,
     val id: String,
-    @SerializedName("name")
+    @field:Json(name = "name")
     val artistName: String,
 ) : Parcelable

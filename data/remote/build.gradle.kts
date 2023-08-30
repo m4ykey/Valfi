@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -50,27 +51,28 @@ android {
 
 dependencies {
 
-    implementation(AndroidX.core)
-    implementation(AndroidX.appCompat)
-    implementation(AndroidX.material)
+    implementation(AndroidX.Core.core)
+    implementation(AndroidX.Core.appCompat)
+    implementation(AndroidX.Core.material)
 
-    testImplementation(TestImplementation.junit)
-    implementation(Testing.coreTesting)
+    testImplementation(Test.TestImplementation.junit)
+    implementation(Test.Testing.coreTesting)
 
-    androidTestImplementation(AndroidTestImplementation.extJUnit)
-    androidTestImplementation(AndroidTestImplementation.espresso)
+    androidTestImplementation(Test.AndroidTestImplementation.extJUnit)
+    androidTestImplementation(Test.AndroidTestImplementation.espresso)
 
-    implementation(Retrofit.retrofit)
-    implementation(Retrofit.gsonConverter)
-    implementation(Gson.gson)
-
-    implementation(Retrofit.okhttp)
-    implementation(Retrofit.loggingInterceptor)
+    implementation(Network.Retrofit.retrofit)
+    implementation(Network.Retrofit.okhttp)
+    implementation(Network.Retrofit.loggingInterceptor)
+    implementation(Network.Retrofit.moshi)
+    implementation(Network.Retrofit.moshiKotlin)
+    implementation(Network.Retrofit.moshiConverter)
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
     implementation(DaggerHilt.android)
     kapt(DaggerHilt.compiler)
 
-    implementation(DataStore.dataStore)
-    implementation(DataStore.dataStorePreferences)
+    implementation(AndroidX.DataStore.dataStore)
+    implementation(AndroidX.DataStore.dataStorePreferences)
 
 }

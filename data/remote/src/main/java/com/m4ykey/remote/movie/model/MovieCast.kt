@@ -1,16 +1,19 @@
 package com.m4ykey.remote.movie.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class MovieCast(
     val cast: List<CastDetail>,
     val id: Int
 ) {
+    @JsonClass(generateAdapter = true)
     data class CastDetail(
-        @SerializedName("cast_id")
+        @field:Json(name = "cast_id")
         val castId: Int,
         val name: String,
-        @SerializedName("profile_path")
+        @field:Json(name = "profile_path")
         val profilePath: String?
     )
 }

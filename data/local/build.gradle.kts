@@ -38,23 +38,24 @@ android {
 
 dependencies {
 
-    implementation(AndroidX.core)
-    implementation(AndroidX.appCompat)
-    implementation(AndroidX.material)
+    implementation(AndroidX.Core.core)
+    implementation(AndroidX.Core.appCompat)
+    implementation(AndroidX.Core.material)
 
-    testImplementation(TestImplementation.junit)
-    implementation(Testing.coreTesting)
+    testImplementation(Test.TestImplementation.junit)
+    implementation(Test.Testing.coreTesting)
 
-    androidTestImplementation(AndroidTestImplementation.extJUnit)
-    androidTestImplementation(AndroidTestImplementation.espresso)
+    androidTestImplementation(Test.AndroidTestImplementation.extJUnit)
+    androidTestImplementation(Test.AndroidTestImplementation.espresso)
 
-    implementation(Room.runtime)
-    implementation(Room.ktx)
-    ksp(Room.compiler)
-
-    implementation(Gson.gson)
+    implementation(AndroidX.Room.runtime)
+    implementation(AndroidX.Room.ktx)
+    ksp(AndroidX.Room.compiler)
 
     implementation(DaggerHilt.android)
     kapt(DaggerHilt.compiler)
+
+    implementation(Network.Retrofit.moshi)
+    implementation(Network.Retrofit.moshiKotlin)
 
 }
