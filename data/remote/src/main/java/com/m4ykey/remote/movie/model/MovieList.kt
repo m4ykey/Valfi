@@ -1,18 +1,20 @@
 package com.m4ykey.remote.movie.model
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class MovieList(
     val id: Int,
     val overview: String,
-    @SerializedName("poster_path")
+    @field:Json(name = "poster_path")
     val posterPath: String?,
-    @SerializedName("release_date")
+    @field:Json(name = "release_date")
     val releaseDate: String,
     val title: String,
-    @SerializedName("vote_average")
+    @field:Json(name = "vote_average")
     val voteAverage: Double,
 ) : Parcelable

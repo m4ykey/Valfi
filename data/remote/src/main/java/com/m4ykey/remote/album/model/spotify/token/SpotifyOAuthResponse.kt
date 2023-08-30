@@ -1,12 +1,14 @@
 package com.m4ykey.remote.album.model.spotify.token
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class SpotifyOAuthResponse(
-    @SerializedName("access_token")
+    @field:Json(name = "access_token")
     val accessToken: String,
-    @SerializedName("token_type")
+    @field:Json(name = "token_type")
     val tokenType: String,
-    @SerializedName("expires_in")
+    @field:Json(name = "expires_in")
     val expiresIn: Int
 )

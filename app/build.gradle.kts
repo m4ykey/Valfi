@@ -46,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 }
 
@@ -57,25 +57,25 @@ dependencies {
     implementation(project(":data:remote"))
     implementation(project(":repository"))
 
-    implementation(AndroidX.core)
-    implementation(AndroidX.appCompat)
-    implementation(AndroidX.material)
-    implementation(AndroidX.constraintLayout)
+    implementation(AndroidX.Core.core)
+    implementation(AndroidX.Core.appCompat)
+    implementation(AndroidX.Core.material)
+    implementation(AndroidX.Core.constraintLayout)
 
-    testImplementation(TestImplementation.junit)
-    implementation(Testing.truth)
+    testImplementation(Test.TestImplementation.junit)
+    implementation(Test.Testing.truth)
     implementation(Coroutines.test)
-    implementation(Testing.coreTesting)
+    implementation(Test.Testing.coreTesting)
 
-    androidTestImplementation(AndroidTestImplementation.extJUnit)
-    androidTestImplementation(AndroidTestImplementation.espresso)
+    androidTestImplementation(Test.AndroidTestImplementation.extJUnit)
+    androidTestImplementation(Test.AndroidTestImplementation.espresso)
 
     // Kotlin Lifecycle
-    implementation(Lifecycle.viewModel)
-    implementation(Lifecycle.runtime)
+    implementation(AndroidX.Lifecycle.viewModel)
+    implementation(AndroidX.Lifecycle.runtime)
 
     // Room
-    implementation(Room.ktx)
+    implementation(AndroidX.Room.ktx)
 
     // Kotlin Coroutines
     implementation(Coroutines.core)
@@ -86,8 +86,8 @@ dependencies {
     implementation(DaggerHilt.android)
 
     // Navigation
-    implementation(Navigation.fragment)
-    implementation(Navigation.ui)
+    implementation(AndroidX.Navigation.fragment)
+    implementation(AndroidX.Navigation.ui)
 
     // Firebase
     implementation(platform(Firebase.firebaseBom))
@@ -100,14 +100,14 @@ dependencies {
     implementation(Coil.coilCompose)
 
     // Jetpack Compose
-    implementation(platform(Compose.composeBom))
-    implementation(Compose.composeMaterial)
-    implementation(Compose.composeUiToolingPreview)
-    debugImplementation(Compose.composeUiTooling)
-    implementation(Compose.composeUi)
-    implementation(Compose.composeIcons)
-    implementation(Compose.composeActivity)
-    implementation(Compose.composeViewModel)
-    implementation(Compose.composeNavigation)
+    implementation(platform(AndroidX.Compose.composeBom))
+    implementation(AndroidX.Compose.composeMaterial)
+    implementation(AndroidX.Compose.composeUiToolingPreview)
+    debugImplementation(AndroidX.Compose.composeUiTooling)
+    implementation(AndroidX.Compose.composeUi)
+    implementation(AndroidX.Compose.composeIcons)
+    implementation(AndroidX.Compose.composeActivity)
+    implementation(AndroidX.Compose.composeViewModel)
+    implementation(AndroidX.Compose.composeNavigation)
 
 }
