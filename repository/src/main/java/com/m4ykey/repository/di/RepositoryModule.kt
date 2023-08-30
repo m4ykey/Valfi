@@ -20,18 +20,18 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAlbumRepository(albumRepository: AlbumRepositoryImpl) : AlbumRepository = albumRepository
+    fun provideAlbumRepository(albumRepository: AlbumRepositoryImpl) : AlbumRepository { return albumRepository }
 
     @Provides
     @Singleton
-    fun provideMovieRepository(movieRepository : MovieRepositoryImpl) : MovieRepository = movieRepository
+    fun provideMovieRepository(movieRepository : MovieRepositoryImpl) : MovieRepository { return movieRepository }
 
     @Provides
     @Singleton
-    fun provideAlbumLocalRepository(albumRepository: AlbumLocalRepositoryImpl) : AlbumLocalRepository = albumRepository
+    fun provideAlbumLocalRepository(albumRepository: AlbumLocalRepositoryImpl) : AlbumLocalRepository { return albumRepository }
 
     @Provides
     @Singleton
-    fun provideMovieLocalRepository(movieRepository : MovieLocalRepositoryImpl) : MovieLocalRepository = movieRepository
+    fun provideMovieLocalRepository(movieRepository : MovieLocalRepositoryImpl) : MovieLocalRepository { return movieRepository }
 
 }

@@ -23,6 +23,8 @@ class SpotifyInterceptor @Inject constructor(
     private val accessTokenKey = stringPreferencesKey("access_token")
     private val expireTimeKey = longPreferencesKey("expire_token")
 
+    private var currentAccessToken : String? = null
+
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
         val request = chain.request()
 
@@ -44,7 +46,10 @@ class SpotifyInterceptor @Inject constructor(
                 preferences.remove(accessTokenKey)
                 preferences.remove(expireTimeKey)
             }
+            accessToken = getAccessToken()
         }
+
+        currentAccessToken = accessToken
 
         val newRequest = request.newBuilder()
             .addHeader("Authorization", "Bearer $accessToken")
@@ -66,8 +71,9 @@ class SpotifyInterceptor @Inject constructor(
             Base64.NO_WRAP
         )
 
-        val response = authApi.getAccessToken(authHeader, "client_credentials")
-
-        return response.accessToken
+        return currentAccessToken ?: run {
+            val response = authApi.getAccessToken(authHeader, "client_credentials")
+            response.accessToken
+        }
     }
 }
