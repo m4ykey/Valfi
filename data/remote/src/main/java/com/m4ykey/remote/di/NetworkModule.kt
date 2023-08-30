@@ -1,8 +1,5 @@
 package com.m4ykey.remote.di
 
-import com.m4ykey.remote.Urls.SPOTIFY_AUTH_URL
-import com.m4ykey.remote.Urls.SPOTIFY_BASE_URL
-import com.m4ykey.remote.Urls.TMDB_BASE_URL
 import com.m4ykey.remote.album.token.SpotifyInterceptor
 import com.m4ykey.remote.movie.interceptor.TmdbInterceptor
 import com.squareup.moshi.Moshi
@@ -59,7 +56,7 @@ object NetworkModule {
     @Named("Auth")
     fun provideSpotifyAuth(): Retrofit = Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create())
-            .baseUrl(SPOTIFY_AUTH_URL)
+            .baseUrl("https://accounts.spotify.com/")
             .build()
 
     @Provides
@@ -68,7 +65,7 @@ object NetworkModule {
     fun provideAlbumRetrofit(
         httpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
-            .baseUrl(SPOTIFY_BASE_URL)
+            .baseUrl("https://api.spotify.com/")
             .client(httpClient)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
@@ -79,7 +76,7 @@ object NetworkModule {
     fun provideMovieRetrofit(
         httpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
-            .baseUrl(TMDB_BASE_URL)
+            .baseUrl("https://api.themoviedb.org/3/")
             .client(httpClient)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()

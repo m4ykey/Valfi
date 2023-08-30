@@ -52,7 +52,8 @@ class SpotifyInterceptor @Inject constructor(
         currentAccessToken = accessToken
 
         val newRequest = request.newBuilder()
-            .addHeader("Authorization", "Bearer $accessToken")
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer $accessToken")
             .build()
 
         chain.proceed(newRequest)
