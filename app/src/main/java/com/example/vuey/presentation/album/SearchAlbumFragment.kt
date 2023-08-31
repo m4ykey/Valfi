@@ -20,6 +20,7 @@ import com.example.vuey.presentation.album.adapter.AlbumAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.album.viewmodel.ui_state.SearchAlbumUiState
 import com.google.android.material.snackbar.Snackbar
+import com.m4ykey.common.utils.calculateAlbumMatchingScore
 import com.m4ykey.common.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -106,7 +107,15 @@ class SearchAlbumFragment : Fragment() {
                 searchViewModel.albumSearchUiState.collect { uiState ->
                     when (uiState) {
                         is SearchAlbumUiState.Success -> {
-                            albumAdapter.submitAlbums(uiState.albumData)
+
+                            val albums = uiState.albumData.map { album ->
+                                album to calculateAlbumMatchingScore(album, etSearch.text.toString())
+                            }
+
+                            val sortAlbum = albums.sortedByDescending { it.second }
+                            val sortedList = sortAlbum.map { it.first }
+
+                            albumAdapter.submitAlbums(sortedList)
                         }
 
                         is SearchAlbumUiState.Failure -> {

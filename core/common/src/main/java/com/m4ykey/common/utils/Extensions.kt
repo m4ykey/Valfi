@@ -2,6 +2,8 @@ package com.m4ykey.common.utils
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
+import com.m4ykey.remote.album.model.spotify.album.AlbumList
+import com.m4ykey.remote.movie.model.MovieList
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -29,4 +31,36 @@ object DateUtils {
 
 fun showSnackbar(view: View, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(view, message, duration).show()
+}
+
+fun calculateAlbumMatchingScore(album: AlbumList, query: String): Double {
+    val albumTitle = album.albumName.lowercase(Locale.ROOT)
+    val queryLowercase = query.lowercase(Locale.ROOT)
+
+    val maxLength = maxOf(albumTitle.length, queryLowercase.length)
+    var matchingCharacters = 0
+
+    for (i in 0 until minOf(albumTitle.length, queryLowercase.length)) {
+        if (albumTitle[i] == queryLowercase[i]) {
+            matchingCharacters++
+        }
+    }
+
+    return matchingCharacters.toDouble() / maxLength
+}
+
+fun calculateMovieMatchingScore(movie: MovieList, query: String): Double {
+    val movieTitle = movie.title.lowercase(Locale.ROOT)
+    val queryLowercase = query.lowercase(Locale.ROOT)
+
+    val maxLength = maxOf(movieTitle.length, queryLowercase.length)
+    var matchingCharacters = 0
+
+    for (i in 0 until minOf(movieTitle.length, queryLowercase.length)) {
+        if (movieTitle[i] == queryLowercase[i]) {
+            matchingCharacters++
+        }
+    }
+
+    return matchingCharacters.toDouble() / maxLength
 }
