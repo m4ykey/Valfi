@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -41,7 +42,7 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(DaggerHilt.android)
-    kapt(DaggerHilt.compiler)
+    ksp(DaggerHilt.compiler)
 
     implementation(Network.Retrofit.retrofit)
 

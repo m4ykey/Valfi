@@ -7,6 +7,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -82,7 +83,7 @@ dependencies {
     implementation(Coroutines.android)
 
     // Dagger - Hilt
-    kapt(DaggerHilt.compiler)
+    ksp(DaggerHilt.compiler)
     implementation(DaggerHilt.android)
 
     // Navigation

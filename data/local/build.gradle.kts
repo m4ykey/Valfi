@@ -53,7 +53,7 @@ dependencies {
     ksp(AndroidX.Room.compiler)
 
     implementation(DaggerHilt.android)
-    kapt(DaggerHilt.compiler)
+    ksp(DaggerHilt.compiler)
 
     implementation(Network.Retrofit.moshi)
     implementation(Network.Retrofit.moshiKotlin)

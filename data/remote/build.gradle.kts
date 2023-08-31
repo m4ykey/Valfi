@@ -70,7 +70,7 @@ dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
     implementation(DaggerHilt.android)
-    kapt(DaggerHilt.compiler)
+    ksp(DaggerHilt.compiler)
 
     implementation(AndroidX.DataStore.dataStore)
     implementation(AndroidX.DataStore.dataStorePreferences)
