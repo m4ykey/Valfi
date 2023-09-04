@@ -1,6 +1,5 @@
 package com.example.vuey.app
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -62,24 +61,8 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 networkStateMonitor.isInternetAvailable.collect { isAvailable ->
                     if (isAvailable) {
-                        val slideOutAnimator = ObjectAnimator.ofFloat(
-                            txtNoInternet,
-                            "translationY",
-                            0f,
-                            txtNoInternet.height.toFloat()
-                        )
-                        slideOutAnimator.duration = 500
-                        slideOutAnimator.start()
                         txtNoInternet.visibility = View.GONE
                     } else {
-                        val slideInAnimator = ObjectAnimator.ofFloat(
-                            txtNoInternet,
-                            "translationY",
-                            txtNoInternet.height.toFloat(),
-                            0f
-                        )
-                        slideInAnimator.duration = 500
-                        slideInAnimator.start()
                         txtNoInternet.visibility = View.VISIBLE
                     }
                 }
