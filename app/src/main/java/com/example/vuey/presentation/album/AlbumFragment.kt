@@ -17,6 +17,7 @@ import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.presentation.album.adapter.AlbumAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.components.EmptyListScreen
+import com.m4ykey.common.utils.showBottomNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,6 +42,7 @@ class AlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            showBottomNavigation(R.id.bottomNavigation)
             setupNavigation()
             with(albumRecyclerView) {
                 adapter = albumAdapter

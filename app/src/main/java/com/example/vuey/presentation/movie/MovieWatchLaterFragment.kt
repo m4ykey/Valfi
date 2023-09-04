@@ -15,6 +15,7 @@ import com.example.vuey.databinding.FragmentMovieWatchLaterBinding
 import com.example.vuey.presentation.components.EmptyLaterListScreen
 import com.example.vuey.presentation.movie.adapter.WatchLaterAdapter
 import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
+import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.common.utils.toMovie
 import com.m4ykey.common.utils.toMovieEntity
@@ -46,6 +47,7 @@ class MovieWatchLaterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            hideBottomNavigation(R.id.bottomNavigation)
             recyclerViewMovie.apply {
                 adapter = watchLaterAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)

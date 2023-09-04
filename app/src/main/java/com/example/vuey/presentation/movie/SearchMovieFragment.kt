@@ -19,6 +19,8 @@ import com.example.vuey.presentation.movie.adapter.MovieAdapter
 import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
 import com.example.vuey.presentation.movie.viewmodel.ui_state.SearchMovieUiState
 import com.google.android.material.snackbar.Snackbar
+import com.m4ykey.common.utils.calculateMovieMatchingScore
+import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -45,6 +47,7 @@ class SearchMovieFragment : Fragment() {
 
         with(binding) {
             observeSearchMovie()
+            hideBottomNavigation(R.id.bottomNavigation)
             searchMovie()
             imgBack.setOnClickListener { findNavController().navigateUp() }
             recyclerViewMovie.adapter = movieAdapter
@@ -102,7 +105,15 @@ class SearchMovieFragment : Fragment() {
                     when (uiState) {
                         is SearchMovieUiState.Success -> {
                             progressBar.visibility = View.GONE
-                            movieAdapter.submitMovie(uiState.movieData)
+
+                            val movies = uiState.movieData.map { movie ->
+                                movie to calculateMovieMatchingScore(movie, etSearch.text.toString())
+                            }
+
+                            val sortMovie = movies.sortedByDescending { it.second }
+                            val sortedList = sortMovie.map { it.first }
+
+                            movieAdapter.submitMovie(sortedList)
                         }
                         is SearchMovieUiState.Failure -> {
                             progressBar.visibility = View.GONE
@@ -112,6 +123,7 @@ class SearchMovieFragment : Fragment() {
                                 Snackbar.LENGTH_LONG
                             )
                         }
+
                         else -> {}
                     }
                 }

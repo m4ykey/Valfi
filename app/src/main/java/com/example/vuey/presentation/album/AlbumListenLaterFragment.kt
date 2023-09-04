@@ -15,6 +15,7 @@ import com.example.vuey.databinding.FragmentAlbumListenLaterBinding
 import com.example.vuey.presentation.album.adapter.ListenLaterAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.components.EmptyLaterListScreen
+import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.common.utils.toAlbumEntity
 import com.m4ykey.local.album.entity.ListenLaterEntity
@@ -45,6 +46,7 @@ class AlbumListenLaterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            hideBottomNavigation(R.id.bottomNavigation)
             recyclerViewAlbum.apply {
                 adapter = listenLaterAdapter
                 layoutManager = GridLayoutManager(requireContext(), 3)

@@ -157,6 +157,7 @@
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/artist"
                     app:elevation="0dp"
+                    android:elevation="0dp"
                     android:textColor="@color/white"
                     app:icon="@drawable/ic_artist"
                     app:iconTint="@color/white" />
@@ -171,6 +172,7 @@
                     android:backgroundTint="@color/green"
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/album"
+                    android:elevation="0dp"
                     android:textColor="@color/white"
                     app:icon="@drawable/ic_album"
                     app:iconTint="@color/white" />

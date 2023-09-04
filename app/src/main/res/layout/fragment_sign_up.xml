@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
+    android:layout_height="match_parent"
+    tools:context=".presentation.auth.SignUpFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/appBar"
+        android:background="@null"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:navigationIconTint="@color/menuIconTint"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/appBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:id="@+id/linearLayoutRegisterText"
+        android:orientation="vertical">
+
+        <TextView
+            android:textColor="@color/textColor"
+            android:textSize="30sp"
+            android:fontFamily="@font/cabin_semibold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register"/>
+
+        <TextView
+            android:textColor="@color/textGray"
+            android:textSize="16sp"
+            android:fontFamily="@font/cabin"
+            android:layout_marginTop="5dp"
+            android:text="@string/create_your_new_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutRegisterText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:id="@+id/linearLayoutCreateAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:paddingStart="10dp"
+            android:drawablePadding="10dp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:drawableTint="@color/textGray"
+            android:textColorHint="@color/textGray"
+            android:drawableStart="@drawable/ic_person"
+            android:background="@drawable/edit_text_auth_box"
+            android:layout_margin="30dp"
+            android:paddingEnd="10dp"
+            android:hint="@string/name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="text" />
+
+        <EditText
+            android:paddingStart="10dp"
+            android:drawablePadding="10dp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            android:paddingEnd="10dp"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:drawableTint="@color/textGray"
+            android:textColorHint="@color/textGray"
+            android:drawableStart="@drawable/ic_mail"
+            android:background="@drawable/edit_text_auth_box"
+            android:hint="@string/email"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:drawablePadding="10dp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:drawableTint="@color/textGray"
+            android:textColorHint="@color/textGray"
+            android:drawableStart="@drawable/ic_lock"
+            android:background="@drawable/edit_text_auth_box"
+            android:layout_margin="30dp"
+            android:inputType="textPassword"
+            android:hint="@string/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+        <Button
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:fontFamily="@font/cabin"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/blue"
+            android:text="@string/register"/>
+
+    </LinearLayout>
+
+    <Button
+        android:fontFamily="@font/cabin"
+        android:id="@+id/btnForgotPassword"
+        android:text="@string/forgot_password"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutCreateAccount"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:textColor="@color/textColor"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Material3.Button.TextButton"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:fontFamily="@font/cabin"
+            android:text="@string/already_have_an_account"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up"
+            android:textColor="@color/blue"
+            android:fontFamily="@font/cabin"
+            style="@style/Widget.Material3.Button.TextButton"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,8 +11,8 @@ import com.example.vuey.databinding.LayoutMovieBinding
 import com.example.vuey.presentation.movie.MovieFragmentDirections
 import com.example.vuey.presentation.movie.SearchMovieFragmentDirections
 import com.m4ykey.common.Constants.TMDB_IMAGE_ORIGINAL
-import com.m4ykey.common.utils.DateUtils
 import com.m4ykey.common.utils.DiffUtils
+import com.m4ykey.common.utils.formatAirDate
 import com.m4ykey.common.utils.formatVoteAverage
 import com.m4ykey.common.utils.toMovie
 import com.m4ykey.common.utils.toMovieEntity
@@ -46,7 +46,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         if (movie.movieReleaseDate.isEmpty()) {
                             txtReleaseDate.visibility = View.GONE
                         } else {
-                            txtReleaseDate.text = DateUtils.formatAirDate(movie.movieReleaseDate)
+                            txtReleaseDate.text = formatAirDate(movie.movieReleaseDate)
                         }
                         layoutMovie.setOnClickListener {
                             val action = MovieFragmentDirections.actionMovieFragmentToDetailMovieFragment(
@@ -68,7 +68,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         if (movie.releaseDate.isEmpty()) {
                             txtReleaseDate.visibility = View.GONE
                         } else {
-                            txtReleaseDate.text = DateUtils.formatAirDate(movie.releaseDate)
+                            txtReleaseDate.text = formatAirDate(movie.releaseDate)
                         }
                         layoutMovie.setOnClickListener {
                             val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToDetailMovieFragment(

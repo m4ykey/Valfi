@@ -25,8 +25,9 @@ import com.example.vuey.presentation.movie.viewmodel.ui_state.DetailMovieUiState
 import com.google.android.material.snackbar.Snackbar
 import com.m4ykey.common.Constants.TMDB_IMAGE_ORIGINAL
 import com.m4ykey.common.network.NetworkStateMonitor
-import com.m4ykey.common.utils.DateUtils
+import com.m4ykey.common.utils.formatAirDate
 import com.m4ykey.common.utils.formatVoteAverage
+import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.local.movie.entity.MovieEntity
 import com.m4ykey.local.movie.entity.WatchLaterEntity
@@ -71,6 +72,7 @@ class DetailMovieFragment : Fragment() {
 
         with(binding) {
 
+            hideBottomNavigation(R.id.bottomNavigation)
             observeMovieDetail()
             observeMovieCast()
 
@@ -220,7 +222,7 @@ class DetailMovieFragment : Fragment() {
             txtOverviewFull.text = movieDatabase.movieOverview
             txtMovieTitle.text = movieDatabase.movieTitle
             txtInfo.text = "$movieRuntime • $genreList • ${
-                DateUtils.formatAirDate(movieDatabase.movieReleaseDate)
+                formatAirDate(movieDatabase.movieReleaseDate)
             }"
             txtSpokenLanguages.text = spokenLanguage
         }
@@ -290,17 +292,13 @@ class DetailMovieFragment : Fragment() {
                             txtOverviewFull.text = movieOverview
 
                             txtInfo.text = if (movieRuntime.isEmpty()) {
-                                "$genreList • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                "$genreList • ${formatAirDate(movieDetail.releaseDate)}"
                             } else if (genreList.isEmpty()) {
-                                "$movieRuntime • ${DateUtils.formatAirDate(movieDetail.releaseDate)}"
+                                "$movieRuntime • ${formatAirDate(movieDetail.releaseDate)}"
                             } else if (movieDetail.releaseDate.isEmpty()) {
                                 "$movieRuntime • $genreList"
                             } else {
-                                "$movieRuntime • $genreList • ${
-                                    DateUtils.formatAirDate(
-                                        movieDetail.releaseDate
-                                    )
-                                }"
+                                "$movieRuntime • $genreList • ${formatAirDate(movieDetail.releaseDate)}"
                             }
 
                             txtSpokenLanguages.text =

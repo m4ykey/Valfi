@@ -24,7 +24,8 @@ import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.album.viewmodel.ui_state.DetailAlbumUiState
 import com.google.android.material.snackbar.Snackbar
 import com.m4ykey.common.network.NetworkStateMonitor
-import com.m4ykey.common.utils.DateUtils
+import com.m4ykey.common.utils.formatAirDate
+import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.local.album.entity.AlbumEntity
 import com.m4ykey.local.album.entity.ListenLaterEntity
@@ -73,6 +74,7 @@ class DetailAlbumFragment : Fragment() {
 
         with(binding) {
             observeDetailAlbum()
+            hideBottomNavigation(R.id.bottomNavigation)
 
             val albumDatabase = arguments.albumEntity
             val listenLaterDatabase = arguments.listenLaterEntity
@@ -130,7 +132,7 @@ class DetailAlbumFragment : Fragment() {
                 albumName = albumDatabase.albumName,
                 albumType = albumDatabase.albumType,
                 id = albumDatabase.id,
-                releaseDate = DateUtils.formatAirDate(albumDatabase.releaseDate).toString(),
+                releaseDate = formatAirDate(albumDatabase.releaseDate).toString(),
                 totalTracks = albumDatabase.totalTracks,
                 externalUrls = AlbumEntity.ExternalUrlsEntity(
                     spotify = albumDatabase.externalUrls.spotify
@@ -211,7 +213,7 @@ class DetailAlbumFragment : Fragment() {
             txtAlbumName.text = albumDatabase.albumName
             txtArtist.text = albumDatabase.artistList.joinToString(separator = ", ") { it.name }
             txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
-                    "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(
+                    "${formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(
                 R.string.tracks
             )
 
@@ -306,7 +308,7 @@ class DetailAlbumFragment : Fragment() {
 
                             txtInfo.text =
                                 "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
-                                        "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(
+                                        "${formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(
                                     R.string.tracks
                                 )
 
@@ -354,8 +356,7 @@ class DetailAlbumFragment : Fragment() {
                                 albumLength = albumTime,
                                 albumName = albumDetail.albumName,
                                 albumType = albumDetail.albumType,
-                                releaseDate = DateUtils.formatAirDate(albumDetail.releaseDate)
-                                    .toString(),
+                                releaseDate = formatAirDate(albumDetail.releaseDate).toString(),
                                 totalTracks = albumDetail.totalTracks,
                                 externalUrls = AlbumEntity.ExternalUrlsEntity(
                                     spotify = albumDetail.externalUrls.spotify

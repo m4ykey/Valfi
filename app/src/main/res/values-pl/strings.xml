@@ -59,4 +59,16 @@
     <string name="watch_later">Obejrzyj później</string>
     <string name="random_movie">Losowy film</string>
     <string name="settings">Ustawienia</string>
+    <string name="register">Zarejestruj się</string>
+    <string name="create_your_new_account">Stwórz swoje nowe konto</string>
+    <string name="name">Nazwa</string>
+    <string name="email">Email</string>
+    <string name="password">Hasło</string>
+    <string name="forgot_password">Zapomniełeś hasła?</string>
+    <string name="already_have_an_account">Posiadasz już konto?</string>
+    <string name="sign_up">Zarejestruj się</string>
+    <string name="log_in">Zaloguj się</string>
+    <string name="welcome_back">Witaj ponownie</string>
+    <string name="login_to_your_account">Zaloguj się na swoje konto</string>
+    <string name="don_t_have_account">Nie masz konta?</string>
 </resources>

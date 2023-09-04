@@ -37,6 +37,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumStatisticsBinding
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
+import com.m4ykey.common.utils.hideBottomNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -59,6 +60,7 @@ class AlbumStatisticsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            hideBottomNavigation(R.id.bottomNavigation)
             composeView.setContent {
                 Scaffold(
                     topBar = {

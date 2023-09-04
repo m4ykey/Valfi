@@ -21,6 +21,7 @@ import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.album.viewmodel.ui_state.SearchAlbumUiState
 import com.google.android.material.snackbar.Snackbar
 import com.m4ykey.common.utils.calculateAlbumMatchingScore
+import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,6 +48,7 @@ class SearchAlbumFragment : Fragment() {
 
         with(binding) {
             observeSearchAlbum()
+            hideBottomNavigation(R.id.bottomNavigation)
             searchAlbum()
             recyclerViewAlbum.apply {
                 adapter = albumAdapter
