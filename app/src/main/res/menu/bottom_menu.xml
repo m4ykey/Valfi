@@ -8,8 +8,4 @@
         android:title="@string/movie"
         android:enabled="true"
         android:icon="@drawable/ic_movie_menu"/>
-    <item android:id="@+id/settingsFragment"
-        android:title="@string/settings"
-        android:enabled="true"
-        android:icon="@drawable/select_settings"/>
 </menu>
