@@ -30,7 +30,8 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 ## TODO
 - [X] Improve UX/UI
 - [X] Statistic Screen
-- [X] Light/Night Mode 
+- [X] Light/Night Mode
+- [ ] Save data in the cloud
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
