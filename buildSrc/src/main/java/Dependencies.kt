@@ -13,7 +13,7 @@ object AndroidX {
     }
 
     object Core {
-        const val core = "androidx.core:core-ktx:1.10.1"
+        const val core = "androidx.core:core-ktx:1.12.0"
         const val appCompat = "androidx.appcompat:appcompat:1.6.1"
         const val material = "com.google.android.material:material:1.9.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
@@ -86,8 +86,9 @@ object Network {
         const val retrofit = "com.squareup.retrofit2:retrofit:${Version.retrofit}"
         const val okhttp = "com.squareup.okhttp3:okhttp:${Version.okhttp}"
         const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Version.okhttp}"
-        const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:1.14.0"
-        const val moshi = "com.squareup.moshi:moshi:1.14.0"
-        const val moshiConverter = "com.squareup.retrofit2:converter-moshi:2.9.0"
+        const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:${Version.moshi}"
+        const val moshi = "com.squareup.moshi:moshi:${Version.moshi}"
+        const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Version.retrofit}"
+        const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Version.moshi}"
     }
 }

@@ -67,7 +67,7 @@ dependencies {
     implementation(Network.Retrofit.moshi)
     implementation(Network.Retrofit.moshiKotlin)
     implementation(Network.Retrofit.moshiConverter)
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+    ksp(Network.Retrofit.moshiCodegen)
 
     implementation(DaggerHilt.android)
     ksp(DaggerHilt.compiler)
