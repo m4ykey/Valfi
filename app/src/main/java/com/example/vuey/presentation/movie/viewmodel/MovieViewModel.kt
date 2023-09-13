@@ -55,6 +55,8 @@ class MovieViewModel @Inject constructor(
 
     fun getMovieCount() : Flow<Int> = repositoryLocal.getMovieCount()
 
+    fun getWatchLaterMovieCount() : Flow<Int> = repositoryLocal.getWatchLaterMovieCount()
+
     fun getMovieById(movieId: Int) : Flow<MovieEntity> = repositoryLocal.getMovieById(movieId)
 
     fun insertMovie(movieEntity: MovieEntity) {

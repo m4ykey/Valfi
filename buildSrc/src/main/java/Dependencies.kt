@@ -51,7 +51,6 @@ object Firebase {
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
     const val firebasePerf = "com.google.firebase:firebase-perf-ktx"
-    const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
 }
 
 object DaggerHilt {
@@ -89,6 +88,5 @@ object Network {
         const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:${Version.moshi}"
         const val moshi = "com.squareup.moshi:moshi:${Version.moshi}"
         const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Version.retrofit}"
-        const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Version.moshi}"
     }
 }

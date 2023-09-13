@@ -1,5 +1,6 @@
 package com.example.vuey.presentation.movie
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import com.m4ykey.common.utils.toMovie
 import com.m4ykey.common.utils.toMovieEntity
 import com.m4ykey.local.movie.entity.WatchLaterEntity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -43,10 +45,15 @@ class MovieWatchLaterFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            lifecycleScope.launch {
+                val watchLaterMovies = viewModel.getWatchLaterMovieCount().firstOrNull() ?: 0
+                txtCount.text = "${getString(R.string.movies_to_watch)}: $watchLaterMovies"
+            }
             hideBottomNavigation(R.id.bottomNavigation)
             recyclerViewMovie.apply {
                 adapter = watchLaterAdapter

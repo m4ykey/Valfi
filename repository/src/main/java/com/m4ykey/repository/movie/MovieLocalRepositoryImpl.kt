@@ -49,4 +49,8 @@ class MovieLocalRepositoryImpl @Inject constructor(
     override fun getWatchLaterMovieById(movieId: Int): Flow<WatchLaterEntity> {
         return movieDao.getWatchLaterMovieById(movieId)
     }
+
+    override fun getWatchLaterMovieCount(): Flow<Int> {
+        return movieDao.getWatchLaterMovieCount()
+    }
 }

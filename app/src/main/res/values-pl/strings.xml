@@ -53,4 +53,5 @@
     <string name="watch_later">Obejrzyj później</string>
     <string name="random_movie">Losowy film</string>
     <string name="albums_to_listen">Albumy do przesłuchania</string>
+    <string name="movies_to_watch">Filmy do obejrzenia</string>
 </resources>
