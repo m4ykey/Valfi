@@ -36,12 +36,6 @@
     <string name="watched_movies">Watched movies</string>
     <string name="genres">Genres</string>
     <string name="genre_list_is_empty">Genre list is empty</string>
-    <string name="top_tracks">Top Tracks</string>
-    <string name="artist_image">Artist Image</string>
-    <string name="top_tracks_list_is_empty">Top tracks list is empty</string>
-    <string name="follow">Follow</string>
-    <string name="followed">Followed</string>
-    <string name="artist_page">Artist Page</string>
     <string name="something_empty_here">Something empty here</string>
     <string name="quickly_add_something_to_your_list">Quickly add something to your list</string>
     <string name="it_looks_like_you_don_t_have_internet">No internet, please check your internet connection.</string>
@@ -57,17 +51,5 @@
     <string name="random_album">Random album</string>
     <string name="watch_later">Watch later</string>
     <string name="random_movie">Random movie</string>
-    <string name="settings">Settings</string>
-    <string name="register">Register</string>
-    <string name="create_your_new_account">Create your new account</string>
-    <string name="name">Name</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="already_have_an_account">Already have an account?</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="log_in">Log in</string>
-    <string name="welcome_back">Welcome back</string>
-    <string name="login_to_your_account">Login to your account</string>
-    <string name="don_t_have_account">Don\'t have account?</string>
+    <string name="albums_to_listen">Albums to listen to</string>
 </resources>

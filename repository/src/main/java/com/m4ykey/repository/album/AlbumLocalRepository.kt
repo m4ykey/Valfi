@@ -18,5 +18,6 @@ interface AlbumLocalRepository {
     suspend fun deleteAlbumToListenLater(listenLaterEntity: ListenLaterEntity)
     fun getAllListenLaterAlbums() : Flow<List<ListenLaterEntity>>
     fun getListenLaterAlbumById(albumId : String) : Flow<ListenLaterEntity>
+    fun getListenLaterAlbumCount() : Flow<Int>
 
 }
