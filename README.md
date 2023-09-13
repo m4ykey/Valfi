@@ -33,7 +33,7 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [X] Light/Night Mode
 - [ ] Save data in the cloud
 
-## Tech
+## Libraries
 - [Retrofit](https://square.github.io/retrofit/)
 - [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
 - [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
