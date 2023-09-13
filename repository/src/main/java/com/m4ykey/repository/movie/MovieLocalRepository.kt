@@ -17,5 +17,6 @@ interface MovieLocalRepository {
     suspend fun deleteWatchLaterMovie(watchLaterEntity: WatchLaterEntity)
     fun getAllWatchLaterMovies() : Flow<List<WatchLaterEntity>>
     fun getWatchLaterMovieById(movieId: Int) : Flow<WatchLaterEntity>
+    fun getWatchLaterMovieCount() : Flow<Int>
 
 }

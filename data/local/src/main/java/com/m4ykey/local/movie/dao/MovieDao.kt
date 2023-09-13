@@ -42,4 +42,7 @@ interface MovieDao {
     @Query("SELECT * FROM watch_later_table WHERE movieId = :movieId")
     fun getWatchLaterMovieById(movieId: Int) : Flow<WatchLaterEntity>
 
+    @Query("SELECT COUNT(*) FROM watch_later_table")
+    fun getWatchLaterMovieCount() : Flow<Int>
+
 }

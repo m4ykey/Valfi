@@ -52,4 +52,5 @@
     <string name="watch_later">Watch later</string>
     <string name="random_movie">Random movie</string>
     <string name="albums_to_listen">Albums to listen to</string>
+    <string name="movies_to_watch">Movies to watch</string>
 </resources>
