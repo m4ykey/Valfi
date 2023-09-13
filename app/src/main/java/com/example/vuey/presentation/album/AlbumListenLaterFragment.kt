@@ -1,5 +1,6 @@
 package com.example.vuey.presentation.album
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.m4ykey.common.utils.showSnackbar
 import com.m4ykey.common.utils.toAlbumEntity
 import com.m4ykey.local.album.entity.ListenLaterEntity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -42,10 +44,15 @@ class AlbumListenLaterFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+            lifecycleScope.launch {
+                val listenLaterAlbums = viewModel.getListenLaterAlbumCount().firstOrNull() ?: 0
+                txtCount.text = "${getString(R.string.albums_to_listen)}: $listenLaterAlbums"
+            }
             hideBottomNavigation(R.id.bottomNavigation)
             recyclerViewAlbum.apply {
                 adapter = listenLaterAdapter

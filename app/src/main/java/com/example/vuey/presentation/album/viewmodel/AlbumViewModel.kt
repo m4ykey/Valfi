@@ -53,6 +53,8 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumCount(): Flow<Int> = repositoryLocal.getAlbumCount()
 
+    fun getListenLaterAlbumCount() : Flow<Int> = repositoryLocal.getListenLaterAlbumCount()
+
     fun insertAlbum(albumEntity: AlbumEntity) {
         viewModelScope.launch {
             repositoryLocal.insertAlbum(albumEntity)

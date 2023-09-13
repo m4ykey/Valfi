@@ -41,4 +41,7 @@ interface AlbumDao {
     @Query("SELECT * FROM listen_later_table WHERE albumId = :albumId")
     fun getListenLaterAlbumById(albumId : String) : Flow<ListenLaterEntity>
 
+    @Query("SELECT COUNT(*) FROM listen_later_table")
+    fun getListenLaterAlbumCount() : Flow<Int>
+
 }
