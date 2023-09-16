@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,34 +7,33 @@
     android:background="@color/background"
     tools:context=".presentation.album.DetailAlbumFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolBar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/menuIconTint" />
+            android:layout_height="wrap_content"
+            android:background="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:navigationIconTint="@color/menuIconTint" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar">
+        </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/appBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -154,26 +153,26 @@
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/green"
+                    android:elevation="0dp"
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/artist"
-                    app:elevation="0dp"
-                    android:elevation="0dp"
                     android:textColor="@color/white"
+                    app:elevation="0dp"
                     app:icon="@drawable/ic_artist"
                     app:iconTint="@color/white" />
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/btnAlbum"
-                    app:elevation="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/green"
+                    android:elevation="0dp"
                     android:fontFamily="@font/cabin_semibold"
                     android:text="@string/album"
-                    android:elevation="0dp"
                     android:textColor="@color/white"
+                    app:elevation="0dp"
                     app:icon="@drawable/ic_album"
                     app:iconTint="@color/white" />
 
@@ -191,18 +190,18 @@
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/progressBar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/progressBar"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -5,7 +5,6 @@ plugins {
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
 

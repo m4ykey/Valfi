@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
@@ -98,7 +97,6 @@ dependencies {
 
     // Coil
     implementation(Coil.coil)
-    implementation(Coil.coilCompose)
 
     // Jetpack Compose
     implementation(platform(AndroidX.Compose.composeBom))

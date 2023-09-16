@@ -1,6 +1,5 @@
 plugins {
     id("com.android.library")
-    kotlin("kapt")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.android")
 }
@@ -51,6 +50,6 @@ dependencies {
 
     implementation(AndroidX.Room.ktx)
     implementation(AndroidX.Room.runtime)
-    annotationProcessor(AndroidX.Room.compiler)
+    ksp(AndroidX.Room.compiler)
 
 }

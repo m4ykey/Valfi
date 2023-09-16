@@ -43,7 +43,6 @@ object AndroidX {
 
 object Coil {
     const val coil = "io.coil-kt:coil:${Version.coil}"
-    const val coilCompose = "io.coil-kt:coil-compose:${Version.coil}"
 }
 
 object Firebase {
