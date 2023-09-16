@@ -88,5 +88,6 @@ object Network {
         const val moshiKotlin = "com.squareup.moshi:moshi-kotlin:${Version.moshi}"
         const val moshi = "com.squareup.moshi:moshi:${Version.moshi}"
         const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Version.retrofit}"
+        const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Version.moshi}"
     }
 }

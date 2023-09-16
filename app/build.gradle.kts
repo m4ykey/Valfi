@@ -95,7 +95,6 @@ dependencies {
     implementation(Firebase.firebaseAnalytics)
     implementation(Firebase.firebaseCrashlytics)
     implementation(Firebase.firebasePerf)
-    implementation(Firebase.firebaseAuth)
 
     // Coil
     implementation(Coil.coil)
