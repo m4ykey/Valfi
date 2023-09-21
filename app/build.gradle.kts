@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.vuey"
+    namespace = "com.m4ykey.valfi"
     compileSdk = Configuration.compileSdk
 
     defaultConfig {

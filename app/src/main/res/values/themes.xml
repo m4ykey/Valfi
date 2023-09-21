@@ -8,7 +8,7 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.Vuey" parent="Base.Theme.Vuey" />
+    <style name="Theme.Valfi" parent="Base.Theme.Vuey" />
 
     <style name="Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/bottomNavItemSelected</item>

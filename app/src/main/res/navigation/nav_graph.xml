@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.example.vuey.presentation.album.AlbumFragment"
+        android:name="com.m4ykey.valfi.presentation.album.AlbumFragment"
         android:label="fragment_album"
         tools:layout="@layout/fragment_album" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
-        android:name="com.example.vuey.presentation.album.DetailAlbumFragment"
+        android:name="com.m4ykey.valfi.presentation.album.DetailAlbumFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_album_detail">
         <argument
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
-        android:name="com.example.vuey.presentation.album.SearchAlbumFragment"
+        android:name="com.m4ykey.valfi.presentation.album.SearchAlbumFragment"
         android:label="fragment_search_album"
         tools:layout="@layout/fragment_search_album" >
         <argument
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieFragment"
-        android:name="com.example.vuey.presentation.movie.MovieFragment"
+        android:name="com.m4ykey.valfi.presentation.movie.MovieFragment"
         android:label="fragment_movie"
         tools:layout="@layout/fragment_movie" >
         <action
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
-        android:name="com.example.vuey.presentation.movie.SearchMovieFragment"
+        android:name="com.m4ykey.valfi.presentation.movie.SearchMovieFragment"
         android:label="fragment_search_movie"
         tools:layout="@layout/fragment_search_movie" >
         <action
@@ -79,7 +79,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailMovieFragment"
-        android:name="com.example.vuey.presentation.movie.DetailMovieFragment"
+        android:name="com.m4ykey.valfi.presentation.movie.DetailMovieFragment"
         android:label="fragment_detail_movie"
         tools:layout="@layout/fragment_detail_movie" >
         <argument
@@ -94,17 +94,17 @@
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"
-        android:name="com.example.vuey.presentation.album.AlbumStatisticsFragment"
+        android:name="com.m4ykey.valfi.presentation.album.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics" />
     <fragment
         android:id="@+id/movieStatisticsFragment"
-        android:name="com.example.vuey.presentation.movie.MovieStatisticsFragment"
+        android:name="com.m4ykey.valfi.presentation.movie.MovieStatisticsFragment"
         android:label="fragment_movie_statistics"
         tools:layout="@layout/fragment_movie_statistics" />
     <fragment
         android:id="@+id/albumListenLaterFragment"
-        android:name="com.example.vuey.presentation.album.AlbumListenLaterFragment"
+        android:name="com.m4ykey.valfi.presentation.album.AlbumListenLaterFragment"
         android:label="fragment_album_listen_later"
         tools:layout="@layout/fragment_album_listen_later" >
         <action
@@ -113,7 +113,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieWatchLaterFragment"
-        android:name="com.example.vuey.presentation.movie.MovieWatchLaterFragment"
+        android:name="com.m4ykey.valfi.presentation.movie.MovieWatchLaterFragment"
         android:label="fragment_movie_watch_later"
         tools:layout="@layout/fragment_movie_watch_later" >
         <action

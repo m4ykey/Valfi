@@ -15,7 +15,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Vuey"
+rootProject.name = "Valfi"
 include(":app")
 include(":core:common")
 include(":data:remote")
