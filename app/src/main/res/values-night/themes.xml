@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Vuey" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Base.Theme.Valfi" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="android:statusBarColor">@color/background</item>

@@ -2,6 +2,7 @@ package com.example.vuey.presentation.movie
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -18,10 +19,8 @@ import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.presentation.movie.adapter.MovieAdapter
 import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
 import com.example.vuey.presentation.movie.viewmodel.ui_state.SearchMovieUiState
-import com.google.android.material.snackbar.Snackbar
 import com.m4ykey.common.utils.calculateMovieMatchingScore
 import com.m4ykey.common.utils.hideBottomNavigation
-import com.m4ykey.common.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -117,11 +116,7 @@ class SearchMovieFragment : Fragment() {
                         }
                         is SearchMovieUiState.Failure -> {
                             progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.message,
-                                Snackbar.LENGTH_LONG
-                            )
+                            Log.i("MovieError", "observeSearchMovie: ${uiState.message}")
                         }
 
                         else -> {}

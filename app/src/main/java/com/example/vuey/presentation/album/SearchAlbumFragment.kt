@@ -2,6 +2,7 @@ package com.example.vuey.presentation.album
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -19,10 +20,8 @@ import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.presentation.album.adapter.AlbumAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.album.viewmodel.ui_state.SearchAlbumUiState
-import com.google.android.material.snackbar.Snackbar
 import com.m4ykey.common.utils.calculateAlbumMatchingScore
 import com.m4ykey.common.utils.hideBottomNavigation
-import com.m4ykey.common.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -122,11 +121,7 @@ class SearchAlbumFragment : Fragment() {
 
                         is SearchAlbumUiState.Failure -> {
                             progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.message,
-                                Snackbar.LENGTH_LONG
-                            )
+                            Log.i("AlbumError", "observeSearchAlbum: ${uiState.message}")
                         }
 
                         else -> {}

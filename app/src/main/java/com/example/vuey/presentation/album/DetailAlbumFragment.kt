@@ -1,11 +1,10 @@
 package com.example.vuey.presentation.album
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +21,6 @@ import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.presentation.album.adapter.TrackListAdapter
 import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
 import com.example.vuey.presentation.album.viewmodel.ui_state.DetailAlbumUiState
-import com.google.android.material.snackbar.Snackbar
-import com.m4ykey.common.network.NetworkStateMonitor
 import com.m4ykey.common.utils.formatAirDate
 import com.m4ykey.common.utils.hideBottomNavigation
 import com.m4ykey.common.utils.showSnackbar
@@ -49,24 +46,12 @@ class DetailAlbumFragment : Fragment() {
     private var isAlbumSaved = false
     private var isListenLater = false
 
-    private lateinit var connectivityManager: ConnectivityManager
-    private val networkStateMonitor: NetworkStateMonitor by lazy {
-        NetworkStateMonitor(connectivityManager)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumDetailBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        networkStateMonitor.startMonitoring()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -258,11 +243,7 @@ class DetailAlbumFragment : Fragment() {
 
                         is DetailAlbumUiState.Failure -> {
                             progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.message,
-                                Snackbar.LENGTH_LONG
-                            )
+                            Log.i("AlbumError", "observeDetailAlbum: ${uiState.message}")
                         }
 
                         is DetailAlbumUiState.Success -> {
@@ -437,6 +418,5 @@ class DetailAlbumFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        networkStateMonitor.stopMonitoring()
     }
 }
