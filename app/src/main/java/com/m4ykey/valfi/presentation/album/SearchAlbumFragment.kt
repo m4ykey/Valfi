@@ -1,7 +1,8 @@
-package com.m4ykey.valfi.presentation.album
+package com.example.vuey.presentation.album
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,15 +15,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.snackbar.Snackbar
+import com.example.vuey.R
+import com.example.vuey.databinding.FragmentSearchAlbumBinding
+import com.example.vuey.presentation.album.adapter.AlbumAdapter
+import com.example.vuey.presentation.album.viewmodel.AlbumViewModel
+import com.example.vuey.presentation.album.viewmodel.ui_state.SearchAlbumUiState
 import com.m4ykey.common.utils.calculateAlbumMatchingScore
 import com.m4ykey.common.utils.hideBottomNavigation
-import com.m4ykey.common.utils.showSnackbar
-import com.m4ykey.valfi.R
-import com.m4ykey.valfi.databinding.FragmentSearchAlbumBinding
-import com.m4ykey.valfi.presentation.album.adapter.AlbumAdapter
-import com.m4ykey.valfi.presentation.album.viewmodel.AlbumViewModel
-import com.m4ykey.valfi.presentation.album.viewmodel.ui_state.SearchAlbumUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -122,11 +121,7 @@ class SearchAlbumFragment : Fragment() {
 
                         is SearchAlbumUiState.Failure -> {
                             progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.message,
-                                Snackbar.LENGTH_LONG
-                            )
+                            Log.i("AlbumError", "observeSearchAlbum: ${uiState.message}")
                         }
 
                         else -> {}

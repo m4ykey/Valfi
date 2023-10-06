@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -240,11 +241,7 @@ class DetailMovieFragment : Fragment() {
 
                         is DetailMovieUiState.Failure -> {
                             progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.message,
-                                Snackbar.LENGTH_LONG
-                            )
+                            Log.i("MovieError", "observeMovieDetail: ${uiState.message}")
                         }
 
                         is DetailMovieUiState.Success -> {

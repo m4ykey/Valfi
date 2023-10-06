@@ -1,4 +1,4 @@
-package com.m4ykey.valfi.app
+package com.example.vuey.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

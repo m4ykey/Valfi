@@ -1,7 +1,8 @@
-package com.m4ykey.valfi.presentation.movie
+package com.example.vuey.presentation.movie
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -13,15 +14,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
+import com.example.vuey.R
+import com.example.vuey.databinding.FragmentSearchMovieBinding
+import com.example.vuey.presentation.movie.adapter.MovieAdapter
+import com.example.vuey.presentation.movie.viewmodel.MovieViewModel
+import com.example.vuey.presentation.movie.viewmodel.ui_state.SearchMovieUiState
 import com.m4ykey.common.utils.calculateMovieMatchingScore
 import com.m4ykey.common.utils.hideBottomNavigation
-import com.m4ykey.common.utils.showSnackbar
-import com.m4ykey.valfi.R
-import com.m4ykey.valfi.databinding.FragmentSearchMovieBinding
-import com.m4ykey.valfi.presentation.movie.adapter.MovieAdapter
-import com.m4ykey.valfi.presentation.movie.viewmodel.MovieViewModel
-import com.m4ykey.valfi.presentation.movie.viewmodel.ui_state.SearchMovieUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -117,11 +116,7 @@ class SearchMovieFragment : Fragment() {
                         }
                         is SearchMovieUiState.Failure -> {
                             progressBar.visibility = View.GONE
-                            showSnackbar(
-                                requireView(),
-                                uiState.message,
-                                Snackbar.LENGTH_LONG
-                            )
+                            Log.i("MovieError", "observeSearchMovie: ${uiState.message}")
                         }
 
                         else -> {}
