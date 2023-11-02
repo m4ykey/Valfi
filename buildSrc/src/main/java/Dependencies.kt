@@ -1,7 +1,7 @@
 object AndroidX {
 
     object Compose {
-        const val composeBom = "androidx.compose:compose-bom:2023.09.02"
+        const val composeBom = "androidx.compose:compose-bom:2023.10.01"
         const val composeMaterial = "androidx.compose.material3:material3"
         const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview"
         const val composeUiTooling = "androidx.compose.ui:ui-tooling"
@@ -15,7 +15,7 @@ object AndroidX {
     object Core {
         const val core = "androidx.core:core-ktx:1.12.0"
         const val appCompat = "androidx.appcompat:appcompat:1.6.1"
-        const val material = "com.google.android.material:material:1.9.0"
+        const val material = "com.google.android.material:material:1.10.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
     }
 
@@ -46,7 +46,7 @@ object Coil {
 }
 
 object Firebase {
-    const val firebaseBom = "com.google.firebase:firebase-bom:32.3.1"
+    const val firebaseBom = "com.google.firebase:firebase-bom:32.5.0"
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
     const val firebasePerf = "com.google.firebase:firebase-perf-ktx"
