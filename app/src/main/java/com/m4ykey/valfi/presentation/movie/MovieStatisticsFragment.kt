@@ -67,8 +67,10 @@ class MovieStatisticsFragment : Fragment() {
                         MovieTopAppBar(navigateUp = { findNavController().navigateUp() })
                     }
                 ) { innerPadding ->
-                    Modifier.padding(innerPadding)
-                    StatisticsScreen(viewModel = viewModel)
+                    StatisticsScreen(
+                        viewModel = viewModel,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
@@ -111,6 +113,7 @@ fun MovieTopAppBar(
 
 @Composable
 fun StatisticsScreen(
+    modifier : Modifier,
     viewModel: MovieViewModel
 ) {
 
@@ -121,7 +124,7 @@ fun StatisticsScreen(
     val minute = totalLength % 60
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.background)),
         verticalArrangement = Arrangement.Center,

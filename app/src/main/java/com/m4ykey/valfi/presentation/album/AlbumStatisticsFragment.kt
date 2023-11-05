@@ -67,8 +67,10 @@ class AlbumStatisticsFragment : Fragment() {
                         AlbumTopAppBar(navigateUp = { findNavController().navigateUp() })
                     }
                 ) { innerPadding ->
-                    Modifier.padding(innerPadding)
-                    StatisticsScreen(viewModel = viewModel)
+                    StatisticsScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        viewModel = viewModel
+                    )
                 }
             }
         }
@@ -110,6 +112,7 @@ fun AlbumTopAppBar(
 
 @Composable
 fun StatisticsScreen(
+    modifier : Modifier,
     viewModel: AlbumViewModel
 ) {
 
@@ -122,7 +125,7 @@ fun StatisticsScreen(
     val second = (totalLength / 1000) % 60
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.background)),
         verticalArrangement = Arrangement.Center,
