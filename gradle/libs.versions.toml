@@ -1,0 +1,70 @@
+[versions]
+ksp = "1.9.21-1.0.16"
+kotlin = "1.9.21"
+application = "8.2.0"
+firebase-crashlytics = "18.6.0"
+firebase-analytics = "21.5.0"
+firebase-auth = "22.3.0"
+gradle-build = "8.1.4"
+google-services = "4.4.0"
+crashlytics-gradle = "2.9.9"
+junit = "4.13.2"
+ext-junit = "1.1.5"
+espresso = "3.5.1"
+navigation = "2.7.6"
+core = "1.12.0"
+appcompat = "1.6.1"
+material = "1.11.0"
+constraintlayout = "2.1.4"
+retrofit = "2.9.0"
+timber = "5.0.1"
+swiperefresh = "1.2.0-alpha01"
+room = "2.6.1"
+coil = "2.5.0"
+paging = "3.2.1"
+
+[libraries]
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase-crashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+
+build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle-build" }
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "google-services"}
+crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "crashlytics-gradle" }
+
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-junit" }
+espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+
+androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefresh" }
+
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+
+paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "application" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+[bundles]
+firebase = ["firebase-analytics", "firebase-auth", "firebase-crashlytics"]
+navigation = ["navigation-fragment", "navigation-ui"]
