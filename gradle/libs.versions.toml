@@ -22,6 +22,9 @@ swiperefresh = "1.2.0-alpha01"
 room = "2.6.1"
 coil = "2.5.0"
 paging = "3.2.1"
+koin = "3.5.3"
+lifecycle = "2.6.2"
+coroutines = "1.7.3"
 
 [libraries]
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase-crashlytics" }
@@ -59,6 +62,13 @@ room-paging = { group = "androidx.room", name = "room-paging", version.ref = "ro
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 
 paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+
+koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
+
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "application" }
