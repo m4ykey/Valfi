@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="100dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        android:id="@+id/cardViewImage"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/imgAlbum"
+            android:scaleType="centerCrop"
+            tools:background="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/album_cover" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_marginStart="10dp"
+        android:gravity="center|start"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cardViewImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+        <TextView
+            android:textSize="17sp"
+            android:id="@+id/txtAlbumName"
+            android:maxLines="2"
+            android:fontFamily="@font/generalsans_medium"
+            android:ellipsize="end"
+            tools:text="The Rise and Fall of Ziggy Stardust and the Spiders from Mars (2012 Remaster)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtArtist"
+            android:textSize="15sp"
+            tools:text="David Bowie"
+            android:fontFamily="@font/outfit_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

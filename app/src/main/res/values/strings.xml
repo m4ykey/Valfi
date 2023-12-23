@@ -2,4 +2,6 @@
     <string name="app_name">Valfi</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="album_cover">Album Cover</string>
+    <string name="movie_poster">Movie poster</string>
 </resources>
