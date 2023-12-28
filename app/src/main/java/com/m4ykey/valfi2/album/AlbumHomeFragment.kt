@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.m4ykey.valfi2.R
 import com.m4ykey.valfi2.databinding.FragmentAlbumHomeBinding
 
 class AlbumHomeFragment : Fragment() {
 
+    private lateinit var navController : NavController
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -25,29 +27,31 @@ class AlbumHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = findNavController()
+
         with(binding) {
-            linearLayoutSort.setOnClickListener {
-                openMaterialDialog()
+            toolbar.setNavigationOnClickListener {
+                drawerLayout.open()
             }
-        }
-    }
-
-    private fun FragmentAlbumHomeBinding.openMaterialDialog() {
-        val sortOptions = resources.getStringArray(R.array.sort_options)
-
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.sort_by)
-            .setItems(sortOptions) { _, index ->
-                when (index) {
-                    0 -> {
-                        txtSort.setText(R.string.recently_added)
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.imgSearch -> {
+                        navController.navigate(R.id.action_albumHomeFragment_to_albumSearchFragment)
+                        true
                     }
-                    1 -> {
-                        txtSort.setText(R.string.alphabetical)
-                    }
+                    else -> false
                 }
             }
-        dialog.show()
+
+            navigationView.setNavigationItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+
+                }
+
+                return@setNavigationItemSelectedListener true
+            }
+        }
+
     }
 
     override fun onDestroy() {

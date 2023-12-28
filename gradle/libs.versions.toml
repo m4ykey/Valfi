@@ -1,6 +1,6 @@
 [versions]
-ksp = "1.9.21-1.0.16"
-kotlin = "1.9.21"
+ksp = "1.9.22-1.0.16"
+kotlin = "1.9.22"
 application = "8.2.0"
 firebase-crashlytics = "18.6.0"
 firebase-analytics = "21.5.0"

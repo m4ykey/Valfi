@@ -1,18 +1,9 @@
 <resources>
     <string name="app_name">Valfi</string>
-    <string name="album_cover">Album Cover</string>
-    <string name="movie_poster">Movie poster</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>
-    <string name="analytics">Analytics</string>
-
-    <string name="recently_added">Recently added</string>
-    <string name="list_view">List view</string>
-    <string name="sort_by">Sort by</string>
-    <string name="alphabetical">Alphabetical</string>
-
-    <string-array name="sort_options">
-        <item>Alphabetical</item>
-        <item>Recently added</item>
-    </string-array>
-
+    <string name="more">More</string>
+    <string name="search">Search</string>
 </resources>

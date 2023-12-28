@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_nav_graph.xml"
+    app:startDestination="@id/albumHomeFragment">
+
+    <fragment
+        android:id="@+id/albumHomeFragment"
+        android:name="com.m4ykey.valfi2.album.AlbumHomeFragment"
+        android:label="fragment_album_home"
+        tools:layout="@layout/fragment_album_home" >
+        <action
+            android:id="@+id/action_albumHomeFragment_to_albumSearchFragment"
+            app:destination="@id/albumSearchFragment" />
+        <action
+            android:id="@+id/action_albumHomeFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumSearchFragment"
+        android:name="com.m4ykey.valfi2.album.AlbumSearchFragment"
+        android:label="fragment_album_search"
+        tools:layout="@layout/fragment_album_search" >
+        <action
+            android:id="@+id/action_albumSearchFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumDetailFragment"
+        android:name="com.m4ykey.valfi2.album.AlbumDetailFragment"
+        android:label="fragment_album_detail"
+        tools:layout="@layout/fragment_album_detail" >
+        <argument
+            android:name="albumId"
+            app:argType="string" />
+    </fragment>
+</navigation>
