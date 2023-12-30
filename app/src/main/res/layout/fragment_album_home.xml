@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".album.AlbumHomeFragment">
+    tools:context=".album.ui.AlbumHomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,18 +22,37 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
-                app:menu="@menu/toolbar_menu"
+                app:menu="@menu/menu_toolbar"
                 app:navigationIcon="@drawable/ic_menu"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAlbums"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBar"/>
+
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtOrientation"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         app:headerLayout="@layout/header_drawer_menu"
-        app:menu="@menu/nav_drawer_menu"
+        app:menu="@menu/menu_nav_drawer"
         android:id="@+id/navigationView"
         android:layout_gravity="start"
         android:layout_width="wrap_content"

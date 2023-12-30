@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/albumHomeFragment"
-        android:name="com.m4ykey.valfi2.album.AlbumHomeFragment"
+        android:name="com.m4ykey.valfi2.album.ui.AlbumHomeFragment"
         android:label="fragment_album_home"
         tools:layout="@layout/fragment_album_home" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumSearchFragment"
-        android:name="com.m4ykey.valfi2.album.AlbumSearchFragment"
+        android:name="com.m4ykey.valfi2.album.ui.AlbumSearchFragment"
         android:label="fragment_album_search"
         tools:layout="@layout/fragment_album_search" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
-        android:name="com.m4ykey.valfi2.album.AlbumDetailFragment"
+        android:name="com.m4ykey.valfi2.album.ui.AlbumDetailFragment"
         android:label="fragment_album_detail"
         tools:layout="@layout/fragment_album_detail" >
         <argument

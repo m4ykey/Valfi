@@ -1,10 +1,10 @@
-package com.m4ykey.valfi2.album
+package com.m4ykey.valfi2.album.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.m4ykey.valfi2.R
 
 class AlbumSearchFragment : Fragment() {

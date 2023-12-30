@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Valfi</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>
     <string name="more">More</string>
     <string name="search">Search</string>
+    <string name="album" translatable="false">Album</string>
+    <string name="listen_later">Listen later</string>
 </resources>

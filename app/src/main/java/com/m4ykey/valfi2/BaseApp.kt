@@ -9,6 +9,9 @@ import coil.request.CachePolicy
 import coil.util.DebugLogger
 import com.google.android.material.color.DynamicColors
 import com.m4ykey.valfi2.core.timberSetup
+import com.m4ykey.valfi2.module.networkModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class BaseApp : Application(), ImageLoaderFactory {
     override fun onCreate() {
@@ -16,6 +19,11 @@ class BaseApp : Application(), ImageLoaderFactory {
         DynamicColors.applyToActivitiesIfAvailable(this)
 
         timberSetup()
+
+        startKoin {
+            androidContext(this@BaseApp)
+            modules(networkModule)
+        }
     }
 
     private val cachePolicy = CachePolicy.ENABLED

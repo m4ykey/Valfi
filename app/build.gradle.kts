@@ -72,4 +72,11 @@ dependencies {
 
     implementation(libs.timber)
 
+    implementation(libs.retrofit.moshi)
+    implementation(libs.retrofit)
+
+    implementation(libs.koin)
+
+    implementation(libs.moshi.kotlin)
+
 }

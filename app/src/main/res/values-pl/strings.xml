@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Valfi</string>
+    <string name="statistics">Statystyki</string>
+    <string name="settings">Ustawienia</string>
+    <string name="more">Więcej</string>
+    <string name="search">Szukaj</string>
+    <string name="listen_later">Posłuchaj później</string>
+</resources>

@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/imgTime"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_time"
+        android:title="@string/listen_later"/>
+
+    <item
         android:id="@+id/imgSearch"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_search"
