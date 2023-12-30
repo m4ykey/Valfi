@@ -8,7 +8,7 @@ import coil.memory.MemoryCache
 import coil.request.CachePolicy
 import coil.util.DebugLogger
 import com.google.android.material.color.DynamicColors
-import com.m4ykey.valfi2.core.timberSetup
+import com.m4ykey.core.timberSetup
 import com.m4ykey.valfi2.module.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

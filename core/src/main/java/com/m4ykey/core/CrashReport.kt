@@ -1,4 +1,4 @@
-package com.m4ykey.valfi2.core
+package com.m4ykey.core
 
 import android.util.Log.ERROR
 import com.google.firebase.BuildConfig

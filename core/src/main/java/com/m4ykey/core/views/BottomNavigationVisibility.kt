@@ -1,4 +1,4 @@
-package com.m4ykey.valfi2.core.views
+package com.m4ykey.core.views
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment

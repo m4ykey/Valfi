@@ -19,13 +19,14 @@ constraintlayout = "2.1.4"
 retrofit = "2.9.0"
 timber = "5.0.1"
 swiperefresh = "1.2.0-alpha01"
-room = "2.6.1"
 coil = "2.5.0"
 paging = "3.2.1"
 koin = "3.5.3"
 lifecycle = "2.6.2"
 coroutines = "1.7.3"
 moshi = "1.15.0"
+datastore = "1.0.0"
+sqldelight = "2.0.1"
 
 [libraries]
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase-crashlytics" }
@@ -40,44 +41,41 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-junit" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 
-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
-
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefresh" }
-
-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
-
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
-
-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
-
-koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
-
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
+android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+
+koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
+
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+sqldelight-android = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "application" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidLibrary = { id = "com.android.library", version.ref = "application" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 [bundles]
-firebase = ["firebase-analytics", "firebase-auth", "firebase-crashlytics"]
-navigation = ["navigation-fragment", "navigation-ui"]
+firebase = ["firebase-analytics", "firebase-auth"]
+navigation = ["androidx-navigation-fragment", "androidx-navigation-ui"]

@@ -1,4 +1,4 @@
-package com.m4ykey.valfi2.core.network
+package com.m4ykey.core.network
 
 sealed class Resource<T>(
     val data : T? = null,

@@ -1,4 +1,4 @@
-package com.m4ykey.valfi2.core.network
+package com.m4ykey.core.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

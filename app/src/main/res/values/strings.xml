@@ -7,4 +7,6 @@
     <string name="search">Search</string>
     <string name="album" translatable="false">Album</string>
     <string name="listen_later">Listen later</string>
+    <string name="clear">Clear</string>
+    <string name="search_albums">Search albums</string>
 </resources>

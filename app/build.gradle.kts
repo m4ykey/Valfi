@@ -6,6 +6,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -33,7 +34,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -53,30 +54,43 @@ android {
     }
 }
 
+//sqldelight {
+//    databases {
+//        create("AlbumDatabase") {
+//            packageName.set("")
+//        }
+//    }
+//}
+
 dependencies {
+    implementation(project(":core"))
+    libs.apply {
+        implementation(androidx.appcompat)
+        implementation(android.material)
+        implementation(androidx.constraintlayout)
+        implementation(androidx.core)
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.android.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.core)
+        implementation(bundles.navigation)
 
-    implementation(libs.bundles.navigation)
+        implementation(bundles.firebase)
 
-    implementation(libs.bundles.firebase)
+        testImplementation(junit)
+        androidTestImplementation(ext.junit)
+        androidTestImplementation(espresso)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso)
+        implementation(coil)
 
-    implementation(libs.coil)
+        implementation(retrofit.moshi)
+        implementation(retrofit)
 
-    implementation(libs.timber)
+        implementation(koin)
 
-    implementation(libs.retrofit.moshi)
-    implementation(libs.retrofit)
+        implementation(moshi.kotlin)
 
-    implementation(libs.koin)
+        implementation(androidx.swiperefreshlayout)
 
-    implementation(libs.moshi.kotlin)
+        implementation(androidx.paging)
 
+        implementation(androidx.datastore)
+    }
 }

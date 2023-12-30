@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "valfi2"
 include(":app")
+include(":core")

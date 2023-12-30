@@ -1,4 +1,4 @@
-package com.m4ykey.valfi2.core.views
+package com.m4ykey.core.views
 
 import android.content.Context
 import android.widget.Toast
