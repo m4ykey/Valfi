@@ -27,7 +27,7 @@ interface AlbumApi {
     @GET("search")
     suspend fun searchAlbums(
         @Header("Authorization") auth : String,
-        @Query("q") query : String,
+        @Query("q") query : String = "a",
         @Query("limit") limit : Int,
         @Query("offset") offset : Int,
         @Query("type") type : String = "album"

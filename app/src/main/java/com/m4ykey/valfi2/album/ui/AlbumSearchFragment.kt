@@ -5,20 +5,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.m4ykey.valfi2.R
 import com.m4ykey.core.views.hideBottomNavigation
 import com.m4ykey.core.views.isNightMode
+import com.m4ykey.valfi2.album.ui.adapter.SearchAlbumAdapter
 import com.m4ykey.valfi2.databinding.FragmentAlbumSearchBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 
 class AlbumSearchFragment : Fragment() {
 
     private lateinit var navController : NavController
     private var _binding : FragmentAlbumSearchBinding? = null
     private val binding get() = _binding!!
+    private val viewModel = get<AlbumViewModel>()
+    private val adapter by lazy { SearchAlbumAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +46,15 @@ class AlbumSearchFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
+
+            lifecycleScope.launch {
+                viewModel.albums.collectLatest {
+                    adapter.submitData(it)
+                }
+            }
+
+            rvSearchAlbums.adapter = adapter
+            rvSearchAlbums.layoutManager = LinearLayoutManager(requireContext())
         }
     }
 

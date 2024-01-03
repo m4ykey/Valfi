@@ -6,7 +6,6 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -53,14 +52,6 @@ android {
         buildConfig = true
     }
 }
-
-//sqldelight {
-//    databases {
-//        create("AlbumDatabase") {
-//            packageName.set("")
-//        }
-//    }
-//}
 
 dependencies {
     implementation(project(":core"))

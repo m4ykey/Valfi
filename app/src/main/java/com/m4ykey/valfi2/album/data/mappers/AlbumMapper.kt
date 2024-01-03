@@ -11,7 +11,13 @@ import com.m4ykey.valfi2.album.data.remote.model.album.ExternalUrlsDto
 import com.m4ykey.valfi2.album.data.remote.model.album.ImageDto
 import com.m4ykey.valfi2.album.data.remote.model.album.ItemDto
 
-fun AlbumsDto.toAlbums() : Albums = Albums(items = items.map { it.toItem() })
+fun AlbumsDto.toAlbums() : Albums = Albums(
+    items = items.map { it.toItem() },
+    limit = limit,
+    next = next ?: "",
+    offset = offset,
+    previous = previous
+)
 
 fun ItemDto.toItem() : Item {
     return Item(
