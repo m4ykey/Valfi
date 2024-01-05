@@ -1,0 +1,1 @@
+Valfi 2 is the refreshed version of my previous application where users could save their favorite albums and movies. The updated version will bring more features that were missing in the initial release."
