@@ -1,11 +1,11 @@
 [versions]
 ksp = "1.9.22-1.0.16"
 kotlin = "1.9.22"
-application = "8.2.0"
+application = "8.2.1"
 firebase-crashlytics = "18.6.0"
 firebase-analytics = "21.5.0"
 firebase-auth = "22.3.0"
-gradle-build = "8.1.4"
+gradle-build = "8.2.1"
 google-services = "4.4.0"
 crashlytics-gradle = "2.9.9"
 junit = "4.13.2"
@@ -21,11 +21,11 @@ timber = "5.0.1"
 swiperefresh = "1.2.0-alpha01"
 coil = "2.5.0"
 paging = "3.2.1"
-koin = "3.5.3"
 lifecycle = "2.6.2"
 coroutines = "1.7.3"
 moshi = "1.15.0"
 datastore = "1.0.0"
+hilt = "2.50"
 
 [libraries]
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase-crashlytics" }
@@ -61,16 +61,13 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 
-koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin"}
-
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "application" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
-
-[bundles]
-firebase = ["firebase-analytics", "firebase-auth"]
-navigation = ["androidx-navigation-fragment", "androidx-navigation-ui"]

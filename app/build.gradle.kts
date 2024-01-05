@@ -3,9 +3,9 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -54,16 +54,19 @@ android {
 }
 
 dependencies {
+
     implementation(project(":core"))
+    implementation(project(":navigation"))
+    implementation(project(":album:ui"))
+
     libs.apply {
+
         implementation(androidx.appcompat)
         implementation(android.material)
         implementation(androidx.constraintlayout)
         implementation(androidx.core)
 
-        implementation(bundles.navigation)
-
-        implementation(bundles.firebase)
+        implementation(firebase.crashlytics)
 
         testImplementation(junit)
         androidTestImplementation(ext.junit)
@@ -71,17 +74,11 @@ dependencies {
 
         implementation(coil)
 
-        implementation(retrofit.moshi)
-        implementation(retrofit)
+        implementation(hilt.android)
+        ksp(hilt.compiler)
 
-        implementation(koin)
+        implementation(androidx.navigation.fragment)
+        implementation(androidx.navigation.ui)
 
-        implementation(moshi.kotlin)
-
-        implementation(androidx.swiperefreshlayout)
-
-        implementation(androidx.paging)
-
-        implementation(androidx.datastore)
     }
 }

@@ -11,6 +11,11 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.androidLibrary) apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+}
+
+subprojects {
+    apply(plugin = "com.google.devtools.ksp")
 }
 
 tasks.register("clean", Delete::class) {
