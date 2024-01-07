@@ -1,59 +1,79 @@
 package com.m4ykey.ui
 
+import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.isNightMode
+import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AlbumHomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AlbumHomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding : FragmentAlbumHomeBinding? = null
+    private val binding get() = _binding!!
+    private var bottomNavigationVisibility : BottomNavigationVisibility? = null
+    private lateinit var navController : NavController
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is BottomNavigationVisibility) {
+            bottomNavigationVisibility = context
+        } else {
+            throw RuntimeException("$context must implement BottomNavigationView")
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_album_home, container, false)
+    ): View {
+        _binding = FragmentAlbumHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AlbumHomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AlbumHomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        bottomNavigationVisibility?.showBottomNavigation()
+        navController = findNavController()
+
+        with(binding) {
+            setupToolbar()
+        }
+    }
+
+    private fun FragmentAlbumHomeBinding.setupToolbar() {
+        val isNightMode = isNightMode(resources)
+        val iconTint = if (isNightMode) {
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+        } else {
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+
+
+        with(toolbar) {
+            menu.findItem(R.id.imgSearch).setIconTintList(iconTint)
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.imgSearch -> {
+                        navController.navigate(com.m4ykey.navigation.R.id.action_albumHomeFragment_to_albumSearchFragment)
+                        true
+                    }
+                    else -> false
                 }
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

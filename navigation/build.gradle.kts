@@ -34,8 +34,6 @@ android {
 
 dependencies {
 
-    implementation(project(":album:ui"))
-
     libs.apply {
         implementation(androidx.core)
         implementation(androidx.appcompat)

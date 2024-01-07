@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+
     libs.apply {
         implementation(androidx.appcompat)
         implementation(android.material)

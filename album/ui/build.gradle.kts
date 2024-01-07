@@ -11,7 +11,6 @@ android {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -24,20 +23,30 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
 
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.android.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso)
+    implementation(project(":core"))
+    implementation(project(":navigation"))
+
+    libs.apply {
+        implementation(androidx.core)
+        implementation(androidx.appcompat)
+        testImplementation(junit)
+        androidTestImplementation(ext.junit)
+        androidTestImplementation(espresso)
+        implementation(androidx.constraintlayout)
+        implementation(android.material)
+        implementation(androidx.navigation.fragment)
+    }
 }

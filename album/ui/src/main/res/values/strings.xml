@@ -1,4 +1,8 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search</string>
+    <string name="sort_by">Sort by</string>
+    <string name="list_view">List View</string>
+    <string name="grid_view">Grid View</string>
 </resources>
