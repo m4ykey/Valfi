@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:icon="@drawable/baseline_close_24"
+        android:icon="@drawable/selector_album"
         android:title="@string/album"
         android:id="@+id/albumHomeFragment"/>
 

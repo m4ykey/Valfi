@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
@@ -26,7 +27,7 @@ class AlbumHomeFragment : Fragment() {
         if (context is BottomNavigationVisibility) {
             bottomNavigationVisibility = context
         } else {
-            throw RuntimeException("$context must implement BottomNavigationView")
+            throw RuntimeException("$context ${getString(R.string.must_implement_bottom_navigation)}")
         }
     }
 
@@ -46,7 +47,23 @@ class AlbumHomeFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
+            chipSort.setOnClickListener { openSortDialog() }
         }
+    }
+
+    private fun FragmentAlbumHomeBinding.openSortDialog() {
+        val sortOptions = resources.getStringArray(R.array.sort_options)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.sort_by)
+            .setItems(sortOptions) { _, index ->
+                when (index) {
+                    0 -> { chipSort.text = getString(R.string.alphabetical) }
+                    1 -> { chipSort.text = getString(R.string.recently_added) }
+                }
+            }
+
+        dialog.show()
     }
 
     private fun FragmentAlbumHomeBinding.setupToolbar() {

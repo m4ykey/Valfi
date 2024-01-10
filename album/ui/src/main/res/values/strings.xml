@@ -5,4 +5,12 @@
     <string name="sort_by">Sort by</string>
     <string name="list_view">List View</string>
     <string name="grid_view">Grid View</string>
+    <string name="alphabetical">Alphabetical</string>
+    <string name="recently_added">Recently added</string>
+    <string name="must_implement_bottom_navigation">must implement BottomNavigationView</string>
+
+    <string-array name="sort_options">
+        <item>@string/alphabetical</item>
+        <item>@string/recently_added</item>
+    </string-array>
 </resources>
