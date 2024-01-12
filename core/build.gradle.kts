@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -48,5 +49,12 @@ dependencies {
         implementation(timber)
 
         implementation(firebase.crashlytics)
+
+        ksp(hilt.compiler)
+        implementation(hilt.android)
+
+        implementation(okhttp)
+        implementation(okhttp.logging.interceptor)
+
     }
 }

@@ -8,6 +8,7 @@
     <string name="alphabetical">Alphabetical</string>
     <string name="recently_added">Recently added</string>
     <string name="must_implement_bottom_navigation">must implement BottomNavigationView</string>
+    <string name="collection">Collection</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>

@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.androidLibrary) apply false
-    id("com.google.dagger.hilt.android") version "2.50" apply false
+    alias(libs.plugins.hilt) apply false
 }
 
 subprojects {

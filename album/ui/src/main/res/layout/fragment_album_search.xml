@@ -34,9 +34,9 @@
                     android:drawableStart="@drawable/ic_search_2"
                     android:background="@drawable/drawable_et_search"
                     android:inputType="text"
-                    android:imeOptions="actionSearch"
                     android:paddingEnd="10dp"
                     android:id="@+id/etSearch"
+                    android:imeOptions="actionSearch"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -60,8 +60,8 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:id="@+id/rvSearchAlbums"
+        tools:listitem="@layout/layout_album"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/appBar"

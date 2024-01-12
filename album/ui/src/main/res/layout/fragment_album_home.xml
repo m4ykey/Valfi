@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AlbumHomeFragment">
@@ -18,8 +19,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             app:menu="@menu/toolbar_menu"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
+            style="@style/CustomToolbarStyle"
+            app:title="@string/collection"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

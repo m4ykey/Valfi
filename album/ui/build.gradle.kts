@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -38,15 +39,28 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":navigation"))
+    implementation(project(":album:data"))
 
     libs.apply {
         implementation(androidx.core)
         implementation(androidx.appcompat)
+
         testImplementation(junit)
+
         androidTestImplementation(ext.junit)
         androidTestImplementation(espresso)
+
         implementation(androidx.constraintlayout)
         implementation(android.material)
+
         implementation(androidx.navigation.fragment)
+
+        implementation(androidx.lifecycle.runtime)
+        implementation(androidx.lifecycle.viewmodel)
+
+        implementation(androidx.paging)
+
+        ksp(hilt.compiler)
+        implementation(hilt.android)
     }
 }

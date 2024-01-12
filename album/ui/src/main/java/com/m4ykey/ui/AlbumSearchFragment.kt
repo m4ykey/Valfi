@@ -3,23 +3,30 @@ package com.m4ykey.ui
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.m4ykey.core.views.BottomNavigationVisibility
-import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.show
+import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AlbumSearchFragment : Fragment() {
 
     private var _binding : FragmentAlbumSearchBinding? = null
@@ -27,6 +34,8 @@ class AlbumSearchFragment : Fragment() {
     private lateinit var navController: NavController
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private var isClearButtonVisible = false
+    private val viewModel : AlbumViewModel by viewModels()
+    private val searchAdapter by lazy { SearchAlbumPagingAdapter() }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,6 +62,34 @@ class AlbumSearchFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
+            setupRecyclerView()
+            searchAlbums()
+
+            lifecycleScope.launch {
+                viewModel.albums.observe(viewLifecycleOwner) { albums ->
+                    searchAdapter.submitData(viewLifecycleOwner.lifecycle, albums)
+                }
+            }
+        }
+    }
+
+    private fun FragmentAlbumSearchBinding.searchAlbums() {
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                lifecycleScope.launch {
+                    viewModel.searchAlbums(etSearch.text.toString())
+                    Log.i("SearchQuery", "searchAlbums: ${etSearch.text}")
+                }
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+    }
+
+    private fun FragmentAlbumSearchBinding.setupRecyclerView() {
+        with(rvSearchAlbums) {
+            adapter = searchAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
@@ -65,6 +102,10 @@ class AlbumSearchFragment : Fragment() {
         }
 
         with(toolbar) {
+
+            imgClear.imageTintList = iconTint
+            navigationIcon?.setTintList(iconTint)
+
             setNavigationOnClickListener { navController.navigateUp() }
             etSearch.doOnTextChanged { text, _, _, _ ->
                 val isSearchEmpty = text.isNullOrBlank()
@@ -103,15 +144,17 @@ class AlbumSearchFragment : Fragment() {
     }
 
     private fun FragmentAlbumSearchBinding.hideClearButtonWithAnimation() {
-        imgClear.animate()
-            .translationX(imgClear.width.toFloat())
-            .alpha(0f)
-            .setInterpolator(AccelerateInterpolator())
-            .withEndAction {
-                imgClear.alpha = 0f
-                imgClear.translationX = imgClear.width.toFloat()
-            }
-            .start()
+        imgClear.apply {
+            animate()
+                .translationX(width.toFloat())
+                .alpha(0f)
+                .setInterpolator(AccelerateInterpolator())
+                .withEndAction {
+                    alpha = 0f
+                    translationX = width.toFloat()
+                }
+                .start()
+        }
     }
 
     override fun onDestroy() {

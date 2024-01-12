@@ -21,11 +21,12 @@ timber = "5.0.1"
 swiperefresh = "1.2.0-alpha01"
 coil = "2.5.0"
 paging = "3.2.1"
-lifecycle = "2.6.2"
+lifecycle = "2.7.0"
 coroutines = "1.7.3"
 moshi = "1.15.0"
 datastore = "1.0.0"
 hilt = "2.50"
+okhttp = "4.12.0"
 
 [libraries]
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase-crashlytics" }
@@ -66,8 +67,12 @@ coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-andro
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "application" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

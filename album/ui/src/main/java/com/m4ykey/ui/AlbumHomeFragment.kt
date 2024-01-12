@@ -14,7 +14,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AlbumHomeFragment : Fragment() {
 
     private var _binding : FragmentAlbumHomeBinding? = null
