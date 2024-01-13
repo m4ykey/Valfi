@@ -8,6 +8,6 @@
     <string name="recently_added">Ostatnio dodane</string>
     <string name="must_implement_bottom_navigation">musi zawierać BottomNavigationView</string>
     <string name="collection">Kolekcja</string>
-    <string name="remove_text">Remove text</string>
-    <string name="album_cover">Album Cover</string>
+    <string name="remove_text">Wyczyść tekst</string>
+    <string name="album_cover">Okładka albumu</string>
 </resources>
