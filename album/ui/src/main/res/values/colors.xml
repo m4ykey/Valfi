@@ -5,5 +5,8 @@
 
     <color name="background">@color/white</color>
     <color name="textColor">@color/black</color>
+    <color name="progressBar">#151515</color>
+    <color name="searchIconEditText">#424242</color>
+    <color name="searchBox">#40000000</color>
 
 </resources>

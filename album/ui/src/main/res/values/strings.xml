@@ -10,6 +10,8 @@
     <string name="album" translatable="false">Album</string>
     <string name="single" translatable="false">Single</string>
     <string name="ep" translatable="false">EP</string>
+    <string name="remove_text">Remove text</string>
+    <string name="album_cover">Album Cover</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>

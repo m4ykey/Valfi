@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.m4ykey.data.domain.model.AlbumItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,7 @@ class AlbumViewModel @Inject constructor(
     fun searchAlbums(query : String) {
         searchQuery = query
         viewModelScope.launch {
-            repository.searchAlbums(query).collectLatest { albums ->
+            repository.searchAlbums(query).cachedIn(viewModelScope).collectLatest { albums ->
                 _albums.value = albums
             }
         }

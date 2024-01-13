@@ -2,9 +2,11 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.hardware.display.DisplayManager
 import android.os.Bundle
-import android.util.Log
+import android.view.Display
 import android.view.LayoutInflater
+import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
@@ -17,10 +19,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.show
+import com.m4ykey.ui.adapter.SearchAlbumLoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +81,6 @@ class AlbumSearchFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 lifecycleScope.launch {
                     viewModel.searchAlbums(etSearch.text.toString())
-                    Log.i("SearchQuery", "searchAlbums: ${etSearch.text}")
                 }
                 return@setOnEditorActionListener true
             }
@@ -87,9 +89,21 @@ class AlbumSearchFragment : Fragment() {
     }
 
     private fun FragmentAlbumSearchBinding.setupRecyclerView() {
+        val displayManager = requireContext().getSystemService(DisplayManager::class.java)
+        val defaultDisplay = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
+
         with(rvSearchAlbums) {
-            adapter = searchAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = searchAdapter.withLoadStateHeaderAndFooter(
+                header = SearchAlbumLoadStateAdapter(),
+                footer = SearchAlbumLoadStateAdapter()
+            )
+
+            val spanCount = when (defaultDisplay.rotation) {
+                Surface.ROTATION_0, Surface.ROTATION_180 -> 2
+                else -> 3
+            }
+            layoutManager = GridLayoutManager(requireContext(), spanCount)
         }
     }
 

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="search">Szukaj</string>
     <string name="sort_by">Sortuj wg</string>
     <string name="list_view">Lista</string>
@@ -10,4 +8,6 @@
     <string name="recently_added">Ostatnio dodane</string>
     <string name="must_implement_bottom_navigation">musi zawierać BottomNavigationView</string>
     <string name="collection">Kolekcja</string>
+    <string name="remove_text">Remove text</string>
+    <string name="album_cover">Album Cover</string>
 </resources>
