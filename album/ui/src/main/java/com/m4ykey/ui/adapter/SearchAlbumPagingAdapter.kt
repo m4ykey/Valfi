@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.m4ykey.data.domain.model.AlbumItem
 import com.m4ykey.ui.databinding.LayoutAlbumBinding
 
@@ -40,7 +41,11 @@ class SearchAlbumPagingAdapter : PagingDataAdapter<AlbumItem, SearchAlbumPagingA
     inner class AlbumViewHolder(private val binding: LayoutAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(album : AlbumItem) {
             with(binding) {
+                val image = album.images.maxByOrNull { it.height * it.width }
+                val artistList = album.artists.joinToString(", ") { it.name }
+                imgAlbum.load(image?.url)
                 txtAlbum.text = album.name
+                txtArtist.text = artistList
             }
         }
     }

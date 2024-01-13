@@ -14,7 +14,6 @@ import dagger.hilt.android.HiltAndroidApp
 class BaseApp : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
-        //DynamicColors.applyToActivitiesIfAvailable(this)
 
         timberSetup()
     }

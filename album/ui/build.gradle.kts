@@ -62,5 +62,8 @@ dependencies {
 
         ksp(hilt.compiler)
         implementation(hilt.android)
+
+        implementation(coil)
+
     }
 }

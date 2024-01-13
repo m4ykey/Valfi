@@ -50,7 +50,24 @@ class AlbumHomeFragment : Fragment() {
         with(binding) {
             setupToolbar()
             chipSort.setOnClickListener { openSortDialog() }
+            chipAlbumType.setOnClickListener { openAlbumTypeDialog() }
         }
+    }
+
+    private fun FragmentAlbumHomeBinding.openAlbumTypeDialog() {
+        val sortOptions = resources.getStringArray(R.array.album_options)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.sort_by)
+            .setItems(sortOptions) { _, index ->
+                when (index) {
+                    0 -> { chipAlbumType.text = getString(R.string.album) }
+                    1 -> { chipAlbumType.text = getString(R.string.single) }
+                    2 -> { chipAlbumType.text = getString(R.string.ep) }
+                }
+            }
+
+        dialog.show()
     }
 
     private fun FragmentAlbumHomeBinding.openSortDialog() {
