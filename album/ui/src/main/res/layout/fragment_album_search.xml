@@ -77,4 +77,15 @@
         app:layout_constraintTop_toBottomOf="@id/appBar"
         tools:listitem="@layout/layout_album" />
 
+    <ProgressBar
+        android:indeterminateTint="@color/progressBar"
+        android:id="@+id/progressBar"
+        app:layout_constraintTop_toBottomOf="@id/appBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

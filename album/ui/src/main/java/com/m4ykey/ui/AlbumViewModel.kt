@@ -22,13 +22,24 @@ class AlbumViewModel @Inject constructor(
     private var _albums = MutableLiveData<PagingData<AlbumItem>>()
     val albums : LiveData<PagingData<AlbumItem>> get() = _albums
 
+    private var _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> get() = _isLoading
+
+    private fun setLoading(isLoading : Boolean) {
+        _isLoading.value = isLoading
+    }
+
     fun searchAlbums(query : String) {
         searchQuery = query
         viewModelScope.launch {
-            repository.searchAlbums(query).cachedIn(viewModelScope).collectLatest { albums ->
-                _albums.value = albums
+            try {
+                setLoading(true)
+                repository.searchAlbums(query).cachedIn(viewModelScope).collectLatest { albums ->
+                    _albums.value = albums
+                }
+            } finally {
+                setLoading(false)
             }
         }
     }
-
 }

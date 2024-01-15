@@ -13,6 +13,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -71,6 +72,9 @@ class AlbumSearchFragment : Fragment() {
             lifecycleScope.launch {
                 viewModel.albums.observe(viewLifecycleOwner) { albums ->
                     searchAdapter.submitData(viewLifecycleOwner.lifecycle, albums)
+                }
+                viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                    progressBar.isVisible = isLoading
                 }
             }
         }
