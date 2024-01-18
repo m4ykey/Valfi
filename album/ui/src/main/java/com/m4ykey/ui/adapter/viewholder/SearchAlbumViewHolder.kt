@@ -10,19 +10,22 @@ import com.m4ykey.ui.databinding.LayoutAlbumBinding
 
 class SearchAlbumViewHolder(
     private val binding: LayoutAlbumBinding,
-    private val listener : OnAlbumClick? = null
+    private val listener : OnAlbumClick
 ) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
-        fun create(view : ViewGroup) : SearchAlbumViewHolder {
+        fun create(view : ViewGroup, listener: OnAlbumClick) : SearchAlbumViewHolder {
             val inflater = LayoutInflater.from(view.context)
-            return SearchAlbumViewHolder(binding = LayoutAlbumBinding.inflate(inflater, view, false))
+            return SearchAlbumViewHolder(
+                listener = listener,
+                binding = LayoutAlbumBinding.inflate(inflater, view, false)
+            )
         }
     }
 
     init {
         binding.root.setOnClickListener {
-            listener?.onAlbumClick(albumId)
+            listener.onAlbumClick(albumId)
         }
     }
 

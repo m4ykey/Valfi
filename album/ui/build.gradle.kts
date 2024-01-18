@@ -54,11 +54,8 @@ dependencies {
         implementation(androidx.constraintlayout)
         implementation(android.material)
 
-        implementation(androidx.navigation.fragment)
-        implementation(androidx.navigation.ui)
-
-        implementation(androidx.lifecycle.runtime)
-        implementation(androidx.lifecycle.viewmodel)
+        implementation(bundles.navigation)
+        implementation(bundles.lifecycle)
 
         implementation(androidx.paging)
 
