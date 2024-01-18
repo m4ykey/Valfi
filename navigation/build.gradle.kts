@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -35,13 +36,6 @@ android {
 dependencies {
 
     libs.apply {
-        implementation(androidx.core)
-        implementation(androidx.appcompat)
-        implementation(android.material)
-        testImplementation(junit)
-        androidTestImplementation(ext.junit)
-        androidTestImplementation(espresso)
-
         implementation(androidx.navigation.ui)
         implementation(androidx.navigation.fragment)
     }

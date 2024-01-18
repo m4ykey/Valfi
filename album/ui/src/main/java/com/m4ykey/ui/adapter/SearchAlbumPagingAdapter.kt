@@ -1,52 +1,27 @@
 package com.m4ykey.ui.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.m4ykey.data.domain.model.AlbumItem
-import com.m4ykey.ui.databinding.LayoutAlbumBinding
+import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
 
-class SearchAlbumPagingAdapter : PagingDataAdapter<AlbumItem, SearchAlbumPagingAdapter.AlbumViewHolder>(COMPARATOR) {
+class SearchAlbumPagingAdapter : PagingDataAdapter<AlbumItem, SearchAlbumViewHolder>(COMPARATOR) {
 
-    override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchAlbumViewHolder, position: Int) {
         getItem(position)?.let { album ->
             holder.bind(album)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
-        return AlbumViewHolder(
-            LayoutAlbumBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent, false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAlbumViewHolder {
+        return SearchAlbumViewHolder.create(parent)
     }
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<AlbumItem>() {
-            override fun areItemsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
-
-    inner class AlbumViewHolder(private val binding: LayoutAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(album : AlbumItem) {
-            with(binding) {
-                val image = album.images.maxByOrNull { it.height * it.width }
-                val artistList = album.artists.joinToString(", ") { it.name }
-                imgAlbum.load(image?.url)
-                txtAlbum.text = album.name
-                txtArtist.text = artistList
-            }
+            override fun areItemsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean = oldItem == newItem
         }
     }
 

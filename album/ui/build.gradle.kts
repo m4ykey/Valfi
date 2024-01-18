@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
         implementation(android.material)
 
         implementation(androidx.navigation.fragment)
+        implementation(androidx.navigation.ui)
 
         implementation(androidx.lifecycle.runtime)
         implementation(androidx.lifecycle.viewmodel)

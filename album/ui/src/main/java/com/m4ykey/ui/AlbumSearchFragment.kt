@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -20,18 +21,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.show
 import com.m4ykey.ui.adapter.SearchAlbumLoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
+import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumSearchFragment : Fragment() {
+class AlbumSearchFragment : Fragment(), OnAlbumClick {
 
     private var _binding : FragmentAlbumSearchBinding? = null
     private val binding get() = _binding!!
@@ -73,9 +76,6 @@ class AlbumSearchFragment : Fragment() {
                 viewModel.albums.observe(viewLifecycleOwner) { albums ->
                     searchAdapter.submitData(viewLifecycleOwner.lifecycle, albums)
                 }
-                viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-                    progressBar.isVisible = isLoading
-                }
             }
         }
     }
@@ -98,14 +98,27 @@ class AlbumSearchFragment : Fragment() {
 
         with(rvSearchAlbums) {
             setHasFixedSize(true)
+            itemAnimator = null
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
                 header = SearchAlbumLoadStateAdapter(),
                 footer = SearchAlbumLoadStateAdapter()
             )
 
+            searchAdapter.addLoadStateListener { loadState ->
+                rvSearchAlbums.isVisible = loadState.source.refresh is LoadState.NotLoading
+                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+
+                if (loadState.source.refresh is LoadState.NotLoading &&
+                    loadState.append.endOfPaginationReached &&
+                    searchAdapter.itemCount < 1) {
+                    rvSearchAlbums.isVisible = false
+                    Toast.makeText(requireContext(), "No more items", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             val spanCount = when (defaultDisplay.rotation) {
-                Surface.ROTATION_0, Surface.ROTATION_180 -> 2
-                else -> 3
+                Surface.ROTATION_0, Surface.ROTATION_180 -> 3
+                else -> 5
             }
             layoutManager = GridLayoutManager(requireContext(), spanCount)
         }
@@ -178,5 +191,10 @@ class AlbumSearchFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onAlbumClick(id: String) {
+        val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(albumId = id)
+        findNavController().navigate(action)
     }
 }

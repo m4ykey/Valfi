@@ -76,3 +76,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
