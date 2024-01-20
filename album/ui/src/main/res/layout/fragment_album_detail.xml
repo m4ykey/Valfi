@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
     tools:context=".AlbumDetailFragment">
 
@@ -21,6 +22,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
+                android:background="@color/background"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_arrow_back" />
@@ -141,6 +143,9 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            tools:listitem="@layout/layout_tracks"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:id="@+id/rvTrackList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,6 +153,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayoutButtons" />
+
+        <ProgressBar
+            app:layout_constraintTop_toBottomOf="@id/appBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:indeterminateTint="@color/progressBar"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
