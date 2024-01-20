@@ -2,17 +2,13 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.hardware.display.DisplayManager
 import android.os.Bundle
-import android.view.Display
 import android.view.LayoutInflater
-import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -93,9 +89,6 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
     }
 
     private fun FragmentAlbumSearchBinding.setupRecyclerView() {
-        val displayManager = requireContext().getSystemService(DisplayManager::class.java)
-        val defaultDisplay = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
-
         with(rvSearchAlbums) {
             setHasFixedSize(true)
             itemAnimator = null
@@ -108,19 +101,15 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
                 rvSearchAlbums.isVisible = loadState.source.refresh is LoadState.NotLoading
                 progressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
-                if (loadState.source.refresh is LoadState.NotLoading &&
-                    loadState.append.endOfPaginationReached &&
-                    searchAdapter.itemCount < 1) {
-                    rvSearchAlbums.isVisible = false
-                    Toast.makeText(requireContext(), "No more items", Toast.LENGTH_SHORT).show()
-                }
+                val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
+                        loadState.append.endOfPaginationReached &&
+                        searchAdapter.itemCount < 1
+
+                rvSearchAlbums.isVisible = !isNothingFound
+                layoutNothingFound.root.isVisible = isNothingFound
             }
 
-            val spanCount = when (defaultDisplay.rotation) {
-                Surface.ROTATION_0, Surface.ROTATION_180 -> 3
-                else -> 5
-            }
-            layoutManager = GridLayoutManager(requireContext(), spanCount)
+            layoutManager = GridLayoutManager(requireContext(), 3)
         }
     }
 

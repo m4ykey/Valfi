@@ -12,6 +12,7 @@
     <string name="ep" translatable="false">EP</string>
     <string name="remove_text">Remove text</string>
     <string name="album_cover">Album Cover</string>
+    <string name="nothing_found">Nothing found</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>

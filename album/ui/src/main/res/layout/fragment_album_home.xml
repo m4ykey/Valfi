@@ -52,17 +52,6 @@
                 app:chipSurfaceColor="@android:color/transparent" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/grid_view"
-                android:textColor="@color/textColor"
-                app:chipBackgroundColor="@android:color/transparent"
-                app:chipIcon="@drawable/ic_grid"
-                app:chipIconTint="@color/textColor"
-                app:chipSurfaceColor="@android:color/transparent" />
-
-            <com.google.android.material.chip.Chip
                 android:id="@+id/chipAlbumType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

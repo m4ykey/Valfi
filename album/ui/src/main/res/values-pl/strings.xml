@@ -10,4 +10,5 @@
     <string name="collection">Kolekcja</string>
     <string name="remove_text">Wyczyść tekst</string>
     <string name="album_cover">Okładka albumu</string>
+    <string name="nothing_found">Nothing found</string>
 </resources>

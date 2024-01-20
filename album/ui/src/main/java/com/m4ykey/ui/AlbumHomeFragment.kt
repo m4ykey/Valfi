@@ -99,7 +99,8 @@ class AlbumHomeFragment : Fragment() {
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {
-                        navController.navigate(com.m4ykey.navigation.R.id.action_albumHomeFragment_to_albumSearchFragment)
+                        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
+                        navController.navigate(action)
                         true
                     }
                     else -> false
