@@ -53,6 +53,7 @@ dependencies {
 
         implementation(androidx.constraintlayout)
         implementation(android.material)
+        implementation(androidx.swiperefreshlayout)
 
         implementation(bundles.navigation)
         implementation(bundles.lifecycle)

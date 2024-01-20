@@ -10,5 +10,8 @@
     <string name="collection">Kolekcja</string>
     <string name="remove_text">Wyczyść tekst</string>
     <string name="album_cover">Okładka albumu</string>
-    <string name="nothing_found">Nothing found</string>
+    <string name="nothing_found">Nic nie znaleziono</string>
+    <string name="save_album">Zapisz album</string>
+    <string name="listen_later_album">Posłuchaj później album</string>
+    <string name="artist">Artysta</string>
 </resources>

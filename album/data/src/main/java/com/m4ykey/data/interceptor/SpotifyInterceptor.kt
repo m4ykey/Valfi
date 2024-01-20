@@ -1,7 +1,6 @@
 package com.m4ykey.data.interceptor
 
 import android.util.Base64
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -53,7 +52,7 @@ class SpotifyInterceptor @Inject constructor(
 
         val newRequest = request.newBuilder()
             .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", "Bearer $accessToken")
+            .addHeader("Authorization", "Bearer ${getAccessToken()}")
             .build()
 
         chain.proceed(newRequest)
@@ -65,8 +64,6 @@ class SpotifyInterceptor @Inject constructor(
             "${BuildConfig.SPOTIFY_CLIENT_ID}:${BuildConfig.SPOTIFY_CLIENT_SECRET}".toByteArray(),
             Base64.NO_WRAP
         )
-        Log.i("AccessToken", "getAccessToken: ${api.getAccessToken(authHeader).accessToken}")
-
         return api.getAccessToken(authHeader).accessToken
     }
 
