@@ -14,4 +14,5 @@
     <string name="save_album">Zapisz album</string>
     <string name="listen_later_album">Posłuchaj później album</string>
     <string name="artist">Artysta</string>
+    <string name="tracks">Utworów</string>
 </resources>

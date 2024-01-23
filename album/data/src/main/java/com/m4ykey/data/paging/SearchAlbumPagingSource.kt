@@ -1,6 +1,5 @@
 package com.m4ykey.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.m4ykey.data.domain.model.AlbumItem
@@ -28,7 +27,6 @@ class SearchAlbumPagingSource @Inject constructor(
             val page = params.key ?: 0
             val limit = params.loadSize.coerceIn(1, 50)
             val accessToken = "Bearer ${interceptor.getAccessToken()}"
-            Log.i("AccessToken", "load: $accessToken")
 
             val response = api.searchAlbums(
                 query = query,

@@ -33,22 +33,24 @@ class AlbumViewModel @Inject constructor(
         repository.getAlbumById(id).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    _detail.value = detail.value?.copy(
+                    _detail.value = AlbumDetailUiState(
                         isLoading = true,
-                        albumDetail = result.data!!
+                        albumDetail = null,
+                        error = null
                     )
                 }
                 is Resource.Success -> {
-                    _detail.value = detail.value?.copy(
+                    _detail.value = AlbumDetailUiState(
                         isLoading = false,
-                        albumDetail = result.data!!
+                        albumDetail = result.data,
+                        error = null
                     )
                 }
                 is Resource.Error -> {
-                    _detail.value = detail.value?.copy(
+                    _detail.value = AlbumDetailUiState(
                         isLoading = false,
                         error = result.message ?: "Unknown error",
-                        albumDetail = result.data!!
+                        albumDetail = null
                     )
                 }
             }

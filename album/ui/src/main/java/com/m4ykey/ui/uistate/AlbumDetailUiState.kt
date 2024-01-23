@@ -5,5 +5,5 @@ import com.m4ykey.data.domain.model.AlbumDetail
 data class AlbumDetailUiState(
     val isLoading : Boolean = false,
     val error : String? = null,
-    val albumDetail: AlbumDetail
+    val albumDetail: AlbumDetail? = null
 )

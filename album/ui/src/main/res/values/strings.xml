@@ -16,6 +16,7 @@
     <string name="save_album">Save album</string>
     <string name="listen_later_album">Listen later album</string>
     <string name="artist">Artist</string>
+    <string name="tracks">Tracks</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>

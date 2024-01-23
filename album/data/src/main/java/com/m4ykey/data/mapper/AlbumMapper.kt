@@ -21,7 +21,10 @@ fun ImageDto.toImage() : Image {
 
 fun ExternalUrlsDto.toExternalUrls() : ExternalUrls = ExternalUrls(spotify = spotify)
 
-fun ArtistDto.toArtist() : Artist = Artist(name = name)
+fun ArtistDto.toArtist() : Artist = Artist(
+    name = name,
+    externalUrls = external_urls.toExternalUrls()
+)
 
 fun AlbumItemDto.toAlbumItem() : AlbumItem {
     return AlbumItem(
