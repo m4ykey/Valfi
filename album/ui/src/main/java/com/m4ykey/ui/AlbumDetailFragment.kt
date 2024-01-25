@@ -2,11 +2,13 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,17 +21,19 @@ import coil.load
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.formatAirDate
+import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
+import com.m4ykey.ui.adapter.navigation.OnTrackClick
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumDetailFragment : Fragment() {
+class AlbumDetailFragment : Fragment(), OnTrackClick {
 
     private var _binding: FragmentAlbumDetailBinding? = null
     private val binding get() = _binding!!
@@ -37,7 +41,7 @@ class AlbumDetailFragment : Fragment() {
     private var bottomNavigationVisibility: BottomNavigationVisibility? = null
     private lateinit var navController: NavController
     private val viewModel: AlbumViewModel by viewModels()
-    private val trackAdapter by lazy { TrackListPagingAdapter() }
+    private val trackAdapter by lazy { TrackListPagingAdapter(this) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,12 +84,25 @@ class AlbumDetailFragment : Fragment() {
             }
         }
 
-
         with(binding) {
-            toolbar.setNavigationOnClickListener { navController.navigateUp() }
             setupRecyclerView()
+            setupToolbar()
         }
 
+    }
+
+    private fun FragmentAlbumDetailBinding.setupToolbar() {
+        val isNightMode = isNightMode(resources)
+        val iconTint = if (isNightMode) {
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+        } else {
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+
+        with(toolbar) {
+            navigationIcon?.setTintList(iconTint)
+            setNavigationOnClickListener { navController.navigateUp() }
+        }
     }
 
     private fun FragmentAlbumDetailBinding.setupRecyclerView() {
@@ -178,5 +195,9 @@ class AlbumDetailFragment : Fragment() {
 
     companion object {
         const val TAG = "DetailAlbumFragment"
+    }
+
+    override fun onTrackClick(id: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(id)))
     }
 }
