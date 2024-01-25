@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
@@ -57,7 +58,7 @@ class AlbumHomeFragment : Fragment() {
     private fun FragmentAlbumHomeBinding.openAlbumTypeDialog() {
         val sortOptions = resources.getStringArray(R.array.album_options)
 
-        val dialog = MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.sort_by)
             .setItems(sortOptions) { _, index ->
                 when (index) {
@@ -65,24 +66,20 @@ class AlbumHomeFragment : Fragment() {
                     1 -> { chipAlbumType.text = getString(R.string.single) }
                     2 -> { chipAlbumType.text = getString(R.string.ep) }
                 }
-            }
-
-        dialog.show()
+            }.show()
     }
 
     private fun FragmentAlbumHomeBinding.openSortDialog() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
 
-        val dialog = MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.sort_by)
             .setItems(sortOptions) { _, index ->
                 when (index) {
                     0 -> { chipSort.text = getString(R.string.alphabetical) }
                     1 -> { chipSort.text = getString(R.string.recently_added) }
                 }
-            }
-
-        dialog.show()
+            }.show()
     }
 
     private fun FragmentAlbumHomeBinding.setupToolbar() {
@@ -96,6 +93,7 @@ class AlbumHomeFragment : Fragment() {
 
         with(toolbar) {
             menu.findItem(R.id.imgSearch).setIconTintList(iconTint)
+            menu.findItem(R.id.imgLink).setIconTintList(iconTint)
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {
@@ -103,10 +101,36 @@ class AlbumHomeFragment : Fragment() {
                         navController.navigate(action)
                         true
                     }
+                    R.id.imgLink -> {
+                        val customView = layoutInflater.inflate(R.layout.layout_insert_album_link, null)
+                        val etInputLink : TextInputEditText = customView.findViewById(R.id.etInputLink)
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setPositiveButton("Ok") { dialog, _ ->
+                                val albumUrl = etInputLink.text.toString()
+                                val albumId = getAlbumIdFromUrl(albumUrl)
+                                val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
+                                navController.navigate(action)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(getString(R.string.close)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .setView(customView)
+                            .show()
+
+                        true
+                    }
                     else -> false
                 }
             }
         }
+    }
+
+    private fun getAlbumIdFromUrl(url: String): String? {
+        val regex = Regex("/album/([^/?]+)")
+        val matchResult = regex.find(url)
+        return matchResult?.groupValues?.getOrNull(1)
     }
 
     override fun onDestroy() {

@@ -5,5 +5,11 @@
     <item android:id="@+id/imgSearch"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/imgLink"
+        android:icon="@drawable/ic_link"
+        android:title="@string/link"
+        app:showAsAction="ifRoom"/>
+
 </menu>

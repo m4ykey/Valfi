@@ -17,6 +17,9 @@
     <string name="listen_later_album">Listen later album</string>
     <string name="artist">Artist</string>
     <string name="tracks">Tracks</string>
+    <string name="link" translatable="false">Link</string>
+    <string name="enter_album_link">Enter Album Link</string>
+    <string name="close">Close</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>

@@ -15,4 +15,6 @@
     <string name="listen_later_album">Posłuchaj później album</string>
     <string name="artist">Artysta</string>
     <string name="tracks">Utworów</string>
+    <string name="enter_album_link">Wprowadź adres albumu</string>
+    <string name="close">Zamknij</string>
 </resources>
