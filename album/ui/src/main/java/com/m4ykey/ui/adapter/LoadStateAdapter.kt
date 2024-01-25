@@ -5,7 +5,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import com.m4ykey.ui.adapter.viewholder.LoadStateViewHolder
 
-class SearchAlbumLoadStateAdapter : LoadStateAdapter<LoadStateViewHolder>() {
+class LoadStateAdapter : LoadStateAdapter<LoadStateViewHolder>() {
 
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)

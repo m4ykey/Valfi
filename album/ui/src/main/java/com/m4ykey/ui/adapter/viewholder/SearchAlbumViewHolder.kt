@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.m4ykey.data.domain.model.AlbumItem
+import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.LayoutAlbumBinding
 
@@ -15,10 +15,9 @@ class SearchAlbumViewHolder(
 
     companion object {
         fun create(view : ViewGroup, listener: OnAlbumClick) : SearchAlbumViewHolder {
-            val inflater = LayoutInflater.from(view.context)
             return SearchAlbumViewHolder(
                 listener = listener,
-                binding = LayoutAlbumBinding.inflate(inflater, view, false)
+                binding = LayoutAlbumBinding.inflate(LayoutInflater.from(view.context), view, false)
             )
         }
     }

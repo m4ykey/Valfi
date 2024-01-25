@@ -14,12 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import coil.load
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.formatAirDate
 import com.m4ykey.core.views.showToast
-import com.m4ykey.data.domain.model.AlbumDetail
+import com.m4ykey.data.domain.model.album.AlbumDetail
+import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -54,24 +56,57 @@ class AlbumDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            viewModel.getAlbumById(args.albumId)
+        }
+        viewModel.getAlbumTracks(args.albumId)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.hideBottomNavigation()
         navController = findNavController()
 
-        lifecycleScope.launch {
-            viewModel.getAlbumById(args.albumId)
-        }
-
         viewModel.detail.observe(viewLifecycleOwner) { state ->
             handleUiState(state)
         }
 
-        with(binding) {
-            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        lifecycleScope.launch {
+            viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+                trackAdapter.submitData(viewLifecycleOwner.lifecycle, tracks.albumTracks!!)
+            }
         }
 
+
+        with(binding) {
+            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+            setupRecyclerView()
+        }
+
+    }
+
+    private fun FragmentAlbumDetailBinding.setupRecyclerView() {
+        with(rvTrackList) {
+            setHasFixedSize(true)
+            adapter = trackAdapter.withLoadStateFooter(
+                footer = LoadStateAdapter()
+            )
+
+            trackAdapter.addLoadStateListener { loadState ->
+                rvTrackList.isVisible = loadState.source.refresh is LoadState.NotLoading
+                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+
+                val errorState = loadState.source.refresh as? LoadState.Error
+                val error = errorState?.error
+
+                if (error != null) {
+                    showToast(requireContext(), error.message.toString())
+                }
+            }
+        }
     }
 
     private fun handleUiState(state: AlbumDetailUiState?) {

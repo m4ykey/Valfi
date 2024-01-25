@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.m4ykey.core.network.Resource
-import com.m4ykey.data.domain.model.AlbumItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.ui.uistate.AlbumDetailUiState
+import com.m4ykey.ui.uistate.AlbumSearchUiState
+import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -22,12 +22,14 @@ class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepository
 ) : ViewModel() {
 
-    private var searchQuery : String = ""
-    private var _albums = MutableLiveData<PagingData<AlbumItem>>()
-    val albums : LiveData<PagingData<AlbumItem>> get() = _albums
+    private var _albums = MutableLiveData<AlbumSearchUiState>()
+    val albums : LiveData<AlbumSearchUiState> get() = _albums
 
     private var _detail = MutableLiveData<AlbumDetailUiState>()
     val detail : LiveData<AlbumDetailUiState> get() = _detail
+
+    private var _tracks = MutableLiveData<AlbumTrackUiState>()
+    val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
     suspend fun getAlbumById(id : String) {
         repository.getAlbumById(id).onEach { result ->
@@ -58,10 +60,31 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun searchAlbums(query : String) {
-        searchQuery = query
         viewModelScope.launch {
-            repository.searchAlbums(query).cachedIn(viewModelScope).collectLatest { albums ->
-                _albums.value = albums
+            _albums.value = AlbumSearchUiState(isLoading = true)
+            try {
+                repository.searchAlbums(query).cachedIn(viewModelScope).collectLatest { albums ->
+                    _albums.value = AlbumSearchUiState(albumSearch = albums)
+                }
+            } catch (e : Exception) {
+                _albums.value = AlbumSearchUiState(error = e.message ?: "Unknown error")
+            } finally {
+                _albums.value = AlbumSearchUiState(isLoading = false)
+            }
+        }
+    }
+
+    fun getAlbumTracks(id : String) {
+        viewModelScope.launch {
+            _tracks.value = AlbumTrackUiState(isLoading = true)
+            try {
+                repository.getAlbumTracks(id).cachedIn(viewModelScope).collectLatest { tracks ->
+                    _tracks.value = AlbumTrackUiState(albumTracks = tracks)
+                }
+            } catch (e : Exception) {
+                _tracks.value = AlbumTrackUiState(error = e.message ?: "Unknown error")
+            } finally {
+                _tracks.value = AlbumTrackUiState(isLoading = false)
             }
         }
     }

@@ -18,11 +18,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.show
-import com.m4ykey.ui.adapter.SearchAlbumLoadStateAdapter
+import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
@@ -68,9 +69,9 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
             setupRecyclerView()
             searchAlbums()
 
-            lifecycleScope.launch {
-                viewModel.albums.observe(viewLifecycleOwner) { albums ->
-                    searchAdapter.submitData(viewLifecycleOwner.lifecycle, albums)
+            viewModel.albums.observe(viewLifecycleOwner) { state ->
+                lifecycleScope.launch {
+                    searchAdapter.submitData(viewLifecycleOwner.lifecycle, state?.albumSearch ?: PagingData.empty())
                 }
             }
         }
@@ -93,8 +94,8 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
             setHasFixedSize(true)
             itemAnimator = null
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
-                header = SearchAlbumLoadStateAdapter(),
-                footer = SearchAlbumLoadStateAdapter()
+                header = LoadStateAdapter(),
+                footer = LoadStateAdapter()
             )
 
             searchAdapter.addLoadStateListener { loadState ->

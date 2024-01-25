@@ -6,12 +6,14 @@ import androidx.paging.PagingData
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.Resource
 import com.m4ykey.core.network.safeApiCall
-import com.m4ykey.data.domain.model.AlbumDetail
-import com.m4ykey.data.domain.model.AlbumItem
+import com.m4ykey.data.domain.model.album.AlbumDetail
+import com.m4ykey.data.domain.model.album.AlbumItem
+import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.interceptor.SpotifyInterceptor
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.paging.SearchAlbumPagingSource
+import com.m4ykey.data.paging.TrackListPagingSource
 import com.m4ykey.data.remote.api.AlbumApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -45,5 +47,21 @@ class AlbumRepositoryImpl @Inject constructor(
                 id = id
             ).toAlbumDetail()
         })
+    }
+
+    override fun getAlbumTracks(id: String): Flow<PagingData<TrackItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                TrackListPagingSource(
+                    id = id,
+                    interceptor = interceptor,
+                    api = api
+                )
+            }
+        ).flow
     }
 }

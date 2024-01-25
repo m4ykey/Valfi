@@ -3,7 +3,7 @@ package com.m4ykey.ui.adapter
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.m4ykey.data.domain.model.AlbumItem
+import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
 

@@ -1,4 +1,4 @@
-package com.m4ykey.data.domain.model
+package com.m4ykey.data.domain.model.album
 
 data class Image(
     val height: Int,

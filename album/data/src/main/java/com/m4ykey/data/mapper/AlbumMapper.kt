@@ -1,10 +1,10 @@
 package com.m4ykey.data.mapper
 
-import com.m4ykey.data.domain.model.AlbumDetail
-import com.m4ykey.data.domain.model.AlbumItem
-import com.m4ykey.data.domain.model.Artist
-import com.m4ykey.data.domain.model.ExternalUrls
-import com.m4ykey.data.domain.model.Image
+import com.m4ykey.data.domain.model.album.AlbumDetail
+import com.m4ykey.data.domain.model.album.AlbumItem
+import com.m4ykey.data.domain.model.album.Artist
+import com.m4ykey.data.domain.model.album.ExternalUrls
+import com.m4ykey.data.domain.model.album.Image
 import com.m4ykey.data.remote.model.album.AlbumDetailDto
 import com.m4ykey.data.remote.model.album.AlbumItemDto
 import com.m4ykey.data.remote.model.album.ArtistDto
