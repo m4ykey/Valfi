@@ -9,7 +9,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:hint="@string/enter_album_link"
+        android:hint="@string/enter_album_url"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

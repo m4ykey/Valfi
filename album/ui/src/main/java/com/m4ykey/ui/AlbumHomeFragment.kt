@@ -3,6 +3,7 @@ package com.m4ykey.ui
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
+import com.m4ykey.core.views.showToast
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.MalformedURLException
+import java.net.URISyntaxException
+import java.net.URL
 
 @AndroidEntryPoint
 class AlbumHomeFragment : Fragment() {
@@ -108,9 +113,13 @@ class AlbumHomeFragment : Fragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setPositiveButton("Ok") { dialog, _ ->
                                 val albumUrl = etInputLink.text.toString()
-                                val albumId = getAlbumIdFromUrl(albumUrl)
-                                val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
-                                navController.navigate(action)
+                                if (isValidAlbumUrl(albumUrl)) {
+                                    val albumId = getAlbumIdFromUrl(albumUrl)
+                                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
+                                    navController.navigate(action)
+                                } else {
+                                    showToast(requireContext(), getString(R.string.invalid_album_url))
+                                }
                                 dialog.dismiss()
                             }
                             .setNegativeButton(getString(R.string.close)) { dialog, _ ->
@@ -127,6 +136,21 @@ class AlbumHomeFragment : Fragment() {
         }
     }
 
+    private fun isValidAlbumUrl(url: String): Boolean {
+        try {
+            val uri = URL(url).toURI()
+            if (uri.host == "open.spotify.com" && uri.path.startsWith("/album/")) {
+                return true
+            }
+        } catch (e: MalformedURLException) {
+            Log.i(TAG, "Error: ${e.message.toString()}")
+        } catch (e: URISyntaxException) {
+            Log.i(TAG, "Error: ${e.message.toString()}")
+        }
+        return false
+    }
+
+
     private fun getAlbumIdFromUrl(url: String): String? {
         val regex = Regex("/album/([^/?]+)")
         val matchResult = regex.find(url)
@@ -137,4 +161,9 @@ class AlbumHomeFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
+    companion object {
+        const val TAG = "AlbumHomeFragment"
+    }
+
 }
