@@ -28,10 +28,4 @@
         <item>@string/recently_added</item>
     </string-array>
 
-    <string-array name="album_options">
-        <item>@string/album</item>
-        <item>@string/single</item>
-        <item>@string/ep</item>
-    </string-array>
-
 </resources>

@@ -56,15 +56,29 @@ class AlbumHomeFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
-
-            imgList.setOnClickListener {
+            chipList.setOnClickListener {
                 isListViewChanged = !isListViewChanged
                 when {
-                    isListViewChanged -> { imgList.setImageResource(R.drawable.ic_grid) }
-                    else -> { imgList.setImageResource(R.drawable.ic_list) }
+                    isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
+                    else -> { chipList.setChipIconResource(R.drawable.ic_list) }
                 }
             }
+            chipSortBy.setOnClickListener { listTypeDialog() }
         }
+    }
+
+    private fun FragmentAlbumHomeBinding.listTypeDialog() {
+        val sortOptions = resources.getStringArray(R.array.sort_options)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.sort_by)
+            .setItems(sortOptions) { _, index ->
+                when (index) {
+                    0 -> { chipSortBy.text = getString(R.string.alphabetical) }
+                    1 -> { chipSortBy.text = getString(R.string.recently_added) }
+                }
+            }
+            .show()
     }
 
     private fun FragmentAlbumHomeBinding.setupToolbar() {
@@ -77,8 +91,10 @@ class AlbumHomeFragment : Fragment() {
 
 
         with(toolbar) {
-            menu.findItem(R.id.imgSearch).setIconTintList(iconTint)
-            menu.findItem(R.id.imgLink).setIconTintList(iconTint)
+            menu.apply {
+                findItem(R.id.imgSearch).setIconTintList(iconTint)
+                findItem(R.id.imgLink).setIconTintList(iconTint)
+            }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {

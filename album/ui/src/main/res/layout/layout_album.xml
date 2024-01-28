@@ -29,6 +29,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:fontFamily="@font/inter_medium"
         android:id="@+id/txtAlbum"
         android:layout_width="102dp"
         android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
     <TextView
         android:id="@+id/txtArtist"
         android:layout_width="102dp"
+        android:fontFamily="@font/outfit_regular"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"

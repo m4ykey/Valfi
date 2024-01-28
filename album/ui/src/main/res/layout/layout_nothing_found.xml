@@ -12,6 +12,7 @@
         android:layout_height="120dp"/>
 
     <TextView
+        android:fontFamily="@font/inter_medium"
         android:text="@string/nothing_found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

@@ -3,6 +3,8 @@ package com.m4ykey.ui.adapter.viewholder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.m4ykey.core.views.hide
+import com.m4ykey.core.views.show
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.adapter.navigation.OnTrackClick
 import com.m4ykey.ui.databinding.LayoutTracksBinding
@@ -35,6 +37,8 @@ class TrackListViewHolder(
             val artistList = track.artists.joinToString(", ") { it.name }
             val seconds = track.durationMs / 1000
             val trackDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
+
+            if (track.explicit) txtExplicit.show() else txtExplicit.hide()
 
             txtTrackName.text = track.name
             txtArtist.text = artistList

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -168,27 +169,26 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
             }
 
             buttonsIntents(
-                id = btnAlbum.id,
+                button = btnAlbum,
                 url = albumDetail.externalUrls.spotify
             )
             buttonsIntents(
-                id = btnArtist.id,
+                button = btnArtist,
                 url = albumDetail.artists[0].externalUrls.spotify
             )
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
-                when {
-                    isAlbumSaved -> { imgSave.setImageResource(R.drawable.ic_favorite) }
-                    else -> { imgSave.setImageResource(R.drawable.ic_favorite_border) }
-                }
+
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                buttonAnimation(imgSave, resourceId)
             }
+
             imgListenLater.setOnClickListener {
                 isListenLaterSaved = !isListenLaterSaved
-                when {
-                    isListenLaterSaved -> { imgListenLater.setImageResource(R.drawable.ic_listen_later) }
-                    else -> { imgListenLater.setImageResource(R.drawable.ic_listen_later_border) }
-                }
+
+                val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                buttonAnimation(imgListenLater, resourceId)
             }
 
             txtAlbumName.text = albumDetail.name
@@ -198,8 +198,7 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
         }
     }
 
-    private fun buttonsIntents(url: String, id: Int) {
-        val button: MaterialButton = view?.findViewById(id)!!
+    private fun buttonsIntents(button: MaterialButton, url: String) {
         button.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
@@ -212,6 +211,20 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
     companion object {
         const val TAG = "DetailAlbumFragment"
+    }
+
+    private fun buttonAnimation(imageView : ImageView, resourceId : Int) {
+        imageView.animate()
+            .alpha(0f)
+            .setDuration(200)
+            .withEndAction {
+                imageView.setImageResource(resourceId)
+                imageView.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            }
+            .start()
     }
 
     override fun onTrackClick(id: String) {

@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutTracks"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_marginTop="10dp"
-    android:id="@+id/linearLayoutTracks"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,37 +13,60 @@
         tools:ignore="UselessParent">
 
         <LinearLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:textSize="16sp"
-                android:textColor="@color/textColor"
-                tools:text="Believe"
+                android:fontFamily="@font/outfit_medium"
                 android:id="@+id/txtTrackName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:textSize="14sp"
-                tools:text="Cher"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
                 android:textColor="@color/textColor"
-                android:id="@+id/txtArtist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                tools:text="Believe" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:id="@+id/txtExplicit"
+                    android:fontFamily="@font/outfit_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="E"
+                    style="@style/Explicit"
+                    android:textColor="@color/white"
+                    tools:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/txtArtist"
+                    android:layout_width="wrap_content"
+                    android:fontFamily="@font/outfit_regular"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor"
+                    tools:text="Cher" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/txtDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/outfit_regular"
             android:layout_gravity="center"
             android:padding="10dp"
             tools:text="2:39"
-            android:id="@+id/txtDuration"
-            android:textColor="@color/textColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/textColor" />
 
     </LinearLayout>
 

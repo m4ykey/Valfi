@@ -17,7 +17,6 @@
         app:navGraph="@navigation/app_nav_graph"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:background="@color/background"
         app:menu="@menu/menu_bottom_bar"
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
     tools:context=".AlbumHomeFragment">
 
@@ -24,58 +23,52 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <HorizontalScrollView
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:id="@+id/horizontalScrollView"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        app:singleLine="true"
         app:layout_constraintTop_toBottomOf="@id/appBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.google.android.material.chip.Chip
+            android:fontFamily="@font/outfit_regular"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:id="@+id/chipEverything"
+            android:text="@string/everything"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_marginEnd="10dp"
-                android:id="@+id/txtEverything"
-                android:text="@string/everything"
-                style="@style/RoundedCornerTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.Material3.Chip.Filter"
+            android:fontFamily="@font/outfit_regular"
+            android:id="@+id/chipAlbum"
+            android:text="@string/album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_marginEnd="10dp"
-                android:id="@+id/txtAlbum"
-                android:text="@string/album"
-                style="@style/RoundedCornerTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipEp"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:text="@string/ep"
+            android:fontFamily="@font/outfit_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_marginEnd="10dp"
-                android:id="@+id/txtEP"
-                android:text="@string/ep"
-                style="@style/RoundedCornerTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <com.google.android.material.chip.Chip
+            android:fontFamily="@font/outfit_regular"
+            android:id="@+id/chipSingle"
+            android:text="@string/single"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/txtSingle"
-                android:text="@string/single"
-                style="@style/RoundedCornerTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.core.widget.NestedScrollView
-        app:layout_constraintTop_toBottomOf="@id/horizontalScrollView"
+        app:layout_constraintTop_toBottomOf="@id/chipGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -104,24 +97,23 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.chip.Chip
-                        app:chipIconTint="@color/textColor"
-                        app:chipSurfaceColor="@android:color/transparent"
-                        android:textColor="@color/textColor"
-                        app:chipBackgroundColor="@android:color/transparent"
+                        style="@style/ChipStyle"
                         android:id="@+id/chipSortBy"
+                        android:fontFamily="@font/outfit_regular"
                         android:text="@string/recently_added"
                         app:chipIcon="@drawable/ic_sort"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        style="@style/ChipStyle"
+                        android:id="@+id/chipList"
+                        app:chipIcon="@drawable/ic_list"
+                        app:chipEndPadding="-9dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                <ImageView
-                    android:id="@+id/imgList"
-                    android:src="@drawable/ic_grid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/list_view" />
+                </com.google.android.material.chip.ChipGroup>
 
             </LinearLayout>
 
