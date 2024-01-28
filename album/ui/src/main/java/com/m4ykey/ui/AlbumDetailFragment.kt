@@ -42,6 +42,8 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
     private lateinit var navController: NavController
     private val viewModel: AlbumViewModel by viewModels()
     private val trackAdapter by lazy { TrackListPagingAdapter(this) }
+    private var isAlbumSaved = false
+    private var isListenLaterSaved = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -173,6 +175,21 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
                 id = btnArtist.id,
                 url = albumDetail.artists[0].externalUrls.spotify
             )
+
+            imgSave.setOnClickListener {
+                isAlbumSaved = !isAlbumSaved
+                when {
+                    isAlbumSaved -> { imgSave.setImageResource(R.drawable.ic_favorite) }
+                    else -> { imgSave.setImageResource(R.drawable.ic_favorite_border) }
+                }
+            }
+            imgListenLater.setOnClickListener {
+                isListenLaterSaved = !isListenLaterSaved
+                when {
+                    isListenLaterSaved -> { imgListenLater.setImageResource(R.drawable.ic_listen_later) }
+                    else -> { imgListenLater.setImageResource(R.drawable.ic_listen_later_border) }
+                }
+            }
 
             txtAlbumName.text = albumDetail.name
             txtArtist.text = artistList

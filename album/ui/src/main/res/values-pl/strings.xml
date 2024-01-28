@@ -18,4 +18,5 @@
     <string name="enter_album_url">Wprowadź adres albumu</string>
     <string name="close">Zamknij</string>
     <string name="invalid_album_url">Błędny adres albumu</string>
+    <string name="everything">Wszystko</string>
 </resources>

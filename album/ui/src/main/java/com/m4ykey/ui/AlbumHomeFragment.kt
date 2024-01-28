@@ -29,6 +29,7 @@ class AlbumHomeFragment : Fragment() {
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
+    private var isListViewChanged = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,36 +56,15 @@ class AlbumHomeFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
-            chipSort.setOnClickListener { openSortDialog() }
-            chipAlbumType.setOnClickListener { openAlbumTypeDialog() }
+
+            imgList.setOnClickListener {
+                isListViewChanged = !isListViewChanged
+                when {
+                    isListViewChanged -> { imgList.setImageResource(R.drawable.ic_grid) }
+                    else -> { imgList.setImageResource(R.drawable.ic_list) }
+                }
+            }
         }
-    }
-
-    private fun FragmentAlbumHomeBinding.openAlbumTypeDialog() {
-        val sortOptions = resources.getStringArray(R.array.album_options)
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.sort_by)
-            .setItems(sortOptions) { _, index ->
-                when (index) {
-                    0 -> { chipAlbumType.text = getString(R.string.album) }
-                    1 -> { chipAlbumType.text = getString(R.string.single) }
-                    2 -> { chipAlbumType.text = getString(R.string.ep) }
-                }
-            }.show()
-    }
-
-    private fun FragmentAlbumHomeBinding.openSortDialog() {
-        val sortOptions = resources.getStringArray(R.array.sort_options)
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.sort_by)
-            .setItems(sortOptions) { _, index ->
-                when (index) {
-                    0 -> { chipSort.text = getString(R.string.alphabetical) }
-                    1 -> { chipSort.text = getString(R.string.recently_added) }
-                }
-            }.show()
     }
 
     private fun FragmentAlbumHomeBinding.setupToolbar() {

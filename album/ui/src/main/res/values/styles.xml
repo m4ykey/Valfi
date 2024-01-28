@@ -11,5 +11,13 @@
         <item name="android:fontFamily">@font/inter_medium</item>
         <item name="android:textColor">@color/textColor</item>
     </style>
-    
+
+    <style name="RoundedCornerTextView">
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:background">@drawable/drawable_txt_home</item>
+    </style>
 </resources>

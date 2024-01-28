@@ -9,4 +9,6 @@
     <color name="searchIconEditText">#424242</color>
     <color name="searchBox">#40000000</color>
 
+    <color name="txtHome">#424242</color>
+
 </resources>
