@@ -6,7 +6,6 @@ data class AlbumDetail(
     val externalUrls: ExternalUrls,
     val id : String,
     val images : List<Image>,
-    val label : String,
     val name : String,
     val releaseDate : String,
     val totalTracks : Int

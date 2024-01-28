@@ -27,6 +27,7 @@ moshi = "1.15.0"
 datastore = "1.0.0"
 hilt = "2.50"
 okhttp = "4.12.0"
+room = "2.6.1"
 
 [libraries]
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase-crashlytics" }
@@ -51,6 +52,9 @@ androidx-datastore = { group = "androidx.datastore", name = "datastore-preferenc
 androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 
 android-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
