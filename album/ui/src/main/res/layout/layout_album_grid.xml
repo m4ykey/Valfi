@@ -19,11 +19,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            tools:background="@color/black"
             android:id="@+id/imgAlbum"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:background="@color/white"
             android:contentDescription="@string/album_cover" />
 
     </androidx.cardview.widget.CardView>

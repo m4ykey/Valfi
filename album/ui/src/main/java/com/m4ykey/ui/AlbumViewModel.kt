@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.m4ykey.core.network.Resource
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -37,6 +38,9 @@ class AlbumViewModel @Inject constructor(
 
     private var _albumPagingData = MutableStateFlow<PagingData<AlbumEntity>>(PagingData.empty())
     val albumPagingData: StateFlow<PagingData<AlbumEntity>> = _albumPagingData
+
+    private var _currentViewType = MutableLiveData(AlbumEntityPagingAdapter.ViewType.GRID)
+    val currentViewType : LiveData<AlbumEntityPagingAdapter.ViewType> = _currentViewType
 
     init {
         getAllAlbumsPaged()

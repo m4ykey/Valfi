@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -65,13 +66,16 @@ class AlbumHomeFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
-            setupRecyclerView()
             setupChips()
+            setupRecyclerView()
 
             lifecycleScope.launch(Dispatchers.Main) {
                 viewModel.albumPagingData.collect { pagingData ->
                     albumAdapter.submitData(pagingData)
                 }
+            }
+            viewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
+                albumAdapter.setupViewType(viewType)
             }
         }
     }
@@ -83,17 +87,26 @@ class AlbumHomeFragment : Fragment() {
                 isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
                 else -> { chipList.setChipIconResource(R.drawable.ic_list) }
             }
+            setRecyclerViewLayout(isListViewChanged)
         }
         chipSortBy.setOnClickListener { listTypeDialog() }
     }
 
+    private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView : Boolean) {
+        val layoutManager = if (isListView) {
+            LinearLayoutManager(requireContext())
+        } else {
+            GridLayoutManager(requireContext(), 3)
+        }
+        rvAlbums.layoutManager = layoutManager
+    }
+
     private fun FragmentAlbumHomeBinding.setupRecyclerView() {
         with(rvAlbums) {
+            layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = albumAdapter.withLoadStateFooter(
                 footer = LoadStateAdapter()
             )
-
-            layoutManager = GridLayoutManager(requireContext(), 3)
         }
     }
 
