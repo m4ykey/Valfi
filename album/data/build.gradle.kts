@@ -72,6 +72,7 @@ dependencies {
         implementation(androidx.room.runtime)
         implementation(androidx.room.ktx)
         ksp(androidx.room.compiler)
+        implementation(androidx.room.paging)
 
         implementation(okhttp)
         implementation(okhttp.logging.interceptor)

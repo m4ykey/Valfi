@@ -72,5 +72,14 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun deleteAlbum(album: AlbumEntity) = dao.deleteAlbum(album)
     override suspend fun albumById(id: String): AlbumEntity = dao.getAlbumById(id)
     override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = dao.getAlbumSortedAlphabetical()
-    override fun getAllAlbums(): Flow<List<AlbumEntity>> = dao.getAllAlbums()
+
+    override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { dao.getAllAlbumsPaged() }
+        ).flow
+    }
 }

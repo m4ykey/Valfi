@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.m4ykey.core.network.Resource
 import com.m4ykey.data.domain.repository.AlbumRepository
@@ -12,6 +13,8 @@ import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,13 +35,17 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableLiveData<AlbumTrackUiState>()
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
-    private var _albumEntity = MutableLiveData<List<AlbumEntity>>(emptyList())
-    val albumEntity : LiveData<List<AlbumEntity>> get() = _albumEntity
+    private var _albumPagingData = MutableStateFlow<PagingData<AlbumEntity>>(PagingData.empty())
+    val albumPagingData: StateFlow<PagingData<AlbumEntity>> = _albumPagingData
 
     init {
+        getAllAlbumsPaged()
+    }
+
+    private fun getAllAlbumsPaged() {
         viewModelScope.launch {
-            repository.getAllAlbums().collect { album ->
-                _albumEntity.value = album
+            repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
+                _albumPagingData.value = pagingData
             }
         }
     }

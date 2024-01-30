@@ -9,15 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.showToast
+import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
+import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
@@ -30,6 +37,8 @@ class AlbumHomeFragment : Fragment() {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private var isListViewChanged = false
+    private val albumAdapter by lazy { AlbumEntityPagingAdapter() }
+    private val viewModel : AlbumViewModel by viewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,14 +65,35 @@ class AlbumHomeFragment : Fragment() {
 
         with(binding) {
             setupToolbar()
-            chipList.setOnClickListener {
-                isListViewChanged = !isListViewChanged
-                when {
-                    isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
-                    else -> { chipList.setChipIconResource(R.drawable.ic_list) }
+            setupRecyclerView()
+            setupChips()
+
+            lifecycleScope.launch(Dispatchers.Main) {
+                viewModel.albumPagingData.collect { pagingData ->
+                    albumAdapter.submitData(pagingData)
                 }
             }
-            chipSortBy.setOnClickListener { listTypeDialog() }
+        }
+    }
+
+    private fun FragmentAlbumHomeBinding.setupChips() {
+        chipList.setOnClickListener {
+            isListViewChanged = !isListViewChanged
+            when {
+                isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
+                else -> { chipList.setChipIconResource(R.drawable.ic_list) }
+            }
+        }
+        chipSortBy.setOnClickListener { listTypeDialog() }
+    }
+
+    private fun FragmentAlbumHomeBinding.setupRecyclerView() {
+        with(rvAlbums) {
+            adapter = albumAdapter.withLoadStateFooter(
+                footer = LoadStateAdapter()
+            )
+
+            layoutManager = GridLayoutManager(requireContext(), 3)
         }
     }
 

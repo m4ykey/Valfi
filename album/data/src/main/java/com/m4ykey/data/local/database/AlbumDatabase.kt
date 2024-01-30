@@ -7,7 +7,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 
 @Database(
     entities = [AlbumEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AlbumDatabase : RoomDatabase() {

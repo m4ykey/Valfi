@@ -1,5 +1,6 @@
 package com.m4ykey.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -24,6 +25,15 @@ interface AlbumDao {
     fun getAlbumSortedAlphabetical() : Flow<List<AlbumEntity>>
 
     @Query("SELECT * FROM album ORDER BY saveTime ASC")
-    fun getAllAlbums() : Flow<List<AlbumEntity>>
+    fun getAllAlbumsPaged() : PagingSource<Int, AlbumEntity>
+
+    @Query("SELECT * FROM album WHERE albumType = 'Album' ORDER BY name ASC")
+    fun getAlbumsOfTypeAlbumPaged() : PagingSource<Int, AlbumEntity>
+
+    @Query("SELECT * FROM album WHERE albumType = 'EP' ORDER BY name ASC")
+    fun getAlbumsOfTypeEPPaged() : PagingSource<Int, AlbumEntity>
+
+    @Query("SELECT * FROM album WHERE albumType = 'Single' ORDER BY name ASC")
+    fun getAlbumsOfTypeSinglePaged() : PagingSource<Int, AlbumEntity>
 
 }

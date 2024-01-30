@@ -20,7 +20,7 @@ object DatabaseModule {
             application,
             AlbumDatabase::class.java,
             "album_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
 }
