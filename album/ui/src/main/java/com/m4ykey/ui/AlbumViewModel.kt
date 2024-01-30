@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.m4ykey.core.network.Resource
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -30,6 +31,25 @@ class AlbumViewModel @Inject constructor(
 
     private var _tracks = MutableLiveData<AlbumTrackUiState>()
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
+
+    private var _albumEntity = MutableLiveData<List<AlbumEntity>>(emptyList())
+    val albumEntity : LiveData<List<AlbumEntity>> get() = _albumEntity
+
+    init {
+        viewModelScope.launch {
+            repository.getAllAlbums().collect { album ->
+                _albumEntity.value = album
+            }
+        }
+    }
+
+    suspend fun insertAlbum(album : AlbumEntity) {
+        viewModelScope.launch { repository.insertAlbum(album) }
+    }
+
+    suspend fun deleteAlbum(album : AlbumEntity) {
+        viewModelScope.launch { repository.deleteAlbum(album) }
+    }
 
     suspend fun getAlbumById(id : String) {
         repository.getAlbumById(id).onEach { result ->

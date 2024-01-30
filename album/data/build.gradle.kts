@@ -57,6 +57,7 @@ dependencies {
         testImplementation(junit)
         androidTestImplementation(ext.junit)
         androidTestImplementation(espresso)
+        androidTestImplementation(truth)
 
         implementation(retrofit)
         implementation(retrofit.moshi)

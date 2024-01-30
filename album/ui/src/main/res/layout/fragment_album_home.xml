@@ -34,14 +34,6 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.chip.Chip
-            android:fontFamily="@font/outfit_regular"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:id="@+id/chipEverything"
-            android:text="@string/everything"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <com.google.android.material.chip.Chip
             style="@style/Widget.Material3.Chip.Filter"
             android:fontFamily="@font/outfit_regular"
             android:id="@+id/chipAlbum"

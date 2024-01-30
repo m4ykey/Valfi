@@ -25,6 +25,7 @@ import com.m4ykey.core.views.formatAirDate
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.adapter.navigation.OnTrackClick
@@ -158,8 +159,9 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
                 else -> albumDetail.albumType.replaceFirstChar { it.uppercase() }
             }
+            val formatAirDate = formatAirDate(albumDetail.releaseDate)
             val albumInfo =
-                "$albumType • ${formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(
+                "$albumType • $formatAirDate • ${albumDetail.totalTracks} " + getString(
                     R.string.tracks
                 )
 
@@ -179,9 +181,28 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
-
                 val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 buttonAnimation(imgSave, resourceId)
+
+                val album = AlbumEntity(
+                    albumType = albumType,
+                    artistList = artistList,
+                    image = image ?: "",
+                    totalTracks = albumDetail.totalTracks,
+                    name = albumDetail.name,
+                    releaseDate = formatAirDate ?: "",
+                    id = albumDetail.id,
+                    isAlbumSaved = isAlbumSaved,
+                    albumUrl = albumDetail.externalUrls.spotify,
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify
+                )
+
+                lifecycleScope.launch {
+                    when {
+                        isAlbumSaved -> viewModel.insertAlbum(album)
+                        else -> viewModel.deleteAlbum(album)
+                    }
+                }
             }
 
             imgListenLater.setOnClickListener {

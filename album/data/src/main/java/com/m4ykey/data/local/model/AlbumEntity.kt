@@ -8,9 +8,12 @@ data class AlbumEntity(
     @PrimaryKey(autoGenerate = false) val id : String,
     val name : String,
     val totalTracks : Int,
-    val albumInfo : String,
-    val image : List<ImageEntity>,
-    val externalUrls : ExternalUrlsEntity,
-    val artistList : List<ArtistEntity>,
-    val saveTime : Long = System.currentTimeMillis()
+    val albumUrl : String,
+    val artistUrl : String,
+    val image : String,
+    val artistList : String,
+    val saveTime : Long = System.currentTimeMillis(),
+    val albumType : String,
+    val releaseDate : String,
+    var isAlbumSaved : Boolean
 )

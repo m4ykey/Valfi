@@ -46,7 +46,6 @@ fun AlbumDetailDto.toAlbumDetail() : AlbumDetail {
         externalUrls = external_urls.toExternalUrls(),
         id = id,
         images = images.map { it.toImage() },
-        label = label,
         name = name,
         releaseDate = release_date,
         totalTracks = total_tracks

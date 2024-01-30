@@ -11,6 +11,8 @@ import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.interceptor.SpotifyInterceptor
+import com.m4ykey.data.local.dao.AlbumDao
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.paging.SearchAlbumPagingSource
 import com.m4ykey.data.paging.TrackListPagingSource
@@ -21,7 +23,8 @@ import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api : AlbumApi,
-    private val interceptor: SpotifyInterceptor
+    private val interceptor: SpotifyInterceptor,
+    private val dao : AlbumDao
 ) : AlbumRepository {
     override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> {
         return Pager(
@@ -64,4 +67,10 @@ class AlbumRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+
+    override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
+    override suspend fun deleteAlbum(album: AlbumEntity) = dao.deleteAlbum(album)
+    override suspend fun albumById(id: String): AlbumEntity = dao.getAlbumById(id)
+    override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = dao.getAlbumSortedAlphabetical()
+    override fun getAllAlbums(): Flow<List<AlbumEntity>> = dao.getAllAlbums()
 }

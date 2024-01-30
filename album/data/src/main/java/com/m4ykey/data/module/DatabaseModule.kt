@@ -6,7 +6,6 @@ import com.m4ykey.data.local.database.AlbumDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,7 +15,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAlbumDatabase(@ApplicationContext application: Application) : AlbumDatabase {
+    fun provideAlbumDatabase(application: Application) : AlbumDatabase {
         return Room.databaseBuilder(
             application,
             AlbumDatabase::class.java,
