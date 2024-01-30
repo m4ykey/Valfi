@@ -7,13 +7,13 @@ import coil.load
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 
-class AlbumEntityGridViewHolder(
+class AlbumGridViewHolder(
     private val binding : LayoutAlbumGridBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
-        fun create(view : ViewGroup) : AlbumEntityGridViewHolder {
-            return AlbumEntityGridViewHolder(binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false))
+        fun create(view : ViewGroup) : AlbumGridViewHolder {
+            return AlbumGridViewHolder(LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false))
         }
     }
 

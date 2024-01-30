@@ -92,13 +92,18 @@ class AlbumHomeFragment : Fragment() {
         chipSortBy.setOnClickListener { listTypeDialog() }
     }
 
-    private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView : Boolean) {
-        val layoutManager = if (isListView) {
+    private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
+        val newViewType = if (isListView) {
+            AlbumEntityPagingAdapter.ViewType.LIST
+        } else {
+            AlbumEntityPagingAdapter.ViewType.GRID
+        }
+        albumAdapter.setupViewType(newViewType)
+        rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
             GridLayoutManager(requireContext(), 3)
         }
-        rvAlbums.layoutManager = layoutManager
     }
 
     private fun FragmentAlbumHomeBinding.setupRecyclerView() {

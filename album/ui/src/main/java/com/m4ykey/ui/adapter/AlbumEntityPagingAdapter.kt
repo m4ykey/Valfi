@@ -5,8 +5,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.ui.adapter.viewholder.AlbumEntityGridViewHolder
-import com.m4ykey.ui.adapter.viewholder.AlbumEntityListViewHolder
+import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
+import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
 
 class AlbumEntityPagingAdapter : PagingDataAdapter<AlbumEntity, RecyclerView.ViewHolder>(COMPARATOR) {
 
@@ -18,24 +18,30 @@ class AlbumEntityPagingAdapter : PagingDataAdapter<AlbumEntity, RecyclerView.Vie
     }
 
     enum class ViewType {
-        LIST,
-        GRID
+        GRID,
+        LIST
     }
 
-    var currentViewType = ViewType.GRID
+    private var currentViewType = ViewType.GRID
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is AlbumEntityListViewHolder -> getItem(position)?.let { album -> holder.bind(album) }
-            is AlbumEntityGridViewHolder -> getItem(position)?.let { album -> holder.bind(album) }
+            is AlbumGridViewHolder -> getItem(position)?.let { album -> holder.bind(album) }
+            is AlbumListViewHolder -> getItem(position)?.let { album -> holder.bind(album) }
+            else -> throw IllegalArgumentException("Unknown view holder type")
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (currentViewType) {
-            ViewType.GRID -> AlbumEntityGridViewHolder.create(parent)
-            ViewType.LIST -> AlbumEntityListViewHolder.create(parent)
+        return when (viewType) {
+            ViewType.GRID.ordinal -> AlbumGridViewHolder.create(parent)
+            ViewType.LIST.ordinal -> AlbumListViewHolder.create(parent)
+            else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return currentViewType.ordinal
     }
 
     fun setupViewType(viewType: ViewType) {
