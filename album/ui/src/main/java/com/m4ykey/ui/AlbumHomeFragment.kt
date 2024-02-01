@@ -24,6 +24,7 @@ import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.helpers.CenterSpaceItemDecoration
 import com.m4ykey.ui.adapter.helpers.convertDpToPx
+import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -33,14 +34,14 @@ import java.net.URISyntaxException
 import java.net.URL
 
 @AndroidEntryPoint
-class AlbumHomeFragment : Fragment() {
+class AlbumHomeFragment : Fragment(), OnAlbumClick {
 
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private var isListViewChanged = false
-    private val albumAdapter by lazy { AlbumEntityPagingAdapter() }
+    private val albumAdapter by lazy { AlbumEntityPagingAdapter(this) }
     private val albumViewModel : AlbumViewModel by viewModels()
 
     override fun onAttach(context: Context) {
@@ -224,6 +225,11 @@ class AlbumHomeFragment : Fragment() {
 
     companion object {
         const val TAG = "AlbumHomeFragment"
+    }
+
+    override fun onAlbumClick(id: String) {
+        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId = id)
+        findNavController().navigate(action)
     }
 
 }

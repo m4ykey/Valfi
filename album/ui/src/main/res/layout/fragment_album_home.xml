@@ -34,7 +34,6 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.Material3.Chip.Filter"
             android:fontFamily="@font/outfit_regular"
             android:id="@+id/chipAlbum"
             android:text="@string/album"
@@ -43,7 +42,6 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipEp"
-            style="@style/Widget.Material3.Chip.Filter"
             android:text="@string/ep"
             android:fontFamily="@font/outfit_regular"
             android:layout_width="wrap_content"
@@ -53,7 +51,6 @@
             android:fontFamily="@font/outfit_regular"
             android:id="@+id/chipSingle"
             android:text="@string/single"
-            style="@style/Widget.Material3.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

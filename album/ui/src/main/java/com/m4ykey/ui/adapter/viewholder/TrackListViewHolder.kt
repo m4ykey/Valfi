@@ -45,5 +45,4 @@ class TrackListViewHolder(
             txtDuration.text = trackDuration
         }
     }
-
 }

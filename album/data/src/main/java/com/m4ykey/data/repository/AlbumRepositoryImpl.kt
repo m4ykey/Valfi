@@ -22,9 +22,9 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
-    private val api : AlbumApi,
+    private val api: AlbumApi,
     private val interceptor: SpotifyInterceptor,
-    private val dao : AlbumDao
+    private val albumDao: AlbumDao
 ) : AlbumRepository {
     override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> {
         return Pager(
@@ -68,9 +68,9 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
-    override suspend fun deleteAlbum(album: AlbumEntity) = dao.deleteAlbum(album)
-    override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = dao.getAlbumSortedAlphabetical()
+    override suspend fun insertAlbum(album: AlbumEntity) = albumDao.insertAlbum(album)
+    override suspend fun deleteAlbum(album: AlbumEntity) = albumDao.deleteAlbum(album)
+    override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = albumDao.getAlbumSortedAlphabetical()
 
     override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
@@ -78,7 +78,7 @@ class AlbumRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { dao.getAllAlbumsPaged() }
+            pagingSourceFactory = { albumDao.getAllAlbumsPaged() }
         ).flow
     }
 }

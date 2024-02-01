@@ -92,7 +92,6 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
             setupRecyclerView()
             setupToolbar()
         }
-
     }
 
     private fun FragmentAlbumDetailBinding.setupToolbar() {
