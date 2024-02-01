@@ -85,12 +85,10 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
 
     private fun FragmentAlbumHomeBinding.setupChips() {
         lifecycleScope.launch {
-
             when {
                 isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
                 else -> { chipList.setChipIconResource(R.drawable.ic_list) }
             }
-
             chipList.setOnClickListener {
                 isListViewChanged = !isListViewChanged
                 lifecycleScope.launch {
@@ -160,6 +158,7 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
                 findItem(R.id.imgSearch).setIconTintList(iconTint)
                 findItem(R.id.imgLink).setIconTintList(iconTint)
             }
+            setNavigationOnClickListener { drawerLayout.open() }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {

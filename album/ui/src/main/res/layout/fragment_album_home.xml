@@ -1,123 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/drawerLayout"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
     tools:context=".AlbumHomeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/CustomToolbarStyle"
-            app:menu="@menu/toolbar_menu"
-            app:title="@string/collection" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
-        app:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@id/appBar"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.chip.Chip
-            android:fontFamily="@font/outfit_regular"
-            android:id="@+id/chipAlbum"
-            android:text="@string/album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipEp"
-            android:text="@string/ep"
-            android:fontFamily="@font/outfit_regular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <com.google.android.material.chip.Chip
-            android:fontFamily="@font/outfit_regular"
-            android:id="@+id/chipSingle"
-            android:text="@string/single"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <androidx.core.widget.NestedScrollView
-        app:layout_constraintTop_toBottomOf="@id/chipGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:overScrollMode="never">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:id="@+id/linearChipGroup"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:orientation="horizontal"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/CustomToolbarStyle"
+                app:navigationIcon="@drawable/ic_menu"
+                app:menu="@menu/toolbar_menu">
+
+                <TextView
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/collection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            app:singleLine="true"
+            app:layout_constraintTop_toBottomOf="@id/appBar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                android:fontFamily="@font/outfit_regular"
+                android:id="@+id/chipAlbum"
+                android:text="@string/album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEp"
+                android:text="@string/ep"
+                android:fontFamily="@font/outfit_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.chip.Chip
+                android:fontFamily="@font/outfit_regular"
+                android:id="@+id/chipSingle"
+                android:text="@string/single"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <androidx.core.widget.NestedScrollView
+            app:layout_constraintTop_toBottomOf="@id/chipGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:id="@+id/linearChipGroup"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/ChipStyle"
-                        android:id="@+id/chipSortBy"
-                        android:fontFamily="@font/outfit_regular"
-                        android:text="@string/recently_added"
-                        app:chipIcon="@drawable/ic_sort"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/ChipStyle"
-                        android:id="@+id/chipList"
-                        app:chipIcon="@drawable/ic_list"
-                        app:chipEndPadding="-9dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        <com.google.android.material.chip.Chip
+                            style="@style/ChipStyle"
+                            android:id="@+id/chipSortBy"
+                            android:fontFamily="@font/outfit_regular"
+                            android:text="@string/recently_added"
+                            app:chipIcon="@drawable/ic_sort"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
-                </com.google.android.material.chip.ChipGroup>
+                        <com.google.android.material.chip.Chip
+                            style="@style/ChipStyle"
+                            android:id="@+id/chipList"
+                            app:chipIcon="@drawable/ic_list"
+                            app:chipEndPadding="-9dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
-            </LinearLayout>
+                    </com.google.android.material.chip.ChipGroup>
 
-            <androidx.recyclerview.widget.RecyclerView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearChipGroup"
-                android:id="@+id/rvAlbums"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:overScrollMode="never" />
+                </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearChipGroup"
+                    android:id="@+id/rvAlbums"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never" />
 
-    </androidx.core.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_gravity="start"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>
