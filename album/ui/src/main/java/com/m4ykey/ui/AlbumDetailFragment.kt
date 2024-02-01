@@ -42,7 +42,7 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
     private val args: AlbumDetailFragmentArgs by navArgs()
     private var bottomNavigationVisibility: BottomNavigationVisibility? = null
     private lateinit var navController: NavController
-    private val viewModel: AlbumViewModel by viewModels()
+    private val albumViewModel: AlbumViewModel by viewModels()
     private val trackAdapter by lazy { TrackListPagingAdapter(this) }
     private var isAlbumSaved = false
     private var isListenLaterSaved = false
@@ -67,9 +67,9 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            viewModel.getAlbumById(args.albumId)
+            albumViewModel.getAlbumById(args.albumId)
         }
-        viewModel.getAlbumTracks(args.albumId)
+        albumViewModel.getAlbumTracks(args.albumId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,12 +78,12 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
         bottomNavigationVisibility?.hideBottomNavigation()
         navController = findNavController()
 
-        viewModel.detail.observe(viewLifecycleOwner) { state ->
+        albumViewModel.detail.observe(viewLifecycleOwner) { state ->
             handleUiState(state)
         }
 
         lifecycleScope.launch {
-            viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+            albumViewModel.tracks.observe(viewLifecycleOwner) { tracks ->
                 trackAdapter.submitData(viewLifecycleOwner.lifecycle, tracks.albumTracks!!)
             }
         }
@@ -199,8 +199,8 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
                 lifecycleScope.launch {
                     when {
-                        isAlbumSaved -> viewModel.insertAlbum(album)
-                        else -> viewModel.deleteAlbum(album)
+                        isAlbumSaved -> albumViewModel.insertAlbum(album)
+                        else -> albumViewModel.deleteAlbum(album)
                     }
                 }
             }

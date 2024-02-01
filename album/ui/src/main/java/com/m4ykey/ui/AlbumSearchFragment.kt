@@ -25,6 +25,8 @@ import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.show
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
+import com.m4ykey.ui.adapter.helpers.CenterSpaceItemDecoration
+import com.m4ykey.ui.adapter.helpers.convertDpToPx
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,8 +93,10 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
 
     private fun FragmentAlbumSearchBinding.setupRecyclerView() {
         with(rvSearchAlbums) {
-            setHasFixedSize(true)
-            itemAnimator = null
+
+            val spaceBetweenItems = 10
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(spaceBetweenItems)))
+
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
                 header = LoadStateAdapter(),
                 footer = LoadStateAdapter()

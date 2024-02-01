@@ -8,6 +8,8 @@
     <color name="progressBar">#151515</color>
     <color name="searchIconEditText">#424242</color>
     <color name="searchBox">#40000000</color>
+    <color name="textColor2">#424242</color>
+    <color name="buttonColor">#4FC3F7</color>
 
     <color name="txtHome">#424242</color>
 

@@ -70,7 +70,6 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
     override suspend fun deleteAlbum(album: AlbumEntity) = dao.deleteAlbum(album)
-    override suspend fun albumById(id: String): AlbumEntity = dao.getAlbumById(id)
     override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = dao.getAlbumSortedAlphabetical()
 
     override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {

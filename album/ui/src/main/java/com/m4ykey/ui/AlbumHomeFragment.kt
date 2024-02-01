@@ -22,6 +22,8 @@ import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.showToast
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
+import com.m4ykey.ui.adapter.helpers.CenterSpaceItemDecoration
+import com.m4ykey.ui.adapter.helpers.convertDpToPx
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +41,7 @@ class AlbumHomeFragment : Fragment() {
     private lateinit var navController : NavController
     private var isListViewChanged = false
     private val albumAdapter by lazy { AlbumEntityPagingAdapter() }
-    private val viewModel : AlbumViewModel by viewModels()
+    private val albumViewModel : AlbumViewModel by viewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -70,26 +72,36 @@ class AlbumHomeFragment : Fragment() {
             setupRecyclerView()
 
             lifecycleScope.launch(Dispatchers.Main) {
-                viewModel.albumPagingData.collect { pagingData ->
+                albumViewModel.albumPagingData.collect { pagingData ->
                     albumAdapter.submitData(pagingData)
                 }
             }
-            viewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
+            albumViewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
                 albumAdapter.setupViewType(viewType)
             }
         }
     }
 
     private fun FragmentAlbumHomeBinding.setupChips() {
-        chipList.setOnClickListener {
-            isListViewChanged = !isListViewChanged
+        lifecycleScope.launch {
+
             when {
                 isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
                 else -> { chipList.setChipIconResource(R.drawable.ic_list) }
             }
-            setRecyclerViewLayout(isListViewChanged)
+
+            chipList.setOnClickListener {
+                isListViewChanged = !isListViewChanged
+                lifecycleScope.launch {
+                    when {
+                        isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
+                        else -> { chipList.setChipIconResource(R.drawable.ic_list) }
+                    }
+                    setRecyclerViewLayout(isListViewChanged)
+                }
+            }
+            chipSortBy.setOnClickListener { listTypeDialog() }
         }
-        chipSortBy.setOnClickListener { listTypeDialog() }
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
@@ -108,6 +120,10 @@ class AlbumHomeFragment : Fragment() {
 
     private fun FragmentAlbumHomeBinding.setupRecyclerView() {
         with(rvAlbums) {
+
+            val spaceBetweenItems = 10
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(spaceBetweenItems)))
+
             layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = albumAdapter.withLoadStateFooter(
                 footer = LoadStateAdapter()

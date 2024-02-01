@@ -2,8 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/app_nav_graph"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="InvalidNavigation"
     app:startDestination="@id/albumHomeFragment">
 
     <fragment
@@ -11,9 +9,17 @@
         android:name="com.m4ykey.ui.AlbumHomeFragment"
         android:label="AlbumHomeFragment" >
         <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumSearchFragment"
             app:destination="@id/albumSearchFragment" />
         <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
     </fragment>
@@ -22,6 +28,10 @@
         android:name="com.m4ykey.ui.AlbumSearchFragment"
         android:label="AlbumSearchFragment" >
         <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumSearchFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
     </fragment>

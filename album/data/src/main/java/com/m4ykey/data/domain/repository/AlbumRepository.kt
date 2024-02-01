@@ -16,7 +16,6 @@ interface AlbumRepository {
 
     suspend fun insertAlbum(album : AlbumEntity)
     suspend fun deleteAlbum(album: AlbumEntity)
-    suspend fun albumById(id : String) : AlbumEntity
     fun getAlbumSortedAlphabetical() : Flow<List<AlbumEntity>>
     fun getAllAlbumsPaged() : Flow<PagingData<AlbumEntity>>
 

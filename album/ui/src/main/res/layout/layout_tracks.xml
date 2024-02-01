@@ -51,7 +51,7 @@
                     android:fontFamily="@font/outfit_regular"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColor2"
                     tools:text="Cher" />
 
             </LinearLayout>

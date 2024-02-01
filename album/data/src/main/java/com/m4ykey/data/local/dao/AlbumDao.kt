@@ -18,9 +18,6 @@ interface AlbumDao {
     @Delete
     suspend fun deleteAlbum(album: AlbumEntity)
 
-    @Query("SELECT * FROM album WHERE id = :id")
-    suspend fun getAlbumById(id : String) : AlbumEntity
-
     @Query("SELECT * FROM album ORDER BY name ASC")
     fun getAlbumSortedAlphabetical() : Flow<List<AlbumEntity>>
 

@@ -15,5 +15,4 @@ object DaoModule {
     @Provides
     @Singleton
     fun provideAlbumDao(db : AlbumDatabase) : AlbumDao = db.albumDao()
-
 }
