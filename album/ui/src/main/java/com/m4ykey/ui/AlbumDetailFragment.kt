@@ -68,6 +68,7 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             albumViewModel.getAlbumById(args.albumId)
+            albumViewModel.getLocalAlbumById(args.albumId)
         }
         albumViewModel.getAlbumTracks(args.albumId)
     }
@@ -91,6 +92,45 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
         with(binding) {
             setupRecyclerView()
             setupToolbar()
+            albumViewModel.localAlbum.observe(viewLifecycleOwner) { album ->
+                displayAlbumFromDatabase(album)
+            }
+        }
+    }
+
+    private fun FragmentAlbumDetailBinding.displayAlbumFromDatabase(albumEntity: AlbumEntity?) {
+        albumEntity?.let { album ->
+            var isAlbumSaved = album.isAlbumSaved
+            val albumInfo =
+                "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
+                    R.string.tracks
+                )
+            txtAlbumName.text = album.name
+            txtArtist.text = album.artistList
+            txtInfo.text = albumInfo
+            imgAlbum.load(album.image) {
+                crossfade(true)
+                crossfade(500)
+            }
+            buttonsIntents(button = btnAlbum, url = album.albumUrl)
+            buttonsIntents(button = btnArtist, url = album.artistUrl)
+
+            when {
+                isAlbumSaved -> imgSave.setImageResource(R.drawable.ic_favorite)
+                else -> imgSave.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            imgSave.setOnClickListener {
+                isAlbumSaved = !isAlbumSaved
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                buttonAnimation(imgSave, resourceId)
+                lifecycleScope.launch {
+                    when {
+                        isAlbumSaved -> albumViewModel.insertAlbum(album)
+                        else -> albumViewModel.deleteAlbum(album)
+                    }
+                }
+            }
         }
     }
 
@@ -169,14 +209,8 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
                 crossfade(500)
             }
 
-            buttonsIntents(
-                button = btnAlbum,
-                url = albumDetail.externalUrls.spotify
-            )
-            buttonsIntents(
-                button = btnArtist,
-                url = albumDetail.artists[0].externalUrls.spotify
-            )
+            buttonsIntents(button = btnAlbum, url = albumDetail.externalUrls.spotify)
+            buttonsIntents(button = btnArtist, url = albumDetail.artists[0].externalUrls.spotify)
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved

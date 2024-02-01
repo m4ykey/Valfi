@@ -18,5 +18,6 @@ interface AlbumRepository {
     suspend fun deleteAlbum(album: AlbumEntity)
     fun getAlbumSortedAlphabetical() : Flow<List<AlbumEntity>>
     fun getAllAlbumsPaged() : Flow<PagingData<AlbumEntity>>
+    suspend fun getLocalAlbumById(albumId : String) : AlbumEntity
 
 }

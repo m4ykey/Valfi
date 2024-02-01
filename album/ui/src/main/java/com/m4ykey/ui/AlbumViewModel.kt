@@ -14,12 +14,14 @@ import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +44,9 @@ class AlbumViewModel @Inject constructor(
     private var _currentViewType = MutableLiveData(AlbumEntityPagingAdapter.ViewType.GRID)
     val currentViewType : LiveData<AlbumEntityPagingAdapter.ViewType> = _currentViewType
 
+    private var _localAlbum = MutableLiveData<AlbumEntity>()
+    val localAlbum : LiveData<AlbumEntity> get() = _localAlbum
+
     init {
         getAllAlbumsPaged()
     }
@@ -50,6 +55,15 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
                 _albumPagingData.value = pagingData
+            }
+        }
+    }
+
+    suspend fun getLocalAlbumById(albumId : String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val album = repository.getLocalAlbumById(albumId)
+                _localAlbum.postValue(album)
             }
         }
     }

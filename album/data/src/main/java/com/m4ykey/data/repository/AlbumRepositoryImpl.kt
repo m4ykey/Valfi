@@ -71,6 +71,7 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun insertAlbum(album: AlbumEntity) = albumDao.insertAlbum(album)
     override suspend fun deleteAlbum(album: AlbumEntity) = albumDao.deleteAlbum(album)
     override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = albumDao.getAlbumSortedAlphabetical()
+    override suspend fun getLocalAlbumById(albumId: String): AlbumEntity = albumDao.getLocalAlbumById(albumId)
 
     override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
