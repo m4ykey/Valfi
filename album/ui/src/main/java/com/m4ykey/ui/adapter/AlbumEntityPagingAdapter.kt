@@ -4,12 +4,13 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
 
-class AlbumEntityPagingAdapter(private val listener : OnAlbumClick) : PagingDataAdapter<AlbumEntity, RecyclerView.ViewHolder>(COMPARATOR) {
+class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumEntity>) : PagingDataAdapter<AlbumEntity, RecyclerView.ViewHolder>(COMPARATOR) {
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<AlbumEntity>() {

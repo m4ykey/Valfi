@@ -24,8 +24,10 @@ import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.formatAirDate
 import com.m4ykey.core.views.isNightMode
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
+import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
@@ -36,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumDetailFragment : Fragment(), OnTrackClick {
+class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private var _binding: FragmentAlbumDetailBinding? = null
     private val binding get() = _binding!!
@@ -281,7 +283,8 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
             .start()
     }
 
-    override fun onTrackClick(id: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(id)))
+    override fun onItemClick(position: Int, item: TrackItem) {
+        val trackId = item.externalUrls.spotify
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(trackId)))
     }
 }

@@ -27,15 +27,17 @@ import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.show
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
-import com.m4ykey.ui.adapter.helpers.CenterSpaceItemDecoration
-import com.m4ykey.ui.adapter.helpers.convertDpToPx
+import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
+import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumSearchFragment : Fragment(), OnAlbumClick {
+class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
 
     private var _binding : FragmentAlbumSearchBinding? = null
     private val binding get() = _binding!!
@@ -182,8 +184,9 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
         _binding = null
     }
 
-    override fun onAlbumClick(id: String) {
-        val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(albumId = id)
+    override fun onItemClick(position: Int, item: AlbumItem) {
+        val albumId = item.id
+        val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(albumId = albumId)
         findNavController().navigate(action)
     }
 }

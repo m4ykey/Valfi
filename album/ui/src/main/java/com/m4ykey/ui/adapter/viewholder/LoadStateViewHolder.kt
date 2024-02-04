@@ -11,8 +11,7 @@ class LoadStateViewHolder(private val binding : LayoutAlbumLoadStateBinding) : R
 
     companion object {
         fun create(view : ViewGroup) : LoadStateViewHolder {
-            val inflater = LayoutInflater.from(view.context)
-            return LoadStateViewHolder(LayoutAlbumLoadStateBinding.inflate(inflater, view, false))
+            return LoadStateViewHolder(LayoutAlbumLoadStateBinding.inflate(LayoutInflater.from(view.context), view, false))
         }
     }
 

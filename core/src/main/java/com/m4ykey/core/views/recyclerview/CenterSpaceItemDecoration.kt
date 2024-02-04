@@ -1,4 +1,4 @@
-package com.m4ykey.ui.adapter.helpers
+package com.m4ykey.core.views.recyclerview
 
 import android.graphics.Rect
 import android.view.View

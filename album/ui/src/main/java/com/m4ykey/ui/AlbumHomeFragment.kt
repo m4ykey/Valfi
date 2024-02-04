@@ -23,8 +23,10 @@ import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.showToast
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
-import com.m4ykey.ui.adapter.helpers.CenterSpaceItemDecoration
-import com.m4ykey.ui.adapter.helpers.convertDpToPx
+import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
+import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +37,7 @@ import java.net.URISyntaxException
 import java.net.URL
 
 @AndroidEntryPoint
-class AlbumHomeFragment : Fragment(), OnAlbumClick {
+class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
@@ -224,9 +226,9 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
         const val TAG = "AlbumHomeFragment"
     }
 
-    override fun onAlbumClick(id: String) {
-        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId = id)
+    override fun onItemClick(position: Int, item: AlbumEntity) {
+        val albumId = item.id
+        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId = albumId)
         findNavController().navigate(action)
     }
-
 }

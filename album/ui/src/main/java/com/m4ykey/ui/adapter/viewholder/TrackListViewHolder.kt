@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.hide
+import com.m4ykey.core.views.recyclerview.BaseViewHolder
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.show
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.adapter.navigation.OnTrackClick
@@ -11,38 +13,32 @@ import com.m4ykey.ui.databinding.LayoutTracksBinding
 
 class TrackListViewHolder(
     private val binding : LayoutTracksBinding,
-    private val listener : OnTrackClick
-) : RecyclerView.ViewHolder(binding.root) {
+    listener : OnItemClickListener<TrackItem>?
+) : BaseViewHolder<TrackItem>(listener, binding.root) {
 
-    companion object {
-        fun create(view : ViewGroup, listener: OnTrackClick) : TrackListViewHolder {
-            return TrackListViewHolder(
-                binding = LayoutTracksBinding.inflate(LayoutInflater.from(view.context), view, false),
-                listener = listener
-            )
-        }
-    }
+    private lateinit var currentTrackItem : TrackItem
 
-    init {
-        binding.root.setOnClickListener {
-            listener.onTrackClick(trackId)
-        }
-    }
-
-    private var trackId = ""
-
-    fun bind(track : TrackItem) {
-        trackId = track.externalUrls.spotify
+    override fun bind(item: TrackItem) {
+        currentTrackItem = item
         with(binding) {
-            val artistList = track.artists.joinToString(", ") { it.name }
-            val seconds = track.durationMs / 1000
+            val artistList = item.artists.joinToString(", ") { it.name }
+            val seconds = item.durationMs / 1000
             val trackDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
 
-            if (track.explicit) txtExplicit.show() else txtExplicit.hide()
-
-            txtTrackName.text = track.name
             txtArtist.text = artistList
+            txtTrackName.text = item.name
             txtDuration.text = trackDuration
+            if (item.explicit) txtExplicit.show() else txtExplicit.hide()
+        }
+    }
+
+    override fun getItem(position: Int): TrackItem {
+        return currentTrackItem
+    }
+
+    companion object {
+        fun create(parent: ViewGroup, listener: OnItemClickListener<TrackItem>?): TrackListViewHolder {
+            return TrackListViewHolder(LayoutTracksBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
         }
     }
 }
