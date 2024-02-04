@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -17,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,6 +44,7 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
     private val searchAdapter by lazy { SearchAlbumPagingAdapter(this) }
+    private val spaceBetweenItemsDp = 10
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,21 +84,16 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
 
     private fun FragmentAlbumSearchBinding.searchAlbums() {
         etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                lifecycleScope.launch {
-                    viewModel.searchAlbums(etSearch.text.toString())
-                }
-                return@setOnEditorActionListener true
+            when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH -> lifecycleScope.launch { viewModel.searchAlbums(etSearch.text.toString()) }
             }
-            return@setOnEditorActionListener false
+            actionId == EditorInfo.IME_ACTION_SEARCH
         }
     }
 
     private fun FragmentAlbumSearchBinding.setupRecyclerView() {
         with(rvSearchAlbums) {
-
-            val spaceBetweenItems = 10
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(spaceBetweenItems)))
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(spaceBetweenItemsDp)))
 
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
                 header = LoadStateAdapter(),
@@ -103,44 +101,39 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
             )
 
             searchAdapter.addLoadStateListener { loadState ->
-                rvSearchAlbums.isVisible = loadState.source.refresh is LoadState.NotLoading
-                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-
-                val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
-                        loadState.append.endOfPaginationReached &&
-                        searchAdapter.itemCount < 1
-
-                rvSearchAlbums.isVisible = !isNothingFound
-                layoutNothingFound.root.isVisible = isNothingFound
+                handleLoadState(loadState)
             }
 
             layoutManager = GridLayoutManager(requireContext(), 3)
         }
     }
 
+    private fun FragmentAlbumSearchBinding.handleLoadState(loadState : CombinedLoadStates) {
+        val isLoading = loadState.source.refresh is LoadState.Loading
+        progressBar.isVisible = isLoading
+
+        val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
+                loadState.append.endOfPaginationReached &&
+                searchAdapter.itemCount < 1
+
+        rvSearchAlbums.isVisible = !isNothingFound
+        layoutNothingFound.root.isVisible = isNothingFound
+    }
+
     private fun FragmentAlbumSearchBinding.setupToolbar() {
         val isNightMode = isNightMode(resources)
-        val iconTint = if (isNightMode) {
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
-        } else {
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
-        }
+        val iconTint = ColorStateList.valueOf(
+            ContextCompat.getColor(requireContext(), if (isNightMode) R.color.white else R.color.black)
+        )
 
         with(toolbar) {
-
             imgClear.imageTintList = iconTint
             navigationIcon?.setTintList(iconTint)
 
             setNavigationOnClickListener { navController.navigateUp() }
             etSearch.doOnTextChanged { text, _, _, _ ->
                 val isSearchEmpty = text.isNullOrBlank()
-                if (isSearchEmpty && isClearButtonVisible) {
-                    hideClearButtonWithAnimation()
-                    isClearButtonVisible = false
-                } else if (!isSearchEmpty && !isClearButtonVisible) {
-                    showClearButtonWithAnimation()
-                    isClearButtonVisible = true
-                }
+                handleClearButtonVisibility(isSearchEmpty)
             }
 
             imgClear.setOnClickListener {
@@ -150,35 +143,37 @@ class AlbumSearchFragment : Fragment(), OnAlbumClick {
         }
     }
 
+    private fun FragmentAlbumSearchBinding.handleClearButtonVisibility(isSearchEmpty : Boolean) {
+        if (!isSearchEmpty && isClearButtonVisible) {
+            showClearButtonWithAnimation()
+            isClearButtonVisible = true
+        } else if (isSearchEmpty && isClearButtonVisible) {
+            hideClearButtonWithAnimation()
+            isClearButtonVisible = false
+        }
+    }
+
+    private fun View.animationProperties(translationXValue : Float, alphaValue : Float, interpolator : Interpolator) {
+        animate()
+            .translationX(translationXValue)
+            .alpha(alphaValue)
+            .setInterpolator(interpolator)
+            .start()
+    }
+
     private fun FragmentAlbumSearchBinding.showClearButtonWithAnimation() {
         imgClear.apply {
-            alpha = 0f
             translationX = 100f
+            alpha = 0f
             show()
 
-            animate()
-                .translationX(0f)
-                .alpha(1f)
-                .setInterpolator(DecelerateInterpolator())
-                .withEndAction {
-                    alpha = 1f
-                    translationX = 0f
-                }
-                .start()
+            animationProperties(0f, 1f, DecelerateInterpolator())
         }
     }
 
     private fun FragmentAlbumSearchBinding.hideClearButtonWithAnimation() {
         imgClear.apply {
-            animate()
-                .translationX(width.toFloat())
-                .alpha(0f)
-                .setInterpolator(AccelerateInterpolator())
-                .withEndAction {
-                    alpha = 0f
-                    translationX = width.toFloat()
-                }
-                .start()
+            animationProperties(width.toFloat(), 0f, AccelerateInterpolator())
         }
     }
 

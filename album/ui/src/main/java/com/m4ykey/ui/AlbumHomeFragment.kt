@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -43,9 +44,6 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
     private var isListViewChanged = false
     private val albumAdapter by lazy { AlbumEntityPagingAdapter(this) }
     private val albumViewModel : AlbumViewModel by viewModels()
-    private var isChipAlbumSelected = false
-    private var isChipEpSelected = false
-    private var isChipSingleSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -97,51 +95,6 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
                 setRecyclerViewLayout(isListViewChanged)
             }
         }
-        chipAlbum.apply {
-            setOnClickListener {
-                isChipAlbumSelected = !isChipAlbumSelected
-                when {
-                    isChipAlbumSelected -> {
-                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chipSelected))
-                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chipSelected))
-                    }
-                    else -> {
-                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColor2))
-                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.textColor))
-                    }
-                }
-            }
-        }
-        chipEp.apply {
-            setOnClickListener {
-                isChipEpSelected = !isChipEpSelected
-                when {
-                    isChipEpSelected -> {
-                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chipSelected))
-                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chipSelected))
-                    }
-                    else -> {
-                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColor2))
-                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.textColor))
-                    }
-                }
-            }
-        }
-        chipSingle.apply {
-            setOnClickListener {
-                isChipSingleSelected = !isChipSingleSelected
-                when {
-                    isChipSingleSelected -> {
-                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chipSelected))
-                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chipSelected))
-                    }
-                    else -> {
-                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColor2))
-                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.textColor))
-                    }
-                }
-            }
-        }
         chipSortBy.setOnClickListener { listTypeDialog() }
     }
 
@@ -188,55 +141,58 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
 
     private fun FragmentAlbumHomeBinding.setupToolbar() {
         val isNightMode = isNightMode(resources)
-        val iconTint = if (isNightMode) {
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
-        } else {
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
-        }
-
+        val iconTint = ColorStateList.valueOf(
+            ContextCompat.getColor(requireContext(), if (isNightMode) R.color.white else R.color.black)
+        )
+        val setIconColor : (MenuItem) -> Unit = { item -> item.iconTintList = iconTint }
 
         with(toolbar) {
             menu.apply {
-                findItem(R.id.imgSearch).setIconTintList(iconTint)
-                findItem(R.id.imgLink).setIconTintList(iconTint)
+                setIconColor(findItem(R.id.imgSearch))
+                setIconColor(findItem(R.id.imgLink))
             }
             navigationIcon?.setTintList(iconTint)
-            setNavigationOnClickListener { drawerLayout.open() }
-            setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.imgSearch -> {
-                        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
-                        navController.navigate(action)
-                        true
-                    }
-                    R.id.imgLink -> {
-                        val customView = layoutInflater.inflate(R.layout.layout_insert_album_link, null)
-                        val etInputLink : TextInputEditText = customView.findViewById(R.id.etInputLink)
 
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setPositiveButton("Ok") { dialog, _ ->
-                                val albumUrl = etInputLink.text.toString()
-                                if (isValidAlbumUrl(albumUrl)) {
-                                    val albumId = getAlbumIdFromUrl(albumUrl)
-                                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
-                                    navController.navigate(action)
-                                } else {
-                                    showToast(requireContext(), getString(R.string.invalid_album_url))
-                                }
-                                dialog.dismiss()
-                            }
-                            .setNegativeButton(getString(R.string.close)) { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .setView(customView)
-                            .show()
-
-                        true
-                    }
-                    else -> false
+            val buttons = listOf(
+                Pair(R.id.imgSearch) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
+                    navController.navigate(action)
+                },
+                Pair(R.id.imgLink) {
+                    showInsertAlbumLinkDialog()
+                }
+            )
+            for ((itemId, action) in buttons) {
+                menu.findItem(itemId)?.setOnMenuItemClickListener {
+                    action.invoke()
+                    true
                 }
             }
+            setNavigationOnClickListener { drawerLayout.open() }
         }
+    }
+
+    private fun showInsertAlbumLinkDialog() {
+        val customView = layoutInflater.inflate(R.layout.layout_insert_album_link, null)
+        val etInputLink : TextInputEditText = customView.findViewById(R.id.etInputLink)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setPositiveButton("Ok") { dialog, _ ->
+                val albumUrl = etInputLink.text.toString()
+                if (isValidAlbumUrl(albumUrl)) {
+                    val albumId = getAlbumIdFromUrl(albumUrl)
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
+                    navController.navigate(action)
+                } else {
+                    showToast(requireContext(), getString(R.string.invalid_album_url))
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.close)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setView(customView)
+            .show()
     }
 
     private fun isValidAlbumUrl(url: String): Boolean {
@@ -252,7 +208,6 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
         }
         return false
     }
-
 
     private fun getAlbumIdFromUrl(url: String): String? {
         val regex = Regex("/album/([^/?]+)")

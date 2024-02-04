@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import coil.load
 import com.google.android.material.button.MaterialButton
@@ -136,11 +137,9 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
     private fun FragmentAlbumDetailBinding.setupToolbar() {
         val isNightMode = isNightMode(resources)
-        val iconTint = if (isNightMode) {
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
-        } else {
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
-        }
+        val iconTint = ColorStateList.valueOf(
+            ContextCompat.getColor(requireContext(), if (isNightMode) R.color.white else R.color.black)
+        )
 
         with(toolbar) {
             navigationIcon?.setTintList(iconTint)
@@ -158,13 +157,16 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
                 rvTrackList.isVisible = loadState.source.refresh is LoadState.NotLoading
                 progressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
-                val errorState = loadState.source.refresh as? LoadState.Error
-                val error = errorState?.error
-
-                if (error != null) {
-                    showToast(requireContext(), error.message.toString())
-                }
+                handleLoadStateError(loadState)
             }
+        }
+    }
+
+    private fun handleLoadStateError(loadStates: CombinedLoadStates) {
+        val errorState = loadStates.source.refresh as? LoadState.Error
+        val error = errorState?.error
+        if (error != null) {
+            showToast(requireContext(), error.message.toString())
         }
     }
 
