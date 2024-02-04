@@ -5,7 +5,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.ui.adapter.navigation.OnAlbumClick
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
 
 class SearchAlbumPagingAdapter(private val listener : OnItemClickListener<AlbumItem>) : PagingDataAdapter<AlbumItem, SearchAlbumViewHolder>(COMPARATOR) {

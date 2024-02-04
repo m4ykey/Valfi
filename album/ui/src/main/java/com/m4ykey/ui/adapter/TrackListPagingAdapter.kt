@@ -5,7 +5,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.track.TrackItem
-import com.m4ykey.ui.adapter.navigation.OnTrackClick
 import com.m4ykey.ui.adapter.viewholder.TrackListViewHolder
 
 class TrackListPagingAdapter(private val listener : OnItemClickListener<TrackItem>) : PagingDataAdapter<TrackItem, TrackListViewHolder>(COMPARATOR) {

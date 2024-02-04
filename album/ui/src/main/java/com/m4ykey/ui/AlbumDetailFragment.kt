@@ -31,7 +31,6 @@ import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
-import com.m4ykey.ui.adapter.navigation.OnTrackClick
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import dagger.hilt.android.AndroidEntryPoint

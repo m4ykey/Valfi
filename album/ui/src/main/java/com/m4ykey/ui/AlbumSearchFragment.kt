@@ -24,14 +24,13 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
-import com.m4ykey.core.views.show
-import com.m4ykey.ui.adapter.LoadStateAdapter
-import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.show
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.ui.adapter.navigation.OnAlbumClick
+import com.m4ykey.ui.adapter.LoadStateAdapter
+import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
