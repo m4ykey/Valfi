@@ -1,4 +1,4 @@
-package com.m4ykey.data.module
+package com.m4ykey.data.di
 
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.repository.AlbumRepositoryImpl

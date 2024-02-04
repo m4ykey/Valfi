@@ -1,4 +1,4 @@
-package com.m4ykey.data.module
+package com.m4ykey.data.di
 
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.database.AlbumDatabase

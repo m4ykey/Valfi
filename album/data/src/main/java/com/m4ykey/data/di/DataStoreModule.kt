@@ -1,4 +1,4 @@
-package com.m4ykey.data.module
+package com.m4ykey.data.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

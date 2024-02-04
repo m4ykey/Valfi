@@ -1,9 +1,9 @@
-package com.m4ykey.data.paging
+package com.m4ykey.data.remote.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.m4ykey.data.domain.model.track.TrackItem
-import com.m4ykey.data.interceptor.SpotifyInterceptor
+import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.data.remote.api.AlbumApi
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class TrackListPagingSource @Inject constructor(
     private val id : String,
     private val api : AlbumApi,
-    private val interceptor : SpotifyInterceptor
+    private val interceptor : SpotifyTokenProvider
 ) : PagingSource<Int, TrackItem>() {
     override fun getRefreshKey(state: PagingState<Int, TrackItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->

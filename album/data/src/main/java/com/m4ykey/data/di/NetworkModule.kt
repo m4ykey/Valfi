@@ -1,10 +1,10 @@
-package com.m4ykey.data.module
+package com.m4ykey.data.di
 
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.createApi
-import com.m4ykey.data.interceptor.SpotifyInterceptor
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.api.AuthApi
+import com.m4ykey.data.remote.interceptor.token.CustomTokenProvider
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -13,6 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -33,12 +34,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("album")
     fun provideSpotifyInterceptor(
-        spotifyInterceptor: SpotifyInterceptor,
+        interceptor: CustomTokenProvider,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .addInterceptor(spotifyInterceptor)
+        .addInterceptor { chain ->
+            interceptor.intercept(chain)
+        }
+        .writeTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .connectTimeout(30, TimeUnit.SECONDS)
         .build()

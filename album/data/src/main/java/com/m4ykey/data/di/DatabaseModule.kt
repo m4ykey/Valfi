@@ -1,4 +1,4 @@
-package com.m4ykey.data.module
+package com.m4ykey.data.di
 
 import android.app.Application
 import androidx.room.Room

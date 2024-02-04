@@ -241,7 +241,6 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
             imgListenLater.setOnClickListener {
                 isListenLaterSaved = !isListenLaterSaved
-
                 val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
                 buttonAnimation(imgListenLater, resourceId)
             }

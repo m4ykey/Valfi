@@ -10,12 +10,12 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
-import com.m4ykey.data.interceptor.SpotifyInterceptor
+import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.mapper.toAlbumDetail
-import com.m4ykey.data.paging.SearchAlbumPagingSource
-import com.m4ykey.data.paging.TrackListPagingSource
+import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
+import com.m4ykey.data.remote.paging.TrackListPagingSource
 import com.m4ykey.data.remote.api.AlbumApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
-    private val interceptor: SpotifyInterceptor,
+    private val interceptor: SpotifyTokenProvider,
     private val albumDao: AlbumDao
 ) : AlbumRepository {
     override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> {
