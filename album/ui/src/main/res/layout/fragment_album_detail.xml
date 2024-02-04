@@ -30,6 +30,7 @@
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBar"
+                android:background="@color/background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +39,6 @@
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
-                    android:background="@color/background"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:navigationIcon="@drawable/ic_arrow_back" />
@@ -47,8 +47,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="270dp"
-                android:layout_height="270dp"
+                android:layout_width="280dp"
+                android:layout_height="280dp"
                 app:cardCornerRadius="10dp"
                 app:elevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"

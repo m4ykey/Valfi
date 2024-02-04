@@ -10,6 +10,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +21,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/background"
             app:navigationIcon="@drawable/ic_arrow_back">
 
             <LinearLayout

@@ -17,6 +17,10 @@
         app:navGraph="@navigation/app_nav_graph"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:itemActiveIndicatorStyle="@style/BottomNavigationCustom.Indicator"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:itemIconTint="@color/bottom_nav_selector"
+        android:background="@color/bottomNavigationColor"
         app:menu="@menu/menu_bottom_bar"
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

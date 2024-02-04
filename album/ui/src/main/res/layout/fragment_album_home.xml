@@ -9,10 +9,12 @@
     tools:context=".AlbumHomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:background="@color/background"
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,8 +23,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:id="@+id/toolbar"
-                style="@style/CustomToolbarStyle"
                 app:navigationIcon="@drawable/ic_menu"
                 app:menu="@menu/toolbar_menu">
 
@@ -49,6 +52,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.chip.Chip
+                style="@style/ChipStyle"
                 android:fontFamily="@font/outfit_regular"
                 android:id="@+id/chipAlbum"
                 android:text="@string/album"
@@ -57,12 +61,14 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipEp"
+                style="@style/ChipStyle"
                 android:text="@string/ep"
                 android:fontFamily="@font/outfit_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.chip.Chip
+                style="@style/ChipStyle"
                 android:fontFamily="@font/outfit_regular"
                 android:id="@+id/chipSingle"
                 android:text="@string/single"

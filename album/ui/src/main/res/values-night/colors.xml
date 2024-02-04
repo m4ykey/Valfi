@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#151515</color>
+    <color name="background">#121212</color>
     <color name="textColor">@color/white</color>
     <color name="progressBar">@color/white</color>
     <color name="searchIconEditText">#F5F5F5</color>
     <color name="searchBox">#252525</color>
     <color name="textColor2">#BDBDBD</color>
-    <color name="buttonColor">#4FC3F7</color>
 </resources>

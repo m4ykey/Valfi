@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="CustomToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="titleTextAppearance">@style/CustomTitleTextAppearance</item>
-    </style>
-
-    <style name="CustomTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:fontFamily">@font/inter_medium</item>
-        <item name="android:textColor">@color/textColor</item>
-    </style>
-
-    <style name="RoundedCornerTextView">
-        <item name="android:paddingStart">15dp</item>
-        <item name="android:paddingEnd">15dp</item>
-        <item name="android:paddingTop">7dp</item>
-        <item name="android:paddingBottom">7dp</item>
-        <item name="android:textColor">@color/textColor</item>
-        <item name="android:background">@drawable/drawable_txt_home</item>
-    </style>
-
-    <style name="ChipStyle">
-        <item name="android:textColor">@color/textColor</item>
-        <item name="chipIconTint">@color/textColor</item>
-        <item name="chipSurfaceColor">@android:color/transparent</item>
-        <item name="chipBackgroundColor">@android:color/transparent</item>
-    </style>
-
     <style name="Explicit">
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingEnd">5dp</item>
@@ -35,6 +8,14 @@
         <item name="android:layout_marginEnd">5dp</item>
         <item name="android:background">@drawable/drawable_explicit_txt</item>
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="ChipStyle">
+        <item name="chipSurfaceColor">@android:color/transparent</item>
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="chipIconTint">@color/textColor</item>
+        <item name="chipStrokeColor">@color/textColor2</item>
     </style>
 
 </resources>

@@ -150,7 +150,6 @@ class AlbumDetailFragment : Fragment(), OnTrackClick {
 
     private fun FragmentAlbumDetailBinding.setupRecyclerView() {
         with(rvTrackList) {
-            setHasFixedSize(true)
             adapter = trackAdapter.withLoadStateFooter(
                 footer = LoadStateAdapter()
             )

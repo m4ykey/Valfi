@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bottomNavigationColor">#181818</color>
+    <color name="bottomNavigationItemIndicatorSelected">#5e5c5c</color>
+    <color name="bottomNavigationItemColorSelected">@color/white</color>
+    <color name="bottomNavigationItemColorUnSelected">#8d8d8d</color>
+</resources>

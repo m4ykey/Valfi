@@ -21,7 +21,6 @@
     <string name="enter_album_url">Enter Album URL</string>
     <string name="close">Close</string>
     <string name="invalid_album_url">Invalid album URL</string>
-    <string name="everything">Everything</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>

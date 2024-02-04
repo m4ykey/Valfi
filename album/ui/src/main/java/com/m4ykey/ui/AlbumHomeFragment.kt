@@ -43,6 +43,9 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
     private var isListViewChanged = false
     private val albumAdapter by lazy { AlbumEntityPagingAdapter(this) }
     private val albumViewModel : AlbumViewModel by viewModels()
+    private var isChipAlbumSelected = false
+    private var isChipEpSelected = false
+    private var isChipSingleSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,23 +87,62 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
     }
 
     private fun FragmentAlbumHomeBinding.setupChips() {
-        lifecycleScope.launch {
-            when {
-                isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
-                else -> { chipList.setChipIconResource(R.drawable.ic_list) }
-            }
-            chipList.setOnClickListener {
+        chipList.apply {
+            setOnClickListener {
                 isListViewChanged = !isListViewChanged
-                lifecycleScope.launch {
-                    when {
-                        isListViewChanged -> { chipList.setChipIconResource(R.drawable.ic_grid) }
-                        else -> { chipList.setChipIconResource(R.drawable.ic_list) }
+                when {
+                    isListViewChanged -> setChipIconResource(R.drawable.ic_grid)
+                    else -> setChipIconResource(R.drawable.ic_list)
+                }
+                setRecyclerViewLayout(isListViewChanged)
+            }
+        }
+        chipAlbum.apply {
+            setOnClickListener {
+                isChipAlbumSelected = !isChipAlbumSelected
+                when {
+                    isChipAlbumSelected -> {
+                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chipSelected))
+                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chipSelected))
                     }
-                    setRecyclerViewLayout(isListViewChanged)
+                    else -> {
+                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColor2))
+                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.textColor))
+                    }
                 }
             }
-            chipSortBy.setOnClickListener { listTypeDialog() }
         }
+        chipEp.apply {
+            setOnClickListener {
+                isChipEpSelected = !isChipEpSelected
+                when {
+                    isChipEpSelected -> {
+                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chipSelected))
+                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chipSelected))
+                    }
+                    else -> {
+                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColor2))
+                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.textColor))
+                    }
+                }
+            }
+        }
+        chipSingle.apply {
+            setOnClickListener {
+                isChipSingleSelected = !isChipSingleSelected
+                when {
+                    isChipSingleSelected -> {
+                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chipSelected))
+                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chipSelected))
+                    }
+                    else -> {
+                        chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColor2))
+                        setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.textColor))
+                    }
+                }
+            }
+        }
+        chipSortBy.setOnClickListener { listTypeDialog() }
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
@@ -158,6 +200,7 @@ class AlbumHomeFragment : Fragment(), OnAlbumClick {
                 findItem(R.id.imgSearch).setIconTintList(iconTint)
                 findItem(R.id.imgLink).setIconTintList(iconTint)
             }
+            navigationIcon?.setTintList(iconTint)
             setNavigationOnClickListener { drawerLayout.open() }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
