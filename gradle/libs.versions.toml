@@ -35,8 +35,6 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
 
-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle-build" }
-
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-junit" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
