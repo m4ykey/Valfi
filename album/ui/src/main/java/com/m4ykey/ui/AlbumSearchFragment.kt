@@ -145,7 +145,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     }
 
     private fun FragmentAlbumSearchBinding.handleClearButtonVisibility(isSearchEmpty : Boolean) {
-        if (!isSearchEmpty && isClearButtonVisible) {
+        if (!isSearchEmpty && !isClearButtonVisible) {
             showClearButtonWithAnimation()
             isClearButtonVisible = true
         } else if (isSearchEmpty && isClearButtonVisible) {
