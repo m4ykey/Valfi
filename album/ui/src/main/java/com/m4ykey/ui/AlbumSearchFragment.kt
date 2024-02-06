@@ -22,6 +22,7 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -45,7 +46,6 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
     private val searchAdapter by lazy { SearchAlbumPagingAdapter(this) }
-    private val spaceBetweenItemsDp = 10
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -94,7 +94,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
 
     private fun FragmentAlbumSearchBinding.setupRecyclerView() {
         with(rvSearchAlbums) {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(spaceBetweenItemsDp)))
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
                 header = LoadStateAdapter(),
@@ -110,8 +110,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     }
 
     private fun FragmentAlbumSearchBinding.handleLoadState(loadState : CombinedLoadStates) {
-        val isLoading = loadState.source.refresh is LoadState.Loading
-        progressBar.isVisible = isLoading
+        progressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
         val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
                 loadState.append.endOfPaginationReached &&

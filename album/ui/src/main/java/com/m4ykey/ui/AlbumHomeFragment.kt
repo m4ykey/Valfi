@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -115,9 +116,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private fun FragmentAlbumHomeBinding.setupRecyclerView() {
         with(rvAlbums) {
-
-            val spaceBetweenItems = 10
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(spaceBetweenItems)))
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = albumAdapter.withLoadStateFooter(

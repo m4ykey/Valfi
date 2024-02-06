@@ -21,6 +21,9 @@
     <string name="enter_album_url">Enter Album URL</string>
     <string name="close">Close</string>
     <string name="invalid_album_url">Invalid album URL</string>
+    <string name="couldn_t_find_albums">Sorry, we couldn\'t find albums for this search.</string>
+    <string name="can_t_find_your_favorite_album">If you can\'t find your favorite album, consider adding it to your local collection.</string>
+    <string name="add">Add</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>
