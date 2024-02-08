@@ -17,5 +17,4 @@ rootProject.name = "valfi2"
 include(":app")
 include(":core")
 include(":album:ui")
-include(":navigation")
 include(":album:data")
