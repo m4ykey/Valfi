@@ -39,7 +39,6 @@ android {
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":navigation"))
     implementation(project(":album:data"))
 
     libs.apply {
