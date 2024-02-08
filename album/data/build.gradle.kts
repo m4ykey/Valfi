@@ -1,9 +1,9 @@
 import java.util.Properties
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
 }
 
 android {

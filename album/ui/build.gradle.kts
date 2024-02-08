@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.safeargs)
+    alias(libs.plugins.hilt)
 }
 
 android {
