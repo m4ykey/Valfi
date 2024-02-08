@@ -150,8 +150,9 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.setupRecyclerView() {
         with(rvTrackList) {
-            adapter = trackAdapter.withLoadStateFooter(
-                footer = LoadStateAdapter()
+            adapter = trackAdapter.withLoadStateHeaderAndFooter(
+                footer = LoadStateAdapter { trackAdapter.retry() },
+                header = LoadStateAdapter { trackAdapter.retry() }
             )
 
             trackAdapter.addLoadStateListener { loadState ->

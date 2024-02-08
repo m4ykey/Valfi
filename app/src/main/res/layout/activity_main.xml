@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/app_nav_graph"/>
+        app:navGraph="@navigation/main_app_navigation"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         app:itemActiveIndicatorStyle="@style/BottomNavigationCustom.Indicator"

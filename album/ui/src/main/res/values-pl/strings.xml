@@ -21,4 +21,6 @@
     <string name="couldn_t_find_albums">Przepraszamy, nie mogliśmy znaleźć albumów dla tego wyszukiwania.</string>
     <string name="can_t_find_your_favorite_album">Jeśli nie możesz znaleźć swojego ulubionego albumu, rozważ dodanie go do lokalnej kolekcji.</string>
     <string name="add">Dodaj</string>
+    <string name="refresh">Odśwież</string>
+    <string name="results_cannot_be_loaded">Wyniki nie mogą zostać załadowane</string>
 </resources>

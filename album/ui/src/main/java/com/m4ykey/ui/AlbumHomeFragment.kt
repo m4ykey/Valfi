@@ -120,7 +120,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
             layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = albumAdapter.withLoadStateFooter(
-                footer = LoadStateAdapter()
+                footer = LoadStateAdapter { albumAdapter.retry() }
             )
         }
     }

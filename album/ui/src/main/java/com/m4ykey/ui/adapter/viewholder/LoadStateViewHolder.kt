@@ -5,19 +5,32 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
-import com.m4ykey.ui.databinding.LayoutAlbumLoadStateBinding
+import com.m4ykey.ui.databinding.LayoutLoadStateBinding
 
-class LoadStateViewHolder(private val binding : LayoutAlbumLoadStateBinding) : RecyclerView.ViewHolder(binding.root) {
+class LoadStateViewHolder(
+    private val binding : LayoutLoadStateBinding,
+    private val retry : () -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
-        fun create(view : ViewGroup) : LoadStateViewHolder {
-            return LoadStateViewHolder(LayoutAlbumLoadStateBinding.inflate(LayoutInflater.from(view.context), view, false))
+        fun create(view : ViewGroup, retry: () -> Unit) : LoadStateViewHolder {
+            return LoadStateViewHolder(
+                binding = LayoutLoadStateBinding.inflate(LayoutInflater.from(view.context), view, false),
+                retry = retry
+            )
         }
     }
 
     fun bind(loadState: LoadState) {
         binding.apply {
             progressBar.isVisible = loadState is LoadState.Loading
+            btnRetry.isVisible = loadState !is LoadState.Loading
+            txtError.isVisible = loadState !is LoadState.Loading
         }
     }
+
+    init {
+        binding.btnRetry.setOnClickListener { retry.invoke() }
+    }
+
 }

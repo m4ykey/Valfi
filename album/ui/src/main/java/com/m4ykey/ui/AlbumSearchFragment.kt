@@ -96,16 +96,30 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         with(rvSearchAlbums) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
+            val headerAdapter = LoadStateAdapter { searchAdapter.retry() }
+            val footerAdapter = LoadStateAdapter { searchAdapter.retry() }
+
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
-                header = LoadStateAdapter(),
-                footer = LoadStateAdapter()
+                header = headerAdapter,
+                footer = footerAdapter
             )
+
+            val layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when {
+                        position == 0 && headerAdapter.itemCount > 0 -> 3
+                        position == adapter?.itemCount?.minus(1) && footerAdapter.itemCount > 0 -> 3
+                        else -> 1
+                    }
+                }
+            }
+
+            this@with.layoutManager = layoutManager
 
             searchAdapter.addLoadStateListener { loadState ->
                 handleLoadState(loadState)
             }
-
-            layoutManager = GridLayoutManager(requireContext(), 3)
         }
     }
 
