@@ -60,7 +60,7 @@ dependencies {
         androidTestImplementation(truth)
 
         implementation(retrofit)
-        implementation(retrofit.moshi)
+        implementation(converter.moshi)
 
         implementation(coroutines)
 

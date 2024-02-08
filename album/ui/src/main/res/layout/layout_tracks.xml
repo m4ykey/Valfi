@@ -40,7 +40,6 @@
                     android:fontFamily="@font/outfit_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="E"
                     style="@style/Explicit"
                     android:textColor="@color/white"
                     tools:textColor="@color/white" />
@@ -51,6 +50,10 @@
                     android:fontFamily="@font/outfit_regular"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
+                    android:ellipsize="marquee"
+                    android:scrollHorizontally="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
                     android:textColor="@color/textColor2"
                     tools:text="Cher" />
 

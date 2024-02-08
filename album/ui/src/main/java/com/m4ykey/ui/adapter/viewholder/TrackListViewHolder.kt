@@ -23,7 +23,10 @@ class TrackListViewHolder(
             val artistList = item.artists.joinToString(", ") { it.name }
             val trackDuration = formatDuration(item.durationMs / 1000)
 
-            txtArtist.text = artistList
+            txtArtist.apply {
+                text = artistList
+                isSelected = true
+            }
             txtTrackName.text = item.name
             txtDuration.text = trackDuration
             if (item.explicit) txtExplicit.show() else txtExplicit.hide()

@@ -8,6 +8,7 @@
         <item name="android:layout_marginEnd">5dp</item>
         <item name="android:background">@drawable/drawable_explicit_txt</item>
         <item name="android:textSize">10sp</item>
+        <item name="android:text">E</item>
     </style>
 
     <style name="ChipStyle">

@@ -38,12 +38,13 @@ dependencies {
         implementation(androidx.appcompat)
         implementation(android.material)
         implementation(androidx.core)
+
         testImplementation(junit)
         androidTestImplementation(ext.junit)
         androidTestImplementation(espresso)
 
         implementation(moshi.kotlin)
-        implementation(retrofit.moshi)
+        implementation(converter.moshi)
         implementation(retrofit)
 
         implementation(timber)

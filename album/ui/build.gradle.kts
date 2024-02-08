@@ -44,25 +44,22 @@ dependencies {
     libs.apply {
         implementation(androidx.core)
         implementation(androidx.appcompat)
+        implementation(androidx.palette)
+        implementation(androidx.constraintlayout)
+        implementation(android.material)
+        implementation(androidx.paging)
 
         testImplementation(junit)
 
         androidTestImplementation(ext.junit)
         androidTestImplementation(espresso)
 
-        implementation(androidx.constraintlayout)
-        implementation(android.material)
-        implementation(androidx.swiperefreshlayout)
-
         implementation(bundles.navigation)
         implementation(bundles.lifecycle)
-
-        implementation(androidx.paging)
 
         ksp(hilt.compiler)
         implementation(hilt.android)
 
         implementation(coil)
-
     }
 }

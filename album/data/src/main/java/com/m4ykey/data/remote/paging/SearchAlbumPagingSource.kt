@@ -35,11 +35,13 @@ class SearchAlbumPagingSource @Inject constructor(
                 token = accessToken
             ).albums
 
+            val uniqueItems = response.items.distinctBy { it.id }
+
             val prevKey = if (page > 0) page - 1 else null
-            val nextKey = if (response.next.isNullOrEmpty()) null else page + 1
+            val nextKey = if (uniqueItems.isEmpty() || response.next.isNullOrEmpty()) null else page + 1
 
             LoadResult.Page(
-                data = response.items.map { it.toAlbumItem() },
+                data = uniqueItems.map { it.toAlbumItem() },
                 nextKey = nextKey,
                 prevKey = prevKey
             )

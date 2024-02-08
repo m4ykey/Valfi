@@ -15,7 +15,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "0.3.1"
+        versionName = "0.3.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,8 +65,7 @@ dependencies {
         implementation(hilt.android)
         ksp(hilt.compiler)
 
-        implementation(androidx.navigation.fragment)
-        implementation(androidx.navigation.ui)
+        implementation(libs.bundles.navigation)
 
     }
 }

@@ -23,4 +23,7 @@
     <string name="add">Dodaj</string>
     <string name="refresh">Odśwież</string>
     <string name="results_cannot_be_loaded">Wyniki nie mogą zostać załadowane</string>
+    <string name="add_album">Dodaj Album</string>
+    <string name="statistics">Statystyki</string>
+    <string name="settings">Ustawienia</string>
 </resources>

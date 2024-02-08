@@ -26,6 +26,9 @@
     <string name="add">Add</string>
     <string name="refresh">Refresh</string>
     <string name="results_cannot_be_loaded">Results cannot be loaded</string>
+    <string name="add_album">Add Album</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
 
     <string-array name="sort_options">
         <item>@string/alphabetical</item>
