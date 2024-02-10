@@ -50,7 +50,6 @@ class AlbumViewModel @Inject constructor(
 
     private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
 
-
     init {
         getAllAlbumsPaged()
     }
@@ -87,7 +86,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    private fun getAllAlbumsPaged() {
+    fun getAllAlbumsPaged() {
         viewModelScope.launch {
             when (currentSortingType) {
                 ListSortingType.ALPHABETICAL -> {

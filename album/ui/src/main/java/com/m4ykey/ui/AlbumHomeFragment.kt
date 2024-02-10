@@ -46,7 +46,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private lateinit var navController : NavController
     private var isListViewChanged = false
     private val albumAdapter by lazy { AlbumEntityPagingAdapter(this) }
-    private val albumViewModel : AlbumViewModel by viewModels()
+    private val viewModel : AlbumViewModel by viewModels()
+    private var isAlbumSelected = false
+    private var isEpSelected = false
+    private var isSingleSelected = false
+    private var isCompilationSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -77,11 +81,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             setupRecyclerView()
 
             lifecycleScope.launch(Dispatchers.Main) {
-                albumViewModel.albumPagingData.collect { pagingData ->
+                viewModel.albumPagingData.collect { pagingData ->
                     albumAdapter.submitData(pagingData)
                 }
             }
-            albumViewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
+            viewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
                 albumAdapter.setupViewType(viewType)
             }
         }
@@ -100,10 +104,22 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
         chipSortBy.setOnClickListener { listTypeDialog() }
 
-        chipAlbum.setOnClickListener { albumViewModel.getAlbumsOfTypeAlbumPaged() }
-        chipSingle.setOnClickListener { albumViewModel.getAlbumsOfTypeSinglePaged() }
-        chipCompilation.setOnClickListener { albumViewModel.getAlbumsOfTypeCompilationPaged() }
-        chipEp.setOnClickListener { albumViewModel.getAlbumsOfTypeEPPaged() }
+        chipAlbum.setOnClickListener {
+            isAlbumSelected = !isAlbumSelected
+            if (isAlbumSelected) viewModel.getAlbumsOfTypeAlbumPaged() else viewModel.getAllAlbumsPaged()
+        }
+        chipCompilation.setOnClickListener {
+            isCompilationSelected = !isCompilationSelected
+            if (isCompilationSelected) viewModel.getAlbumsOfTypeCompilationPaged() else viewModel.getAllAlbumsPaged()
+        }
+        chipEp.setOnClickListener {
+            isEpSelected = !isEpSelected
+            if (isEpSelected) viewModel.getAlbumsOfTypeEPPaged() else viewModel.getAllAlbumsPaged()
+        }
+        chipSingle.setOnClickListener {
+            isSingleSelected = !isSingleSelected
+            if (isSingleSelected) viewModel.getAlbumsOfTypeSinglePaged() else viewModel.getAllAlbumsPaged()
+        }
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
@@ -140,11 +156,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 when (index) {
                     0 -> {
                         chipSortBy.text = getString(R.string.recently_added)
-                        albumViewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
+                        viewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
                     }
                     1 -> {
                         chipSortBy.text = getString(R.string.alphabetical)
-                        albumViewModel.updateSortingType(ListSortingType.ALPHABETICAL)
+                        viewModel.updateSortingType(ListSortingType.ALPHABETICAL)
                     }
                 }
             }

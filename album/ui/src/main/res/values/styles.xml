@@ -11,6 +11,14 @@
         <item name="android:text">E</item>
     </style>
 
+    <style name="CustomChipStyle" parent="Widget.Material3.Chip.Filter">
+        <item name="chipSurfaceColor">@android:color/transparent</item>
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="checkedIconTint">#F44336</item>
+        <item name="chipStrokeColor">@color/chip_stroke_color</item>
+    </style>
+
     <style name="ChipStyle">
         <item name="chipSurfaceColor">@android:color/transparent</item>
         <item name="chipBackgroundColor">@android:color/transparent</item>

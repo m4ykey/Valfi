@@ -48,11 +48,12 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
+            app:singleSelection="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <com.google.android.material.chip.Chip
-                style="@style/ChipStyle"
+                style="@style/CustomChipStyle"
                 android:fontFamily="@font/outfit_regular"
                 android:id="@+id/chipAlbum"
                 android:text="@string/album"
@@ -61,14 +62,14 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipEp"
-                style="@style/ChipStyle"
+                style="@style/CustomChipStyle"
                 android:text="@string/ep"
                 android:fontFamily="@font/outfit_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/ChipStyle"
+                style="@style/CustomChipStyle"
                 android:fontFamily="@font/outfit_regular"
                 android:id="@+id/chipSingle"
                 android:text="@string/single"
@@ -76,9 +77,9 @@
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/ChipStyle"
                 android:fontFamily="@font/outfit_regular"
                 android:id="@+id/chipCompilation"
+                style="@style/CustomChipStyle"
                 android:text="@string/compilation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
