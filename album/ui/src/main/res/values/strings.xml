@@ -29,6 +29,7 @@
     <string name="add_album">Add Album</string>
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>
+    <string name="compilation">Compilation</string>
 
     <string-array name="sort_options">
         <item>@string/recently_added</item>

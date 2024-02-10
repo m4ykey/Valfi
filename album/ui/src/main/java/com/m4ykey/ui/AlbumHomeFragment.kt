@@ -29,7 +29,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
-import com.m4ykey.ui.helpers.SortingType
+import com.m4ykey.ui.helpers.ListSortingType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -99,6 +99,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             }
         }
         chipSortBy.setOnClickListener { listTypeDialog() }
+
+        chipAlbum.setOnClickListener { albumViewModel.getAlbumsOfTypeAlbumPaged() }
+        chipSingle.setOnClickListener { albumViewModel.getAlbumsOfTypeSinglePaged() }
+        chipCompilation.setOnClickListener { albumViewModel.getAlbumsOfTypeCompilationPaged() }
+        chipEp.setOnClickListener { albumViewModel.getAlbumsOfTypeEPPaged() }
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
@@ -135,11 +140,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 when (index) {
                     0 -> {
                         chipSortBy.text = getString(R.string.recently_added)
-                        albumViewModel.updateSortingType(SortingType.RECENTLY_ADDED)
+                        albumViewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
                     }
                     1 -> {
                         chipSortBy.text = getString(R.string.alphabetical)
-                        albumViewModel.updateSortingType(SortingType.ALPHABETICAL)
+                        albumViewModel.updateSortingType(ListSortingType.ALPHABETICAL)
                     }
                 }
             }

@@ -32,6 +32,9 @@ interface AlbumDao {
     @Query("SELECT * FROM album WHERE albumType = 'Single' ORDER BY name ASC")
     fun getAlbumsOfTypeSinglePaged() : PagingSource<Int, AlbumEntity>
 
+    @Query("SELECT * FROM album WHERE albumType = 'Compilation' ORDER BY name ASC")
+    fun getAlbumsOfTypeCompilationPaged() : PagingSource<Int, AlbumEntity>
+
     @Query("SELECT * FROM album WHERE id = :albumId")
     suspend fun getLocalAlbumById(albumId : String) : AlbumEntity
 

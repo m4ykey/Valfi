@@ -1,6 +1,5 @@
 package com.m4ykey.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,7 @@ import com.m4ykey.core.network.Resource
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
-import com.m4ykey.ui.helpers.SortingType
+import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -49,24 +48,55 @@ class AlbumViewModel @Inject constructor(
     private var _localAlbum = MutableLiveData<AlbumEntity>()
     val localAlbum : LiveData<AlbumEntity> get() = _localAlbum
 
-    private var currentSortingType : SortingType = SortingType.RECENTLY_ADDED
+    private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
+
 
     init {
         getAllAlbumsPaged()
     }
 
+    fun getAlbumsOfTypeCompilationPaged() {
+        viewModelScope.launch {
+            repository.getAlbumsOfTypeCompilationPaged().cachedIn(viewModelScope).collect { pagingData ->
+                _albumPagingData.value = pagingData
+            }
+        }
+    }
+
+    fun getAlbumsOfTypeAlbumPaged() {
+        viewModelScope.launch {
+            repository.getAlbumsOfTypeAlbumPaged().cachedIn(viewModelScope).collect { pagingData ->
+                _albumPagingData.value = pagingData
+            }
+        }
+    }
+
+    fun getAlbumsOfTypeEPPaged() {
+        viewModelScope.launch {
+            repository.getAlbumsOfTypeEPPaged().cachedIn(viewModelScope).collect { pagingData ->
+                _albumPagingData.value = pagingData
+            }
+        }
+    }
+
+    fun getAlbumsOfTypeSinglePaged() {
+        viewModelScope.launch {
+            repository.getAlbumsOfTypeSinglePaged().cachedIn(viewModelScope).collect { pagingData ->
+                _albumPagingData.value = pagingData
+            }
+        }
+    }
+
     private fun getAllAlbumsPaged() {
         viewModelScope.launch {
             when (currentSortingType) {
-                SortingType.ALPHABETICAL -> {
+                ListSortingType.ALPHABETICAL -> {
                     repository.getAlbumSortedAlphabetical().cachedIn(viewModelScope).collect { pagingData ->
-                        Log.d("Sorting", "getAlbumSortedAlphabetical: $pagingData")
                         _albumPagingData.value = pagingData
                     }
                 }
-                SortingType.RECENTLY_ADDED -> {
+                ListSortingType.RECENTLY_ADDED -> {
                     repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
-                        Log.d("Sorting", "getAllAlbumsPaged: $pagingData")
                         _albumPagingData.value = pagingData
                     }
                 }
@@ -74,7 +104,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun updateSortingType(sortingType: SortingType) {
+    fun updateSortingType(sortingType: ListSortingType) {
         viewModelScope.launch {
             currentSortingType = sortingType
             getAllAlbumsPaged()
