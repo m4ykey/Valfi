@@ -7,7 +7,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.m4ykey.data.local.model.AlbumEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlbumDao {
@@ -18,11 +17,11 @@ interface AlbumDao {
     @Delete
     suspend fun deleteAlbum(album: AlbumEntity)
 
-    @Query("SELECT * FROM album ORDER BY name ASC")
-    fun getAlbumSortedAlphabetical() : Flow<List<AlbumEntity>>
+    @Query("SELECT * FROM album ORDER BY name COLLATE NOCASE ASC")
+    fun getAlbumSortedAlphabetical() : PagingSource<Int, AlbumEntity>
 
-    @Query("SELECT * FROM album ORDER BY saveTime ASC")
-    fun getAllAlbumsPaged() : PagingSource<Int, AlbumEntity>
+    @Query("SELECT * FROM album ORDER BY saveTime DESC")
+    fun getAlbumsRecentlyAdded() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT * FROM album WHERE albumType = 'Album' ORDER BY name ASC")
     fun getAlbumsOfTypeAlbumPaged() : PagingSource<Int, AlbumEntity>

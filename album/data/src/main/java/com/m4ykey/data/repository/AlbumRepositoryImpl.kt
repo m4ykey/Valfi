@@ -70,8 +70,17 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun insertAlbum(album: AlbumEntity) = albumDao.insertAlbum(album)
     override suspend fun deleteAlbum(album: AlbumEntity) = albumDao.deleteAlbum(album)
-    override fun getAlbumSortedAlphabetical(): Flow<List<AlbumEntity>> = albumDao.getAlbumSortedAlphabetical()
     override suspend fun getLocalAlbumById(albumId: String): AlbumEntity = albumDao.getLocalAlbumById(albumId)
+
+    override fun getAlbumSortedAlphabetical(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { albumDao.getAlbumSortedAlphabetical() }
+        ).flow
+    }
 
     override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
@@ -79,7 +88,7 @@ class AlbumRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { albumDao.getAllAlbumsPaged() }
+            pagingSourceFactory = { albumDao.getAlbumsRecentlyAdded() }
         ).flow
     }
 }

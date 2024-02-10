@@ -29,6 +29,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
+import com.m4ykey.ui.helpers.SortingType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -132,8 +133,14 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             .setTitle(R.string.sort_by)
             .setItems(sortOptions) { _, index ->
                 when (index) {
-                    0 -> { chipSortBy.text = getString(R.string.alphabetical) }
-                    1 -> { chipSortBy.text = getString(R.string.recently_added) }
+                    0 -> {
+                        chipSortBy.text = getString(R.string.recently_added)
+                        albumViewModel.updateSortingType(SortingType.RECENTLY_ADDED)
+                    }
+                    1 -> {
+                        chipSortBy.text = getString(R.string.alphabetical)
+                        albumViewModel.updateSortingType(SortingType.ALPHABETICAL)
+                    }
                 }
             }
             .show()

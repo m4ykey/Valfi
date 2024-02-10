@@ -31,8 +31,8 @@
     <string name="settings">Settings</string>
 
     <string-array name="sort_options">
-        <item>@string/alphabetical</item>
         <item>@string/recently_added</item>
+        <item>@string/alphabetical</item>
     </string-array>
 
 </resources>

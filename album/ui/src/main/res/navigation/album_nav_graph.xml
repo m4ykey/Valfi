@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/album_nav_graph"
     app:startDestination="@id/albumHomeFragment">
 
@@ -22,6 +23,9 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+        <action
+            android:id="@+id/action_albumHomeFragment_to_albumStatisticsFragment"
+            app:destination="@id/albumStatisticsFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumSearchFragment"
@@ -43,4 +47,9 @@
             android:name="albumId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/albumStatisticsFragment"
+        android:name="com.m4ykey.ui.AlbumStatisticsFragment"
+        android:label="fragment_album_statistics"
+        tools:layout="@layout/fragment_album_statistics" />
 </navigation>

@@ -1,5 +1,6 @@
 package com.m4ykey.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.m4ykey.core.network.Resource
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
+import com.m4ykey.ui.helpers.SortingType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -47,15 +49,35 @@ class AlbumViewModel @Inject constructor(
     private var _localAlbum = MutableLiveData<AlbumEntity>()
     val localAlbum : LiveData<AlbumEntity> get() = _localAlbum
 
+    private var currentSortingType : SortingType = SortingType.RECENTLY_ADDED
+
     init {
         getAllAlbumsPaged()
     }
 
     private fun getAllAlbumsPaged() {
         viewModelScope.launch {
-            repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.value = pagingData
+            when (currentSortingType) {
+                SortingType.ALPHABETICAL -> {
+                    repository.getAlbumSortedAlphabetical().cachedIn(viewModelScope).collect { pagingData ->
+                        Log.d("Sorting", "getAlbumSortedAlphabetical: $pagingData")
+                        _albumPagingData.value = pagingData
+                    }
+                }
+                SortingType.RECENTLY_ADDED -> {
+                    repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
+                        Log.d("Sorting", "getAllAlbumsPaged: $pagingData")
+                        _albumPagingData.value = pagingData
+                    }
+                }
             }
+        }
+    }
+
+    fun updateSortingType(sortingType: SortingType) {
+        viewModelScope.launch {
+            currentSortingType = sortingType
+            getAllAlbumsPaged()
         }
     }
 

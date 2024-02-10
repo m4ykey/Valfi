@@ -60,8 +60,6 @@ dependencies {
         androidTestImplementation(ext.junit)
         androidTestImplementation(espresso)
 
-        implementation(coil)
-
         implementation(hilt.android)
         ksp(hilt.compiler)
 

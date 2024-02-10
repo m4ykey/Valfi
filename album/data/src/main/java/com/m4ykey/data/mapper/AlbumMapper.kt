@@ -3,11 +3,13 @@ package com.m4ykey.data.mapper
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.album.Artist
+import com.m4ykey.data.domain.model.album.Copyright
 import com.m4ykey.data.domain.model.album.ExternalUrls
 import com.m4ykey.data.domain.model.album.Image
 import com.m4ykey.data.remote.model.album.AlbumDetailDto
 import com.m4ykey.data.remote.model.album.AlbumItemDto
 import com.m4ykey.data.remote.model.album.ArtistDto
+import com.m4ykey.data.remote.model.album.CopyrightDto
 import com.m4ykey.data.remote.model.album.ExternalUrlsDto
 import com.m4ykey.data.remote.model.album.ImageDto
 
@@ -48,6 +50,11 @@ fun AlbumDetailDto.toAlbumDetail() : AlbumDetail {
         images = images.map { it.toImage() },
         name = name,
         releaseDate = release_date,
-        totalTracks = total_tracks
+        totalTracks = total_tracks,
+        copyrights = copyrights.map { it.toCopyright() }
     )
+}
+
+fun CopyrightDto.toCopyright() : Copyright {
+    return Copyright(text = text, type = type)
 }

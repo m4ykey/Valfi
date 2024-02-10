@@ -8,5 +8,6 @@ data class AlbumDetail(
     val images : List<Image>,
     val name : String,
     val releaseDate : String,
-    val totalTracks : Int
+    val totalTracks : Int,
+    val copyrights: List<Copyright>,
 )
