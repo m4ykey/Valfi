@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import coil.load
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -66,34 +67,37 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            albumViewModel.getAlbumById(args.albumId)
-            albumViewModel.getLocalAlbumById(args.albumId)
-        }
-        albumViewModel.getAlbumTracks(args.albumId)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.hideBottomNavigation()
+        setupUI()
+        setupObservers()
+    }
+
+    private fun setupUI() {
         navController = findNavController()
-
-        albumViewModel.detail.observe(viewLifecycleOwner) { state ->
-            handleUiState(state)
-        }
-
-        lifecycleScope.launch {
-            albumViewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-                trackAdapter.submitData(viewLifecycleOwner.lifecycle, tracks.albumTracks!!)
-            }
-        }
+        bottomNavigationVisibility?.hideBottomNavigation()
 
         with(binding) {
             setupRecyclerView()
             setupToolbar()
+        }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            albumViewModel.detail.observe(viewLifecycleOwner) { state ->
+                handleUiState(state)
+            }
+            albumViewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+                trackAdapter.submitData(viewLifecycleOwner.lifecycle, tracks.albumTracks ?: PagingData.empty())
+            }
+
+            albumViewModel.getAlbumById(args.albumId)
+            albumViewModel.getLocalAlbumById(args.albumId)
+            albumViewModel.getAlbumTracks(args.albumId)
+        }
+        with(binding) {
             albumViewModel.localAlbum.observe(viewLifecycleOwner) { album ->
                 displayAlbumFromDatabase(album)
             }
@@ -102,11 +106,11 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.displayAlbumFromDatabase(albumEntity: AlbumEntity?) {
         albumEntity?.let { album ->
-            var isAlbumSaved = album.isAlbumSaved
-            val albumInfo =
-                "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
+            isAlbumSaved = album.isAlbumSaved
+            val albumInfo = "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
                     R.string.tracks
                 )
+
             txtAlbumName.text = album.name
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
@@ -124,14 +128,14 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
-                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-                buttonAnimation(imgSave, resourceId)
                 lifecycleScope.launch {
                     when {
                         isAlbumSaved -> albumViewModel.insertAlbum(album)
                         else -> albumViewModel.deleteAlbum(album)
                     }
                 }
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                buttonAnimation(imgSave, resourceId)
             }
         }
     }
@@ -202,8 +206,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                 else -> albumDetail.albumType.replaceFirstChar { it.uppercase() }
             }
             val formatAirDate = formatAirDate(albumDetail.releaseDate)
-            val albumInfo =
-                "$albumType • $formatAirDate • ${albumDetail.totalTracks} " + getString(
+            val albumInfo = "$albumType • $formatAirDate • ${albumDetail.totalTracks} " + getString(
                     R.string.tracks
                 )
 
@@ -217,9 +220,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
-                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-                buttonAnimation(imgSave, resourceId)
-
                 val album = AlbumEntity(
                     albumType = albumType,
                     artistList = artistList,
@@ -232,19 +232,20 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     albumUrl = albumDetail.externalUrls.spotify,
                     artistUrl = albumDetail.artists[0].externalUrls.spotify
                 )
-
+                val resourceAlbumId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 lifecycleScope.launch {
                     when {
                         isAlbumSaved -> albumViewModel.insertAlbum(album)
                         else -> albumViewModel.deleteAlbum(album)
                     }
                 }
+                buttonAnimation(imgSave, resourceAlbumId)
             }
 
             imgListenLater.setOnClickListener {
                 isListenLaterSaved = !isListenLaterSaved
-                val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
-                buttonAnimation(imgListenLater, resourceId)
+                val resourceListenLaterId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                buttonAnimation(imgListenLater, resourceListenLaterId)
             }
 
             txtAlbumName.text = albumDetail.name

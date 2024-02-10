@@ -60,11 +60,9 @@ class AlbumViewModel @Inject constructor(
     }
 
     suspend fun getLocalAlbumById(albumId : String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val album = repository.getLocalAlbumById(albumId)
-                _localAlbum.postValue(album)
-            }
+        withContext(Dispatchers.IO) {
+            val album = repository.getLocalAlbumById(albumId)
+            _localAlbum.postValue(album)
         }
     }
 
@@ -79,27 +77,9 @@ class AlbumViewModel @Inject constructor(
     suspend fun getAlbumById(id : String) {
         repository.getAlbumById(id).onEach { result ->
             when (result) {
-                is Resource.Loading -> {
-                    _detail.value = AlbumDetailUiState(
-                        isLoading = true,
-                        albumDetail = null,
-                        error = null
-                    )
-                }
-                is Resource.Success -> {
-                    _detail.value = AlbumDetailUiState(
-                        isLoading = false,
-                        albumDetail = result.data,
-                        error = null
-                    )
-                }
-                is Resource.Error -> {
-                    _detail.value = AlbumDetailUiState(
-                        isLoading = false,
-                        error = result.message ?: "Unknown error",
-                        albumDetail = null
-                    )
-                }
+                is Resource.Loading -> { _detail.value = AlbumDetailUiState(true, null, null) }
+                is Resource.Success -> { _detail.value = AlbumDetailUiState(false, null, result.data) }
+                is Resource.Error -> { _detail.value = AlbumDetailUiState(false, result.message ?: "Unknown message", null) }
             }
         }.launchIn(viewModelScope)
     }
