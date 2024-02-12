@@ -153,6 +153,9 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
+        android:background="@color/background"
+        app:itemTextColor="@color/textColor"
+        app:itemIconTint="@color/textColor"
         app:menu="@menu/drawer_menu"
         android:id="@+id/navigationView"
         android:layout_gravity="start"

@@ -27,4 +27,25 @@
         <item name="chipStrokeColor">@color/textColor2</item>
     </style>
 
+    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/positiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/negativeButtonStyle</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="positiveButtonStyle" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="negativeButtonStyle" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.AlertDialog" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
 </resources>

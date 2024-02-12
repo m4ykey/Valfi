@@ -12,7 +12,6 @@
     <string name="ep" translatable="false">EP</string>
     <string name="remove_text">Remove text</string>
     <string name="album_cover">Album Cover</string>
-    <string name="nothing_found">Nothing found</string>
     <string name="save_album">Save album</string>
     <string name="listen_later_album">Listen later album</string>
     <string name="artist">Artist</string>
@@ -30,6 +29,7 @@
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>
     <string name="compilation">Compilation</string>
+    <string name="listen_later">Listen Later</string>
 
     <string-array name="sort_options">
         <item>@string/recently_added</item>

@@ -30,6 +30,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:textCursorDrawable="@null"
                     android:fontFamily="@font/inter_medium"
                     android:id="@+id/etSearch"
                     android:layout_width="0dp"

@@ -204,7 +204,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         val customView = layoutInflater.inflate(R.layout.layout_insert_album_link, null)
         val etInputLink : TextInputEditText = customView.findViewById(R.id.etInputLink)
 
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialogTheme)
             .setPositiveButton("Ok") { dialog, _ ->
                 val albumUrl = etInputLink.text.toString()
                 if (isValidAlbumUrl(albumUrl)) {

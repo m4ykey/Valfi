@@ -2,19 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/imgAddAlbum"
+    <item
+        android:id="@+id/imgAddAlbum"
         android:icon="@drawable/ic_add"
         android:title="@string/add_album"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
-    <item android:title="@string/statistics"
+    <item
+        android:id="@+id/imgListenLater"
+        android:icon="@drawable/ic_listen_later_border"
+        android:title="@string/listen_later"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/imgStatistics"
         android:icon="@drawable/ic_statistics"
-        app:showAsAction="always"
-        android:id="@+id/imgStatistics"/>
+        android:title="@string/statistics"
+        app:showAsAction="always" />
 
-    <item android:id="@+id/imgSettings"
-        app:showAsAction="always"
+    <item
+        android:id="@+id/imgSettings"
         android:icon="@drawable/ic_settings"
-        android:title="@string/settings"/>
+        android:title="@string/settings"
+        app:showAsAction="always" />
 
 </menu>

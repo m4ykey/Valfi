@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search">Szukaj</string>
-    <string name="sort_by">Sortuj wg</string>
+    <string name="sort_by">Sortuj według</string>
     <string name="list_view">Lista</string>
     <string name="grid_view">Siatka</string>
     <string name="alphabetical">Alfabetycznie</string>
@@ -10,7 +10,6 @@
     <string name="collection">Kolekcja</string>
     <string name="remove_text">Wyczyść tekst</string>
     <string name="album_cover">Okładka albumu</string>
-    <string name="nothing_found">Nic nie znaleziono</string>
     <string name="save_album">Zapisz album</string>
     <string name="listen_later_album">Posłuchaj później album</string>
     <string name="artist">Artysta</string>
@@ -27,4 +26,5 @@
     <string name="statistics">Statystyki</string>
     <string name="settings">Ustawienia</string>
     <string name="compilation">Kompilacja</string>
+    <string name="listen_later">Odsłuchaj później</string>
 </resources>

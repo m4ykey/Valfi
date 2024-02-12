@@ -61,5 +61,7 @@ dependencies {
         implementation(hilt.android)
 
         implementation(coil)
+
+        implementation(vico.views)
     }
 }

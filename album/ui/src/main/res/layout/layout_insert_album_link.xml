@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
     android:gravity="center"
@@ -9,12 +10,18 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:textColorHint="@color/textColor2"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/textColor2"
+        app:cursorColor="@color/textColor2"
+        app:hintTextColor="@color/textColor2"
         android:hint="@string/enter_album_url"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etInputLink"
+            android:textColor="@color/textColor"
             android:fontFamily="@font/inter_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

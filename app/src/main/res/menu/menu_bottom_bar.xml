@@ -6,6 +6,8 @@
         android:title="@string/album"
         android:id="@+id/albumHomeFragment"/>
 
-    <item android:title="@string/movie"/>
+    <item
+        android:icon="@drawable/selector_movie"
+        android:title="@string/movie"/>
 
 </menu>
