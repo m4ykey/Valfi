@@ -38,4 +38,10 @@ interface AlbumDao {
     @Query("SELECT * FROM album WHERE id = :albumId")
     suspend fun getLocalAlbumById(albumId : String) : AlbumEntity
 
+    @Query("SELECT COUNT(*) FROM album")
+    fun getAlbumCount() : Int
+
+    @Query("SELECT SUM(totalTracks) FROM album")
+    fun getTotalTracksCount() : Int
+
 }

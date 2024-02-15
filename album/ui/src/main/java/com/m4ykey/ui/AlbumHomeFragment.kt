@@ -31,7 +31,6 @@ import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.ListSortingType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -80,9 +79,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             setupChips()
             setupRecyclerView()
 
-            lifecycleScope.launch(Dispatchers.Main) {
-                viewModel.albumPagingData.collect { pagingData ->
-                    albumAdapter.submitData(pagingData)
+            lifecycleScope.launch {
+                viewModel.albumPagingData.observe(viewLifecycleOwner) { pagingData ->
+                    albumAdapter.submitData(lifecycle, pagingData)
                 }
             }
             viewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
@@ -150,7 +149,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private fun FragmentAlbumHomeBinding.listTypeDialog() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
 
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.SortMaterialAlertDialog)
             .setTitle(R.string.sort_by)
             .setItems(sortOptions) { _, index ->
                 when (index) {
@@ -196,6 +195,24 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                     true
                 }
             }
+
+            val drawerButtons = listOf(
+                Pair(R.id.imgStatistics) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumStatisticsFragment()
+                    navController.navigate(action)
+                    drawerLayout.close()
+                },
+                Pair(R.id.imgSettings) {  },
+                Pair(R.id.imgAddAlbum) {  },
+                Pair(R.id.imgListenLater) {  }
+            )
+            navigationView.setNavigationItemSelectedListener { menuItem ->
+                val itemId = menuItem.itemId
+                val action = drawerButtons.find { it.first == itemId }?.second
+                action?.invoke()
+                true
+            }
+
             setNavigationOnClickListener { drawerLayout.open() }
         }
     }
@@ -204,7 +221,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         val customView = layoutInflater.inflate(R.layout.layout_insert_album_link, null)
         val etInputLink : TextInputEditText = customView.findViewById(R.id.etInputLink)
 
-        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialogTheme)
+        MaterialAlertDialogBuilder(requireContext(), R.style.EnterLinkMaterialDialogTheme)
             .setPositiveButton("Ok") { dialog, _ ->
                 val albumUrl = etInputLink.text.toString()
                 if (isValidAlbumUrl(albumUrl)) {
@@ -226,7 +243,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private fun isValidAlbumUrl(url: String): Boolean {
         try {
             val uri = URL(url).toURI()
-            if (uri.host == "open.spotify.com" && uri.path.startsWith("/album/")) {
+            if (uri.host == "open.spotify.com" && uri.path.startsWith("/album/") || uri.path.startsWith("/track/")) {
                 return true
             }
         } catch (e: MalformedURLException) {

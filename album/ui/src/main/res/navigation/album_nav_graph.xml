@@ -24,6 +24,10 @@
             android:id="@+id/action_albumHomeFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
         <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumStatisticsFragment"
             app:destination="@id/albumStatisticsFragment" />
     </fragment>
@@ -51,5 +55,6 @@
         android:id="@+id/albumStatisticsFragment"
         android:name="com.m4ykey.ui.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
-        tools:layout="@layout/fragment_album_statistics" />
+        tools:layout="@layout/fragment_album_statistics">
+    </fragment>
 </navigation>

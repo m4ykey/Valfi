@@ -27,7 +27,7 @@
         <item name="chipStrokeColor">@color/textColor2</item>
     </style>
 
-    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    <style name="EnterLinkMaterialDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="buttonBarPositiveButtonStyle">@style/positiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/negativeButtonStyle</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
@@ -37,15 +37,25 @@
 
     <style name="positiveButtonStyle" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">@color/textColor</item>
+        <item name="android:fontFamily">@font/outfit_regular</item>
     </style>
 
     <style name="negativeButtonStyle" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">@color/textColor</item>
+        <item name="android:fontFamily">@font/outfit_regular</item>
     </style>
 
     <style name="ShapeAppearance.Material3.AlertDialog" parent="ShapeAppearance.Material3.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="SortMaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorSecondary">@color/textColor2</item>
     </style>
 
 </resources>

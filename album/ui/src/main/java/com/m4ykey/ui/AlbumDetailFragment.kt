@@ -1,5 +1,7 @@
 package com.m4ykey.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -111,7 +113,10 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     R.string.tracks
                 )
 
-            txtAlbumName.text = album.name
+            txtAlbumName.apply {
+                text = album.name
+                setOnClickListener { copyName(album.name) }
+            }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
             imgAlbum.load(album.image) {
@@ -248,7 +253,10 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                 buttonAnimation(imgListenLater, resourceListenLaterId)
             }
 
-            txtAlbumName.text = albumDetail.name
+            txtAlbumName.apply {
+                text = albumDetail.name
+                setOnClickListener { copyName(albumDetail.name) }
+            }
             txtArtist.text = artistList
             txtInfo.text = albumInfo
 
@@ -282,6 +290,17 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     .start()
             }
             .start()
+    }
+
+    private fun copyName(name : String) {
+        if (name.isNotBlank()) {
+            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val data = ClipData.newPlainText(null, name)
+            clipboard.setPrimaryClip(data)
+            showToast(requireContext(), "Copied to clipboard")
+        } else {
+            showToast(requireContext(), "Nothing to copy")
+        }
     }
 
     override fun onItemClick(position: Int, item: TrackItem) {

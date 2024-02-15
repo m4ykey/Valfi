@@ -16,8 +16,6 @@ import com.m4ykey.ui.uistate.AlbumSearchUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,8 +37,8 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableLiveData<AlbumTrackUiState>()
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
-    private var _albumPagingData = MutableStateFlow<PagingData<AlbumEntity>>(PagingData.empty())
-    val albumPagingData: StateFlow<PagingData<AlbumEntity>> = _albumPagingData
+    private var _albumPagingData = MutableLiveData<PagingData<AlbumEntity>>()
+    val albumPagingData: LiveData<PagingData<AlbumEntity>> = _albumPagingData
 
     private var _currentViewType = MutableLiveData(AlbumEntityPagingAdapter.ViewType.GRID)
     val currentViewType : LiveData<AlbumEntityPagingAdapter.ViewType> = _currentViewType
