@@ -23,23 +23,13 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
+                app:navigationIconTint="@color/navigationIconColor"
                 android:id="@+id/toolbar"
                 app:navigationIcon="@drawable/ic_arrow_back"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"/>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <HorizontalScrollView
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-
-        </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

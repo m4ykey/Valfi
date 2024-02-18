@@ -30,6 +30,20 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumStatisticsFragment"
             app:destination="@id/albumStatisticsFragment" />
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_albumHomeFragment_to_albumListenLaterFragment"
+            app:destination="@id/albumListenLaterFragment" />
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_albumHomeFragment_to_albumAddFragment"
+            app:destination="@id/albumAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumSearchFragment"
@@ -42,6 +56,13 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumSearchFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_albumSearchFragment_to_albumAddFragment"
+            app:destination="@id/albumAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
@@ -57,4 +78,22 @@
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics">
     </fragment>
+    <fragment
+        android:id="@+id/albumListenLaterFragment"
+        android:name="com.m4ykey.ui.AlbumListenLaterFragment"
+        android:label="fragment_album_listen_later"
+        tools:layout="@layout/fragment_album_listen_later" >
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_albumListenLaterFragment_to_albumSearchFragment"
+            app:destination="@id/albumSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumAddFragment"
+        android:name="com.m4ykey.ui.AlbumAddFragment"
+        android:label="fragment_album_add"
+        tools:layout="@layout/fragment_album_add" />
 </navigation>

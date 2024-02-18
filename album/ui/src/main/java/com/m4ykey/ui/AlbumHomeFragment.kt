@@ -1,14 +1,11 @@
 package com.m4ykey.ui
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +17,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
-import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -167,19 +163,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     private fun FragmentAlbumHomeBinding.setupToolbar() {
-        val isNightMode = isNightMode(resources)
-        val iconTint = ColorStateList.valueOf(
-            ContextCompat.getColor(requireContext(), if (isNightMode) R.color.white else R.color.black)
-        )
-        val setIconColor : (MenuItem) -> Unit = { item -> item.iconTintList = iconTint }
-
         with(toolbar) {
-            menu.apply {
-                setIconColor(findItem(R.id.imgSearch))
-                setIconColor(findItem(R.id.imgLink))
-            }
-            navigationIcon?.setTintList(iconTint)
-
             val buttons = listOf(
                 Pair(R.id.imgSearch) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
@@ -203,8 +187,16 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                     drawerLayout.close()
                 },
                 Pair(R.id.imgSettings) {  },
-                Pair(R.id.imgAddAlbum) {  },
-                Pair(R.id.imgListenLater) {  }
+                Pair(R.id.imgAddAlbum) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumAddFragment()
+                    navController.navigate(action)
+                    drawerLayout.close()
+                },
+                Pair(R.id.imgListenLater) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
+                    navController.navigate(action)
+                    drawerLayout.close()
+                }
             )
             navigationView.setNavigationItemSelectedListener { menuItem ->
                 val itemId = menuItem.itemId

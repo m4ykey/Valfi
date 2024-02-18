@@ -20,6 +20,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:navigationIconTint="@color/navigationIconColor"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back">
 
@@ -60,7 +61,8 @@
                     android:layout_marginBottom="10dp"
                     android:contentDescription="@string/remove_text"
                     android:src="@drawable/ic_clear"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    app:tint="@color/navigationIconColor" />
 
             </LinearLayout>
 

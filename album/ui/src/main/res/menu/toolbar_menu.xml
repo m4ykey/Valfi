@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/imgSearch"
+        app:iconTint="@color/navigationIconColor"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/imgLink"
+        app:iconTint="@color/navigationIconColor"
         android:icon="@drawable/ic_link"
         android:title="@string/link"
         app:showAsAction="ifRoom"/>

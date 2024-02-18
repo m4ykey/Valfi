@@ -4,14 +4,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,7 +24,6 @@ import coil.load
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.formatAirDate
-import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
@@ -82,7 +79,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
         with(binding) {
             setupRecyclerView()
-            setupToolbar()
+            toolbar.setNavigationOnClickListener { navController.navigateUp() }
         }
     }
 
@@ -142,18 +139,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                 val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 buttonAnimation(imgSave, resourceId)
             }
-        }
-    }
-
-    private fun FragmentAlbumDetailBinding.setupToolbar() {
-        val isNightMode = isNightMode(resources)
-        val iconTint = ColorStateList.valueOf(
-            ContextCompat.getColor(requireContext(), if (isNightMode) R.color.white else R.color.black)
-        )
-
-        with(toolbar) {
-            navigationIcon?.setTintList(iconTint)
-            setNavigationOnClickListener { navController.navigateUp() }
         }
     }
 

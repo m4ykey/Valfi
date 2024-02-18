@@ -1,7 +1,6 @@
 package com.m4ykey.ui
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.inputmethod.EditorInfo
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -22,9 +20,9 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
-import com.m4ykey.core.views.isNightMode
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -74,12 +72,21 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             setupToolbar()
             setupRecyclerView()
             searchAlbums()
+            setupAddAlbumNavigation()
 
             viewModel.albums.observe(viewLifecycleOwner) { state ->
                 lifecycleScope.launch {
                     searchAdapter.submitData(viewLifecycleOwner.lifecycle, state?.albumSearch ?: PagingData.empty())
                 }
             }
+        }
+    }
+
+    private fun FragmentAlbumSearchBinding.setupAddAlbumNavigation() {
+        val addAlbum = layoutNothingFound.root.findViewById<MaterialButton>(R.id.btnAdd)
+        addAlbum?.setOnClickListener {
+            val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumAddFragment()
+            navController.navigate(action)
         }
     }
 
@@ -135,15 +142,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     }
 
     private fun FragmentAlbumSearchBinding.setupToolbar() {
-        val isNightMode = isNightMode(resources)
-        val iconTint = ColorStateList.valueOf(
-            ContextCompat.getColor(requireContext(), if (isNightMode) R.color.white else R.color.black)
-        )
-
         with(toolbar) {
-            imgClear.imageTintList = iconTint
-            navigationIcon?.setTintList(iconTint)
-
             setNavigationOnClickListener { navController.navigateUp() }
             etSearch.doOnTextChanged { text, _, _, _ ->
                 val isSearchEmpty = text.isNullOrBlank()

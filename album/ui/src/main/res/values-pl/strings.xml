@@ -27,4 +27,6 @@
     <string name="settings">Ustawienia</string>
     <string name="compilation">Kompilacja</string>
     <string name="listen_later">Odsłuchaj później</string>
+    <string name="album_count">Ilość albumów</string>
+    <string name="random_album">Losuj album</string>
 </resources>

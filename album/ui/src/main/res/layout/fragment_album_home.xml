@@ -24,6 +24,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
+                app:navigationIconTint="@color/navigationIconColor"
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/toolbar"
                 app:navigationIcon="@drawable/ic_menu"

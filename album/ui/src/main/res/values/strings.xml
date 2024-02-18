@@ -30,12 +30,12 @@
     <string name="settings">Settings</string>
     <string name="compilation">Compilation</string>
     <string name="listen_later">Listen Later</string>
+    <string name="album_count">Album Count</string>
+    <string name="random_album">Random album</string>
 
     <string-array name="sort_options">
         <item>@string/recently_added</item>
         <item>@string/alphabetical</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
