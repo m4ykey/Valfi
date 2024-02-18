@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import coil.load
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -33,6 +32,7 @@ import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
+import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -88,8 +88,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             albumViewModel.detail.observe(viewLifecycleOwner) { state ->
                 handleUiState(state)
             }
-            albumViewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-                trackAdapter.submitData(viewLifecycleOwner.lifecycle, tracks.albumTracks ?: PagingData.empty())
+            albumViewModel.tracks.observe(viewLifecycleOwner) { state ->
+                handleTrackState(state)
             }
 
             albumViewModel.getAlbumById(args.albumId)
@@ -106,7 +106,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun FragmentAlbumDetailBinding.displayAlbumFromDatabase(albumEntity: AlbumEntity?) {
         albumEntity?.let { album ->
             isAlbumSaved = album.isAlbumSaved
-            val albumInfo = "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
+            val albumInfo =
+                "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
                     R.string.tracks
                 )
 
@@ -136,7 +137,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                         else -> albumViewModel.deleteAlbum(album)
                     }
                 }
-                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                val resourceId =
+                    if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 buttonAnimation(imgSave, resourceId)
             }
         }
@@ -166,19 +168,36 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         }
     }
 
+    private fun handleTrackState(state: AlbumTrackUiState?) {
+        with(binding) {
+            rvTrackList.isVisible = state?.isLoading == false && state.albumTracks != null
+            progressBar.isVisible = state?.isLoading == true
+
+            state?.error?.let {
+                progressBar.isVisible = false
+                showToast(requireContext(), it)
+            }
+            state?.albumTracks?.let { track ->
+                progressBar.isVisible = false
+                rvTrackList.isVisible = true
+                trackAdapter.submitData(viewLifecycleOwner.lifecycle, track)
+            }
+        }
+    }
+
     private fun handleUiState(state: AlbumDetailUiState?) {
         with(binding) {
             progressBar.isVisible = state?.isLoading == true
             nestedScrollView.isVisible = !state?.isLoading!!
-            when {
-                state.error != null -> {
-                    progressBar.isVisible = false
-                    showToast(requireContext(), state.error)
-                }
-                state.albumDetail != null -> {
-                    progressBar.isVisible = false
-                    displayAlbumDetail(state.albumDetail)
-                }
+
+            state.error?.let {
+                progressBar.isVisible = false
+                showToast(requireContext(), it)
+            }
+
+            state.albumDetail?.let {
+                progressBar.isVisible = false
+                displayAlbumDetail(it)
             }
         }
     }
@@ -197,8 +216,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             }
             val formatAirDate = formatAirDate(albumDetail.releaseDate)
             val albumInfo = "$albumType • $formatAirDate • ${albumDetail.totalTracks} " + getString(
-                    R.string.tracks
-                )
+                R.string.tracks
+            )
 
             imgAlbum.load(image) {
                 crossfade(true)
@@ -222,7 +241,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     albumUrl = albumDetail.externalUrls.spotify,
                     artistUrl = albumDetail.artists[0].externalUrls.spotify
                 )
-                val resourceAlbumId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                val resourceAlbumId =
+                    if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 lifecycleScope.launch {
                     when {
                         isAlbumSaved -> albumViewModel.insertAlbum(album)
@@ -234,7 +254,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgListenLater.setOnClickListener {
                 isListenLaterSaved = !isListenLaterSaved
-                val resourceListenLaterId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                val resourceListenLaterId =
+                    if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
                 buttonAnimation(imgListenLater, resourceListenLaterId)
             }
 
@@ -259,11 +280,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         _binding = null
     }
 
-    companion object {
-        const val TAG = "DetailAlbumFragment"
-    }
-
-    private fun buttonAnimation(imageView : ImageView, resourceId : Int) {
+    private fun buttonAnimation(imageView: ImageView, resourceId: Int) {
         imageView.animate()
             .alpha(0f)
             .setDuration(200)
@@ -277,7 +294,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             .start()
     }
 
-    private fun copyName(name : String) {
+    private fun copyName(name: String) {
         if (name.isNotBlank()) {
             val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val data = ClipData.newPlainText(null, name)

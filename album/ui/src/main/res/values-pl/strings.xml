@@ -29,4 +29,5 @@
     <string name="listen_later">Odsłuchaj później</string>
     <string name="album_count">Ilość albumów</string>
     <string name="random_album">Losuj album</string>
+    <string name="empty_search">Wprowadź co najmniej 1 znak</string>
 </resources>

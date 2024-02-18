@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
@@ -27,10 +26,12 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
+import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
+import com.m4ykey.ui.uistate.AlbumSearchUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -74,10 +75,27 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             searchAlbums()
             setupAddAlbumNavigation()
 
-            viewModel.albums.observe(viewLifecycleOwner) { state ->
-                lifecycleScope.launch {
-                    searchAdapter.submitData(viewLifecycleOwner.lifecycle, state?.albumSearch ?: PagingData.empty())
+            lifecycleScope.launch {
+                viewModel.albums.observe(viewLifecycleOwner) { state ->
+                    handleSearchState(state)
                 }
+            }
+        }
+    }
+
+    private fun handleSearchState(state : AlbumSearchUiState?) {
+        with(binding) {
+            rvSearchAlbums.isVisible = state?.isLoading == false && state.albumSearch != null
+            progressBar.isVisible = state?.isLoading == true
+
+            state?.error?.let {
+                progressBar.isVisible = false
+                showToast(requireContext(), it)
+            }
+            state?.albumSearch?.let { search ->
+                progressBar.isVisible = false
+                rvSearchAlbums.isVisible = true
+                searchAdapter.submitData(viewLifecycleOwner.lifecycle, search)
             }
         }
     }
@@ -93,7 +111,14 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     private fun FragmentAlbumSearchBinding.searchAlbums() {
         etSearch.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> lifecycleScope.launch { viewModel.searchAlbums(etSearch.text.toString()) }
+                EditorInfo.IME_ACTION_SEARCH -> {
+                    val searchQuery = etSearch.text.toString()
+                    if (searchQuery.isNotEmpty()) {
+                        lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                    } else {
+                        showToast(requireContext(), getString(R.string.empty_search))
+                    }
+                }
             }
             actionId == EditorInfo.IME_ACTION_SEARCH
         }
