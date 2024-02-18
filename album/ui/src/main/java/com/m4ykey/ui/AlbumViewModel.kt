@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.m4ykey.core.network.Resource
+import com.m4ykey.core.sort.PreferencesManager
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
@@ -25,7 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val repository: AlbumRepository
+    private val repository: AlbumRepository,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
     private var _albums = MutableLiveData<AlbumSearchUiState>()
@@ -49,6 +51,15 @@ class AlbumViewModel @Inject constructor(
     private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
 
     init {
+        viewModelScope.launch {
+            preferencesManager.getRecyclerViewViewType().collect { viewType ->
+                _currentViewType.value = when (viewType) {
+                    AlbumEntityPagingAdapter.ViewType.LIST.ordinal -> AlbumEntityPagingAdapter.ViewType.LIST
+                    AlbumEntityPagingAdapter.ViewType.GRID.ordinal -> AlbumEntityPagingAdapter.ViewType.GRID
+                    else -> AlbumEntityPagingAdapter.ViewType.GRID
+                }
+            }
+        }
         getAllAlbumsPaged()
     }
 
@@ -98,6 +109,13 @@ class AlbumViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun updateViewType(viewType : AlbumEntityPagingAdapter.ViewType) {
+        viewModelScope.launch {
+            preferencesManager.setRecyclerViewType(viewType.ordinal)
+            _currentViewType.value = viewType
         }
     }
 

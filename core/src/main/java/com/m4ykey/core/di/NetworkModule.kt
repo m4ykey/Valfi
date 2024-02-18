@@ -1,4 +1,4 @@
-package com.m4ykey.core.network.module
+package com.m4ykey.core.di
 
 import com.m4ykey.core.network.createMoshi
 import dagger.Module

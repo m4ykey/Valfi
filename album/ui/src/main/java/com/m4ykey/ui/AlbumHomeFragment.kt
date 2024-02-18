@@ -123,6 +123,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         } else {
             AlbumEntityPagingAdapter.ViewType.GRID
         }
+
+        viewModel.updateViewType(newViewType)
+
         albumAdapter.setupViewType(newViewType)
         rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
