@@ -10,6 +10,7 @@ import com.m4ykey.core.network.Resource
 import com.m4ykey.core.sort.PreferencesManager
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -42,8 +43,14 @@ class AlbumViewModel @Inject constructor(
     private var _albumPagingData = MutableLiveData<PagingData<AlbumEntity>>()
     val albumPagingData: LiveData<PagingData<AlbumEntity>> = _albumPagingData
 
+    private var _listenLaterPagingData = MutableLiveData<PagingData<ListenLaterEntity>>()
+    val listenLaterPagingData : LiveData<PagingData<ListenLaterEntity>> = _listenLaterPagingData
+
     private var _currentViewType = MutableLiveData(AlbumEntityPagingAdapter.ViewType.GRID)
     val currentViewType : LiveData<AlbumEntityPagingAdapter.ViewType> = _currentViewType
+
+    private var _currentIconResId = MutableLiveData<Int>()
+    val currentIconResId : LiveData<Int> get() = _currentIconResId
 
     private var _localAlbum = MutableLiveData<AlbumEntity>()
     val localAlbum : LiveData<AlbumEntity> get() = _localAlbum
@@ -52,12 +59,11 @@ class AlbumViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            preferencesManager.getRecyclerViewViewType().collect { viewType ->
-                _currentViewType.value = when (viewType) {
-                    AlbumEntityPagingAdapter.ViewType.LIST.ordinal -> AlbumEntityPagingAdapter.ViewType.LIST
-                    AlbumEntityPagingAdapter.ViewType.GRID.ordinal -> AlbumEntityPagingAdapter.ViewType.GRID
-                    else -> AlbumEntityPagingAdapter.ViewType.GRID
+            preferencesManager.getRecyclerViewViewType().collect { (viewType, iconRes) ->
+                val albumViewType = AlbumEntityPagingAdapter.ViewType.entries.toTypedArray().getOrElse(viewType) {
+                    AlbumEntityPagingAdapter.ViewType.GRID
                 }
+                updateViewType(albumViewType, iconRes)
             }
         }
         getAllAlbumsPaged()
@@ -112,11 +118,15 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun updateViewType(viewType : AlbumEntityPagingAdapter.ViewType) {
+    fun saveRecyclerViewType(newViewType : AlbumEntityPagingAdapter.ViewType, iconResId: Int) {
         viewModelScope.launch {
-            preferencesManager.setRecyclerViewType(viewType.ordinal)
-            _currentViewType.value = viewType
+            preferencesManager.setRecyclerViewType(newViewType.ordinal, iconResId)
         }
+    }
+
+    private fun updateViewType(viewType : AlbumEntityPagingAdapter.ViewType, iconResId : Int) {
+        _currentViewType.value = viewType
+        _currentIconResId.value = iconResId
     }
 
     fun updateSortingType(sortingType: ListSortingType) {
@@ -139,6 +149,14 @@ class AlbumViewModel @Inject constructor(
 
     suspend fun deleteAlbum(album : AlbumEntity) {
         viewModelScope.launch { repository.deleteAlbum(album) }
+    }
+
+    suspend fun insertListenLater(album : ListenLaterEntity) {
+        viewModelScope.launch { repository.insertListenLater(album) }
+    }
+
+    suspend fun deleteListenLater(album: ListenLaterEntity) {
+        viewModelScope.launch { repository.deleteListenLater(album) }
     }
 
     suspend fun getAlbumById(id : String) {

@@ -46,8 +46,23 @@ class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumE
     }
 
     fun setupViewType(viewType: ViewType) {
+        val previousViewType = currentViewType
         currentViewType = viewType
-        notifyDataSetChanged()
+
+        when (previousViewType) {
+            ViewType.GRID -> {
+                when (viewType) {
+                    ViewType.LIST -> notifyItemRangeChanged(0, itemCount)
+                    else -> {}
+                }
+            }
+            ViewType.LIST -> {
+                when (viewType) {
+                    ViewType.GRID -> notifyItemRangeChanged(0, itemCount)
+                    else -> {}
+                }
+            }
+        }
     }
 
 }

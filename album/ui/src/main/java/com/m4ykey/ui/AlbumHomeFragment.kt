@@ -124,13 +124,21 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             AlbumEntityPagingAdapter.ViewType.GRID
         }
 
-        viewModel.updateViewType(newViewType)
+        viewModel.saveRecyclerViewType(newViewType, getIconResIdForViewType(newViewType))
 
         albumAdapter.setupViewType(newViewType)
+
         rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
             GridLayoutManager(requireContext(), 3)
+        }
+    }
+
+    private fun getIconResIdForViewType(viewType: AlbumEntityPagingAdapter.ViewType) : Int {
+        return when (viewType) {
+            AlbumEntityPagingAdapter.ViewType.LIST -> R.drawable.ic_list
+            AlbumEntityPagingAdapter.ViewType.GRID -> R.drawable.ic_grid
         }
     }
 

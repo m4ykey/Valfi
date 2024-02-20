@@ -28,6 +28,7 @@ import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
@@ -44,7 +45,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private val args: AlbumDetailFragmentArgs by navArgs()
     private var bottomNavigationVisibility: BottomNavigationVisibility? = null
     private lateinit var navController: NavController
-    private val albumViewModel: AlbumViewModel by viewModels()
+    private val viewModel: AlbumViewModel by viewModels()
     private val trackAdapter by lazy { TrackListPagingAdapter(this) }
     private var isAlbumSaved = false
     private var isListenLaterSaved = false
@@ -85,19 +86,19 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun setupObservers() {
         lifecycleScope.launch {
-            albumViewModel.detail.observe(viewLifecycleOwner) { state ->
+            viewModel.detail.observe(viewLifecycleOwner) { state ->
                 handleUiState(state)
             }
-            albumViewModel.tracks.observe(viewLifecycleOwner) { state ->
+            viewModel.tracks.observe(viewLifecycleOwner) { state ->
                 handleTrackState(state)
             }
 
-            albumViewModel.getAlbumById(args.albumId)
-            albumViewModel.getLocalAlbumById(args.albumId)
-            albumViewModel.getAlbumTracks(args.albumId)
+            viewModel.getAlbumById(args.albumId)
+            viewModel.getLocalAlbumById(args.albumId)
+            viewModel.getAlbumTracks(args.albumId)
         }
         with(binding) {
-            albumViewModel.localAlbum.observe(viewLifecycleOwner) { album ->
+            viewModel.localAlbum.observe(viewLifecycleOwner) { album ->
                 displayAlbumFromDatabase(album)
             }
         }
@@ -133,8 +134,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                 isAlbumSaved = !isAlbumSaved
                 lifecycleScope.launch {
                     when {
-                        isAlbumSaved -> albumViewModel.insertAlbum(album)
-                        else -> albumViewModel.deleteAlbum(album)
+                        isAlbumSaved -> viewModel.insertAlbum(album)
+                        else -> viewModel.deleteAlbum(album)
                     }
                 }
                 val resourceId =
@@ -188,14 +189,14 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun handleUiState(state: AlbumDetailUiState?) {
         with(binding) {
             progressBar.isVisible = state?.isLoading == true
-            nestedScrollView.isVisible = !state?.isLoading!!
+            nestedScrollView.isVisible = state?.isLoading == false && state.albumDetail != null
 
-            state.error?.let {
+            state?.error?.let {
                 progressBar.isVisible = false
                 showToast(requireContext(), it)
             }
 
-            state.albumDetail?.let {
+            state?.albumDetail?.let {
                 progressBar.isVisible = false
                 displayAlbumDetail(it)
             }
@@ -241,12 +242,11 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     albumUrl = albumDetail.externalUrls.spotify,
                     artistUrl = albumDetail.artists[0].externalUrls.spotify
                 )
-                val resourceAlbumId =
-                    if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                val resourceAlbumId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 lifecycleScope.launch {
                     when {
-                        isAlbumSaved -> albumViewModel.insertAlbum(album)
-                        else -> albumViewModel.deleteAlbum(album)
+                        isAlbumSaved -> viewModel.insertAlbum(album)
+                        else -> viewModel.deleteAlbum(album)
                     }
                 }
                 buttonAnimation(imgSave, resourceAlbumId)
@@ -254,8 +254,25 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgListenLater.setOnClickListener {
                 isListenLaterSaved = !isListenLaterSaved
-                val resourceListenLaterId =
-                    if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                val album = ListenLaterEntity(
+                    albumType = albumType,
+                    artistList = artistList,
+                    image = image ?: "",
+                    totalTracks = albumDetail.totalTracks,
+                    name = albumDetail.name,
+                    releaseDate = formatAirDate ?: "",
+                    id = albumDetail.id,
+                    isListenLater = isListenLaterSaved,
+                    albumUrl = albumDetail.externalUrls.spotify,
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify
+                )
+                val resourceListenLaterId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                lifecycleScope.launch {
+                    when {
+                        isListenLaterSaved -> viewModel.insertListenLater(album)
+                        else -> viewModel.deleteListenLater(album)
+                    }
+                }
                 buttonAnimation(imgListenLater, resourceListenLaterId)
             }
 

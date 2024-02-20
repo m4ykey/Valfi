@@ -13,6 +13,7 @@ import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
 import com.m4ykey.data.remote.paging.TrackListPagingSource
@@ -129,6 +130,21 @@ class AlbumRepositoryImpl @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { dao.getAlbumsOfTypeCompilationPaged() }
+        ).flow
+    }
+
+    override suspend fun insertListenLater(album: ListenLaterEntity) = dao.insertListenLater(album)
+    override suspend fun deleteListenLater(album: ListenLaterEntity) = dao.deleteListenLater(album)
+    override suspend fun getListenLaterAlbumById(albumId: String): ListenLaterEntity = dao.getListenLaterAlbumById(albumId)
+    override fun getListenLaterCount(): Int = dao.getListenLaterCount()
+
+    override fun getListenLaterAlbums(): Flow<PagingData<ListenLaterEntity>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { dao.getListenLaterAlbums() }
         ).flow
     }
 }

@@ -6,6 +6,7 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.ListenLaterEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumRepository {
@@ -23,5 +24,11 @@ interface AlbumRepository {
     fun getAlbumsOfTypeSinglePaged() : Flow<PagingData<AlbumEntity>>
     fun getAlbumsOfTypeCompilationPaged() : Flow<PagingData<AlbumEntity>>
     suspend fun getLocalAlbumById(albumId : String) : AlbumEntity
+
+    suspend fun insertListenLater(album : ListenLaterEntity)
+    suspend fun deleteListenLater(album: ListenLaterEntity)
+    suspend fun getListenLaterAlbumById(albumId : String) : ListenLaterEntity
+    fun getListenLaterCount() : Int
+    fun getListenLaterAlbums() : Flow<PagingData<ListenLaterEntity>>
 
 }
