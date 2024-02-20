@@ -27,12 +27,15 @@ class AlbumRepositoryImpl @Inject constructor(
     private val interceptor: SpotifyTokenProvider,
     private val dao: AlbumDao
 ) : AlbumRepository {
+
+    private val pagingConfig = PagingConfig(
+        pageSize = PAGE_SIZE,
+        enablePlaceholders = false
+    )
+
     override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = {
                 SearchAlbumPagingSource(
                     api = api,
@@ -55,10 +58,7 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getAlbumTracks(id: String): Flow<PagingData<TrackItem>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = {
                 TrackListPagingSource(
                     id = id,
@@ -75,60 +75,42 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getAlbumsOfTypeAlbumPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getAlbumsOfTypeAlbumPaged() }
         ).flow
     }
 
     override fun getAlbumsOfTypeEPPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getAlbumsOfTypeEPPaged() }
         ).flow
     }
 
     override fun getAlbumsOfTypeSinglePaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getAlbumsOfTypeSinglePaged() }
         ).flow
     }
 
     override fun getAlbumSortedAlphabetical(): Flow<PagingData<AlbumEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getAlbumSortedAlphabetical() }
         ).flow
     }
 
     override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getAlbumsRecentlyAdded() }
         ).flow
     }
 
     override fun getAlbumsOfTypeCompilationPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getAlbumsOfTypeCompilationPaged() }
         ).flow
     }
@@ -140,10 +122,7 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getListenLaterAlbums(): Flow<PagingData<ListenLaterEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             pagingSourceFactory = { dao.getListenLaterAlbums() }
         ).flow
     }

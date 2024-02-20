@@ -72,7 +72,7 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumsOfTypeCompilationPaged() {
         viewModelScope.launch {
             repository.getAlbumsOfTypeCompilationPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.value = pagingData
+                _albumPagingData.postValue(pagingData)
             }
         }
     }
@@ -80,7 +80,7 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumsOfTypeAlbumPaged() {
         viewModelScope.launch {
             repository.getAlbumsOfTypeAlbumPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.value = pagingData
+                _albumPagingData.postValue(pagingData)
             }
         }
     }
@@ -88,7 +88,7 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumsOfTypeEPPaged() {
         viewModelScope.launch {
             repository.getAlbumsOfTypeEPPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.value = pagingData
+                _albumPagingData.postValue(pagingData)
             }
         }
     }
@@ -96,7 +96,7 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumsOfTypeSinglePaged() {
         viewModelScope.launch {
             repository.getAlbumsOfTypeSinglePaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.value = pagingData
+                _albumPagingData.postValue(pagingData)
             }
         }
     }
@@ -106,12 +106,12 @@ class AlbumViewModel @Inject constructor(
             when (currentSortingType) {
                 ListSortingType.ALPHABETICAL -> {
                     repository.getAlbumSortedAlphabetical().cachedIn(viewModelScope).collect { pagingData ->
-                        _albumPagingData.value = pagingData
+                        _albumPagingData.postValue(pagingData)
                     }
                 }
                 ListSortingType.RECENTLY_ADDED -> {
                     repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
-                        _albumPagingData.value = pagingData
+                        _albumPagingData.postValue(pagingData)
                     }
                 }
             }
