@@ -58,4 +58,19 @@
         <item name="android:textColorSecondary">@color/textColor2</item>
     </style>
 
+    <style name="EditTextSearchStyle">
+        <item name="android:fontFamily">@font/inter_medium</item>
+        <item name="android:background">@drawable/drawable_et_search</item>
+        <item name="android:drawableStart">@drawable/ic_search_2</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:drawableTint">@color/searchIconEditText</item>
+        <item name="android:hint">@string/search</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/searchIconEditText</item>
+    </style>
+
 </resources>

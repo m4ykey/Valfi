@@ -3,6 +3,7 @@ package com.m4ykey.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.m4ykey.data.local.dao.AlbumDao
+import com.m4ykey.data.local.dao.ListenLaterDao
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ListenLaterEntity
 
@@ -14,5 +15,6 @@ import com.m4ykey.data.local.model.ListenLaterEntity
 abstract class AlbumDatabase : RoomDatabase() {
 
     abstract fun albumDao() : AlbumDao
+    abstract fun listenLaterDao() : ListenLaterDao
 
 }

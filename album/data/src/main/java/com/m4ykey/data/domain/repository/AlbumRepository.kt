@@ -15,8 +15,6 @@ interface AlbumRepository {
     suspend fun getAlbumById(id : String) : Flow<Resource<AlbumDetail>>
     fun getAlbumTracks(id : String) : Flow<PagingData<TrackItem>>
 
-    suspend fun insertAlbum(album : AlbumEntity)
-    suspend fun deleteAlbum(album: AlbumEntity)
     fun getAlbumSortedAlphabetical() : Flow<PagingData<AlbumEntity>>
     fun getAllAlbumsPaged() : Flow<PagingData<AlbumEntity>>
     fun getAlbumsOfTypeAlbumPaged() : Flow<PagingData<AlbumEntity>>
@@ -25,10 +23,13 @@ interface AlbumRepository {
     fun getAlbumsOfTypeCompilationPaged() : Flow<PagingData<AlbumEntity>>
     suspend fun getLocalAlbumById(albumId : String) : AlbumEntity
 
-    suspend fun insertListenLater(album : ListenLaterEntity)
-    suspend fun deleteListenLater(album: ListenLaterEntity)
     suspend fun getListenLaterAlbumById(albumId : String) : ListenLaterEntity
     fun getListenLaterCount() : Int
     fun getListenLaterAlbums() : Flow<PagingData<ListenLaterEntity>>
+
+    suspend fun saveAlbum(album : AlbumEntity)
+    suspend fun deleteAlbum(album : AlbumEntity)
+    suspend fun saveListenLater(album : ListenLaterEntity)
+    suspend fun deleteListenLater(album : ListenLaterEntity)
 
 }

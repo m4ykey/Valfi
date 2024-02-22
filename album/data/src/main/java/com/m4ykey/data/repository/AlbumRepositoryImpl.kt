@@ -10,14 +10,15 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
-import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.local.dao.AlbumDao
+import com.m4ykey.data.local.dao.ListenLaterDao
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.data.mapper.toAlbumDetail
+import com.m4ykey.data.remote.api.AlbumApi
+import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
 import com.m4ykey.data.remote.paging.TrackListPagingSource
-import com.m4ykey.data.remote.api.AlbumApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -25,7 +26,8 @@ import javax.inject.Inject
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
     private val interceptor: SpotifyTokenProvider,
-    private val dao: AlbumDao
+    private val albumDao: AlbumDao,
+    private val listenLaterDao: ListenLaterDao
 ) : AlbumRepository {
 
     private val pagingConfig = PagingConfig(
@@ -69,61 +71,62 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
-    override suspend fun deleteAlbum(album: AlbumEntity) = dao.deleteAlbum(album)
-    override suspend fun getLocalAlbumById(albumId: String): AlbumEntity = dao.getLocalAlbumById(albumId)
+    override suspend fun getLocalAlbumById(albumId: String): AlbumEntity = albumDao.getLocalAlbumById(albumId)
 
     override fun getAlbumsOfTypeAlbumPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumsOfTypeAlbumPaged() }
+            pagingSourceFactory = { albumDao.getAlbumsOfTypeAlbumPaged() }
         ).flow
     }
 
     override fun getAlbumsOfTypeEPPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumsOfTypeEPPaged() }
+            pagingSourceFactory = { albumDao.getAlbumsOfTypeEPPaged() }
         ).flow
     }
 
     override fun getAlbumsOfTypeSinglePaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumsOfTypeSinglePaged() }
+            pagingSourceFactory = { albumDao.getAlbumsOfTypeSinglePaged() }
         ).flow
     }
 
     override fun getAlbumSortedAlphabetical(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumSortedAlphabetical() }
+            pagingSourceFactory = { albumDao.getAlbumSortedAlphabetical() }
         ).flow
     }
 
     override fun getAllAlbumsPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumsRecentlyAdded() }
+            pagingSourceFactory = { albumDao.getAlbumsRecentlyAdded() }
         ).flow
     }
 
     override fun getAlbumsOfTypeCompilationPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumsOfTypeCompilationPaged() }
+            pagingSourceFactory = { albumDao.getAlbumsOfTypeCompilationPaged() }
         ).flow
     }
 
-    override suspend fun insertListenLater(album: ListenLaterEntity) = dao.insertListenLater(album)
-    override suspend fun deleteListenLater(album: ListenLaterEntity) = dao.deleteListenLater(album)
-    override suspend fun getListenLaterAlbumById(albumId: String): ListenLaterEntity = dao.getListenLaterAlbumById(albumId)
-    override fun getListenLaterCount(): Int = dao.getListenLaterCount()
+    override suspend fun getListenLaterAlbumById(albumId: String): ListenLaterEntity = listenLaterDao.getListenLaterAlbumById(albumId)
+    override fun getListenLaterCount(): Int = listenLaterDao.getListenLaterCount()
 
     override fun getListenLaterAlbums(): Flow<PagingData<ListenLaterEntity>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getListenLaterAlbums() }
+            pagingSourceFactory = { listenLaterDao.getListenLaterAlbums() }
         ).flow
     }
+
+    override suspend fun saveAlbum(album: AlbumEntity) = albumDao.insertAlbum(album)
+    override suspend fun deleteAlbum(album: AlbumEntity) = albumDao.deleteAlbum(album)
+    override suspend fun saveListenLater(album: ListenLaterEntity) = listenLaterDao.insertListenLater(album)
+    override suspend fun deleteListenLater(album: ListenLaterEntity) = listenLaterDao.deleteListenLater(album)
 }

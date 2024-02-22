@@ -6,6 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +23,7 @@ import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.show
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
@@ -83,6 +87,8 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             viewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
                 albumAdapter.setupViewType(viewType)
             }
+
+            imgHide.setOnClickListener { hideSearchEditText() }
         }
     }
 
@@ -98,6 +104,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             }
         }
         chipSortBy.setOnClickListener { listTypeDialog() }
+        chipSearch.setOnClickListener { showSearchEditText() }
 
         chipAlbum.setOnClickListener {
             isAlbumSelected = !isAlbumSelected
@@ -261,6 +268,30 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         val regex = Regex("/album/([^/?]+)")
         val matchResult = regex.find(url)
         return matchResult?.groupValues?.getOrNull(1)
+    }
+
+    private fun View.animationProperties(translationYValue : Float, alphaValue : Float, interpolator : Interpolator) {
+        animate()
+            .translationY(translationYValue)
+            .alpha(alphaValue)
+            .setInterpolator(interpolator)
+            .start()
+    }
+
+    private fun FragmentAlbumHomeBinding.showSearchEditText() {
+        linearLayoutSearch.apply {
+            translationY = -100f
+            alpha = 0f
+            show()
+
+            animationProperties(0f, 1f, DecelerateInterpolator())
+        }
+    }
+
+    private fun FragmentAlbumHomeBinding.hideSearchEditText() {
+        linearLayoutSearch.apply {
+            animationProperties(width.toFloat(), 0f, AccelerateInterpolator())
+        }
     }
 
     override fun onDestroy() {

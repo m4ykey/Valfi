@@ -6,6 +6,16 @@ plugins {
     alias(libs.plugins.gms)
 }
 
+val versionMajor = 0
+val versionMinor = 3
+val versionPatch = 5
+val versionBuild = 1
+var versionExt = ""
+
+if (versionBuild > 0) {
+    versionExt = ".${versionBuild}-beta"
+}
+
 android {
     namespace = "com.m4ykey.valfi2"
     compileSdk = 34
@@ -14,8 +24,8 @@ android {
         applicationId = "com.m4ykey.valfi2"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.3.4"
+        versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
+        versionName = "${versionMajor}.${versionMinor}.${versionPatch}${versionExt}"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

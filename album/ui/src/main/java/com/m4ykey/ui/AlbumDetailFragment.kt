@@ -28,7 +28,6 @@ import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
@@ -132,14 +131,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
-                lifecycleScope.launch {
-                    when {
-                        isAlbumSaved -> viewModel.insertAlbum(album)
-                        else -> viewModel.deleteAlbum(album)
-                    }
-                }
-                val resourceId =
-                    if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 buttonAnimation(imgSave, resourceId)
             }
         }
@@ -230,49 +222,13 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
-                val album = AlbumEntity(
-                    albumType = albumType,
-                    artistList = artistList,
-                    image = image ?: "",
-                    totalTracks = albumDetail.totalTracks,
-                    name = albumDetail.name,
-                    releaseDate = formatAirDate ?: "",
-                    id = albumDetail.id,
-                    isAlbumSaved = isAlbumSaved,
-                    albumUrl = albumDetail.externalUrls.spotify,
-                    artistUrl = albumDetail.artists[0].externalUrls.spotify
-                )
                 val resourceAlbumId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-                lifecycleScope.launch {
-                    when {
-                        isAlbumSaved -> viewModel.insertAlbum(album)
-                        else -> viewModel.deleteAlbum(album)
-                    }
-                }
                 buttonAnimation(imgSave, resourceAlbumId)
             }
 
             imgListenLater.setOnClickListener {
                 isListenLaterSaved = !isListenLaterSaved
-                val album = ListenLaterEntity(
-                    albumType = albumType,
-                    artistList = artistList,
-                    image = image ?: "",
-                    totalTracks = albumDetail.totalTracks,
-                    name = albumDetail.name,
-                    releaseDate = formatAirDate ?: "",
-                    id = albumDetail.id,
-                    isListenLater = isListenLaterSaved,
-                    albumUrl = albumDetail.externalUrls.spotify,
-                    artistUrl = albumDetail.artists[0].externalUrls.spotify
-                )
                 val resourceListenLaterId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
-                lifecycleScope.launch {
-                    when {
-                        isListenLaterSaved -> viewModel.insertListenLater(album)
-                        else -> viewModel.deleteListenLater(album)
-                    }
-                }
                 buttonAnimation(imgListenLater, resourceListenLaterId)
             }
 

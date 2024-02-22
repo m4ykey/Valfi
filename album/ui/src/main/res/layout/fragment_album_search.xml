@@ -31,25 +31,14 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    style="@style/EditTextSearchStyle"
                     android:textCursorDrawable="@null"
-                    android:fontFamily="@font/inter_medium"
                     android:id="@+id/etSearch"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/drawable_et_search"
-                    android:drawableStart="@drawable/ic_search_2"
-                    android:drawablePadding="10dp"
-                    android:drawableTint="@color/searchIconEditText"
-                    android:hint="@string/search"
-                    android:imeOptions="actionSearch"
                     android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/searchIconEditText"
                     android:textSize="16sp" />
 
                 <ImageView

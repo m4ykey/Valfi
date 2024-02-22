@@ -6,6 +6,8 @@ import com.m4ykey.data.domain.model.album.Artist
 import com.m4ykey.data.domain.model.album.Copyright
 import com.m4ykey.data.domain.model.album.ExternalUrls
 import com.m4ykey.data.domain.model.album.Image
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.data.remote.model.album.AlbumDetailDto
 import com.m4ykey.data.remote.model.album.AlbumItemDto
 import com.m4ykey.data.remote.model.album.ArtistDto
@@ -57,4 +59,19 @@ fun AlbumDetailDto.toAlbumDetail() : AlbumDetail {
 
 fun CopyrightDto.toCopyright() : Copyright {
     return Copyright(text = text, type = type)
+}
+
+fun AlbumEntity.toListenLater() : ListenLaterEntity {
+    return ListenLaterEntity(
+        albumType = albumType,
+        albumUrl = albumUrl,
+        artistList = artistList,
+        artistUrl = artistUrl,
+        id = id,
+        image = image,
+        isListenLater = false,
+        name = name,
+        releaseDate = releaseDate,
+        totalTracks = totalTracks
+    )
 }

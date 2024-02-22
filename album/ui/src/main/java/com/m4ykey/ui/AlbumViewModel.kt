@@ -11,6 +11,7 @@ import com.m4ykey.core.sort.PreferencesManager
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ListenLaterEntity
+import com.m4ykey.data.mapper.toListenLater
 import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -143,20 +144,18 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun insertAlbum(album : AlbumEntity) {
-        viewModelScope.launch { repository.insertAlbum(album) }
+    suspend fun saveAlbum(album : AlbumEntity, isListenLater : Boolean = false) {
+        viewModelScope.launch {
+            repository.saveAlbum(album)
+            if (isListenLater) repository.saveListenLater(album.toListenLater())
+        }
     }
 
-    suspend fun deleteAlbum(album : AlbumEntity) {
-        viewModelScope.launch { repository.deleteAlbum(album) }
-    }
-
-    suspend fun insertListenLater(album : ListenLaterEntity) {
-        viewModelScope.launch { repository.insertListenLater(album) }
-    }
-
-    suspend fun deleteListenLater(album: ListenLaterEntity) {
-        viewModelScope.launch { repository.deleteListenLater(album) }
+    suspend fun deleteAlbum(album: AlbumEntity, isListenLater: Boolean = false) {
+        viewModelScope.launch {
+            repository.deleteAlbum(album)
+            if (isListenLater) repository.deleteListenLater(album.toListenLater())
+        }
     }
 
     suspend fun getAlbumById(id : String) {
