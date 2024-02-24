@@ -2,11 +2,12 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -30,7 +32,9 @@ import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.ListSortingType
+import com.m4ykey.ui.helpers.ViewType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -78,18 +82,38 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             setupToolbar()
             setupChips()
             setupRecyclerView()
+            setupSearchAlbumsFromDatabase()
 
-            lifecycleScope.launch {
-                viewModel.albumPagingData.observe(viewLifecycleOwner) { pagingData ->
-                    albumAdapter.submitData(lifecycle, pagingData)
+            viewModel.apply {
+                lifecycleScope.launch {
+                    albumPagingData.observe(viewLifecycleOwner) { pagingData ->
+                        albumAdapter.submitData(lifecycle, pagingData)
+                    }
+                    currentViewType.observe(viewLifecycleOwner) { viewType ->
+                        albumAdapter.setupViewType(viewType)
+                    }
+                }
+                searchResult.observe(viewLifecycleOwner) { pagingDataFlow ->
+                    lifecycleScope.launch {
+                        pagingDataFlow.collectLatest { pagingData ->
+                            albumAdapter.submitData(lifecycle, pagingData)
+                        }
+                    }
                 }
             }
-            viewModel.currentViewType.observe(viewLifecycleOwner) { viewType ->
-                albumAdapter.setupViewType(viewType)
-            }
-
-            imgHide.setOnClickListener { hideSearchEditText() }
+            imgHide.setOnClickListener { linearLayoutSearch.hide() }
         }
+    }
+
+    private fun FragmentAlbumHomeBinding.setupSearchAlbumsFromDatabase() {
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = etSearch.text.toString()
+                viewModel.searchAlbumsByName(query)
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun FragmentAlbumHomeBinding.setupChips() {
@@ -125,27 +149,12 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
-        val newViewType = if (isListView) {
-            AlbumEntityPagingAdapter.ViewType.LIST
-        } else {
-            AlbumEntityPagingAdapter.ViewType.GRID
-        }
-
-        viewModel.saveRecyclerViewType(newViewType, getIconResIdForViewType(newViewType))
-
+        val newViewType = if (isListView) { ViewType.LIST } else { ViewType.GRID }
         albumAdapter.setupViewType(newViewType)
-
         rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
             GridLayoutManager(requireContext(), 3)
-        }
-    }
-
-    private fun getIconResIdForViewType(viewType: AlbumEntityPagingAdapter.ViewType) : Int {
-        return when (viewType) {
-            AlbumEntityPagingAdapter.ViewType.LIST -> R.drawable.ic_list
-            AlbumEntityPagingAdapter.ViewType.GRID -> R.drawable.ic_grid
         }
     }
 
@@ -285,12 +294,6 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             show()
 
             animationProperties(0f, 1f, DecelerateInterpolator())
-        }
-    }
-
-    private fun FragmentAlbumHomeBinding.hideSearchEditText() {
-        linearLayoutSearch.apply {
-            animationProperties(width.toFloat(), 0f, AccelerateInterpolator())
         }
     }
 

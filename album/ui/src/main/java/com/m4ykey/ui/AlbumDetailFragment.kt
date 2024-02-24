@@ -222,6 +222,24 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
+                val album = AlbumEntity(
+                    albumType = albumType,
+                    artistList = artistList,
+                    image = image ?: "",
+                    totalTracks = albumDetail.totalTracks,
+                    name = albumDetail.name,
+                    releaseDate = formatAirDate ?: "",
+                    id = albumDetail.id,
+                    isAlbumSaved = isAlbumSaved,
+                    albumUrl = albumDetail.externalUrls.spotify,
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify
+                )
+                lifecycleScope.launch {
+                    when {
+                        isAlbumSaved -> viewModel.saveAlbum(album)
+                        else -> viewModel.deleteAlbum(album)
+                    }
+                }
                 val resourceAlbumId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 buttonAnimation(imgSave, resourceAlbumId)
             }

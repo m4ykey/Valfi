@@ -44,4 +44,7 @@ interface AlbumDao {
     @Query("SELECT SUM(totalTracks) FROM album")
     fun getTotalTracksCount() : Int
 
+    @Query("SELECT * FROM album WHERE name LIKE '%' || :searchQuery || '%'")
+    fun searchAlbumsByName(searchQuery : String) : PagingSource<Int, AlbumEntity>
+
 }

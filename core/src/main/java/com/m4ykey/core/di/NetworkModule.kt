@@ -1,6 +1,7 @@
 package com.m4ykey.core.di
 
-import com.m4ykey.core.network.createMoshi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMoshiAdapter() = createMoshi()
+    fun provideMoshiAdapter(): Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
     @Provides
     @Singleton

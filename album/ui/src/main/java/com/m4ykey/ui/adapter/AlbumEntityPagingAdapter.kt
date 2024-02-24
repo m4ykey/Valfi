@@ -8,6 +8,7 @@ import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
+import com.m4ykey.ui.helpers.ViewType
 
 class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumEntity>) : PagingDataAdapter<AlbumEntity, RecyclerView.ViewHolder>(COMPARATOR) {
 
@@ -18,12 +19,7 @@ class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumE
         }
     }
 
-    enum class ViewType {
-        GRID,
-        LIST
-    }
-
-    private var currentViewType = ViewType.GRID
+    var currentViewType = ViewType.GRID
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
