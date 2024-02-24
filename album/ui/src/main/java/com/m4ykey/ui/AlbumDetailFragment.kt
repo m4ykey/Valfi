@@ -165,34 +165,50 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun FragmentAlbumDetailBinding.setupSaveButton(album : AlbumEntity?) {
         album?.let {
             isAlbumSaved = album.isAlbumSaved
-
-            when {
-                isAlbumSaved -> imgSave.setImageResource(R.drawable.ic_favorite)
-                else -> imgSave.setImageResource(R.drawable.ic_favorite_border)
-            }
-
-            imgSave.setOnClickListener {
-                isAlbumSaved = !isAlbumSaved
-                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-                buttonAnimation(imgSave, resourceId)
-            }
+            val savedResourceId = R.drawable.ic_favorite
+            val unSavedResourceId = R.drawable.ic_favorite_border
+            setupButton(
+                imageView = imgSave,
+                isSaved = isAlbumSaved,
+                unSavedResourceId = unSavedResourceId,
+                savedResourceId = savedResourceId,
+                onClick = {
+                    isAlbumSaved = !isAlbumSaved
+                    val resourceId = if (isAlbumSaved) savedResourceId else unSavedResourceId
+                    buttonAnimation(imgAlbum, resourceId)
+                    lifecycleScope.launch {
+                        when {
+                            isAlbumSaved -> viewModel.saveAlbum(album)
+                            else -> viewModel.deleteAlbum(album)
+                        }
+                    }
+                }
+            )
         }
     }
 
     private fun FragmentAlbumDetailBinding.setupListenLaterButton(album : ListenLaterEntity?) {
         album?.let {
             isListenLaterSaved = album.isListenLater
-
-            when {
-                isListenLaterSaved -> imgListenLater.setImageResource(R.drawable.ic_listen_later)
-                else -> imgListenLater.setImageResource(R.drawable.ic_listen_later_border)
-            }
-
-            imgListenLater.setOnClickListener {
-                isListenLaterSaved = !isListenLaterSaved
-                val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
-                buttonAnimation(imgListenLater, resourceId)
-            }
+            val savedResourceId = R.drawable.ic_listen_later
+            val unSavedResourceId = R.drawable.ic_listen_later_border
+            setupButton(
+                imageView = imgListenLater,
+                isSaved = isListenLaterSaved,
+                savedResourceId = savedResourceId,
+                unSavedResourceId = unSavedResourceId,
+                onClick = {
+                    isListenLaterSaved = !isListenLaterSaved
+                    val resourceId = if (isListenLaterSaved) savedResourceId else unSavedResourceId
+                    buttonAnimation(imgListenLater, resourceId)
+                    lifecycleScope.launch {
+                        when {
+                            isListenLaterSaved -> viewModel.saveListenLater(album)
+                            else -> viewModel.deleteListenLater(album)
+                        }
+                    }
+                }
+            )
         }
     }
 
@@ -369,6 +385,19 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             showToast(requireContext(), "Copied to clipboard")
         } else {
             showToast(requireContext(), "Nothing to copy")
+        }
+    }
+
+    private fun setupButton(
+        imageView : ImageView,
+        isSaved : Boolean,
+        onClick : () -> Unit,
+        unSavedResourceId : Int,
+        savedResourceId : Int
+    ) {
+        imageView.apply {
+            setOnClickListener { onClick() }
+            setImageResource(if (isSaved) savedResourceId else unSavedResourceId)
         }
     }
 

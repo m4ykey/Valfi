@@ -13,7 +13,10 @@ abstract class BaseViewHolder<T>(
     init {
         listener?.let {
             viewType.setOnClickListener {
-                listener.onItemClick(adapterPosition, getItem(adapterPosition))
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position, getItem(position))
+                }
             }
         }
     }
