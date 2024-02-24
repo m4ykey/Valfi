@@ -19,7 +19,7 @@ class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumE
         }
     }
 
-    var currentViewType = ViewType.GRID
+    private var currentViewType = ViewType.GRID
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {

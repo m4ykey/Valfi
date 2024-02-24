@@ -46,6 +46,9 @@ class AlbumViewModel @Inject constructor(
     private var _albumPagingData = MutableLiveData<PagingData<AlbumEntity>>()
     val albumPagingData: LiveData<PagingData<AlbumEntity>> = _albumPagingData
 
+    private var _listenLaterPagingData = MutableLiveData<PagingData<ListenLaterEntity>>()
+    val listenLaterPagingData: LiveData<PagingData<ListenLaterEntity>> = _listenLaterPagingData
+
     private var _currentViewType = MutableLiveData(ViewType.GRID)
     val currentViewType : LiveData<ViewType> = _currentViewType
 
@@ -62,7 +65,18 @@ class AlbumViewModel @Inject constructor(
 
     init {
         getAllAlbumsPaged()
+        getListenLaterAlbums()
     }
+
+    private fun getListenLaterAlbums() {
+        viewModelScope.launch {
+            repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { pagingData ->
+                _listenLaterPagingData.value = pagingData
+            }
+        }
+    }
+
+    fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
 
     fun searchAlbumsByName(searchQuery : String) {
         _searchResult.value = repository.searchAlbumsByName(searchQuery)

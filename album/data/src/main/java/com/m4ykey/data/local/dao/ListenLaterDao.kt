@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.m4ykey.data.local.model.ListenLaterEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ListenLaterDao {
@@ -18,7 +19,7 @@ interface ListenLaterDao {
     suspend fun deleteListenLater(album: ListenLaterEntity)
 
     @Query("SELECT COUNT(*) FROM listen_later")
-    fun getListenLaterCount() : Int
+    fun getListenLaterCount() : Flow<Int>
 
     @Query("SELECT * FROM listen_later ORDER BY saveTime DESC")
     fun getListenLaterAlbums() : PagingSource<Int, ListenLaterEntity>

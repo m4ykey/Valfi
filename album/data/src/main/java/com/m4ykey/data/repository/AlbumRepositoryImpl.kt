@@ -123,7 +123,7 @@ class AlbumRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getListenLaterAlbumById(albumId: String): ListenLaterEntity = listenLaterDao.getListenLaterAlbumById(albumId)
-    override fun getListenLaterCount(): Int = listenLaterDao.getListenLaterCount()
+    override fun getListenLaterCount(): Flow<Int> = listenLaterDao.getListenLaterCount()
 
     override fun getListenLaterAlbums(): Flow<PagingData<ListenLaterEntity>> {
         return Pager(

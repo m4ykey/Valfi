@@ -25,7 +25,7 @@ interface AlbumRepository {
     fun searchAlbumsByName(searchQuery : String) : Flow<PagingData<AlbumEntity>>
 
     suspend fun getListenLaterAlbumById(albumId : String) : ListenLaterEntity
-    fun getListenLaterCount() : Int
+    fun getListenLaterCount() : Flow<Int>
     fun getListenLaterAlbums() : Flow<PagingData<ListenLaterEntity>>
 
     suspend fun saveAlbum(album : AlbumEntity)

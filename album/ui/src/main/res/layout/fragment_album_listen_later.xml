@@ -19,6 +19,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             app:navigationIcon="@drawable/ic_arrow_back"
+            android:id="@+id/toolbar"
             app:navigationIconTint="@color/navigationIconColor"
             app:menu="@menu/listen_later_menu"
             android:layout_width="match_parent"
@@ -55,13 +56,15 @@
             android:textColor="@color/white"
             android:backgroundTint="@color/buttonColor"
             android:text="@string/random_album"
-            android:id="@+id/rvListenLater"
+            android:id="@+id/btnListenLater"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="10dp"
+        android:id="@+id/recyclerViewListenLater"
         app:layout_constraintTop_toBottomOf="@id/linearLayoutRandomAlbum"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
