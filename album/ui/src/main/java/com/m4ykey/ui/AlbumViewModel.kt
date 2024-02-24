@@ -52,6 +52,9 @@ class AlbumViewModel @Inject constructor(
     private var _localAlbum = MutableLiveData<AlbumEntity>()
     val localAlbum : LiveData<AlbumEntity> get() = _localAlbum
 
+    private var _listenLaterAlbum = MutableLiveData<ListenLaterEntity>()
+    val listenLaterAlbum : LiveData<ListenLaterEntity> get() = _listenLaterAlbum
+
     private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
 
     private var _searchResult = MutableLiveData<Flow<PagingData<AlbumEntity>>>()
@@ -125,6 +128,13 @@ class AlbumViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             val album = repository.getLocalAlbumById(albumId)
             _localAlbum.postValue(album)
+        }
+    }
+
+    suspend fun getListenLaterAlbum(albumId : String) {
+        withContext(Dispatchers.IO) {
+            val album = repository.getListenLaterAlbumById(albumId)
+            _listenLaterAlbum.postValue(album)
         }
     }
 
