@@ -26,24 +26,18 @@ class SearchAlbumPagingSource @Inject constructor(
         return try {
             val page = params.key ?: 0
             val limit = params.loadSize.coerceIn(1, 50)
-            val accessToken = "Bearer ${interceptor.getAccessToken()}"
 
             val response = api.searchAlbums(
                 query = query,
                 limit = limit,
                 offset = page * limit,
-                token = accessToken
+                token = "Bearer ${interceptor.getAccessToken()}"
             ).albums
 
-            val uniqueItems = response.items.distinctBy { it.id }
-
-            val prevKey = if (page > 0) page - 1 else null
-            val nextKey = if (uniqueItems.isEmpty() || response.next.isNullOrEmpty()) null else page + 1
-
             LoadResult.Page(
-                data = uniqueItems.map { it.toAlbumItem() },
-                nextKey = nextKey,
-                prevKey = prevKey
+                data = response.items.map { it.toAlbumItem() },
+                nextKey = if (response.next.isNullOrEmpty()) null else page + 1,
+                prevKey = if (page > 0) page - 1 else null
             )
         } catch (e : Exception) {
             LoadResult.Error(e)

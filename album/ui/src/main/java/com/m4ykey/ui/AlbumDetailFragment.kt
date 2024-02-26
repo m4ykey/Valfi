@@ -209,6 +209,9 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.setupRecyclerView() {
         with(rvTrackList) {
+            setItemViewCacheSize(20)
+            setHasFixedSize(true)
+
             adapter = trackAdapter.withLoadStateHeaderAndFooter(
                 footer = LoadStateAdapter { trackAdapter.retry() },
                 header = LoadStateAdapter { trackAdapter.retry() }
