@@ -17,7 +17,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -59,8 +59,6 @@ dependencies {
 
         ksp(hilt.compiler)
         implementation(hilt.android)
-
-        implementation(coil)
 
         implementation(vico.views)
 

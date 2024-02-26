@@ -57,5 +57,7 @@ dependencies {
         implementation(okhttp)
         implementation(okhttp.logging.interceptor)
 
+        implementation(coil)
+
     }
 }

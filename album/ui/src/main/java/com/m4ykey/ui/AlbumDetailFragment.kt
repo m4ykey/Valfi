@@ -1,7 +1,5 @@
 package com.m4ykey.ui
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -9,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,11 +16,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import coil.load
-import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.buttonAnimation
+import com.m4ykey.core.views.buttonsIntents
+import com.m4ykey.core.views.copyName
 import com.m4ykey.core.views.formatAirDate
+import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
+import com.m4ykey.core.views.setupButton
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -123,16 +123,13 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             txtAlbumName.apply {
                 text = album.name
-                setOnClickListener { copyName(album.name) }
+                setOnClickListener { copyName(album.name, requireContext()) }
             }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
-            imgAlbum.load(album.image) {
-                crossfade(true)
-                crossfade(500)
-            }
-            buttonsIntents(button = btnAlbum, url = album.albumUrl)
-            buttonsIntents(button = btnArtist, url = album.artistUrl)
+            loadImage(imgAlbum, album.image)
+            buttonsIntents(button = btnAlbum, url = album.albumUrl, requireContext())
+            buttonsIntents(button = btnArtist, url = album.artistUrl, requireContext())
 
             setupSaveButton(album)
         }
@@ -148,16 +145,13 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             txtAlbumName.apply {
                 text = album.name
-                setOnClickListener { copyName(album.name) }
+                setOnClickListener { copyName(album.name, requireContext()) }
             }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
-            imgAlbum.load(album.image) {
-                crossfade(true)
-                crossfade(500)
-            }
-            buttonsIntents(button = btnAlbum, url = album.albumUrl)
-            buttonsIntents(button = btnArtist, url = album.artistUrl)
+            loadImage(imgAlbum, album.image)
+            buttonsIntents(button = btnAlbum, url = album.albumUrl, requireContext())
+            buttonsIntents(button = btnArtist, url = album.artistUrl, requireContext())
 
             setupListenLaterButton(album)
         }
@@ -293,18 +287,15 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
             txtAlbumName.apply {
                 text = albumDetail.name
-                setOnClickListener { copyName(albumDetail.name) }
+                setOnClickListener { copyName(albumDetail.name, requireContext()) }
             }
             txtArtist.text = artistList
             txtInfo.text = albumInfo
 
-            imgAlbum.load(image) {
-                crossfade(true)
-                crossfade(500)
-            }
+            loadImage(imgAlbum, image.toString())
 
-            buttonsIntents(button = btnAlbum, url = albumDetail.externalUrls.spotify)
-            buttonsIntents(button = btnArtist, url = albumDetail.artists[0].externalUrls.spotify)
+            buttonsIntents(button = btnAlbum, url = albumDetail.externalUrls.spotify, requireContext())
+            buttonsIntents(button = btnArtist, url = albumDetail.artists[0].externalUrls.spotify, requireContext())
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
@@ -356,53 +347,9 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         }
     }
 
-    private fun buttonsIntents(button: MaterialButton, url: String) {
-        button.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    private fun buttonAnimation(imageView: ImageView, resourceId: Int) {
-        imageView.animate()
-            .alpha(0f)
-            .setDuration(200)
-            .withEndAction {
-                imageView.setImageResource(resourceId)
-                imageView.animate()
-                    .alpha(1f)
-                    .setDuration(200)
-                    .start()
-            }
-            .start()
-    }
-
-    private fun copyName(name: String) {
-        if (name.isNotBlank()) {
-            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val data = ClipData.newPlainText(null, name)
-            clipboard.setPrimaryClip(data)
-            showToast(requireContext(), "Copied to clipboard")
-        } else {
-            showToast(requireContext(), "Nothing to copy")
-        }
-    }
-
-    private fun setupButton(
-        imageView : ImageView,
-        isSaved : Boolean,
-        onClick : () -> Unit,
-        unSavedResourceId : Int,
-        savedResourceId : Int
-    ) {
-        imageView.apply {
-            setOnClickListener { onClick() }
-            setImageResource(if (isSaved) savedResourceId else unSavedResourceId)
-        }
     }
 
     override fun onItemClick(position: Int, item: TrackItem) {

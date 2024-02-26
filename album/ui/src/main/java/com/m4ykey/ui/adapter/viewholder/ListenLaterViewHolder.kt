@@ -2,7 +2,7 @@ package com.m4ykey.ui.adapter.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import coil.load
+import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.local.model.ListenLaterEntity
@@ -27,7 +27,7 @@ class ListenLaterViewHolder(
     override fun bind(item: ListenLaterEntity) {
         currentAlbumItem = item
         with(binding) {
-            imgAlbum.load(item.image)
+            loadImage(imgAlbum, item.image)
             txtAlbum.text = item.name
             txtArtist.text = item.artistList
         }

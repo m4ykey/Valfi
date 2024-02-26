@@ -2,8 +2,7 @@ package com.m4ykey.ui.adapter.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.album.AlbumItem
@@ -30,10 +29,7 @@ class SearchAlbumViewHolder(
         with(binding) {
             val image = item.images.maxByOrNull { it.height * it.width }?.url
             val artistList = item.artists.joinToString(", ") { it.name }
-            imgAlbum.load(image) {
-                crossfade(true)
-                crossfade(500)
-            }
+            loadImage(imgAlbum, image.toString())
             txtAlbum.text = item.name
             txtArtist.text = artistList
         }
