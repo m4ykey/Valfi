@@ -63,7 +63,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<ListenLaterEnti
             getRandomAlbum()
             lifecycleScope.launch {
                 val albumCount = viewModel.getListenLaterCount().firstOrNull() ?: 0
-                txtAlbumCount.text = "${context?.getString(R.string.album_count)}: $albumCount"
+                txtAlbumCount.text = getString(R.string.album_count, albumCount)
                 viewModel.listenLaterPagingData.observe(viewLifecycleOwner) { pagingData ->
                     listenLaterAdapter.submitData(lifecycle, pagingData)
                 }

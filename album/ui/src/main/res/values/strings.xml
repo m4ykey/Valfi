@@ -30,7 +30,7 @@
     <string name="settings">Settings</string>
     <string name="compilation">Compilation</string>
     <string name="listen_later">Listen Later</string>
-    <string name="album_count">Album Count</string>
+    <string name="album_count">Album Count: %1$d</string>
     <string name="random_album">Random album</string>
     <string name="empty_search">Must enter at least 1 character</string>
     <string name="first_add_something_to_list">First you have to add something to the list</string>
