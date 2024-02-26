@@ -138,6 +138,10 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
+    suspend fun getRandomAlbum() : ListenLaterEntity? {
+        return repository.getRandomAlbum()
+    }
+
     suspend fun getLocalAlbumById(albumId : String) {
         withContext(Dispatchers.IO) {
             val album = repository.getLocalAlbumById(albumId)

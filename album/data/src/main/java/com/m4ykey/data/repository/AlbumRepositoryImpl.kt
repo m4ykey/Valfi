@@ -124,6 +124,7 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun getListenLaterAlbumById(albumId: String): ListenLaterEntity = listenLaterDao.getListenLaterAlbumById(albumId)
     override fun getListenLaterCount(): Flow<Int> = listenLaterDao.getListenLaterCount()
+    override suspend fun getRandomAlbum(): ListenLaterEntity? = listenLaterDao.getRandomAlbum()
 
     override fun getListenLaterAlbums(): Flow<PagingData<ListenLaterEntity>> {
         return Pager(

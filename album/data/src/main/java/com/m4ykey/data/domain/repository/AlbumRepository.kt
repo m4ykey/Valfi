@@ -27,6 +27,7 @@ interface AlbumRepository {
     suspend fun getListenLaterAlbumById(albumId : String) : ListenLaterEntity
     fun getListenLaterCount() : Flow<Int>
     fun getListenLaterAlbums() : Flow<PagingData<ListenLaterEntity>>
+    suspend fun getRandomAlbum() : ListenLaterEntity?
 
     suspend fun saveAlbum(album : AlbumEntity)
     suspend fun deleteAlbum(album : AlbumEntity)
