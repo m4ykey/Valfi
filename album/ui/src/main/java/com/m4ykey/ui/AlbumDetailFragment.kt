@@ -35,6 +35,7 @@ import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -239,16 +240,19 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun handleTrackState(state: AlbumTrackUiState?) {
         with(binding) {
             rvTrackList.isVisible = state?.isLoading == false && state.albumTracks != null
-            progressBar.isVisible = state?.isLoading == true
+            progressBarTrack.isVisible = state?.isLoading == true
 
             state?.error?.let {
-                progressBar.isVisible = false
+                progressBarTrack.isVisible = false
                 showToast(requireContext(), it)
             }
             state?.albumTracks?.let { track ->
-                progressBar.isVisible = false
-                rvTrackList.isVisible = true
-                trackAdapter.submitData(viewLifecycleOwner.lifecycle, track)
+                lifecycleScope.launch {
+                    delay(500)
+                    progressBarTrack.isVisible = false
+                    rvTrackList.isVisible = true
+                    trackAdapter.submitData(lifecycle, track)
+                }
             }
         }
     }
