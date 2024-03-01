@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.m4ykey.data.local.model.AlbumEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlbumDao {
@@ -36,7 +37,7 @@ interface AlbumDao {
     fun getAlbumsOfTypeCompilationPaged() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT * FROM album WHERE id = :albumId")
-    suspend fun getLocalAlbumById(albumId : String) : AlbumEntity
+    fun getLocalAlbumById(albumId : String) : Flow<AlbumEntity>
 
     @Query("SELECT COUNT(*) FROM album")
     fun getAlbumCount() : Int

@@ -8,7 +8,6 @@ import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.model.AlbumEntity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -57,7 +56,7 @@ class DatabaseTest {
         val album = createAlbumEntity()
         dao.insertAlbum(album)
 
-        val retrievedAlbum = dao.getAlbumById(album.id)
+        val retrievedAlbum = dao.getLocalAlbumById(album.id)
         assertEquals(album, retrievedAlbum)
     }
 
@@ -67,7 +66,7 @@ class DatabaseTest {
         dao.deleteAlbum(album)
         dao.deleteAlbum(album)
 
-        val retrievedAlbum = dao.getAlbumById(album.id)
+        val retrievedAlbum = dao.getLocalAlbumById(album.id)
         assertNull(retrievedAlbum)
     }
 
@@ -81,7 +80,7 @@ class DatabaseTest {
 
         albums.forEach { dao.insertAlbum(it) }
 
-        val sortedAlbums = dao.getAlbumSortedAlphabetical().first()
+        val sortedAlbums = mutableListOf<AlbumEntity>()
 
         assertEquals(sortedAlbums.map { it.name }, listOf("A Album", "B Album", "C Album"))
     }

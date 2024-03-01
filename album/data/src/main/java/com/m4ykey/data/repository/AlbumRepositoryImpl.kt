@@ -78,7 +78,7 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getLocalAlbumById(albumId: String): AlbumEntity = albumDao.getLocalAlbumById(albumId)
+    override suspend fun getLocalAlbumById(albumId: String) = albumDao.getLocalAlbumById(albumId)
 
     override fun getAlbumsOfTypeAlbumPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
@@ -122,7 +122,7 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getListenLaterAlbumById(albumId: String): ListenLaterEntity = listenLaterDao.getListenLaterAlbumById(albumId)
+    override suspend fun getListenLaterAlbumById(albumId: String) = listenLaterDao.getListenLaterAlbumById(albumId)
     override fun getListenLaterCount(): Flow<Int> = listenLaterDao.getListenLaterCount()
     override suspend fun getRandomAlbum(): ListenLaterEntity? = listenLaterDao.getRandomAlbum()
 

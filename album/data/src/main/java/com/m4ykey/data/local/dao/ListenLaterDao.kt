@@ -25,7 +25,7 @@ interface ListenLaterDao {
     fun getListenLaterAlbums() : PagingSource<Int, ListenLaterEntity>
 
     @Query("SELECT * FROM listen_later WHERE id = :albumId")
-    suspend fun getListenLaterAlbumById(albumId : String) : ListenLaterEntity
+    fun getListenLaterAlbumById(albumId : String) : Flow<ListenLaterEntity>
 
     @Query("SELECT * FROM listen_later ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandomAlbum() : ListenLaterEntity?

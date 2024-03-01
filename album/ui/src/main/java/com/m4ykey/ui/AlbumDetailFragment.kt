@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -36,6 +38,7 @@ import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -50,6 +53,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private val trackAdapter by lazy { TrackListPagingAdapter(this) }
     private var isAlbumSaved = false
     private var isListenLaterSaved = false
+    private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,6 +62,11 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         } else {
             throw RuntimeException("$context ${getString(R.string.must_implement_bottom_navigation)}")
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        networkStateMonitor.startMonitoring()
     }
 
     override fun onCreateView(
@@ -88,26 +97,25 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.apply {
-                detail.observe(viewLifecycleOwner) { state ->
-                    handleUiState(state)
-                }
-                tracks.observe(viewLifecycleOwner) { state ->
-                    handleTrackState(state)
-                }
-
                 getAlbumById(args.albumId)
                 getLocalAlbumById(args.albumId)
                 getAlbumTracks(args.albumId)
                 getListenLaterAlbum(args.albumId)
-            }
-        }
-        with(binding) {
-            viewModel.apply {
-                localAlbum.observe(viewLifecycleOwner) { album ->
-                    displayAlbumFromDatabase(album)
-                }
-                listenLaterAlbum.observe(viewLifecycleOwner) { album ->
-                    displayListenLaterFromDatabase(album)
+
+                networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
+                    if (isInternetAvailable) {
+                        detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+                        tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                    } else {
+                        lifecycleScope.launch {
+                            binding.apply {
+                                progressBar.isVisible = false
+                                progressBarTrack.isVisible = false
+                                localAlbum.collectLatest { album -> displayAlbumFromDatabase(album) }
+                                listenLaterAlbum.collectLatest { album -> displayListenLaterFromDatabase(album) }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -115,6 +123,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.displayAlbumFromDatabase(albumEntity: AlbumEntity?) {
         albumEntity?.let { album ->
+            Log.d("AlbumDetailFragment", "displayAlbumFromDatabase called with non-null albumEntity")
             isAlbumSaved = album.isAlbumSaved
             val albumInfo =
                 "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
@@ -137,6 +146,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.displayListenLaterFromDatabase(listenLater: ListenLaterEntity?) {
         listenLater?.let { album ->
+            Log.d("AlbumDetailFragment", "displayListenLaterFromDatabase called with non-null albumEntity")
             isListenLaterSaved = album.isListenLater
             val albumInfo =
                 "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
@@ -350,6 +360,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        networkStateMonitor.stopMonitoring()
     }
 
     override fun onItemClick(position: Int, item: TrackItem) {
