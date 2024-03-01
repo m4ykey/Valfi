@@ -101,7 +101,10 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                     }
                 }
             }
-            imgHide.setOnClickListener { linearLayoutSearch.hide() }
+            imgHide.setOnClickListener {
+                linearLayoutSearch.hide()
+                etSearch.setText("")
+            }
         }
     }
 

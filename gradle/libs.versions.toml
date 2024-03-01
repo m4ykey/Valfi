@@ -1,5 +1,5 @@
 [versions]
-application = "8.2.2"
+application = "8.3.0"
 navigation = "2.7.7"
 retrofit = "2.9.0"
 lifecycle = "2.7.0"
