@@ -62,5 +62,9 @@ dependencies {
 
         implementation(vico.views)
 
+        implementation(coil)
+
+        implementation(coroutines)
+
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -123,7 +122,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.displayAlbumFromDatabase(albumEntity: AlbumEntity?) {
         albumEntity?.let { album ->
-            Log.d("AlbumDetailFragment", "displayAlbumFromDatabase called with non-null albumEntity")
             isAlbumSaved = album.isAlbumSaved
             val albumInfo =
                 "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(
@@ -146,7 +144,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun FragmentAlbumDetailBinding.displayListenLaterFromDatabase(listenLater: ListenLaterEntity?) {
         listenLater?.let { album ->
-            Log.d("AlbumDetailFragment", "displayListenLaterFromDatabase called with non-null albumEntity")
             isListenLaterSaved = album.isListenLater
             val albumInfo =
                 "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(

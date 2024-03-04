@@ -43,6 +43,9 @@ class NetworkMonitor(context : Context) {
     fun startMonitoring() {
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .build()
 
         try {
@@ -51,5 +54,4 @@ class NetworkMonitor(context : Context) {
             e.printStackTrace()
         }
     }
-
 }

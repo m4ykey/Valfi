@@ -59,5 +59,7 @@ dependencies {
 
         implementation(coil)
 
+        implementation(androidx.palette)
+
     }
 }
