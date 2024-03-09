@@ -1,5 +1,6 @@
 package com.m4ykey.ui.adapter
 
+import android.content.Context
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -7,7 +8,10 @@ import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.ui.adapter.viewholder.ListenLaterViewHolder
 
-class ListenLaterPagingAdapter(private val listener : OnItemClickListener<ListenLaterEntity>) : PagingDataAdapter<ListenLaterEntity, ListenLaterViewHolder>(COMPARATOR) {
+class ListenLaterPagingAdapter(
+    private val listener : OnItemClickListener<ListenLaterEntity>,
+    private val context : Context
+) : PagingDataAdapter<ListenLaterEntity, ListenLaterViewHolder>(COMPARATOR) {
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<ListenLaterEntity>() {
@@ -21,6 +25,6 @@ class ListenLaterPagingAdapter(private val listener : OnItemClickListener<Listen
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListenLaterViewHolder {
-        return ListenLaterViewHolder.create(parent, listener)
+        return ListenLaterViewHolder.create(parent, listener, context)
     }
 }

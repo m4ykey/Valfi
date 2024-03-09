@@ -1,11 +1,11 @@
 package com.m4ykey.core.views
 
+import android.content.Context
 import android.widget.ImageView
-import coil.load
+import com.bumptech.glide.Glide
 
-fun loadImage(imageView: ImageView, imageUrl : String) {
-    imageView.load(imageUrl) {
-        crossfade(true)
-        crossfade(500)
-    }
+fun loadImage(imageView: ImageView, imageUrl : String, context : Context) {
+    Glide.with(context)
+        .load(imageUrl)
+        .into(imageView)
 }

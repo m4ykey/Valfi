@@ -1,5 +1,6 @@
 package com.m4ykey.ui.adapter
 
+import android.content.Context
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +11,10 @@ import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
 import com.m4ykey.ui.helpers.ViewType
 
-class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumEntity>) : PagingDataAdapter<AlbumEntity, RecyclerView.ViewHolder>(COMPARATOR) {
+class AlbumEntityPagingAdapter(
+    private val listener : OnItemClickListener<AlbumEntity>,
+    private val context: Context
+) : PagingDataAdapter<AlbumEntity, RecyclerView.ViewHolder>(COMPARATOR) {
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<AlbumEntity>() {
@@ -31,8 +35,8 @@ class AlbumEntityPagingAdapter(private val listener : OnItemClickListener<AlbumE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            ViewType.GRID.ordinal -> AlbumGridViewHolder.create(parent, listener)
-            ViewType.LIST.ordinal -> AlbumListViewHolder.create(parent, listener)
+            ViewType.GRID.ordinal -> AlbumGridViewHolder.create(parent, listener = listener, context = context)
+            ViewType.LIST.ordinal -> AlbumListViewHolder.create(parent, listener, context)
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }

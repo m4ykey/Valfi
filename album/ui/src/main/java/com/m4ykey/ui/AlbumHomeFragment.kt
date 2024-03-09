@@ -48,7 +48,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private var isListViewChanged = false
-    private val albumAdapter by lazy { AlbumEntityPagingAdapter(this) }
+    private val albumAdapter by lazy { AlbumEntityPagingAdapter(this, requireContext()) }
     private val viewModel : AlbumViewModel by viewModels()
     private var isAlbumSelected = false
     private var isEpSelected = false

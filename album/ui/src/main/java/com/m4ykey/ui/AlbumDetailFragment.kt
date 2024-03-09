@@ -2,6 +2,8 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +18,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.buttonAnimation
@@ -93,6 +99,26 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         }
     }
 
+    private fun getDominantColorFromImage(imageUrl : String, onColorReady : (Int) -> Unit) {
+        Glide.with(requireContext())
+            .asBitmap()
+            .load(imageUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource).generate { palette ->
+                        val mutedSwatchColor = palette?.mutedSwatch?.rgb
+                        val dominantColor = palette?.dominantSwatch?.rgb
+                        if (mutedSwatchColor != null) {
+                            onColorReady(mutedSwatchColor)
+                        } else if (dominantColor != null) {
+                            onColorReady(dominantColor)
+                        }
+                    }
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
+    }
+
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.apply {
@@ -134,7 +160,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
-            loadImage(imgAlbum, album.image)
+            loadImage(imgAlbum, album.image, requireContext())
             buttonsIntents(button = btnAlbum, url = album.albumUrl, requireContext())
             buttonsIntents(button = btnArtist, url = album.artistUrl, requireContext())
 
@@ -156,7 +182,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
-            loadImage(imgAlbum, album.image)
+            loadImage(imgAlbum, album.image, requireContext())
             buttonsIntents(button = btnAlbum, url = album.albumUrl, requireContext())
             buttonsIntents(button = btnArtist, url = album.artistUrl, requireContext())
 
@@ -299,7 +325,12 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             txtArtist.text = artistList
             txtInfo.text = albumInfo
 
-            loadImage(imgAlbum, image.toString())
+            loadImage(imgAlbum, image.toString(), requireContext())
+
+            getDominantColorFromImage(image.toString()) { color ->
+                btnAlbum.setBackgroundColor(color)
+                btnArtist.setBackgroundColor(color)
+            }
 
             buttonsIntents(button = btnAlbum, url = albumDetail.externalUrls.spotify, requireContext())
             buttonsIntents(button = btnArtist, url = albumDetail.artists[0].externalUrls.spotify, requireContext())

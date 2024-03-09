@@ -44,7 +44,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
-    private val searchAdapter by lazy { SearchAlbumPagingAdapter(this, viewModel) }
+    private val searchAdapter by lazy { SearchAlbumPagingAdapter(this, viewModel, requireContext()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

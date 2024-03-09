@@ -1,5 +1,6 @@
 package com.m4ykey.ui.adapter.viewholder
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -17,15 +18,17 @@ import kotlinx.coroutines.withContext
 class SearchAlbumViewHolder(
     private val binding: LayoutAlbumGridBinding,
     listener : OnItemClickListener<AlbumItem>?,
-    private val viewModel : AlbumViewModel
+    private val viewModel : AlbumViewModel,
+    private val context : Context
 ) : BaseViewHolder<AlbumItem>(listener, binding.root) {
 
     companion object {
-        fun create(view : ViewGroup, listener: OnItemClickListener<AlbumItem>?, viewModel: AlbumViewModel) : SearchAlbumViewHolder {
+        fun create(view : ViewGroup, listener: OnItemClickListener<AlbumItem>?, viewModel: AlbumViewModel, context: Context) : SearchAlbumViewHolder {
             return SearchAlbumViewHolder(
                 listener = listener,
                 viewModel = viewModel,
-                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false)
+                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false),
+                context = context
             )
         }
     }
@@ -37,7 +40,7 @@ class SearchAlbumViewHolder(
         with(binding) {
             val image = item.images.maxByOrNull { it.height * it.width }?.url
             val artistList = item.artists.joinToString(", ") { it.name }
-            loadImage(imgAlbum, image.toString())
+            loadImage(imgAlbum, image.toString(), context)
             txtAlbum.text = item.name
             txtArtist.text = artistList
 

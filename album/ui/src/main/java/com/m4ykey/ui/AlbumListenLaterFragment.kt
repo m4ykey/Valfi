@@ -32,7 +32,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<ListenLaterEnti
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    private val listenLaterAdapter by lazy { ListenLaterPagingAdapter(this) }
+    private val listenLaterAdapter by lazy { ListenLaterPagingAdapter(this, requireContext()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

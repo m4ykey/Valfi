@@ -1,5 +1,6 @@
 package com.m4ykey.ui.adapter.viewholder
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.m4ykey.core.views.loadImage
@@ -10,7 +11,8 @@ import com.m4ykey.ui.databinding.LayoutAlbumListBinding
 
 class AlbumListViewHolder(
     private val binding : LayoutAlbumListBinding,
-    private val listener : OnItemClickListener<AlbumEntity>?
+    private val listener : OnItemClickListener<AlbumEntity>?,
+    private val context: Context
 ) : BaseViewHolder<AlbumEntity>(listener, binding.root) {
 
     private lateinit var currentAlbumItem : AlbumEntity
@@ -18,7 +20,7 @@ class AlbumListViewHolder(
     override fun bind(item: AlbumEntity) {
         currentAlbumItem = item
         with(binding) {
-            loadImage(imgAlbum, item.image)
+            loadImage(imgAlbum, item.image, context)
             txtAlbum.text = item.name
             txtArtist.text = item.artistList
         }
@@ -29,9 +31,10 @@ class AlbumListViewHolder(
     }
 
     companion object {
-        fun create(view : ViewGroup, listener : OnItemClickListener<AlbumEntity>?) : AlbumListViewHolder {
+        fun create(view : ViewGroup, listener : OnItemClickListener<AlbumEntity>?, context: Context) : AlbumListViewHolder {
             return AlbumListViewHolder(
                 listener = listener,
+                context = context,
                 binding = LayoutAlbumListBinding.inflate(LayoutInflater.from(view.context), view, false)
             )
         }
