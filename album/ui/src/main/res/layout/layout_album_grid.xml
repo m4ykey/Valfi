@@ -1,57 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutAlbum"
     android:orientation="vertical"
     android:layout_marginBottom="10dp"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewImage"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp"
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            tools:background="@color/black"
-            android:id="@+id/imgAlbum"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/album_cover" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewImage"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.cardview.widget.CardView>
+            <ImageView
+                tools:background="@color/black"
+                android:id="@+id/imgAlbum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/album_cover" />
 
-    <TextView
-        android:fontFamily="@font/inter_medium"
-        android:id="@+id/txtAlbum"
-        android:layout_width="110dp"
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:fontFamily="@font/inter_medium"
+            android:id="@+id/txtAlbum"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/textColor"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewImage"
+            tools:text="Havana" />
+
+        <TextView
+            android:id="@+id/txtArtist"
+            android:layout_width="110dp"
+            android:fontFamily="@font/outfit_regular"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtAlbum"
+            tools:text="Camila" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgSavedAlbum"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:padding="5dp"
+        app:tint="@color/red"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="@color/textColor"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardViewImage"
-        tools:text="Havana" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_favorite"/>
 
-    <TextView
-        android:id="@+id/txtArtist"
-        android:layout_width="110dp"
-        android:fontFamily="@font/outfit_regular"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/textColor"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtAlbum"
-        tools:text="Camila" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
