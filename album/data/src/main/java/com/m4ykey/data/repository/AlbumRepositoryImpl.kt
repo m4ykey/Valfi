@@ -12,6 +12,7 @@ import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.dao.ListenLaterDao
+import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.data.mapper.toAlbumDetail
@@ -27,7 +28,8 @@ class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
     private val interceptor: SpotifyTokenProvider,
     private val albumDao: AlbumDao,
-    private val listenLaterDao: ListenLaterDao
+    private val listenLaterDao: ListenLaterDao,
+    private val db : AlbumDatabase
 ) : AlbumRepository {
 
     private val pagingConfig = PagingConfig(
@@ -72,7 +74,8 @@ class AlbumRepositoryImpl @Inject constructor(
                 TrackListPagingSource(
                     id = id,
                     interceptor = interceptor,
-                    api = api
+                    api = api,
+                    db = db
                 )
             }
         ).flow

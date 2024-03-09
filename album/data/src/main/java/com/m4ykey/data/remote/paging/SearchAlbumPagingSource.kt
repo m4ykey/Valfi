@@ -25,12 +25,12 @@ class SearchAlbumPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AlbumItem> {
         return try {
             val page = params.key ?: 0
-            val limit = params.loadSize.coerceIn(1, 50)
+            val limit = params.loadSize.coerceIn(1, 20)
 
             val response = api.searchAlbums(
                 query = query,
                 limit = limit,
-                offset = page * limit,
+                offset = page * params.loadSize,
                 token = "Bearer ${interceptor.getAccessToken()}"
             ).albums
 
