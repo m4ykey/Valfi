@@ -75,8 +75,7 @@ dependencies {
         implementation(androidx.room.paging)
         implementation(androidx.lifecycle.viewmodel)
 
-        implementation(okhttp)
-        implementation(okhttp.logging.interceptor)
+        implementation(bundles.okhttp)
 
     }
 }

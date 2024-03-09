@@ -3,9 +3,9 @@ package com.m4ykey.data.remote.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.mapper.toAlbumItem
 import com.m4ykey.data.remote.api.AlbumApi
+import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import javax.inject.Inject
 
 class SearchAlbumPagingSource @Inject constructor(
