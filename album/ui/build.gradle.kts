@@ -62,8 +62,6 @@ dependencies {
 
         implementation(vico.views)
 
-        implementation(glide)
-
         implementation(coroutines)
 
     }
