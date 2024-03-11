@@ -73,7 +73,7 @@ class AlbumViewModel @Inject constructor(
         _searchResult.value = repository.searchAlbumsByName(searchQuery)
     }
 
-    fun getListenLaterAlbums() {
+    private fun getListenLaterAlbums() {
         viewModelScope.launch {
             repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { pagingData ->
                 _albumPagingData.postValue(pagingData)

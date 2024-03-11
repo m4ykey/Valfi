@@ -109,13 +109,79 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                             binding.apply {
                                 progressBar.isVisible = false
                                 progressBarTrack.isVisible = false
-                                localAlbum.collectLatest { album ->
-
-                                }
+                                localAlbum.collectLatest { album -> displayLocalAlbum(album) }
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun FragmentAlbumDetailBinding.displayLocalAlbum(albumEntity : AlbumEntity?) {
+        albumEntity?.let { album ->
+            isAlbumSaved = album.isAlbumSaved
+            isListenLaterSaved = album.isListenLaterSaved
+
+            val albumInfo = "${album.albumType} • ${album.releaseDate} • ${album.totalTracks} " + getString(R.string.tracks)
+
+            txtAlbumName.apply {
+                text = album.name
+                setOnClickListener { copyName(album.name, requireContext()) }
+            }
+            txtArtist.text = album.artistList
+            txtInfo.text = albumInfo
+
+            loadImage(imgAlbum, album.image, requireContext())
+
+            buttonsIntents(btnArtist, album.artistUrl, requireContext())
+            buttonsIntents(btnAlbum, album.albumUrl, requireContext())
+
+            btnAlbum.setBackgroundColor(album.color ?: 0)
+            btnArtist.setBackgroundColor(album.color ?: 0)
+
+            when {
+                isAlbumSaved -> imgSave.setImageResource(R.drawable.ic_favorite)
+                else -> imgSave.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            when {
+                isListenLaterSaved -> imgListenLater.setImageResource(R.drawable.ic_listen_later)
+                else -> imgListenLater.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            imgSave.setOnClickListener {
+                isAlbumSaved = !isAlbumSaved
+                lifecycleScope.launch {
+                    if (isAlbumSaved) {
+                        viewModel.saveAlbum(album)
+                    } else {
+                        if (!album.isListenLaterSaved) {
+                            viewModel.deleteAlbum(album)
+                        } else {
+                            viewModel.updateAlbumSaved(album.id, false)
+                        }
+                    }
+                }
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                buttonAnimation(imgSave, resourceId)
+            }
+
+            imgListenLater.setOnClickListener {
+                isListenLaterSaved = !isListenLaterSaved
+                lifecycleScope.launch {
+                    if (isListenLaterSaved) {
+                        viewModel.saveAlbum(album)
+                    } else {
+                        if (!album.isAlbumSaved) {
+                            viewModel.deleteAlbum(album)
+                        } else {
+                            viewModel.updateListenLaterSaved(album.id, false)
+                        }
+                    }
+                }
+                val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                buttonAnimation(imgListenLater, resourceId)
             }
         }
     }
