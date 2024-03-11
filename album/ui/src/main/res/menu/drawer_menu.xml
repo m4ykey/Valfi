@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/imgAddAlbum"
-        android:icon="@drawable/ic_add"
-        android:title="@string/add_album"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/imgListenLater"
         android:icon="@drawable/ic_listen_later_border"
         android:title="@string/listen_later"
         app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/ic_new"
+        android:id="@+id/imgNewReleases"
+        app:showAsAction="always"
+        android:title="@string/new_releases"/>
 
     <item
         android:id="@+id/imgStatistics"

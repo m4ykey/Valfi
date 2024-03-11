@@ -31,4 +31,5 @@
     <string name="random_album">Losuj album</string>
     <string name="empty_search">Wprowadź co najmniej 1 znak</string>
     <string name="first_add_something_to_list">Najpierw musisz dodać coś do listy</string>
+    <string name="new_releases">Nowe wydania</string>
 </resources>

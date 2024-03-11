@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -73,12 +72,9 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             setupToolbar()
             setupRecyclerView()
             searchAlbums()
-            setupAddAlbumNavigation()
 
             lifecycleScope.launch {
-                viewModel.albums.observe(viewLifecycleOwner) { state ->
-                    handleSearchState(state)
-                }
+                viewModel.albums.observe(viewLifecycleOwner) { state -> handleSearchState(state) }
             }
         }
     }
@@ -97,14 +93,6 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
                 rvSearchAlbums.isVisible = true
                 searchAdapter.submitData(viewLifecycleOwner.lifecycle, search)
             }
-        }
-    }
-
-    private fun FragmentAlbumSearchBinding.setupAddAlbumNavigation() {
-        val addAlbum = layoutNothingFound.root.findViewById<MaterialButton>(R.id.btnAdd)
-        addAlbum?.setOnClickListener {
-            val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumAddFragment()
-            navController.navigate(action)
         }
     }
 

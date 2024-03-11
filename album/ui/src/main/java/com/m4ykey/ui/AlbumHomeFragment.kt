@@ -2,14 +2,13 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -109,14 +108,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     private fun FragmentAlbumHomeBinding.setupSearchAlbumsFromDatabase() {
-        etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = etSearch.text.toString()
-                viewModel.searchAlbumsByName(query)
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
+        etSearch.doOnTextChanged { text, _, _, _ -> viewModel.searchAlbumsByName(text.toString()) }
     }
 
     private fun FragmentAlbumHomeBinding.setupChips() {
@@ -217,13 +209,13 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                     drawerLayout.close()
                 },
                 Pair(R.id.imgSettings) {  },
-                Pair(R.id.imgAddAlbum) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumAddFragment()
+                Pair(R.id.imgListenLater) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
                     navController.navigate(action)
                     drawerLayout.close()
                 },
-                Pair(R.id.imgListenLater) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
+                Pair(R.id.imgNewReleases) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumNewReleaseFragment()
                     navController.navigate(action)
                     drawerLayout.close()
                 }
@@ -265,7 +257,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private fun isValidAlbumUrl(url: String): Boolean {
         try {
             val uri = URL(url).toURI()
-            if (uri.host == "open.spotify.com" && uri.path.startsWith("/album/") || uri.path.startsWith("/track/")) {
+            if (uri.host == "open.spotify.com" && uri.path.startsWith("/album/")) {
                 return true
             }
         } catch (e: MalformedURLException) {
