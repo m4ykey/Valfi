@@ -220,25 +220,24 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             buttonsIntents(button = btnAlbum, url = albumDetail.externalUrls.spotify, requireContext())
             buttonsIntents(button = btnArtist, url = albumDetail.artists[0].externalUrls.spotify, requireContext())
 
-            val album = AlbumEntity(
-                albumType = albumType,
-                artistList = artistList,
-                image = image ?: "",
-                totalTracks = albumDetail.totalTracks,
-                name = albumDetail.name,
-                releaseDate = formatAirDate ?: "",
-                id = albumDetail.id,
-                albumUrl = albumDetail.externalUrls.spotify,
-                artistUrl = albumDetail.artists[0].externalUrls.spotify,
-                color = buttonColor ?: 0,
-                isListenLaterSaved = false,
-                isAlbumSaved = false
-            )
-
             imgSave.setOnClickListener {
-                album.isAlbumSaved = !album.isAlbumSaved
+                isAlbumSaved = !isAlbumSaved
+                val album = AlbumEntity(
+                    albumType = albumType,
+                    artistList = artistList,
+                    image = image ?: "",
+                    totalTracks = albumDetail.totalTracks,
+                    name = albumDetail.name,
+                    releaseDate = formatAirDate ?: "",
+                    id = albumDetail.id,
+                    albumUrl = albumDetail.externalUrls.spotify,
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify,
+                    color = buttonColor ?: 0,
+                    isAlbumSaved = isAlbumSaved,
+                    isListenLaterSaved = isListenLaterSaved
+                )
                 lifecycleScope.launch {
-                    if (album.isAlbumSaved) {
+                    if (isAlbumSaved) {
                         viewModel.saveAlbum(album)
                     } else {
                         if (!album.isListenLaterSaved) {
@@ -248,14 +247,28 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                         }
                     }
                 }
-                val resourceId = if (album.isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
                 buttonAnimation(imgSave, resourceId)
             }
 
             imgListenLater.setOnClickListener {
-                album.isListenLaterSaved = !album.isListenLaterSaved
+                isListenLaterSaved = !isListenLaterSaved
+                val album = AlbumEntity(
+                    albumType = albumType,
+                    artistList = artistList,
+                    image = image ?: "",
+                    totalTracks = albumDetail.totalTracks,
+                    name = albumDetail.name,
+                    releaseDate = formatAirDate ?: "",
+                    id = albumDetail.id,
+                    albumUrl = albumDetail.externalUrls.spotify,
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify,
+                    color = buttonColor ?: 0,
+                    isListenLaterSaved = isListenLaterSaved,
+                    isAlbumSaved = isAlbumSaved
+                )
                 lifecycleScope.launch {
-                    if (album.isListenLaterSaved) {
+                    if (isListenLaterSaved) {
                         viewModel.saveAlbum(album)
                     } else {
                         if (!album.isAlbumSaved) {
@@ -265,7 +278,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                         }
                     }
                 }
-                val resourceId = if (album.isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
                 buttonAnimation(imgListenLater, resourceId)
             }
         }

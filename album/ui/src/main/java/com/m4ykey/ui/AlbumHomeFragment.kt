@@ -12,7 +12,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.filter
@@ -87,10 +86,8 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
             viewModel.apply {
                 lifecycleScope.launch {
-                    albumPagingData
-                        .map { pagingData -> pagingData.filter { it.isAlbumSaved } }
-                        .observe(viewLifecycleOwner) { pagingData ->
-                            albumAdapter.submitData(lifecycle, pagingData)
+                    albumPagingData.observe(viewLifecycleOwner) { pagingData ->
+                            albumAdapter.submitData(lifecycle, pagingData.filter { it.isAlbumSaved })
                         }
                     currentViewType.observe(viewLifecycleOwner) { viewType ->
                         albumAdapter.setupViewType(viewType)

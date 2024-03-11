@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.filter
@@ -66,11 +65,9 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             lifecycleScope.launch {
                 val albumCount = viewModel.getListenLaterCount().firstOrNull() ?: 0
                 txtAlbumCount.text = getString(R.string.album_count, albumCount)
-                viewModel.albumPagingData
-                    .map { pagingData -> pagingData.filter { it.isListenLaterSaved } }
-                    .observe(viewLifecycleOwner) { pagingData ->
-                        listenLaterAdapter.submitData(lifecycle, pagingData)
-                    }
+                viewModel.albumPagingData.observe(viewLifecycleOwner) { pagingData ->
+                        listenLaterAdapter.submitData(lifecycle, pagingData.filter { it.isListenLaterSaved })
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
+import com.m4ykey.data.remote.paging.NewReleasePagingSource
 import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
 import com.m4ykey.data.remote.paging.TrackListPagingSource
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +35,18 @@ class AlbumRepositoryImpl @Inject constructor(
         enablePlaceholders = false
     )
 
+    override fun getNewReleases(): Flow<PagingData<AlbumItem>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = {
+                NewReleasePagingSource(
+                    api = api,
+                    token = interceptor
+                )
+            }
+        ).flow
+    }
+
     override fun searchAlbumsByName(searchQuery: String): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,
@@ -47,7 +60,7 @@ class AlbumRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 SearchAlbumPagingSource(
                     api = api,
-                    interceptor = interceptor,
+                    token = interceptor,
                     query = query
                 )
             }

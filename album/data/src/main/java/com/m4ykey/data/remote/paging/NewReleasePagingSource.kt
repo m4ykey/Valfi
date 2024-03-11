@@ -8,8 +8,7 @@ import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import javax.inject.Inject
 
-class SearchAlbumPagingSource @Inject constructor(
-    private val query : String,
+class NewReleasePagingSource @Inject constructor(
     private val api : AlbumApi,
     private val token : SpotifyTokenProvider
 ) : PagingSource<Int, AlbumItem>() {
@@ -27,11 +26,10 @@ class SearchAlbumPagingSource @Inject constructor(
             val page = params.key ?: 0
             val limit = params.loadSize.coerceIn(1, 20)
 
-            val response = api.searchAlbums(
-                query = query,
+            val response = api.getNewReleases(
                 limit = limit,
-                offset = page * params.loadSize,
-                token = "Bearer ${token.getAccessToken()}"
+                token = "Bearer ${token.getAccessToken()}",
+                offset = page * params.loadSize
             ).albums
 
             LoadResult.Page(
