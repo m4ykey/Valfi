@@ -11,10 +11,8 @@ import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.dao.AlbumDao
-import com.m4ykey.data.local.dao.ListenLaterDao
 import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
@@ -28,7 +26,6 @@ class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
     private val interceptor: SpotifyTokenProvider,
     private val albumDao: AlbumDao,
-    private val listenLaterDao: ListenLaterDao,
     private val db : AlbumDatabase
 ) : AlbumRepository {
 
@@ -125,19 +122,13 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getListenLaterAlbumById(albumId: String) = listenLaterDao.getListenLaterAlbumById(albumId)
-    override fun getListenLaterCount(): Flow<Int> = listenLaterDao.getListenLaterCount()
-    override suspend fun getRandomAlbum(): ListenLaterEntity? = listenLaterDao.getRandomAlbum()
+    override fun getListenLaterCount(): Flow<Int> = albumDao.getListenLaterCount()
 
-    override fun getListenLaterAlbums(): Flow<PagingData<ListenLaterEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { listenLaterDao.getListenLaterAlbums() }
-        ).flow
-    }
+    override suspend fun getRandomAlbum(): AlbumEntity? = albumDao.getRandomAlbum()
 
     override suspend fun saveAlbum(album: AlbumEntity) = albumDao.insertAlbum(album)
     override suspend fun deleteAlbum(album: AlbumEntity) = albumDao.deleteAlbum(album)
-    override suspend fun saveListenLater(album: ListenLaterEntity) = listenLaterDao.insertListenLater(album)
-    override suspend fun deleteListenLater(album: ListenLaterEntity) = listenLaterDao.deleteListenLater(album)
+
+    override suspend fun updateAlbumSaved(albumId: String, isSaved: Boolean) = albumDao.updateAlbumSaved(albumId, isSaved)
+    override suspend fun updateListenLaterSaved(albumId: String, isListenLater: Boolean) = albumDao.updateListenLaterSaved(albumId, isListenLater)
 }

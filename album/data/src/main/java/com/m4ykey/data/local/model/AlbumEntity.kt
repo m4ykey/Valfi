@@ -16,7 +16,8 @@ data class AlbumEntity(
     val saveTime: Long = System.currentTimeMillis(),
     val albumType: String,
     val releaseDate: String,
-    var isAlbumSaved: Boolean,
+    var isAlbumSaved: Boolean = false,
+    var isListenLaterSaved : Boolean = false,
     val month: Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
     val year : Int = Calendar.getInstance().get(Calendar.YEAR),
     val color : Int? = null

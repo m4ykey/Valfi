@@ -12,8 +12,10 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -85,9 +87,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
             viewModel.apply {
                 lifecycleScope.launch {
-                    albumPagingData.observe(viewLifecycleOwner) { pagingData ->
-                        albumAdapter.submitData(lifecycle, pagingData)
-                    }
+                    albumPagingData
+                        .map { pagingData -> pagingData.filter { it.isAlbumSaved } }
+                        .observe(viewLifecycleOwner) { pagingData ->
+                            albumAdapter.submitData(lifecycle, pagingData)
+                        }
                     currentViewType.observe(viewLifecycleOwner) { viewType ->
                         albumAdapter.setupViewType(viewType)
                     }

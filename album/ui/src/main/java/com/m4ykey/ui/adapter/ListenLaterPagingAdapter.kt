@@ -5,18 +5,18 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
-import com.m4ykey.data.local.model.ListenLaterEntity
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.viewholder.ListenLaterViewHolder
 
 class ListenLaterPagingAdapter(
-    private val listener : OnItemClickListener<ListenLaterEntity>,
+    private val listener : OnItemClickListener<AlbumEntity>,
     private val context : Context
-) : PagingDataAdapter<ListenLaterEntity, ListenLaterViewHolder>(COMPARATOR) {
+) : PagingDataAdapter<AlbumEntity, ListenLaterViewHolder>(COMPARATOR) {
 
     companion object {
-        val COMPARATOR = object : DiffUtil.ItemCallback<ListenLaterEntity>() {
-            override fun areItemsTheSame(oldItem: ListenLaterEntity, newItem: ListenLaterEntity): Boolean = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: ListenLaterEntity, newItem: ListenLaterEntity): Boolean = oldItem == newItem
+        val COMPARATOR = object : DiffUtil.ItemCallback<AlbumEntity>() {
+            override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean = oldItem == newItem
         }
     }
 

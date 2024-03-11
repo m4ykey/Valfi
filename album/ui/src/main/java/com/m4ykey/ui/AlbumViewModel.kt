@@ -13,7 +13,6 @@ import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.ListenLaterEntity
 import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.helpers.ViewType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -49,35 +48,16 @@ class AlbumViewModel @Inject constructor(
     private var _albumPagingData = MutableLiveData<PagingData<AlbumEntity>>()
     val albumPagingData: LiveData<PagingData<AlbumEntity>> = _albumPagingData
 
-    private var _listenLaterPagingData = MutableLiveData<PagingData<ListenLaterEntity>>()
-    val listenLaterPagingData: LiveData<PagingData<ListenLaterEntity>> = _listenLaterPagingData
-
     private var _currentViewType = MutableLiveData(ViewType.GRID)
     val currentViewType : LiveData<ViewType> = _currentViewType
 
     private var _localAlbum = MutableStateFlow<AlbumEntity?>(null)
     val localAlbum : StateFlow<AlbumEntity?> get() = _localAlbum
 
-    private var _listenLaterAlbum = MutableStateFlow<ListenLaterEntity?>(null)
-    val listenLaterAlbum : StateFlow<ListenLaterEntity?> get() = _listenLaterAlbum
-
     private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
 
     private var _searchResult = MutableLiveData<Flow<PagingData<AlbumEntity>>>()
     val searchResult : LiveData<Flow<PagingData<AlbumEntity>>> = _searchResult
-
-    init {
-        getAllAlbumsPaged()
-        getListenLaterAlbums()
-    }
-
-    private fun getListenLaterAlbums() {
-        viewModelScope.launch {
-            repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { pagingData ->
-                _listenLaterPagingData.value = pagingData
-            }
-        }
-    }
 
     fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
 
@@ -141,18 +121,9 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun getRandomAlbum() : ListenLaterEntity? {
-        return repository.getRandomAlbum()
-    }
-
     suspend fun getLocalAlbumById(albumId : String) = withContext(Dispatchers.Main) {
         val localAlbumResult = repository.getLocalAlbumById(albumId)
         _localAlbum.value = localAlbumResult.firstOrNull()
-    }
-
-    suspend fun getListenLaterAlbum(albumId : String) = withContext(Dispatchers.Main) {
-        val listenLaterResult = repository.getListenLaterAlbumById(albumId)
-        _listenLaterAlbum.value = listenLaterResult.firstOrNull()
     }
 
     suspend fun saveAlbum(album : AlbumEntity) {
@@ -163,13 +134,10 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch { repository.deleteAlbum(album) }
     }
 
-    suspend fun saveListenLater(album : ListenLaterEntity) {
-        viewModelScope.launch { repository.saveListenLater(album) }
-    }
+    suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
 
-    suspend fun deleteListenLater(album : ListenLaterEntity) {
-        viewModelScope.launch { repository.deleteListenLater(album) }
-    }
+    suspend fun updateAlbumSaved(albumId : String, isSaved : Boolean) = repository.updateAlbumSaved(albumId, isSaved)
+    suspend fun updateListenLaterSaved(albumId: String, isListenLater : Boolean) = repository.updateListenLaterSaved(albumId, isListenLater)
 
     suspend fun getAlbumById(id : String) {
         repository.getAlbumById(id).onEach { result ->

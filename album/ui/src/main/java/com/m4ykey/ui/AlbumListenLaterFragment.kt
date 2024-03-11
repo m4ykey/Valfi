@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -17,7 +19,7 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.showToast
-import com.m4ykey.data.local.model.ListenLaterEntity
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.ListenLaterPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +27,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumListenLaterFragment : Fragment(), OnItemClickListener<ListenLaterEntity> {
+class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private var _binding : FragmentAlbumListenLaterBinding? = null
     private val binding get() = _binding!!
@@ -64,9 +66,11 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<ListenLaterEnti
             lifecycleScope.launch {
                 val albumCount = viewModel.getListenLaterCount().firstOrNull() ?: 0
                 txtAlbumCount.text = getString(R.string.album_count, albumCount)
-                viewModel.listenLaterPagingData.observe(viewLifecycleOwner) { pagingData ->
-                    listenLaterAdapter.submitData(lifecycle, pagingData)
-                }
+                viewModel.albumPagingData
+                    .map { pagingData -> pagingData.filter { it.isListenLaterSaved } }
+                    .observe(viewLifecycleOwner) { pagingData ->
+                        listenLaterAdapter.submitData(lifecycle, pagingData)
+                    }
             }
         }
     }
@@ -110,7 +114,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<ListenLaterEnti
         _binding = null
     }
 
-    override fun onItemClick(position: Int, item: ListenLaterEntity) {
+    override fun onItemClick(position: Int, item: AlbumEntity) {
         val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(item.id)
         navController.navigate(action)
     }
