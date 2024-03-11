@@ -13,7 +13,7 @@ import com.m4ykey.data.local.model.TrackEntity
 
 @Database(
     entities = [AlbumEntity::class, ListenLaterEntity::class, TrackEntity::class],
-    version = 8,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(TrackAlbumConverter::class)

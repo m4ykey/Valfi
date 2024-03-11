@@ -25,7 +25,6 @@ import com.m4ykey.core.views.formatAirDate
 import com.m4ykey.core.views.getColorFromImage
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
-import com.m4ykey.core.views.setupButton
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -54,6 +53,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private var isAlbumSaved = false
     private var isListenLaterSaved = false
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
+    private var buttonColor : Int? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -135,11 +135,31 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
+
             loadImage(imgAlbum, album.image, requireContext())
+
             buttonsIntents(button = btnAlbum, url = album.albumUrl, requireContext())
             buttonsIntents(button = btnArtist, url = album.artistUrl, requireContext())
 
-            setupSaveButton(album)
+            btnAlbum.setBackgroundColor(album.color ?: 0)
+            btnArtist.setBackgroundColor(album.color ?: 0)
+
+            when {
+                isAlbumSaved -> imgSave.setImageResource(R.drawable.ic_favorite)
+                else -> imgSave.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            imgSave.setOnClickListener {
+                isAlbumSaved = !isAlbumSaved
+                lifecycleScope.launch {
+                    when {
+                        isAlbumSaved -> viewModel.saveAlbum(album)
+                        else -> viewModel.deleteAlbum(album)
+                    }
+                }
+                val resourceId = if (isAlbumSaved) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                buttonAnimation(imgSave, resourceId)
+            }
         }
     }
 
@@ -157,61 +177,31 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
             }
             txtArtist.text = album.artistList
             txtInfo.text = albumInfo
+
             loadImage(imgAlbum, album.image, requireContext())
+
             buttonsIntents(button = btnAlbum, url = album.albumUrl, requireContext())
             buttonsIntents(button = btnArtist, url = album.artistUrl, requireContext())
 
-            setupListenLaterButton(album)
-        }
-    }
+            btnAlbum.setBackgroundColor(album.color ?: 0)
+            btnArtist.setBackgroundColor(album.color ?: 0)
 
-    private fun FragmentAlbumDetailBinding.setupSaveButton(album : AlbumEntity?) {
-        album?.let {
-            isAlbumSaved = album.isAlbumSaved
-            val savedResourceId = R.drawable.ic_favorite
-            val unSavedResourceId = R.drawable.ic_favorite_border
-            setupButton(
-                imageView = imgSave,
-                isSaved = isAlbumSaved,
-                unSavedResourceId = unSavedResourceId,
-                savedResourceId = savedResourceId,
-                onClick = {
-                    isAlbumSaved = !isAlbumSaved
-                    val resourceId = if (isAlbumSaved) savedResourceId else unSavedResourceId
-                    buttonAnimation(imgAlbum, resourceId)
-                    lifecycleScope.launch {
-                        when {
-                            isAlbumSaved -> viewModel.saveAlbum(album)
-                            else -> viewModel.deleteAlbum(album)
-                        }
+            when {
+                isListenLaterSaved -> imgListenLater.setImageResource(R.drawable.ic_listen_later)
+                else -> imgListenLater.setImageResource(R.drawable.ic_listen_later_border)
+            }
+
+            imgListenLater.setOnClickListener {
+                isListenLaterSaved = !isListenLaterSaved
+                lifecycleScope.launch {
+                    when {
+                        isListenLaterSaved -> viewModel.saveListenLater(album)
+                        else -> viewModel.deleteListenLater(album)
                     }
                 }
-            )
-        }
-    }
-
-    private fun FragmentAlbumDetailBinding.setupListenLaterButton(album : ListenLaterEntity?) {
-        album?.let {
-            isListenLaterSaved = album.isListenLater
-            val savedResourceId = R.drawable.ic_listen_later
-            val unSavedResourceId = R.drawable.ic_listen_later_border
-            setupButton(
-                imageView = imgListenLater,
-                isSaved = isListenLaterSaved,
-                savedResourceId = savedResourceId,
-                unSavedResourceId = unSavedResourceId,
-                onClick = {
-                    isListenLaterSaved = !isListenLaterSaved
-                    val resourceId = if (isListenLaterSaved) savedResourceId else unSavedResourceId
-                    buttonAnimation(imgListenLater, resourceId)
-                    lifecycleScope.launch {
-                        when {
-                            isListenLaterSaved -> viewModel.saveListenLater(album)
-                            else -> viewModel.deleteListenLater(album)
-                        }
-                    }
-                }
-            )
+                val resourceId = if (isListenLaterSaved) R.drawable.ic_listen_later else R.drawable.ic_listen_later_border
+                buttonAnimation(imgListenLater, resourceId)
+            }
         }
     }
 
@@ -308,6 +298,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                 onColorReady = { color ->
                     btnAlbum.setBackgroundColor(color)
                     btnArtist.setBackgroundColor(color)
+                    buttonColor = color
                 }
             )
 
@@ -326,7 +317,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     id = albumDetail.id,
                     isAlbumSaved = isAlbumSaved,
                     albumUrl = albumDetail.externalUrls.spotify,
-                    artistUrl = albumDetail.artists[0].externalUrls.spotify
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify,
+                    color = buttonColor ?: 0
                 )
                 lifecycleScope.launch {
                     when {
@@ -350,7 +342,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     id = albumDetail.id,
                     isListenLater = isListenLaterSaved,
                     albumUrl = albumDetail.externalUrls.spotify,
-                    artistUrl = albumDetail.artists[0].externalUrls.spotify
+                    artistUrl = albumDetail.artists[0].externalUrls.spotify,
+                    color = buttonColor ?: 0
                 )
                 lifecycleScope.launch {
                     when {

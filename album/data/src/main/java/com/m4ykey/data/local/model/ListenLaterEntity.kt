@@ -15,5 +15,6 @@ data class ListenLaterEntity(
     val saveTime: Long = System.currentTimeMillis(),
     val albumType: String,
     val releaseDate: String,
-    var isListenLater: Boolean
+    var isListenLater: Boolean,
+    val color : Int? = null
 )
