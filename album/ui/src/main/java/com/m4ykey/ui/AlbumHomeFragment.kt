@@ -85,10 +85,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             setupSearchAlbumsFromDatabase()
 
             viewModel.apply {
+                getAllAlbumsPaged()
                 lifecycleScope.launch {
                     albumPagingData.observe(viewLifecycleOwner) { pagingData ->
-                            albumAdapter.submitData(lifecycle, pagingData.filter { it.isAlbumSaved })
-                        }
+                        albumAdapter.submitData(lifecycle, pagingData.filter { it.isAlbumSaved })
+                    }
                     currentViewType.observe(viewLifecycleOwner) { viewType ->
                         albumAdapter.setupViewType(viewType)
                     }
@@ -303,8 +304,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     override fun onItemClick(position: Int, item: AlbumEntity) {
-        val albumId = item.id
-        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId = albumId)
+        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId = item.id)
         findNavController().navigate(action)
     }
 }

@@ -100,6 +100,13 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
+    override fun getListenLaterAlbums(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { albumDao.getListenLaterAlbums() }
+        ).flow
+    }
+
     override fun getAlbumsOfTypeEPPaged(): Flow<PagingData<AlbumEntity>> {
         return Pager(
             config = pagingConfig,

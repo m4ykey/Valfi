@@ -19,7 +19,7 @@ import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.ui.adapter.ListenLaterPagingAdapter
+import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
@@ -33,7 +33,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    private val listenLaterAdapter by lazy { ListenLaterPagingAdapter(this, requireContext()) }
+    private val listenLaterAdapter by lazy { AlbumEntityPagingAdapter(this, requireContext()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,11 +62,12 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             setupToolbar()
             setupRecyclerView()
             getRandomAlbum()
+
             lifecycleScope.launch {
                 val albumCount = viewModel.getListenLaterCount().firstOrNull() ?: 0
                 txtAlbumCount.text = getString(R.string.album_count, albumCount)
                 viewModel.albumPagingData.observe(viewLifecycleOwner) { pagingData ->
-                        listenLaterAdapter.submitData(lifecycle, pagingData.filter { it.isListenLaterSaved })
+                    listenLaterAdapter.submitData(lifecycle, pagingData.filter { it.isListenLaterSaved })
                 }
             }
         }

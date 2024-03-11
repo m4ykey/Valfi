@@ -16,7 +16,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.helpers.ViewType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
-import com.m4ykey.ui.uistate.AlbumSearchUiState
+import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -36,8 +36,11 @@ class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepository
 ) : ViewModel() {
 
-    private var _search = MutableLiveData<AlbumSearchUiState>()
-    val albums : LiveData<AlbumSearchUiState> get() = _search
+    private var _search = MutableLiveData<AlbumListUiState>()
+    val albums : LiveData<AlbumListUiState> get() = _search
+
+    private var _newRelease = MutableLiveData<AlbumListUiState>()
+    val newRelease : LiveData<AlbumListUiState> get() = _newRelease
 
     private var _detail = MutableLiveData<AlbumDetailUiState>()
     val detail : LiveData<AlbumDetailUiState> get() = _detail
@@ -59,10 +62,23 @@ class AlbumViewModel @Inject constructor(
     private var _searchResult = MutableLiveData<Flow<PagingData<AlbumEntity>>>()
     val searchResult : LiveData<Flow<PagingData<AlbumEntity>>> = _searchResult
 
+    init {
+        getAllAlbumsPaged()
+        getListenLaterAlbums()
+    }
+
     fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
 
     fun searchAlbumsByName(searchQuery : String) {
         _searchResult.value = repository.searchAlbumsByName(searchQuery)
+    }
+
+    fun getListenLaterAlbums() {
+        viewModelScope.launch {
+            repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { pagingData ->
+                _albumPagingData.postValue(pagingData)
+            }
+        }
     }
 
     fun getAlbumsOfTypeCompilationPaged() {
@@ -145,9 +161,23 @@ class AlbumViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun getNewReleases() {
+        viewModelScope.launch {
+            _newRelease.value = AlbumListUiState(isLoading = true)
+            try {
+                val result = repository.getNewReleases()
+                    .cachedIn(viewModelScope)
+                    .map { Resource.Success(it) }
+                handleNewReleaseResult(result)
+            } finally {
+                _newRelease.value = _newRelease.value?.copy(isLoading = false)
+            }
+        }
+    }
+
     fun searchAlbums(query : String) {
         viewModelScope.launch {
-            _search.value = AlbumSearchUiState(isLoading = true)
+            _search.value = AlbumListUiState(isLoading = true)
             try {
                 val result = repository.searchAlbums(query)
                     .cachedIn(viewModelScope)
@@ -182,7 +212,11 @@ class AlbumViewModel @Inject constructor(
     }
 
     private fun handleSearchError(e : Exception) {
-        _search.value = AlbumSearchUiState(error = e.message)
+        _search.value = AlbumListUiState(error = e.message)
+    }
+
+    private fun handleNewReleaseError(e : Exception) {
+        _newRelease.value = AlbumListUiState(error = e.message)
     }
 
     private fun handleTrackError(e : Exception) {
@@ -194,7 +228,7 @@ class AlbumViewModel @Inject constructor(
             result.collect { resource ->
                 resource.handleResult(
                     onSuccess = { albums ->
-                        _search.value = AlbumSearchUiState(albumSearch = albums)
+                        _search.value = AlbumListUiState(albumList = albums)
                     },
                     onError = { e -> handleSearchError(e) }
                 )
@@ -210,6 +244,19 @@ class AlbumViewModel @Inject constructor(
                         _tracks.value = AlbumTrackUiState(albumTracks = tracks)
                     },
                     onError = { e -> handleTrackError(e)}
+                )
+            }
+        }
+    }
+
+    private fun handleNewReleaseResult(result : Flow<Resource<PagingData<AlbumItem>>>) {
+        viewModelScope.launch {
+            result.collect { resource ->
+                resource.handleResult(
+                    onError = { e -> handleNewReleaseError(e) },
+                    onSuccess = { albums ->
+                        _newRelease.value = AlbumListUiState(albumList = albums)
+                    }
                 )
             }
         }

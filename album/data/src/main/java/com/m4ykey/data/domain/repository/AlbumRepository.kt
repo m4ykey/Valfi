@@ -34,6 +34,8 @@ interface AlbumRepository {
     suspend fun updateAlbumSaved(albumId : String, isSaved : Boolean)
     suspend fun updateListenLaterSaved(albumId: String, isListenLater : Boolean)
 
+    fun getListenLaterAlbums() : Flow<PagingData<AlbumEntity>>
+
     fun getNewReleases() : Flow<PagingData<AlbumItem>>
 
 }
