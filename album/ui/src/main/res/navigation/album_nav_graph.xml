@@ -38,6 +38,10 @@
             android:id="@+id/action_albumHomeFragment_to_albumListenLaterFragment"
             app:destination="@id/albumListenLaterFragment" />
         <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumNewReleaseFragment"
             app:destination="@id/albumNewReleaseFragment" />
     </fragment>

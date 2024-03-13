@@ -19,16 +19,11 @@ import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,8 +49,8 @@ class AlbumViewModel @Inject constructor(
     private var _currentViewType = MutableLiveData(ViewType.GRID)
     val currentViewType : LiveData<ViewType> = _currentViewType
 
-    private var _localAlbum = MutableStateFlow<AlbumEntity?>(null)
-    val localAlbum : StateFlow<AlbumEntity?> get() = _localAlbum
+    private var _localAlbum = MutableLiveData<AlbumEntity?>(null)
+    val localAlbum : LiveData<AlbumEntity?> get() = _localAlbum
 
     private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
 
@@ -138,9 +133,14 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun getLocalAlbumById(albumId : String) : AlbumEntity? = withContext(Dispatchers.Main) {
-        val localAlbumResult = repository.getLocalAlbumById(albumId)
-        return@withContext localAlbumResult.firstOrNull()
+    suspend fun getLocalAlbumById(albumId : String) : AlbumEntity? {
+        var localAlbum : AlbumEntity? = null
+        viewModelScope.launch {
+            repository.getLocalAlbumById(albumId).collect { album ->
+                localAlbum = album
+            }
+        }
+        return localAlbum
     }
 
     suspend fun saveAlbum(album : AlbumEntity) {

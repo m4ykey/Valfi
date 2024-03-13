@@ -24,7 +24,7 @@ interface AlbumRepository {
 
     fun getListenLaterCount() : Flow<Int>
 
-    suspend fun getLocalAlbumById(albumId : String) : Flow<AlbumEntity>
+    suspend fun getLocalAlbumById(albumId : String?) : Flow<AlbumEntity?>
 
     suspend fun getRandomAlbum() : AlbumEntity?
 
