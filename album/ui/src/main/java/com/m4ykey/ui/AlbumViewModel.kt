@@ -65,6 +65,7 @@ class AlbumViewModel @Inject constructor(
     init {
         getAllAlbumsPaged()
         getListenLaterAlbums()
+        getNewReleases()
     }
 
     fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
@@ -161,7 +162,7 @@ class AlbumViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun getNewReleases() {
+    private fun getNewReleases() {
         viewModelScope.launch {
             _newRelease.value = AlbumListUiState(isLoading = true)
             try {

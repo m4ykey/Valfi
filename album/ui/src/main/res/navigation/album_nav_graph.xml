@@ -91,5 +91,13 @@
         android:id="@+id/albumNewReleaseFragment"
         android:name="com.m4ykey.ui.AlbumNewReleaseFragment"
         android:label="fragment_album_new_release"
-        tools:layout="@layout/fragment_album_new_release" />
+        tools:layout="@layout/fragment_album_new_release" >
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_albumNewReleaseFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
 </navigation>

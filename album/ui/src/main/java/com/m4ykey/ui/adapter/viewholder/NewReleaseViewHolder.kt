@@ -7,23 +7,20 @@ import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.ui.AlbumViewModel
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 
-class SearchAlbumViewHolder(
-    private val binding: LayoutAlbumGridBinding,
-    listener : OnItemClickListener<AlbumItem>?,
-    private val viewModel : AlbumViewModel,
-    private val context : Context
+class NewReleaseViewHolder(
+    private val binding : LayoutAlbumGridBinding,
+    private val context : Context,
+    listener: OnItemClickListener<AlbumItem>
 ) : BaseViewHolder<AlbumItem>(listener, binding.root) {
 
     companion object {
-        fun create(view : ViewGroup, listener: OnItemClickListener<AlbumItem>?, viewModel: AlbumViewModel, context: Context) : SearchAlbumViewHolder {
-            return SearchAlbumViewHolder(
+        fun create(view : ViewGroup, listener: OnItemClickListener<AlbumItem>, context: Context) : NewReleaseViewHolder {
+            return NewReleaseViewHolder(
                 listener = listener,
-                viewModel = viewModel,
-                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false),
-                context = context
+                context = context,
+                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false)
             )
         }
     }
@@ -38,13 +35,6 @@ class SearchAlbumViewHolder(
             loadImage(imgAlbum, image.toString(), context)
             txtAlbum.text = item.name
             txtArtist.text = artistList
-
-//            viewModel.viewModelScope.launch {
-//                val albumEntity = viewModel.getLocalAlbumById(item.id)
-//                withContext(Dispatchers.Main) {
-//                    //imgSavedAlbum.isVisible = albumEntity != null
-//                }
-//            }
         }
     }
 

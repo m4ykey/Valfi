@@ -29,5 +29,4 @@ class SearchAlbumPagingAdapter(
             override fun areContentsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean = oldItem == newItem
         }
     }
-
 }

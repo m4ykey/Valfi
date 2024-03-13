@@ -175,7 +175,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     } else {
                         if (!album.isAlbumSaved) {
                             viewModel.deleteAlbum(album)
-                        } else {
+                        } else if (album.isListenLaterSaved) {
                             viewModel.updateListenLaterSaved(album.id, false)
                         }
                     }

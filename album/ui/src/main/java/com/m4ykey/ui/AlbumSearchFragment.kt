@@ -91,7 +91,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             state?.albumList?.let { search ->
                 progressBar.isVisible = false
                 rvSearchAlbums.isVisible = true
-                searchAdapter.submitData(viewLifecycleOwner.lifecycle, search)
+                searchAdapter.submitData(lifecycle, search)
             }
         }
     }

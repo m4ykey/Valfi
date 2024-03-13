@@ -1,59 +1,137 @@
 package com.m4ykey.ui
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.GridLayoutManager
+import com.m4ykey.core.Constants
+import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
+import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.showToast
+import com.m4ykey.data.domain.model.album.AlbumItem
+import com.m4ykey.ui.adapter.LoadStateAdapter
+import com.m4ykey.ui.adapter.NewReleasePagingAdapter
+import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
+import com.m4ykey.ui.uistate.AlbumListUiState
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AlbumNewReleaseFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AlbumNewReleaseFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding : FragmentAlbumNewReleaseBinding? = null
+    private val binding get() = _binding!!
+    private var bottomNavigationVisibility : BottomNavigationVisibility? = null
+    private lateinit var navController : NavController
+    private val viewModel : AlbumViewModel by viewModels()
+    private val newReleaseAdapter by lazy { NewReleasePagingAdapter(requireContext(), this) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is BottomNavigationVisibility) {
+            bottomNavigationVisibility = context
+        } else {
+            throw RuntimeException("$context ${getString(R.string.must_implement_bottom_navigation)}")
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_album_new_release, container, false)
+    ): View {
+        _binding = FragmentAlbumNewReleaseBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AlbumNewReleaseFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AlbumNewReleaseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        navController = findNavController()
+        bottomNavigationVisibility?.hideBottomNavigation()
+
+        with(binding) {
+            lifecycleScope.launch {
+                viewModel.newRelease.observe(viewLifecycleOwner) { state -> handleNewReleaseState(state) }
+            }
+
+            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+            setupRecyclerView()
+        }
+
+    }
+
+    private fun FragmentAlbumNewReleaseBinding.setupRecyclerView() {
+        with(recyclerViewNewRelease) {
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
+
+            val headerAdapter = LoadStateAdapter { newReleaseAdapter.retry() }
+            val footerAdapter = LoadStateAdapter { newReleaseAdapter.retry() }
+
+            adapter = newReleaseAdapter.withLoadStateHeaderAndFooter(
+                header = headerAdapter,
+                footer = footerAdapter
+            )
+
+            val layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when {
+                        position == 0 && headerAdapter.itemCount > 0 -> 3
+                        position == adapter?.itemCount?.minus(1) && footerAdapter.itemCount > 0 -> 3
+                        else -> 1
+                    }
                 }
             }
+
+            this@with.layoutManager = layoutManager
+
+            newReleaseAdapter.addLoadStateListener { loadState ->
+                handleLoadState(loadState)
+            }
+        }
+    }
+
+    private fun FragmentAlbumNewReleaseBinding.handleLoadState(loadState : CombinedLoadStates) {
+        progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+
+        val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
+                loadState.append.endOfPaginationReached &&
+                newReleaseAdapter.itemCount < 1
+
+        recyclerViewNewRelease.isVisible = !isNothingFound
+    }
+
+    private fun handleNewReleaseState(state : AlbumListUiState?) {
+        with(binding) {
+            recyclerViewNewRelease.isVisible = state?.isLoading == false && state.albumList != null
+            progressBar.isVisible = state?.isLoading == true
+
+            state?.error?.let {
+                progressBar.isVisible = false
+                showToast(requireContext(), it)
+            }
+            state?.albumList?.let { search ->
+                progressBar.isVisible = false
+                recyclerViewNewRelease.isVisible = true
+                newReleaseAdapter.submitData(lifecycle, search)
+            }
+        }
+    }
+
+    override fun onItemClick(position: Int, item: AlbumItem) {
+        val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(item.id)
+        navController.navigate(action)
     }
 }
