@@ -52,7 +52,7 @@ interface AlbumDao {
     fun getTotalTracksCount() : Int
 
     @Query("SELECT COUNT(*) FROM album WHERE isListenLaterSaved = 1")
-    fun getListenLaterCount() : Flow<Int>
+    fun getListenLaterCount() : Int
 
     @Query("SELECT * FROM album WHERE name LIKE '%' || :searchQuery || '%'")
     fun searchAlbumsByName(searchQuery : String) : PagingSource<Int, AlbumEntity>

@@ -22,7 +22,7 @@ interface AlbumRepository {
     fun getAlbumsOfTypeCompilationPaged() : Flow<PagingData<AlbumEntity>>
     fun searchAlbumsByName(searchQuery : String) : Flow<PagingData<AlbumEntity>>
 
-    fun getListenLaterCount() : Flow<Int>
+    fun getListenLaterCount() : Int
 
     suspend fun getLocalAlbumById(albumId : String?) : Flow<AlbumEntity?>
 

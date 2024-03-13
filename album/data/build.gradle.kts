@@ -17,6 +17,10 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    configurations.all {
+        exclude(group = "com.google.guava", module = "listenablefuture")
+    }
+
     val apiKeys by lazy {
         rootProject.file("local.properties").inputStream().use { input ->
             Properties().apply { load(input) }

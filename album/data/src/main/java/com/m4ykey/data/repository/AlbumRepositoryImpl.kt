@@ -142,7 +142,7 @@ class AlbumRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override fun getListenLaterCount(): Flow<Int> = albumDao.getListenLaterCount()
+    override fun getListenLaterCount() = albumDao.getListenLaterCount()
 
     override suspend fun getRandomAlbum(): AlbumEntity? = albumDao.getRandomAlbum()
 
