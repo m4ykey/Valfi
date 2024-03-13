@@ -3,12 +3,18 @@ package com.m4ykey.ui.adapter.viewholder
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.album.AlbumItem
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.AlbumViewModel
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchAlbumViewHolder(
     private val binding: LayoutAlbumGridBinding,
@@ -39,13 +45,22 @@ class SearchAlbumViewHolder(
             txtAlbum.text = item.name
             txtArtist.text = artistList
 
-//            viewModel.viewModelScope.launch {
-//                val albumEntity = viewModel.getLocalAlbumById(item.id)
-//                withContext(Dispatchers.Main) {
-//                    //imgSavedAlbum.isVisible = albumEntity != null
-//                }
-//            }
+            viewModel.viewModelScope.launch {
+                val albumEntity = viewModel.getLocalAlbumById(item.id)
+                withContext(Dispatchers.Main) {
+                    imgSavedAlbum.isVisible = isAlbumSaved(albumEntity)
+                    imgListenLater.isVisible = isListenLaterSaved(albumEntity)
+                }
+            }
         }
+    }
+
+    private fun isAlbumSaved(albumEntity: AlbumEntity?) : Boolean {
+        return albumEntity?.isAlbumSaved ?: false
+    }
+
+    private fun isListenLaterSaved(albumEntity: AlbumEntity?) : Boolean {
+        return albumEntity?.isListenLaterSaved ?: false
     }
 
     override fun getItem(position: Int): AlbumItem = currentAlbumItem

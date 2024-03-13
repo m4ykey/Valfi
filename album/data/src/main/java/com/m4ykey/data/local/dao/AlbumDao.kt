@@ -43,7 +43,7 @@ interface AlbumDao {
     fun getAlbumsOfTypeCompilationPaged() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT * FROM album WHERE id = :albumId")
-    fun getLocalAlbumById(albumId : String) : Flow<AlbumEntity>
+    fun getLocalAlbumById(albumId : String?) : Flow<AlbumEntity>
 
     @Query("SELECT COUNT(*) FROM album WHERE isAlbumSaved = 1")
     fun getAlbumCount() : Int

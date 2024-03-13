@@ -138,9 +138,9 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun getLocalAlbumById(albumId : String) = withContext(Dispatchers.Main) {
+    suspend fun getLocalAlbumById(albumId : String) : AlbumEntity? = withContext(Dispatchers.Main) {
         val localAlbumResult = repository.getLocalAlbumById(albumId)
-        _localAlbum.value = localAlbumResult.firstOrNull()
+        return@withContext localAlbumResult.firstOrNull()
     }
 
     suspend fun saveAlbum(album : AlbumEntity) {

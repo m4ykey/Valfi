@@ -272,8 +272,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private fun getAlbumIdFromUrl(url: String): String? {
         val regex = Regex("/album/([^/?]+)")
-        val matchResult = regex.find(url)
-        return matchResult?.groupValues?.getOrNull(1)
+        return regex.find(url)?.groupValues?.getOrNull(1)
     }
 
     private fun View.animationProperties(translationYValue : Float, alphaValue : Float, interpolator : Interpolator) {

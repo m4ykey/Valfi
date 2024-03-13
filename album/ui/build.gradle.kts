@@ -64,5 +64,7 @@ dependencies {
 
         implementation(coroutines)
 
+        implementation("org.jsoup:jsoup:1.17.2")
+
     }
 }
