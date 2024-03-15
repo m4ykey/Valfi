@@ -32,6 +32,7 @@ import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.ui.uistate.AlbumListUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -91,7 +92,10 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             state?.albumList?.let { search ->
                 progressBar.isVisible = false
                 rvSearchAlbums.isVisible = true
-                searchAdapter.submitData(lifecycle, search)
+                lifecycleScope.launch {
+                    delay(200)
+                    searchAdapter.submitData(lifecycle, search)
+                }
             }
         }
     }

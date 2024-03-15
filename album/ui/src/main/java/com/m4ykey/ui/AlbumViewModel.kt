@@ -12,8 +12,10 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
-import com.m4ykey.ui.helpers.ListSortingType
-import com.m4ykey.ui.helpers.ViewType
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.AlbumWithStates
+import com.m4ykey.data.local.model.IsAlbumSaved
+import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -42,13 +44,56 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableLiveData<AlbumTrackUiState>()
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
-    private var _currentViewType = MutableLiveData(ViewType.GRID)
-    val currentViewType : LiveData<ViewType> = _currentViewType
-
-    private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
-
     init {
         getNewReleases()
+    }
+
+    suspend fun insertAlbum(album : AlbumEntity) {
+        repository.insertAlbum(album)
+    }
+
+    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) {
+        repository.insertSavedAlbum(isAlbumSaved)
+    }
+
+    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) {
+        repository.insertListenLaterAlbum(isListenLaterSaved)
+    }
+
+    suspend fun getAlbum(albumId : String) : AlbumEntity? {
+        return repository.getAlbum(albumId)
+    }
+
+    suspend fun getSavedAlbumState(albumId : String) : IsAlbumSaved? {
+        return repository.getSavedAlbumState(albumId)
+    }
+
+    suspend fun getListenLaterState(albumId: String) : IsListenLaterSaved? {
+        return repository.getListenLaterState(albumId)
+    }
+
+    suspend fun updateAlbumSavedState(albumId: String, state : Boolean) {
+        repository.updateAlbumSavedState(albumId, state)
+    }
+
+    suspend fun updateListenLaterState(albumId: String, state : Boolean) {
+        repository.updateListenLaterState(albumId, state)
+    }
+
+    suspend fun getAlbumWithStates(albumId : String) : AlbumWithStates? {
+        return repository.getAlbumWithStates(albumId)
+    }
+
+    suspend fun deleteAlbum(albumId: String) {
+        repository.deleteAlbum(albumId)
+    }
+
+    suspend fun deleteSavedAlbumState(albumId : String) {
+        repository.deleteSavedAlbumState(albumId)
+    }
+
+    suspend fun deleteListenLaterState(albumId: String) {
+        repository.deleteListenLaterState(albumId)
     }
 
     suspend fun getAlbumById(id : String) {

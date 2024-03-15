@@ -18,6 +18,7 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
 import com.m4ykey.core.views.copyName
 import com.m4ykey.core.views.formatAirDate
@@ -27,6 +28,10 @@ import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.AlbumWithStates
+import com.m4ykey.data.local.model.IsAlbumSaved
+import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
@@ -152,29 +157,29 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         }
     }
 
-    private fun displayAlbumDetail(albumDetail: AlbumDetail) {
+    private fun displayAlbumDetail(item: AlbumDetail) {
         lifecycleScope.launch {
             with(binding) {
-                val image = albumDetail.images.maxByOrNull { it.height * it.width }?.url
-                val artistList = albumDetail.artists.joinToString(", ") { it.name }
+                val image = item.images.maxByOrNull { it.height * it.width }?.url
+                val artistList = item.artists.joinToString(", ") { it.name }
                 val albumType = when {
-                    albumDetail.totalTracks in 2..6 && albumDetail.albumType.equals(
+                    item.totalTracks in 2..6 && item.albumType.equals(
                         "Single",
                         ignoreCase = true
                     ) -> "EP"
 
-                    else -> albumDetail.albumType.replaceFirstChar { it.uppercase() }
+                    else -> item.albumType.replaceFirstChar { it.uppercase() }
                 }
-                val formatAirDate = formatAirDate(albumDetail.releaseDate)
-                val albumInfo = "$albumType • $formatAirDate • ${albumDetail.totalTracks} " + getString(
+                val formatAirDate = formatAirDate(item.releaseDate)
+                val albumInfo = "$albumType • $formatAirDate • ${item.totalTracks} " + getString(
                     R.string.tracks
                 )
-                val albumUrl = albumDetail.externalUrls.spotify
-                val artistUrl = albumDetail.artists[0].externalUrls.spotify
+                val albumUrl = item.externalUrls.spotify
+                val artistUrl = item.artists[0].externalUrls.spotify
 
                 txtAlbumName.apply {
-                    text = albumDetail.name
-                    setOnClickListener { copyName(albumDetail.name, requireContext()) }
+                    text = item.name
+                    setOnClickListener { copyName(item.name, requireContext()) }
                 }
                 txtArtist.text = artistList
                 txtInfo.text = albumInfo
@@ -193,7 +198,77 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
                 buttonsIntents(button = btnArtist, url = artistUrl, requireContext())
+
+                val album = AlbumEntity(
+                    id = item.id,
+                    name = item.name,
+                    releaseDate = formatAirDate.toString(),
+                    totalTracks = item.totalTracks,
+                    images = image.toString(),
+                    albumType = albumType,
+                    artists = artistList,
+                    albumUrl = albumUrl,
+                    artistUrl = artistUrl
+                )
+
+                val albumWithStates = viewModel.getAlbumWithStates(item.id)
+                if (albumWithStates != null) {
+                    updateIcons(albumWithStates)
+                }
+
+                imgSave.setOnClickListener {
+                    lifecycleScope.launch {
+                        val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
+                        if (isAlbumSaved != null) {
+                            viewModel.deleteSavedAlbumState(item.id)
+                            val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                            if (isListenLaterSaved == null) {
+                                viewModel.deleteAlbum(item.id)
+                            }
+                            imgSave.buttonAnimation(R.drawable.ic_favorite_border)
+                        } else {
+                            viewModel.insertAlbum(album)
+                            viewModel.insertSavedAlbum(IsAlbumSaved(item.id, true))
+                            imgSave.buttonAnimation(R.drawable.ic_favorite)
+                        }
+                    }
+                }
+
+                imgListenLater.setOnClickListener {
+                    lifecycleScope.launch {
+                        val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                        if (isListenLaterSaved != null) {
+                            viewModel.deleteListenLaterState(item.id)
+                            val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
+                            if (isAlbumSaved == null) {
+                                viewModel.deleteAlbum(item.id)
+                            }
+                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                        } else {
+                            viewModel.insertAlbum(album)
+                            viewModel.insertListenLaterAlbum(IsListenLaterSaved(item.id, true))
+                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    private fun updateIcons(albumWithStates: AlbumWithStates) {
+        val isAlbumSaved = albumWithStates.isAlbumSaved?.isAlbumSaved
+        val isListenLaterSaved = albumWithStates.isListenLaterSaved?.isListenLaterSaved
+
+        binding.apply {
+            imgSave.setImageResource(
+                if (isAlbumSaved == true) R.drawable.ic_favorite
+                else R.drawable.ic_favorite_border
+            )
+
+            imgListenLater.setImageResource(
+                if (isListenLaterSaved == true) R.drawable.ic_listen_later
+                else R.drawable.ic_listen_later_border
+            )
         }
     }
 

@@ -10,6 +10,11 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.local.dao.AlbumDao
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.AlbumWithStates
+import com.m4ykey.data.local.model.IsAlbumSaved
+import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
@@ -22,7 +27,8 @@ import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
-    private val interceptor: SpotifyTokenProvider
+    private val interceptor: SpotifyTokenProvider,
+    private val dao : AlbumDao
 ) : AlbumRepository {
 
     private val pagingConfig = PagingConfig(
@@ -76,5 +82,53 @@ class AlbumRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun insertAlbum(album: AlbumEntity) {
+        return dao.insertAlbum(album)
+    }
+
+    override suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) {
+        return dao.insertSavedAlbum(isAlbumSaved)
+    }
+
+    override suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) {
+        return dao.insertListenLaterAlbum(isListenLaterSaved)
+    }
+
+    override suspend fun getAlbum(albumId: String): AlbumEntity? {
+        return dao.getAlbum(albumId)
+    }
+
+    override suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? {
+        return dao.getSavedAlbumState(albumId)
+    }
+
+    override suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? {
+        return dao.getListenLaterState(albumId)
+    }
+
+    override suspend fun updateAlbumSavedState(albumId: String, state: Boolean) {
+        return dao.updateAlbumSavedState(albumId, state)
+    }
+
+    override suspend fun updateListenLaterState(albumId: String, state: Boolean) {
+        return dao.updateListenLaterState(albumId, state)
+    }
+
+    override suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? {
+        return dao.getAlbumWithStates(albumId)
+    }
+
+    override suspend fun deleteAlbum(albumId: String) {
+        return dao.deleteAlbum(albumId)
+    }
+
+    override suspend fun deleteSavedAlbumState(albumId: String) {
+        return dao.deleteSavedAlbumState(albumId)
+    }
+
+    override suspend fun deleteListenLaterState(albumId: String) {
+        return dao.deleteListenLaterState(albumId)
     }
 }
