@@ -72,14 +72,6 @@ class AlbumViewModel @Inject constructor(
         return repository.getListenLaterState(albumId)
     }
 
-    suspend fun updateAlbumSavedState(albumId: String, state : Boolean) {
-        repository.updateAlbumSavedState(albumId, state)
-    }
-
-    suspend fun updateListenLaterState(albumId: String, state : Boolean) {
-        repository.updateListenLaterState(albumId, state)
-    }
-
     suspend fun getAlbumWithStates(albumId : String) : AlbumWithStates? {
         return repository.getAlbumWithStates(albumId)
     }

@@ -108,14 +108,6 @@ class AlbumRepositoryImpl @Inject constructor(
         return dao.getListenLaterState(albumId)
     }
 
-    override suspend fun updateAlbumSavedState(albumId: String, state: Boolean) {
-        return dao.updateAlbumSavedState(albumId, state)
-    }
-
-    override suspend fun updateListenLaterState(albumId: String, state: Boolean) {
-        return dao.updateListenLaterState(albumId, state)
-    }
-
     override suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? {
         return dao.getAlbumWithStates(albumId)
     }

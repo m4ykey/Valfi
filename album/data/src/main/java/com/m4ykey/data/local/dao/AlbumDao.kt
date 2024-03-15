@@ -31,12 +31,6 @@ interface AlbumDao {
     @Query("SELECT * FROM listen_later_table WHERE albumId = :albumId")
     suspend fun getListenLaterState(albumId : String) : IsListenLaterSaved?
 
-    @Query("UPDATE album_saved_table SET isAlbumSaved = :state WHERE albumId = :albumId")
-    suspend fun updateAlbumSavedState(albumId: String, state : Boolean)
-
-    @Query("UPDATE listen_later_table SET isListenLaterSaved = :state WHERE albumId = :albumId")
-    suspend fun updateListenLaterState(albumId: String, state: Boolean)
-
     @Transaction
     @Query("SELECT * FROM album_table WHERE id = :albumId")
     suspend fun getAlbumWithStates(albumId: String) : AlbumWithStates?
@@ -49,12 +43,5 @@ interface AlbumDao {
 
     @Query("DELETE FROM listen_later_table WHERE albumId = :albumId")
     suspend fun deleteListenLaterState(albumId: String)
-
-    @Transaction
-    suspend fun deleteAlbumWithStates(albumId : String) {
-        deleteSavedAlbumState(albumId)
-        deleteAlbum(albumId)
-        deleteListenLaterState(albumId)
-    }
 
 }
