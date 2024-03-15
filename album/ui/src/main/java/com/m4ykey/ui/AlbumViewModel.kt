@@ -12,7 +12,6 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
-import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.helpers.ViewType
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -43,118 +42,14 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableLiveData<AlbumTrackUiState>()
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
-    private var _albumPagingData = MutableLiveData<PagingData<AlbumEntity>>()
-    val albumPagingData: LiveData<PagingData<AlbumEntity>> = _albumPagingData
-
     private var _currentViewType = MutableLiveData(ViewType.GRID)
     val currentViewType : LiveData<ViewType> = _currentViewType
 
-    private var _localAlbum = MutableLiveData<AlbumEntity?>(null)
-    val localAlbum : LiveData<AlbumEntity?> get() = _localAlbum
-
     private var currentSortingType : ListSortingType = ListSortingType.RECENTLY_ADDED
 
-    private var _searchResult = MutableLiveData<Flow<PagingData<AlbumEntity>>>()
-    val searchResult : LiveData<Flow<PagingData<AlbumEntity>>> = _searchResult
-
     init {
-        getAllAlbumsPaged()
-        getListenLaterAlbums()
         getNewReleases()
     }
-
-    fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
-
-    fun searchAlbumsByName(searchQuery : String) {
-        _searchResult.value = repository.searchAlbumsByName(searchQuery)
-    }
-
-    private fun getListenLaterAlbums() {
-        viewModelScope.launch {
-            repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.postValue(pagingData)
-            }
-        }
-    }
-
-    fun getAlbumsOfTypeCompilationPaged() {
-        viewModelScope.launch {
-            repository.getAlbumsOfTypeCompilationPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.postValue(pagingData)
-            }
-        }
-    }
-
-    fun getAlbumsOfTypeAlbumPaged() {
-        viewModelScope.launch {
-            repository.getAlbumsOfTypeAlbumPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.postValue(pagingData)
-            }
-        }
-    }
-
-    fun getAlbumsOfTypeEPPaged() {
-        viewModelScope.launch {
-            repository.getAlbumsOfTypeEPPaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.postValue(pagingData)
-            }
-        }
-    }
-
-    fun getAlbumsOfTypeSinglePaged() {
-        viewModelScope.launch {
-            repository.getAlbumsOfTypeSinglePaged().cachedIn(viewModelScope).collect { pagingData ->
-                _albumPagingData.postValue(pagingData)
-            }
-        }
-    }
-
-    fun getAllAlbumsPaged() {
-        viewModelScope.launch {
-            when (currentSortingType) {
-                ListSortingType.ALPHABETICAL -> {
-                    repository.getAlbumSortedAlphabetical().cachedIn(viewModelScope).collect { pagingData ->
-                        _albumPagingData.postValue(pagingData)
-                    }
-                }
-                ListSortingType.RECENTLY_ADDED -> {
-                    repository.getAllAlbumsPaged().cachedIn(viewModelScope).collect { pagingData ->
-                        _albumPagingData.postValue(pagingData)
-                    }
-                }
-            }
-        }
-    }
-
-    fun updateSortingType(sortingType: ListSortingType) {
-        viewModelScope.launch {
-            currentSortingType = sortingType
-            getAllAlbumsPaged()
-        }
-    }
-
-    suspend fun getLocalAlbumById(albumId : String) : AlbumEntity? {
-        var localAlbum : AlbumEntity? = null
-        viewModelScope.launch {
-            repository.getLocalAlbumById(albumId).collect { album ->
-                localAlbum = album
-            }
-        }
-        return localAlbum
-    }
-
-    suspend fun saveAlbum(album : AlbumEntity) {
-        viewModelScope.launch { repository.saveAlbum(album) }
-    }
-
-    suspend fun deleteAlbum(album: AlbumEntity) {
-        viewModelScope.launch { repository.deleteAlbum(album) }
-    }
-
-    suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
-
-    suspend fun updateAlbumSaved(albumId : String, isSaved : Boolean) = repository.updateAlbumSaved(albumId, isSaved)
-    suspend fun updateListenLaterSaved(albumId: String, isListenLater : Boolean) = repository.updateListenLaterSaved(albumId, isListenLater)
 
     suspend fun getAlbumById(id : String) {
         repository.getAlbumById(id).onEach { result ->

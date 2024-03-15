@@ -10,30 +10,24 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.showToast
-import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
+class AlbumListenLaterFragment : Fragment(){
 
     private var _binding : FragmentAlbumListenLaterBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    private val listenLaterAdapter by lazy { AlbumEntityPagingAdapter(this, requireContext()) }
+    //private val listenLaterAdapter by lazy { AlbumEntityPagingAdapter(this, requireContext()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,11 +58,6 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             getRandomAlbum()
 
             lifecycleScope.launch {
-                val albumCount = viewModel.getListenLaterCount().firstOrNull() ?: 0
-                txtAlbumCount.text = getString(R.string.album_count, albumCount)
-                viewModel.albumPagingData.observe(viewLifecycleOwner) { pagingData ->
-                    listenLaterAdapter.submitData(lifecycle, pagingData.filter { it.isListenLaterSaved })
-                }
             }
         }
     }
@@ -76,13 +65,13 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private fun FragmentAlbumListenLaterBinding.getRandomAlbum() {
         btnListenLater.setOnClickListener {
             lifecycleScope.launch {
-                val randomAlbum = viewModel.getRandomAlbum()
-                if (randomAlbum != null) {
-                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
-                    navController.navigate(action)
-                } else {
-                    showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
-                }
+//                val randomAlbum = viewModel.getRandomAlbum()
+//                if (randomAlbum != null) {
+//                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
+//                    navController.navigate(action)
+//                } else {
+//                    showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
+//                }
             }
         }
     }
@@ -91,7 +80,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         recyclerViewListenLater.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            adapter = listenLaterAdapter
+            //adapter = listenLaterAdapter
             layoutManager = GridLayoutManager(requireContext(), 3)
         }
     }
@@ -110,11 +99,6 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    override fun onItemClick(position: Int, item: AlbumEntity) {
-        val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(item.id)
-        navController.navigate(action)
     }
 
 }

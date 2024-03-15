@@ -8,13 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,37 +20,25 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.showToast
-import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.ui.adapter.AlbumEntityPagingAdapter
-import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
-import com.m4ykey.ui.helpers.ListSortingType
 import com.m4ykey.ui.helpers.ViewType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
 
 @AndroidEntryPoint
-class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
+class AlbumHomeFragment : Fragment() {
 
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private var isListViewChanged = false
-    private val albumAdapter by lazy { AlbumEntityPagingAdapter(this, requireContext()) }
     private val viewModel : AlbumViewModel by viewModels()
-    private var isAlbumSelected = false
-    private var isEpSelected = false
-    private var isSingleSelected = false
-    private var isCompilationSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -82,35 +67,13 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             setupToolbar()
             setupChips()
             setupRecyclerView()
-            setupSearchAlbumsFromDatabase()
 
-            viewModel.apply {
-                getAllAlbumsPaged()
-                lifecycleScope.launch {
-                    albumPagingData.observe(viewLifecycleOwner) { pagingData ->
-                        albumAdapter.submitData(lifecycle, pagingData.filter { it.isAlbumSaved })
-                    }
-                    currentViewType.observe(viewLifecycleOwner) { viewType ->
-                        albumAdapter.setupViewType(viewType)
-                    }
-                }
-                searchResult.observe(viewLifecycleOwner) { pagingDataFlow ->
-                    lifecycleScope.launch {
-                        pagingDataFlow.collectLatest { pagingData ->
-                            albumAdapter.submitData(lifecycle, pagingData)
-                        }
-                    }
-                }
-            }
+            viewModel.apply {}
             imgHide.setOnClickListener {
                 linearLayoutSearch.hide()
                 etSearch.setText("")
             }
         }
-    }
-
-    private fun FragmentAlbumHomeBinding.setupSearchAlbumsFromDatabase() {
-        etSearch.doOnTextChanged { text, _, _, _ -> viewModel.searchAlbumsByName(text.toString()) }
     }
 
     private fun FragmentAlbumHomeBinding.setupChips() {
@@ -126,28 +89,10 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
         chipSortBy.setOnClickListener { listTypeDialog() }
         chipSearch.setOnClickListener { showSearchEditText() }
-
-        chipAlbum.setOnClickListener {
-            isAlbumSelected = !isAlbumSelected
-            if (isAlbumSelected) viewModel.getAlbumsOfTypeAlbumPaged() else viewModel.getAllAlbumsPaged()
-        }
-        chipCompilation.setOnClickListener {
-            isCompilationSelected = !isCompilationSelected
-            if (isCompilationSelected) viewModel.getAlbumsOfTypeCompilationPaged() else viewModel.getAllAlbumsPaged()
-        }
-        chipEp.setOnClickListener {
-            isEpSelected = !isEpSelected
-            if (isEpSelected) viewModel.getAlbumsOfTypeEPPaged() else viewModel.getAllAlbumsPaged()
-        }
-        chipSingle.setOnClickListener {
-            isSingleSelected = !isSingleSelected
-            if (isSingleSelected) viewModel.getAlbumsOfTypeSinglePaged() else viewModel.getAllAlbumsPaged()
-        }
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
-        val newViewType = if (isListView) { ViewType.LIST } else { ViewType.GRID }
-        albumAdapter.setupViewType(newViewType)
+        if (isListView) { ViewType.LIST } else { ViewType.GRID }
         rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
@@ -160,9 +105,6 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             layoutManager = GridLayoutManager(requireContext(), 3)
-            adapter = albumAdapter.withLoadStateFooter(
-                footer = LoadStateAdapter { albumAdapter.retry() }
-            )
         }
     }
 
@@ -175,11 +117,11 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 when (index) {
                     0 -> {
                         chipSortBy.text = getString(R.string.recently_added)
-                        viewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
+                        //viewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
                     }
                     1 -> {
                         chipSortBy.text = getString(R.string.alphabetical)
-                        viewModel.updateSortingType(ListSortingType.ALPHABETICAL)
+                        //viewModel.updateSortingType(ListSortingType.ALPHABETICAL)
                     }
                 }
             }
@@ -300,10 +242,5 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     companion object {
         const val TAG = "AlbumHomeFragment"
-    }
-
-    override fun onItemClick(position: Int, item: AlbumEntity) {
-        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId = item.id)
-        findNavController().navigate(action)
     }
 }
