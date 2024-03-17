@@ -137,4 +137,12 @@ class AlbumRepositoryImpl @Inject constructor(
             pagingSourceFactory = { dao.getListenLaterAlbums() }
         ).flow
     }
+
+    override suspend fun getRandomAlbum(): AlbumEntity? {
+        return dao.getRandomAlbum()
+    }
+
+    override fun getListenLaterCount(): Flow<Int> {
+        return dao.getListenLaterCount()
+    }
 }

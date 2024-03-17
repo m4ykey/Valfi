@@ -10,6 +10,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.AlbumWithStates
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlbumDao {
@@ -55,4 +56,11 @@ interface AlbumDao {
             "listen_later_table.isListenLaterSaved = 1 ORDER BY name ASC")
     fun getListenLaterAlbums() : PagingSource<Int, AlbumEntity>
 
+    @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
+            "album_table.id = listen_later_table.albumId WHERE " +
+            "listen_later_table.isListenLaterSaved = 1 ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomAlbum() : AlbumEntity?
+
+    @Query("SELECT COUNT(*) FROM listen_later_table WHERE isListenLaterSaved = 1")
+    fun getListenLaterCount() : Flow<Int>
 }

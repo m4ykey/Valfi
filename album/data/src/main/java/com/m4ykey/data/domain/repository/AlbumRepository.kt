@@ -32,4 +32,7 @@ interface AlbumRepository {
     fun getSavedAlbums() : Flow<PagingData<AlbumEntity>>
     fun getListenLaterAlbums() : Flow<PagingData<AlbumEntity>>
 
+    suspend fun getRandomAlbum() : AlbumEntity?
+
+    fun getListenLaterCount() : Flow<Int>
 }

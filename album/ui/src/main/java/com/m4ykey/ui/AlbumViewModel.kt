@@ -51,6 +51,14 @@ class AlbumViewModel @Inject constructor(
         getNewReleases()
     }
 
+    fun getListenLaterCount() : Flow<Int> {
+        return repository.getListenLaterCount()
+    }
+
+    suspend fun getRandomAlbum() : AlbumEntity? {
+        return repository.getRandomAlbum()
+    }
+
     fun getSavedAlbums() {
         viewModelScope.launch {
             repository.getSavedAlbums().cachedIn(viewModelScope).collect { albums ->
