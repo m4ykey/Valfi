@@ -10,6 +10,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,6 +31,8 @@ import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.ViewType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
@@ -44,6 +47,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var isListViewChanged = false
     private val viewModel : AlbumViewModel by viewModels()
     private val albumAdapter by lazy { AlbumPagingAdapter(requireContext(), this) }
+    private var isSearchEditTextVisible = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,7 +84,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 }
             }
             imgHide.setOnClickListener {
-                linearLayoutSearch.hide()
+                hideSearchEditText()
                 etSearch.setText("")
             }
         }
@@ -240,12 +244,27 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     private fun FragmentAlbumHomeBinding.showSearchEditText() {
-        linearLayoutSearch.apply {
-            translationY = -100f
-            alpha = 0f
-            show()
+        if (!isSearchEditTextVisible) {
+            linearLayoutSearch.apply {
+                translationY = -100f
+                show()
+                animationProperties(0f, 1f, DecelerateInterpolator())
+            }
+            isSearchEditTextVisible = true
+        }
+    }
 
-            animationProperties(0f, 1f, DecelerateInterpolator())
+    private fun FragmentAlbumHomeBinding.hideSearchEditText() {
+        if (isSearchEditTextVisible) {
+            linearLayoutSearch.apply {
+                translationY = 0f
+                animationProperties(-100f, 0f, DecelerateInterpolator())
+                lifecycleScope.launch {
+                    delay(400)
+                    hide()
+                }
+            }
+            isSearchEditTextVisible = false
         }
     }
 
