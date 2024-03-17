@@ -20,9 +20,13 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.showToast
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.ui.adapter.AlbumPagingAdapter
+import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.ViewType
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +35,7 @@ import java.net.URISyntaxException
 import java.net.URL
 
 @AndroidEntryPoint
-class AlbumHomeFragment : Fragment() {
+class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +43,7 @@ class AlbumHomeFragment : Fragment() {
     private lateinit var navController : NavController
     private var isListViewChanged = false
     private val viewModel : AlbumViewModel by viewModels()
+    private val albumAdapter by lazy { AlbumPagingAdapter(requireContext(), this) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,7 +73,12 @@ class AlbumHomeFragment : Fragment() {
             setupChips()
             setupRecyclerView()
 
-            viewModel.apply {}
+            viewModel.apply {
+                getSavedAlbums()
+                albumPaging.observe(viewLifecycleOwner) { pagingData ->
+                    albumAdapter.submitData(lifecycle, pagingData)
+                }
+            }
             imgHide.setOnClickListener {
                 linearLayoutSearch.hide()
                 etSearch.setText("")
@@ -105,6 +115,10 @@ class AlbumHomeFragment : Fragment() {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = albumAdapter.withLoadStateHeaderAndFooter(
+                footer = LoadStateAdapter { albumAdapter.retry() },
+                header = LoadStateAdapter { albumAdapter.retry() }
+            )
         }
     }
 
@@ -242,5 +256,10 @@ class AlbumHomeFragment : Fragment() {
 
     companion object {
         const val TAG = "AlbumHomeFragment"
+    }
+
+    override fun onItemClick(position: Int, item: AlbumEntity) {
+        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(item.id)
+        navController.navigate(action)
     }
 }

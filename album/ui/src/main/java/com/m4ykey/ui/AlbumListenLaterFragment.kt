@@ -14,20 +14,24 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.ui.adapter.AlbumPagingAdapter
+import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumListenLaterFragment : Fragment(){
+class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private var _binding : FragmentAlbumListenLaterBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    //private val listenLaterAdapter by lazy { AlbumEntityPagingAdapter(this, requireContext()) }
+    private val albumAdapter by lazy { AlbumPagingAdapter(requireContext(), this) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -57,7 +61,11 @@ class AlbumListenLaterFragment : Fragment(){
             setupRecyclerView()
             getRandomAlbum()
 
-            lifecycleScope.launch {
+            viewModel.apply {
+                getListenLaterAlbums()
+                albumPaging.observe(viewLifecycleOwner) { pagingData ->
+                    albumAdapter.submitData(lifecycle, pagingData)
+                }
             }
         }
     }
@@ -80,8 +88,11 @@ class AlbumListenLaterFragment : Fragment(){
         recyclerViewListenLater.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            //adapter = listenLaterAdapter
             layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = albumAdapter.withLoadStateHeaderAndFooter(
+                footer = LoadStateAdapter { albumAdapter.retry() },
+                header = LoadStateAdapter { albumAdapter.retry() }
+            )
         }
     }
 
@@ -99,6 +110,11 @@ class AlbumListenLaterFragment : Fragment(){
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onItemClick(position: Int, item: AlbumEntity) {
+        val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(item.id)
+        navController.navigate(action)
     }
 
 }

@@ -44,8 +44,27 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableLiveData<AlbumTrackUiState>()
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
+    private var _albumPaging = MutableLiveData<PagingData<AlbumEntity>>()
+    val albumPaging : LiveData<PagingData<AlbumEntity>> get() = _albumPaging
+
     init {
         getNewReleases()
+    }
+
+    fun getSavedAlbums() {
+        viewModelScope.launch {
+            repository.getSavedAlbums().cachedIn(viewModelScope).collect { albums ->
+                _albumPaging.value = albums
+            }
+        }
+    }
+
+    fun getListenLaterAlbums() {
+        viewModelScope.launch {
+            repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { albums ->
+                _albumPaging.value = albums
+            }
+        }
     }
 
     suspend fun insertAlbum(album : AlbumEntity) {

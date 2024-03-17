@@ -1,5 +1,6 @@
 package com.m4ykey.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -43,5 +44,15 @@ interface AlbumDao {
 
     @Query("DELETE FROM listen_later_table WHERE albumId = :albumId")
     suspend fun deleteListenLaterState(albumId: String)
+
+    @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
+            "album_table.id = album_saved_table.albumId WHERE " +
+            "album_saved_table.isAlbumSaved = 1 ORDER BY name ASC")
+    fun getSavedAlbums() : PagingSource<Int, AlbumEntity>
+
+    @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
+            "album_table.id = listen_later_table.albumId WHERE " +
+            "listen_later_table.isListenLaterSaved = 1 ORDER BY name ASC")
+    fun getListenLaterAlbums() : PagingSource<Int, AlbumEntity>
 
 }

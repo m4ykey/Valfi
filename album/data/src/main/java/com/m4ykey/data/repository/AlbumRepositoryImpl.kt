@@ -123,4 +123,18 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun deleteListenLaterState(albumId: String) {
         return dao.deleteListenLaterState(albumId)
     }
+
+    override fun getSavedAlbums(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { dao.getSavedAlbums() }
+        ).flow
+    }
+
+    override fun getListenLaterAlbums(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { dao.getListenLaterAlbums() }
+        ).flow
+    }
 }

@@ -1,0 +1,42 @@
+package com.m4ykey.ui.adapter.viewholder
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.m4ykey.core.views.loadImage
+import com.m4ykey.core.views.recyclerview.BaseViewHolder
+import com.m4ykey.core.views.recyclerview.OnItemClickListener
+import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
+
+class AlbumViewHolder(
+    private val binding : LayoutAlbumGridBinding,
+    listener : OnItemClickListener<AlbumEntity>,
+    private val context : Context
+) : BaseViewHolder<AlbumEntity>(listener, binding.root) {
+
+    companion object {
+        fun create(context : Context, view : ViewGroup, listener: OnItemClickListener<AlbumEntity>) : AlbumViewHolder {
+            return AlbumViewHolder(
+                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false),
+                listener = listener,
+                context = context
+            )
+        }
+    }
+
+    private lateinit var currentAlbum : AlbumEntity
+
+    override fun bind(item: AlbumEntity) {
+        currentAlbum = item
+        with(binding) {
+            with(item) {
+                txtArtist.text = artists
+                txtAlbum.text = name
+                loadImage(imgAlbum, images, context)
+            }
+        }
+    }
+
+    override fun getItem(position: Int): AlbumEntity = currentAlbum
+}

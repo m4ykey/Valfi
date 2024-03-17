@@ -29,4 +29,7 @@ interface AlbumRepository {
     suspend fun deleteSavedAlbumState(albumId : String)
     suspend fun deleteListenLaterState(albumId: String)
 
+    fun getSavedAlbums() : Flow<PagingData<AlbumEntity>>
+    fun getListenLaterAlbums() : Flow<PagingData<AlbumEntity>>
+
 }
