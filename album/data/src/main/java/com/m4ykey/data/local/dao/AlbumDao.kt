@@ -7,9 +7,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.AlbumWithStates
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.relations.AlbumWithStates
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -63,4 +63,5 @@ interface AlbumDao {
 
     @Query("SELECT COUNT(*) FROM listen_later_table WHERE isListenLaterSaved = 1")
     fun getListenLaterCount() : Flow<Int>
+
 }

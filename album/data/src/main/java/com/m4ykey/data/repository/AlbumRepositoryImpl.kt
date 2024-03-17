@@ -12,7 +12,7 @@ import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.AlbumWithStates
+import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.mapper.toAlbumDetail

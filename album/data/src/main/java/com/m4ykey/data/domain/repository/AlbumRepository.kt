@@ -6,7 +6,7 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.AlbumWithStates
+import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import kotlinx.coroutines.flow.Flow
@@ -35,4 +35,5 @@ interface AlbumRepository {
     suspend fun getRandomAlbum() : AlbumEntity?
 
     fun getListenLaterCount() : Flow<Int>
+
 }
