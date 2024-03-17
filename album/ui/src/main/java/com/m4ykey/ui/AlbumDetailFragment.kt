@@ -52,7 +52,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private val viewModel: AlbumViewModel by viewModels()
     private val trackAdapter by lazy { TrackListPagingAdapter(this) }
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
-    private var buttonColor : Int? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -85,14 +84,92 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         with(binding) {
             setupRecyclerView()
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
+            lifecycleScope.launch {
+                viewModel.apply {
+                    networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
+                        if (isInternetAvailable) {
+                            getAlbumById(args.albumId)
+                            getAlbumTracks(args.albumId)
+                            detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+                            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                        } else {
+                            progressBar.isVisible = false
+                            progressBarTrack.isVisible = false
+                            getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
+                        }
+                    }
+                }
+            }
         }
+    }
 
-        lifecycleScope.launch {
-            viewModel.getAlbumById(args.albumId)
-            viewModel.getAlbumTracks(args.albumId)
+    private fun displayAlbumFromDatabase(album: AlbumEntity) {
+        with(binding) {
+            with(album) {
+                lifecycleScope.launch {
+                    val albumWithStates = viewModel.getAlbumWithStates(id)
+                    if (albumWithStates != null) {
+                        updateIcons(albumWithStates)
+                    }
+                }
 
-            viewModel.detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-            viewModel.tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                loadImage(imgAlbum, images, requireContext())
+                getColorFromImage(
+                    images,
+                    context = requireContext(),
+                    onColorReady = { color ->
+                        btnAlbum.setBackgroundColor(color)
+                        btnArtist.setBackgroundColor(color)
+                    }
+                )
+
+                buttonsIntents(button = btnArtist, url = artistUrl, requireContext())
+                buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
+
+                txtAlbumName.apply {
+                    text = name
+                    setOnClickListener { copyName(name, requireContext()) }
+                }
+                txtArtist.text = artists
+                txtInfo.text = "$albumType • $releaseDate • $totalTracks ${getString(R.string.tracks)}"
+
+                imgSave.setOnClickListener {
+                    lifecycleScope.launch {
+                        val isAlbumSaved = viewModel.getSavedAlbumState(id)
+                        if (isAlbumSaved != null) {
+                            viewModel.deleteSavedAlbumState(id)
+                            val isListenLaterSaved = viewModel.getListenLaterState(id)
+                            if (isListenLaterSaved == null) {
+                                viewModel.deleteAlbum(id)
+                            }
+                            imgSave.buttonAnimation(R.drawable.ic_favorite_border)
+                        } else {
+                            viewModel.insertAlbum(album)
+                            viewModel.insertSavedAlbum(IsAlbumSaved(id, true))
+                            imgSave.buttonAnimation(R.drawable.ic_favorite)
+                        }
+                    }
+                }
+
+                imgListenLater.setOnClickListener {
+                    lifecycleScope.launch {
+                        val isListenLaterSaved = viewModel.getListenLaterState(id)
+                        if (isListenLaterSaved != null) {
+                            viewModel.deleteListenLaterState(id)
+                            val isAlbumSaved = viewModel.getSavedAlbumState(id)
+                            if (isAlbumSaved == null) {
+                                viewModel.deleteAlbum(id)
+                            }
+                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                        } else {
+                            viewModel.insertAlbum(album)
+                            viewModel.insertListenLaterAlbum(IsListenLaterSaved(id, true))
+                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
+                        }
+                    }
+                }
+
+            }
         }
     }
 
@@ -192,7 +269,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     onColorReady = { color ->
                         btnAlbum.setBackgroundColor(color)
                         btnArtist.setBackgroundColor(color)
-                        buttonColor = color
                     }
                 )
 
