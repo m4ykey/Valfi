@@ -68,6 +68,7 @@
     <LinearLayout
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:padding="5dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -76,7 +77,6 @@
             android:id="@+id/imgSavedAlbum"
             android:visibility="gone"
             tools:visibility="visible"
-            android:padding="5dp"
             app:tint="@color/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,7 +87,6 @@
             android:id="@+id/imgListenLater"
             android:visibility="gone"
             tools:visibility="visible"
-            android:padding="5dp"
             app:tint="@color/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
