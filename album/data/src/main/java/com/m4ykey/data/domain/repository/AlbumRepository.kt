@@ -9,13 +9,13 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.TrackEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumRepository {
 
     fun searchAlbums(query : String) : Flow<PagingData<AlbumItem>>
     suspend fun getAlbumById(id : String) : Flow<Resource<AlbumDetail>>
-    fun getAlbumTracks(id : String) : Flow<PagingData<TrackItem>>
     fun getNewReleases() : Flow<PagingData<AlbumItem>>
 
     suspend fun insertAlbum(album : AlbumEntity)

@@ -90,16 +90,34 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                         if (isInternetAvailable) {
                             getAlbumById(args.albumId)
                             getAlbumTracks(args.albumId)
-                            detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-                            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                            handleOnlineMode()
                         } else {
-                            progressBar.isVisible = false
-                            progressBarTrack.isVisible = false
-                            getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
+                            handleOfflineMode()
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun handleOfflineMode() {
+        viewModel.apply {
+            tracks.observe(viewLifecycleOwner) { state ->
+                handleTrackState(state)
+                binding.progressBarTrack.isVisible = false
+            }
+            getAlbumTracks(args.albumId)
+            lifecycleScope.launch {
+                getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
+            }
+            binding.progressBar.isVisible = false
+        }
+    }
+
+    private fun handleOnlineMode() {
+        viewModel.apply {
+            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+            detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
         }
     }
 
@@ -122,6 +140,8 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                         btnArtist.setBackgroundColor(color)
                     }
                 )
+
+                //rvTrackList.adapter = trackAdapter
 
                 buttonsIntents(button = btnArtist, url = artistUrl, requireContext())
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())

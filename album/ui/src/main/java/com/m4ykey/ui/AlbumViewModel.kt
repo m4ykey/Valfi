@@ -6,16 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.m4ykey.core.network.Resource
 import com.m4ykey.core.network.handleResult
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
+import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -29,7 +32,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val repository: AlbumRepository
+    private val repository: AlbumRepository,
+    private val trackRepository: TrackRepository
 ) : ViewModel() {
 
     private var _search = MutableLiveData<AlbumListUiState>()
@@ -153,15 +157,22 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             _tracks.value = AlbumTrackUiState(isLoading = true)
             try {
-                val result = repository.getAlbumTracks(id)
+                val result = trackRepository.getAlbumTracks(id)
                     .cachedIn(viewModelScope)
+                    .map { pagingData ->
+                        pagingData.map { trackEntity -> trackEntity.toTrackItem() }
+                    }
                     .map { Resource.Success(it) }
                 handleTrackResult(result)
+            } catch (e: Exception) {
+                val errorMessage = e.message ?: "Unknown error"
+                _tracks.value = AlbumTrackUiState(error = errorMessage)
             } finally {
                 _tracks.value = _tracks.value?.copy(isLoading = false)
             }
         }
     }
+
 
     private fun handleDetailState(result : Resource<AlbumDetail>) : AlbumDetailUiState {
         return when (result) {

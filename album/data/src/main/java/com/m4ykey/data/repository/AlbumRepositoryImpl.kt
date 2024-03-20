@@ -8,19 +8,17 @@ import com.m4ykey.core.network.Resource
 import com.m4ykey.core.network.safeApiCall
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.remote.paging.NewReleasePagingSource
 import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
-import com.m4ykey.data.remote.paging.TrackListPagingSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -69,19 +67,6 @@ class AlbumRepositoryImpl @Inject constructor(
                 id = id
             ).toAlbumDetail()
         })
-    }
-
-    override fun getAlbumTracks(id: String): Flow<PagingData<TrackItem>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = {
-                TrackListPagingSource(
-                    id = id,
-                    interceptor = interceptor,
-                    api = api
-                )
-            }
-        ).flow
     }
 
     override suspend fun insertAlbum(album: AlbumEntity) {
