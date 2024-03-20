@@ -44,7 +44,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
-    private val searchAdapter by lazy { SearchAlbumPagingAdapter(this, viewModel, requireContext()) }
+    private val searchAdapter by lazy { SearchAlbumPagingAdapter(this, viewModel) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -222,8 +222,8 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         binding.resetSearchState()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

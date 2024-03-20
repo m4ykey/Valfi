@@ -16,6 +16,7 @@ junit = { group = "junit", name = "junit", version = "4.13.2" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version = "3.5.1" }
 truth = { group = "com.google.truth", name = "truth", version = "1.4.0" }
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "3.0-alpha-1" }
 
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }

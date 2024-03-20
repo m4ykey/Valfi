@@ -5,13 +5,12 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import com.m4ykey.data.local.model.TrackEntity
 
 @Dao
 interface TrackDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTracks(tracks : List<TrackEntity>)
 
     @Query("SELECT * FROM track_table WHERE albumId = :albumId")

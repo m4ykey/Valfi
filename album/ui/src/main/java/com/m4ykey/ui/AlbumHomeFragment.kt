@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -46,11 +47,13 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private lateinit var navController : NavController
     private var isListViewChanged = false
     private val viewModel : AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumPagingAdapter(requireContext(), this) }
+    private val albumAdapter by lazy { AlbumPagingAdapter(this) }
     private var isSearchEditTextVisible = false
+    private var drawerLayout : DrawerLayout? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        navController = findNavController()
         if (context is BottomNavigationVisibility) {
             bottomNavigationVisibility = context
         } else {
@@ -63,6 +66,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumHomeBinding.inflate(inflater, container, false)
+        drawerLayout = binding.drawerLayout
         return binding.root
     }
 
@@ -70,7 +74,6 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.showBottomNavigation()
-        navController = findNavController()
 
         with(binding) {
             setupToolbar()
@@ -268,8 +271,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        drawerLayout = null
         _binding = null
     }
 

@@ -171,7 +171,6 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-
     private fun handleDetailState(result : Resource<AlbumDetail>) : AlbumDetailUiState {
         return when (result) {
             is Resource.Success -> AlbumDetailUiState(albumDetail = result.data)

@@ -75,5 +75,7 @@ dependencies {
 
         implementation(libs.bundles.navigation)
 
+        debugImplementation(libs.leakcanary)
+
     }
 }

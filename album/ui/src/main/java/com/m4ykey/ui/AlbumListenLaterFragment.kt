@@ -33,7 +33,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumPagingAdapter(requireContext(), this) }
+    private val albumAdapter by lazy { AlbumPagingAdapter(this) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -113,8 +113,8 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

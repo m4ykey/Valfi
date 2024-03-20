@@ -52,6 +52,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private val viewModel: AlbumViewModel by viewModels()
     private val trackAdapter by lazy { TrackListPagingAdapter(this) }
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
+    private var isDataLoaded = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,15 +85,18 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         with(binding) {
             setupRecyclerView()
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
-            lifecycleScope.launch {
-                viewModel.apply {
-                    networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
-                        if (isInternetAvailable) {
-                            getAlbumById(args.albumId)
-                            getAlbumTracks(args.albumId)
-                            handleOnlineMode()
-                        } else {
-                            handleOfflineMode()
+            if (!isDataLoaded) {
+                lifecycleScope.launch {
+                    viewModel.apply {
+                        getAlbumTracks(args.albumId)
+                        tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                        networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
+                            if (isInternetAvailable) {
+                                getAlbumById(args.albumId)
+                                handleOnlineMode()
+                            } else {
+                                handleOfflineMode()
+                            }
                         }
                     }
                 }
@@ -101,23 +105,24 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     }
 
     private fun handleOfflineMode() {
-        viewModel.apply {
-            tracks.observe(viewLifecycleOwner) { state ->
-                handleTrackState(state)
+        if (!isDataLoaded) {
+            viewModel.apply {
                 binding.progressBarTrack.isVisible = false
+                lifecycleScope.launch {
+                    getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
+                }
+                binding.progressBar.isVisible = false
             }
-            getAlbumTracks(args.albumId)
-            lifecycleScope.launch {
-                getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
-            }
-            binding.progressBar.isVisible = false
+            isDataLoaded = true
         }
     }
 
     private fun handleOnlineMode() {
-        viewModel.apply {
-            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
-            detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+        if (!isDataLoaded) {
+            viewModel.apply {
+                detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+            }
+            isDataLoaded = true
         }
     }
 
@@ -367,8 +372,12 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
         networkStateMonitor.stopMonitoring()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onItemClick(position: Int, item: TrackItem) {
