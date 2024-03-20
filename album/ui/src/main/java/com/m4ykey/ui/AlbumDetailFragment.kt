@@ -141,8 +141,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     }
                 )
 
-                //rvTrackList.adapter = trackAdapter
-
                 buttonsIntents(button = btnArtist, url = artistUrl, requireContext())
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
 

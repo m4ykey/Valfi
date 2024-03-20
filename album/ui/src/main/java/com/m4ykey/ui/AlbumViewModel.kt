@@ -159,9 +159,7 @@ class AlbumViewModel @Inject constructor(
             try {
                 val result = trackRepository.getAlbumTracks(id)
                     .cachedIn(viewModelScope)
-                    .map { pagingData ->
-                        pagingData.map { trackEntity -> trackEntity.toTrackItem() }
-                    }
+                    .map { pagingData -> pagingData.map { trackEntity -> trackEntity.toTrackItem() } }
                     .map { Resource.Success(it) }
                 handleTrackResult(result)
             } catch (e: Exception) {
