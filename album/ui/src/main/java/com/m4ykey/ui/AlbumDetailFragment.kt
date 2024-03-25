@@ -154,7 +154,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
                     setOnClickListener { copyName(name, requireContext()) }
                 }
                 txtArtist.text = artists
-                txtInfo.text = "$albumType • $releaseDate • $totalTracks ${getString(R.string.tracks)}"
+                txtInfo.text = getString(R.string.album_info, albumType, releaseDate, totalTracks, getString(R.string.tracks))
 
                 imgSave.setOnClickListener {
                     lifecycleScope.launch {

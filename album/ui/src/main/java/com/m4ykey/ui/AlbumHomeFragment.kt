@@ -95,16 +95,15 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     private fun FragmentAlbumHomeBinding.setupChips() {
-        chipList.apply {
-            setOnClickListener {
-                isListViewChanged = !isListViewChanged
-                when {
-                    isListViewChanged -> setChipIconResource(R.drawable.ic_grid)
-                    else -> setChipIconResource(R.drawable.ic_list)
-                }
-                setRecyclerViewLayout(isListViewChanged)
+        chipList.setOnClickListener {
+            isListViewChanged = !isListViewChanged
+            when {
+                isListViewChanged -> chipList.setChipIconResource(R.drawable.ic_grid)
+                else -> chipList.setChipIconResource(R.drawable.ic_list)
             }
+            setRecyclerViewLayout(isListViewChanged)
         }
+
         chipSortBy.setOnClickListener { listTypeDialog() }
         chipSearch.setOnClickListener { showSearchEditText() }
 
@@ -200,8 +199,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 }
             )
             navigationView.setNavigationItemSelectedListener { menuItem ->
-                val itemId = menuItem.itemId
-                val action = drawerButtons.find { it.first == itemId }?.second
+                val action = drawerButtons.find { it.first == menuItem.itemId }?.second
                 action?.invoke()
                 true
             }

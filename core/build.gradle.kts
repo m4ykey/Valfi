@@ -36,12 +36,8 @@ dependencies {
 
     libs.apply {
         implementation(androidx.appcompat)
-        implementation(android.material)
         implementation(androidx.core)
-
-        testImplementation(junit)
-        androidTestImplementation(ext.junit)
-        androidTestImplementation(espresso)
+        implementation(android.material)
 
         implementation(moshi.kotlin)
         implementation(converter.moshi)

@@ -58,10 +58,6 @@ dependencies {
     implementation(project(":core"))
 
     libs.apply {
-        testImplementation(junit)
-        androidTestImplementation(ext.junit)
-        androidTestImplementation(espresso)
-        androidTestImplementation(truth)
 
         implementation(retrofit)
         implementation(converter.moshi)
