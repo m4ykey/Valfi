@@ -13,5 +13,6 @@ data class AlbumEntity(
     val images : String,
     val name : String,
     val releaseDate : String,
-    val totalTracks : Int
+    val totalTracks : Int,
+    val saveTime : Long = System.currentTimeMillis()
 )
