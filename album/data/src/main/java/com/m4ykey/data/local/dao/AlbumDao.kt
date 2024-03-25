@@ -64,4 +64,7 @@ interface AlbumDao {
     @Query("SELECT COUNT(*) FROM listen_later_table WHERE isListenLaterSaved = 1")
     fun getListenLaterCount() : Flow<Int>
 
+    @Query("SELECT * FROM album_table WHERE albumType = :albumType")
+    fun getAlbumType(albumType : String) : PagingSource<Int, AlbumEntity>
+
 }

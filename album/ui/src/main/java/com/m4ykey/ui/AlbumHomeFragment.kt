@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -49,7 +48,10 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private val viewModel : AlbumViewModel by viewModels()
     private val albumAdapter by lazy { AlbumPagingAdapter(this) }
     private var isSearchEditTextVisible = false
-    private var drawerLayout : DrawerLayout? = null
+    private var isAlbumSelected = false
+    private var isEPSelected = false
+    private var isSingleSelected = false
+    private var isCompilationSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,7 +68,6 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumHomeBinding.inflate(inflater, container, false)
-        drawerLayout = binding.drawerLayout
         return binding.root
     }
 
@@ -106,6 +107,19 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
         chipSortBy.setOnClickListener { listTypeDialog() }
         chipSearch.setOnClickListener { showSearchEditText() }
+
+        chipAlbum.setOnClickListener {
+            isAlbumSelected = !isAlbumSelected
+            if (isAlbumSelected) viewModel.getAlbumType("Album") else viewModel.getSavedAlbums() }
+        chipSingle.setOnClickListener {
+            isSingleSelected = !isSingleSelected
+            if (isSingleSelected) viewModel.getAlbumType("Single") else viewModel.getSavedAlbums() }
+        chipEp.setOnClickListener {
+            isEPSelected = !isEPSelected
+            if (isEPSelected) viewModel.getAlbumType("EP") else viewModel.getSavedAlbums() }
+        chipCompilation.setOnClickListener {
+            isCompilationSelected = !isCompilationSelected
+            if (isCompilationSelected) viewModel.getAlbumType("Compilation") else viewModel.getSavedAlbums() }
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
@@ -273,7 +287,6 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        drawerLayout = null
         _binding = null
     }
 

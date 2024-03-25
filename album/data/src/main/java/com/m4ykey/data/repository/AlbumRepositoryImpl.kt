@@ -130,4 +130,11 @@ class AlbumRepositoryImpl @Inject constructor(
     override fun getListenLaterCount(): Flow<Int> {
         return dao.getListenLaterCount()
     }
+
+    override fun getAlbumType(albumType: String): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { dao.getAlbumType(albumType) }
+        ).flow
+    }
 }

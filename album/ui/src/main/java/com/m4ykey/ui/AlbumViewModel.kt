@@ -55,6 +55,14 @@ class AlbumViewModel @Inject constructor(
         getNewReleases()
     }
 
+    fun getAlbumType(albumType : String) {
+        viewModelScope.launch {
+            repository.getAlbumType(albumType).cachedIn(viewModelScope).collect { pagingData ->
+                _albumPaging.value = pagingData
+            }
+        }
+    }
+
     fun getListenLaterCount() : Flow<Int> {
         return repository.getListenLaterCount()
     }

@@ -25,4 +25,5 @@ class AlbumPagingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         return AlbumViewHolder.create(view = parent, listener = listener)
     }
+
 }
