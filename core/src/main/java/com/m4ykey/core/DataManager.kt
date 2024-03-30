@@ -28,6 +28,12 @@ class DataManager(context : Context) {
         }
     }
 
+    suspend fun clearSelectedAlbumType(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.remove(KEY_SELECTED_ALBUM_TYPE)
+        }
+    }
+
     val selectedAlbumType : Flow<String?> = context.dataStore.data
         .catch { exception ->
             if (exception is IOException) {

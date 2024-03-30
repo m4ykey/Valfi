@@ -158,7 +158,12 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                         lifecycleScope.launch {
                             dataManager.saveSelectedAlbumType(requireContext(), ALBUM)
                         }
-                    } else viewModel.getSavedAlbums()
+                    } else {
+                        viewModel.getSavedAlbums()
+                        lifecycleScope.launch {
+                            dataManager.clearSelectedAlbumType(requireContext())
+                        }
+                    }
                 }
                 R.id.chipSingle -> {
                     isSingleSelected = !isSingleSelected
@@ -167,7 +172,12 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                         lifecycleScope.launch {
                             dataManager.saveSelectedAlbumType(requireContext(), SINGLE)
                         }
-                    } else viewModel.getSavedAlbums()
+                    } else {
+                        viewModel.getSavedAlbums()
+                        lifecycleScope.launch {
+                            dataManager.clearSelectedAlbumType(requireContext())
+                        }
+                    }
                 }
                 R.id.chipEp -> {
                     isEPSelected = !isEPSelected
@@ -176,7 +186,12 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                         lifecycleScope.launch {
                             dataManager.saveSelectedAlbumType(requireContext(), EP)
                         }
-                    } else viewModel.getSavedAlbums()
+                    } else {
+                        viewModel.getSavedAlbums()
+                        lifecycleScope.launch {
+                            dataManager.clearSelectedAlbumType(requireContext())
+                        }
+                    }
                 }
                 R.id.chipCompilation -> {
                     isCompilationSelected = !isCompilationSelected
@@ -185,7 +200,12 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                         lifecycleScope.launch {
                             dataManager.saveSelectedAlbumType(requireContext(), COMPILATION)
                         }
-                    } else viewModel.getSavedAlbums()
+                    } else {
+                        viewModel.getSavedAlbums()
+                        lifecycleScope.launch {
+                            dataManager.clearSelectedAlbumType(requireContext())
+                        }
+                    }
                 }
             }
         }
