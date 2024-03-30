@@ -37,7 +37,6 @@ import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.ViewType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -58,7 +57,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var isEPSelected = false
     private var isSingleSelected = false
     private var isCompilationSelected = false
-    private lateinit var dataManager: DataManager
+    private val dataManager: DataManager = DataManager()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -82,10 +81,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.showBottomNavigation()
-        dataManager = DataManager(requireContext())
 
         lifecycleScope.launch {
-            val selectedAlbum = dataManager.selectedAlbumType.first()
+            val selectedAlbum = dataManager.getSelectedAlbumType(requireContext())
             when (selectedAlbum) {
                 ALBUM -> {
                     isAlbumSelected = true
