@@ -17,7 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.m4ykey.core.Constants.ALBUM
+import com.m4ykey.core.Constants.COMPILATION
+import com.m4ykey.core.Constants.EP
+import com.m4ykey.core.Constants.SINGLE
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
+import com.m4ykey.core.DataManager
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -32,6 +37,7 @@ import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.ViewType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -52,6 +58,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var isEPSelected = false
     private var isSingleSelected = false
     private var isCompilationSelected = false
+    private lateinit var dataManager: DataManager
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -75,6 +82,32 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.showBottomNavigation()
+        dataManager = DataManager(requireContext())
+
+        lifecycleScope.launch {
+            val selectedAlbum = dataManager.selectedAlbumType.first()
+            when (selectedAlbum) {
+                ALBUM -> {
+                    isAlbumSelected = true
+                    viewModel.getAlbumType(ALBUM)
+                }
+                EP -> {
+                    isEPSelected = true
+                    viewModel.getAlbumType(EP)
+                }
+                SINGLE -> {
+                    isSingleSelected = true
+                    viewModel.getAlbumType(SINGLE)
+                }
+                COMPILATION -> {
+                    isCompilationSelected = true
+                    viewModel.getAlbumType(COMPILATION)
+                }
+                else -> viewModel.getSavedAlbums()
+            }
+
+            updateChipSelection()
+        }
 
         with(binding) {
             setupToolbar()
@@ -94,6 +127,15 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
+    private fun updateChipSelection() {
+        with(binding) {
+            chipAlbum.isChecked = isAlbumSelected
+            chipEp.isChecked = isEPSelected
+            chipCompilation.isChecked = isCompilationSelected
+            chipSingle.isChecked = isSingleSelected
+        }
+    }
+
     private fun FragmentAlbumHomeBinding.setupChips() {
         chipList.setOnClickListener {
             isListViewChanged = !isListViewChanged
@@ -107,18 +149,51 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         chipSortBy.setOnClickListener { listTypeDialog() }
         chipSearch.setOnClickListener { showSearchEditText() }
 
-        chipAlbum.setOnClickListener {
-            isAlbumSelected = !isAlbumSelected
-            if (isAlbumSelected) viewModel.getAlbumType("Album") else viewModel.getSavedAlbums() }
-        chipSingle.setOnClickListener {
-            isSingleSelected = !isSingleSelected
-            if (isSingleSelected) viewModel.getAlbumType("Single") else viewModel.getSavedAlbums() }
-        chipEp.setOnClickListener {
-            isEPSelected = !isEPSelected
-            if (isEPSelected) viewModel.getAlbumType("EP") else viewModel.getSavedAlbums() }
-        chipCompilation.setOnClickListener {
-            isCompilationSelected = !isCompilationSelected
-            if (isCompilationSelected) viewModel.getAlbumType("Compilation") else viewModel.getSavedAlbums() }
+        val chipClickListener: View.OnClickListener = View.OnClickListener { view ->
+            when (view.id) {
+                R.id.chipAlbum -> {
+                    isAlbumSelected = !isAlbumSelected
+                    if (isAlbumSelected) {
+                        viewModel.getAlbumType(ALBUM)
+                        lifecycleScope.launch {
+                            dataManager.saveSelectedAlbumType(requireContext(), ALBUM)
+                        }
+                    } else viewModel.getSavedAlbums()
+                }
+                R.id.chipSingle -> {
+                    isSingleSelected = !isSingleSelected
+                    if (isSingleSelected) {
+                        viewModel.getAlbumType(SINGLE)
+                        lifecycleScope.launch {
+                            dataManager.saveSelectedAlbumType(requireContext(), SINGLE)
+                        }
+                    } else viewModel.getSavedAlbums()
+                }
+                R.id.chipEp -> {
+                    isEPSelected = !isEPSelected
+                    if (isEPSelected) {
+                        viewModel.getAlbumType(EP)
+                        lifecycleScope.launch {
+                            dataManager.saveSelectedAlbumType(requireContext(), EP)
+                        }
+                    } else viewModel.getSavedAlbums()
+                }
+                R.id.chipCompilation -> {
+                    isCompilationSelected = !isCompilationSelected
+                    if (isCompilationSelected) {
+                        viewModel.getAlbumType(COMPILATION)
+                        lifecycleScope.launch {
+                            dataManager.saveSelectedAlbumType(requireContext(), COMPILATION)
+                        }
+                    } else viewModel.getSavedAlbums()
+                }
+            }
+        }
+
+        chipAlbum.setOnClickListener(chipClickListener)
+        chipSingle.setOnClickListener(chipClickListener)
+        chipEp.setOnClickListener(chipClickListener)
+        chipCompilation.setOnClickListener(chipClickListener)
     }
 
     private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
