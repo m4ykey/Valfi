@@ -107,7 +107,6 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun handleOfflineMode() {
         if (!isDataLoaded) {
             viewModel.apply {
-                binding.progressBarTrack.isVisible = false
                 lifecycleScope.launch {
                     getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
                 }
@@ -220,38 +219,29 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     }
 
     private fun handleTrackState(state: AlbumTrackUiState?) {
+        state ?: return
         with(binding) {
-            rvTrackList.isVisible = state?.isLoading == false && state.albumTracks != null
-            progressBarTrack.isVisible = state?.isLoading == true
-
-            state?.error?.let {
-                progressBarTrack.isVisible = false
-                showToast(requireContext(), it)
-            }
-            state?.albumTracks?.let { track ->
+            progressBar.isVisible = state.isLoading
+            nestedScrollView.isVisible = !state.isLoading
+            state.error?.let { showToast(requireContext(), it) }
+            state.albumTracks?.let { tracks ->
+                rvTrackList.isVisible = true
                 lifecycleScope.launch {
-                    delay(500)
-                    progressBarTrack.isVisible = false
-                    rvTrackList.isVisible = true
-                    trackAdapter.submitData(lifecycle, track)
+                    delay(500L)
+                    trackAdapter.submitData(lifecycle, tracks)
                 }
             }
         }
     }
 
     private fun handleUiState(state: AlbumDetailUiState?) {
+        state ?: return
         with(binding) {
-            progressBar.isVisible = state?.isLoading == true
-            nestedScrollView.isVisible = state?.isLoading == false && state.albumDetail != null
-
-            state?.error?.let {
-                progressBar.isVisible = false
-                showToast(requireContext(), it)
-            }
-
-            state?.albumDetail?.let {
-                progressBar.isVisible = false
-                displayAlbumDetail(it)
+            progressBar.isVisible = state.isLoading
+            nestedScrollView.isVisible = !state.isLoading
+            state.error?.let { showToast(requireContext(), it) }
+            state.albumDetail?.let { detail ->
+                displayAlbumDetail(detail)
             }
         }
     }

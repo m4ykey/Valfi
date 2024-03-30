@@ -32,7 +32,6 @@ import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.ui.uistate.AlbumListUiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -81,21 +80,14 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     }
 
     private fun handleSearchState(state : AlbumListUiState?) {
+        state ?: return
         with(binding) {
-            rvSearchAlbums.isVisible = state?.isLoading == false && state.albumList != null
-            progressBar.isVisible = state?.isLoading == true
-
-            state?.error?.let {
-                progressBar.isVisible = false
-                showToast(requireContext(), it)
-            }
-            state?.albumList?.let { search ->
-                progressBar.isVisible = false
+            progressBar.isVisible = state.isLoading
+            rvSearchAlbums.isVisible = !state.isLoading
+            state.error?.let { showToast(requireContext(), it) }
+            state.albumList?.let { search ->
                 rvSearchAlbums.isVisible = true
-                lifecycleScope.launch {
-                    delay(200)
-                    searchAdapter.submitData(lifecycle, search)
-                }
+                searchAdapter.submitData(lifecycle, search)
             }
         }
     }

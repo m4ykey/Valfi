@@ -26,7 +26,6 @@ import com.m4ykey.ui.adapter.NewReleasePagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.ui.uistate.AlbumListUiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -115,21 +114,14 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
     }
 
     private fun handleNewReleaseState(state : AlbumListUiState?) {
+        state ?: return
         with(binding) {
-            recyclerViewNewRelease.isVisible = state?.isLoading == false && state.albumList != null
-            progressBar.isVisible = state?.isLoading == true
-
-            state?.error?.let {
-                progressBar.isVisible = false
-                showToast(requireContext(), it)
-            }
-            state?.albumList?.let { search ->
-                lifecycleScope.launch {
-                    delay(500)
-                    progressBar.isVisible = false
-                    recyclerViewNewRelease.isVisible = true
-                    newReleaseAdapter.submitData(lifecycle, search)
-                }
+            progressBar.isVisible = state.isLoading
+            recyclerViewNewRelease.isVisible = !state.isLoading
+            state.error?.let { showToast(requireContext(), it) }
+            state.albumList?.let { items ->
+                recyclerViewNewRelease.isVisible = true
+                newReleaseAdapter.submitData(lifecycle, items)
             }
         }
     }
