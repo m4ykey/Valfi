@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
@@ -57,7 +58,8 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private var isEPSelected = false
     private var isSingleSelected = false
     private var isCompilationSelected = false
-    private val dataManager: DataManager = DataManager()
+    @Inject
+    lateinit var dataManager: DataManager
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
