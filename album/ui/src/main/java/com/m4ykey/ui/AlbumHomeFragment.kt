@@ -31,12 +31,12 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
-import com.m4ykey.core.views.showToast
+import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
-import com.m4ykey.core.views.ViewType
+import com.m4ykey.core.views.sorting.ViewType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -92,6 +92,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             if (selectedViewType != null) {
                 albumAdapter.viewType = selectedViewType
                 binding.chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
+                isListViewChanged = selectedViewType == ViewType.LIST
             } else {
                 val defaultViewType = ViewType.GRID
                 albumAdapter.viewType = defaultViewType
@@ -163,17 +164,16 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         with(binding) {
             chipList.setOnClickListener {
                 isListViewChanged = !isListViewChanged
-                when {
-                    isListViewChanged -> {
+                lifecycleScope.launch {
+                    if (isListViewChanged) {
+                        dataManager.saveSelectedViewType(requireContext(), ViewType.LIST)
                         chipList.setChipIconResource(R.drawable.ic_grid)
-                        lifecycleScope.launch { dataManager.saveSelectedViewType(requireContext(), ViewType.LIST) }
-                    }
-                    else -> {
+                    } else {
+                        dataManager.clearSelectedViewType(requireContext())
                         chipList.setChipIconResource(R.drawable.ic_list)
-                        lifecycleScope.launch { dataManager.clearSelectedViewType(requireContext()) }
                     }
+                    setRecyclerViewLayout(isListViewChanged)
                 }
-                setRecyclerViewLayout(isListViewChanged)
             }
 
             chipSortBy.setOnClickListener { listTypeDialog() }
@@ -255,11 +255,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                     when (index) {
                         0 -> {
                             chipSortBy.text = getString(R.string.recently_added)
-                            //viewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
                         }
                         1 -> {
                             chipSortBy.text = getString(R.string.alphabetical)
-                            //viewModel.updateSortingType(ListSortingType.ALPHABETICAL)
                         }
                     }
                 }

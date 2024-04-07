@@ -16,7 +16,7 @@ import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.showToast
+import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter

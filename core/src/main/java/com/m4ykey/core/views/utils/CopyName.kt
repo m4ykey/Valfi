@@ -1,4 +1,4 @@
-package com.m4ykey.core.views
+package com.m4ykey.core.views.utils
 
 import android.content.ClipData
 import android.content.ClipboardManager

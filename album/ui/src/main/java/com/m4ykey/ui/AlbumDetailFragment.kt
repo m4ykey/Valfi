@@ -20,12 +20,12 @@ import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
-import com.m4ykey.core.views.copyName
-import com.m4ykey.core.views.formatAirDate
-import com.m4ykey.core.views.getColorFromImage
+import com.m4ykey.core.views.utils.copyName
+import com.m4ykey.core.views.utils.formatAirDate
+import com.m4ykey.core.views.utils.getColorFromImage
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
-import com.m4ykey.core.views.showToast
+import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
