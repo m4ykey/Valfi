@@ -76,8 +76,8 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun FragmentAlbumListenLaterBinding.getRandomAlbum() {
-        btnListenLater.setOnClickListener {
+    private fun getRandomAlbum() {
+        binding.btnListenLater.setOnClickListener {
             lifecycleScope.launch {
                 val randomAlbum = viewModel.getRandomAlbum()
                 if (randomAlbum != null) {
@@ -90,8 +90,8 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun FragmentAlbumListenLaterBinding.setupRecyclerView() {
-        recyclerViewListenLater.apply {
+    private fun setupRecyclerView() {
+        binding.recyclerViewListenLater.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             layoutManager = GridLayoutManager(requireContext(), 3)
@@ -102,8 +102,8 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun FragmentAlbumListenLaterBinding.setupToolbar() {
-        toolbar.apply {
+    private fun setupToolbar() {
+        binding.toolbar.apply {
             setNavigationOnClickListener { navController.navigateUp() }
             menu.findItem(R.id.imgAdd).setOnMenuItemClickListener {
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumSearchFragment()

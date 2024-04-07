@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -119,6 +121,10 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 albumPaging.observe(viewLifecycleOwner) { pagingData ->
                     albumAdapter.submitData(lifecycle, pagingData)
                 }
+                etSearch.doOnTextChanged { text, _, _, _ -> searchAlbumByName(text.toString()) }
+                searchResult.observe(viewLifecycleOwner) { pagingData ->
+                    albumAdapter.submitData(lifecycle, pagingData)
+                }
             }
             imgHide.setOnClickListener {
                 hideSearchEditText()
@@ -136,97 +142,99 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun FragmentAlbumHomeBinding.setupChips() {
-        chipList.setOnClickListener {
-            isListViewChanged = !isListViewChanged
-            when {
-                isListViewChanged -> chipList.setChipIconResource(R.drawable.ic_grid)
-                else -> chipList.setChipIconResource(R.drawable.ic_list)
+    private fun setupChips() {
+        with(binding) {
+            chipList.setOnClickListener {
+                isListViewChanged = !isListViewChanged
+                when {
+                    isListViewChanged -> chipList.setChipIconResource(R.drawable.ic_grid)
+                    else -> chipList.setChipIconResource(R.drawable.ic_list)
+                }
+                setRecyclerViewLayout(isListViewChanged)
             }
-            setRecyclerViewLayout(isListViewChanged)
-        }
 
-        chipSortBy.setOnClickListener { listTypeDialog() }
-        chipSearch.setOnClickListener { showSearchEditText() }
+            chipSortBy.setOnClickListener { listTypeDialog() }
+            chipSearch.setOnClickListener { showSearchEditText() }
 
-        val chipClickListener: View.OnClickListener = View.OnClickListener { view ->
-            when (view.id) {
-                R.id.chipAlbum -> {
-                    isAlbumSelected = !isAlbumSelected
-                    if (isAlbumSelected) {
-                        viewModel.getAlbumType(ALBUM)
-                        lifecycleScope.launch {
-                            dataManager.saveSelectedAlbumType(requireContext(), ALBUM)
-                        }
-                    } else {
-                        viewModel.getSavedAlbums()
-                        lifecycleScope.launch {
-                            dataManager.clearSelectedAlbumType(requireContext())
-                        }
-                    }
-                }
-                R.id.chipSingle -> {
-                    isSingleSelected = !isSingleSelected
-                    if (isSingleSelected) {
-                        viewModel.getAlbumType(SINGLE)
-                        lifecycleScope.launch {
-                            dataManager.saveSelectedAlbumType(requireContext(), SINGLE)
-                        }
-                    } else {
-                        viewModel.getSavedAlbums()
-                        lifecycleScope.launch {
-                            dataManager.clearSelectedAlbumType(requireContext())
+            val chipClickListener: View.OnClickListener = View.OnClickListener { view ->
+                when (view.id) {
+                    R.id.chipAlbum -> {
+                        isAlbumSelected = !isAlbumSelected
+                        if (isAlbumSelected) {
+                            viewModel.getAlbumType(ALBUM)
+                            lifecycleScope.launch {
+                                dataManager.saveSelectedAlbumType(requireContext(), ALBUM)
+                            }
+                        } else {
+                            viewModel.getSavedAlbums()
+                            lifecycleScope.launch {
+                                dataManager.clearSelectedAlbumType(requireContext())
+                            }
                         }
                     }
-                }
-                R.id.chipEp -> {
-                    isEPSelected = !isEPSelected
-                    if (isEPSelected) {
-                        viewModel.getAlbumType(EP)
-                        lifecycleScope.launch {
-                            dataManager.saveSelectedAlbumType(requireContext(), EP)
-                        }
-                    } else {
-                        viewModel.getSavedAlbums()
-                        lifecycleScope.launch {
-                            dataManager.clearSelectedAlbumType(requireContext())
+                    R.id.chipSingle -> {
+                        isSingleSelected = !isSingleSelected
+                        if (isSingleSelected) {
+                            viewModel.getAlbumType(SINGLE)
+                            lifecycleScope.launch {
+                                dataManager.saveSelectedAlbumType(requireContext(), SINGLE)
+                            }
+                        } else {
+                            viewModel.getSavedAlbums()
+                            lifecycleScope.launch {
+                                dataManager.clearSelectedAlbumType(requireContext())
+                            }
                         }
                     }
-                }
-                R.id.chipCompilation -> {
-                    isCompilationSelected = !isCompilationSelected
-                    if (isCompilationSelected) {
-                        viewModel.getAlbumType(COMPILATION)
-                        lifecycleScope.launch {
-                            dataManager.saveSelectedAlbumType(requireContext(), COMPILATION)
+                    R.id.chipEp -> {
+                        isEPSelected = !isEPSelected
+                        if (isEPSelected) {
+                            viewModel.getAlbumType(EP)
+                            lifecycleScope.launch {
+                                dataManager.saveSelectedAlbumType(requireContext(), EP)
+                            }
+                        } else {
+                            viewModel.getSavedAlbums()
+                            lifecycleScope.launch {
+                                dataManager.clearSelectedAlbumType(requireContext())
+                            }
                         }
-                    } else {
-                        viewModel.getSavedAlbums()
-                        lifecycleScope.launch {
-                            dataManager.clearSelectedAlbumType(requireContext())
+                    }
+                    R.id.chipCompilation -> {
+                        isCompilationSelected = !isCompilationSelected
+                        if (isCompilationSelected) {
+                            viewModel.getAlbumType(COMPILATION)
+                            lifecycleScope.launch {
+                                dataManager.saveSelectedAlbumType(requireContext(), COMPILATION)
+                            }
+                        } else {
+                            viewModel.getSavedAlbums()
+                            lifecycleScope.launch {
+                                dataManager.clearSelectedAlbumType(requireContext())
+                            }
                         }
                     }
                 }
             }
-        }
 
-        chipAlbum.setOnClickListener(chipClickListener)
-        chipSingle.setOnClickListener(chipClickListener)
-        chipEp.setOnClickListener(chipClickListener)
-        chipCompilation.setOnClickListener(chipClickListener)
+            chipAlbum.setOnClickListener(chipClickListener)
+            chipSingle.setOnClickListener(chipClickListener)
+            chipEp.setOnClickListener(chipClickListener)
+            chipCompilation.setOnClickListener(chipClickListener)
+        }
     }
 
-    private fun FragmentAlbumHomeBinding.setRecyclerViewLayout(isListView: Boolean) {
+    private fun setRecyclerViewLayout(isListView: Boolean) {
         if (isListView) { ViewType.LIST } else { ViewType.GRID }
-        rvAlbums.layoutManager = if (isListView) {
+        binding.rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
             GridLayoutManager(requireContext(), 3)
         }
     }
 
-    private fun FragmentAlbumHomeBinding.setupRecyclerView() {
-        with(rvAlbums) {
+    private fun setupRecyclerView() {
+        with(binding.rvAlbums) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             layoutManager = GridLayoutManager(requireContext(), 3)
@@ -237,28 +245,30 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun FragmentAlbumHomeBinding.listTypeDialog() {
-        val sortOptions = resources.getStringArray(R.array.sort_options)
+    private fun listTypeDialog() {
+        with(binding) {
+            val sortOptions = resources.getStringArray(R.array.sort_options)
 
-        MaterialAlertDialogBuilder(requireContext(), R.style.SortMaterialAlertDialog)
-            .setTitle(R.string.sort_by)
-            .setItems(sortOptions) { _, index ->
-                when (index) {
-                    0 -> {
-                        chipSortBy.text = getString(R.string.recently_added)
-                        //viewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
-                    }
-                    1 -> {
-                        chipSortBy.text = getString(R.string.alphabetical)
-                        //viewModel.updateSortingType(ListSortingType.ALPHABETICAL)
+            MaterialAlertDialogBuilder(requireContext(), R.style.SortMaterialAlertDialog)
+                .setTitle(R.string.sort_by)
+                .setItems(sortOptions) { _, index ->
+                    when (index) {
+                        0 -> {
+                            chipSortBy.text = getString(R.string.recently_added)
+                            //viewModel.updateSortingType(ListSortingType.RECENTLY_ADDED)
+                        }
+                        1 -> {
+                            chipSortBy.text = getString(R.string.alphabetical)
+                            //viewModel.updateSortingType(ListSortingType.ALPHABETICAL)
+                        }
                     }
                 }
-            }
-            .show()
+                .show()
+        }
     }
 
-    private fun FragmentAlbumHomeBinding.setupToolbar() {
-        with(toolbar) {
+    private fun setupToolbar() {
+        with(binding) {
             val buttons = listOf(
                 Pair(R.id.imgSearch) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
@@ -269,7 +279,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 }
             )
             for ((itemId, action) in buttons) {
-                menu.findItem(itemId)?.setOnMenuItemClickListener {
+                toolbar.menu.findItem(itemId)?.setOnMenuItemClickListener {
                     action.invoke()
                     true
                 }
@@ -299,7 +309,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 true
             }
 
-            setNavigationOnClickListener { drawerLayout.open() }
+            toolbar.setNavigationOnClickListener { drawerLayout.open() }
         }
     }
 
@@ -353,9 +363,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             .start()
     }
 
-    private fun FragmentAlbumHomeBinding.showSearchEditText() {
+    private fun showSearchEditText() {
         if (!isSearchEditTextVisible) {
-            linearLayoutSearch.apply {
+            binding.linearLayoutSearch.apply {
                 translationY = -100f
                 show()
                 animationProperties(0f, 1f, DecelerateInterpolator())
@@ -364,9 +374,9 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun FragmentAlbumHomeBinding.hideSearchEditText() {
+    private fun hideSearchEditText() {
         if (isSearchEditTextVisible) {
-            linearLayoutSearch.apply {
+            binding.linearLayoutSearch.apply {
                 translationY = 0f
                 animationProperties(-100f, 0f, DecelerateInterpolator())
                 lifecycleScope.launch {
@@ -376,6 +386,22 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             }
             isSearchEditTextVisible = false
         }
+    }
+
+    private fun resetSearchState() {
+        with(binding) {
+            if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
+                linearLayoutSearch.isVisible = false
+                etSearch.setText("")
+            } else {
+                linearLayoutSearch.isVisible = true
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resetSearchState()
     }
 
     override fun onDestroyView() {

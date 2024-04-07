@@ -9,8 +9,6 @@ plugins {
 val versionMajor = 0
 val versionMinor = 4
 val versionPatch = 2
-val versionBuild = 1
-var versionExt = if (versionBuild > 0) ".${versionBuild}-beta" else ""
 
 android {
     namespace = "com.m4ykey.valfi2"
@@ -20,8 +18,8 @@ android {
         applicationId = "com.m4ykey.valfi2"
         minSdk = 26
         targetSdk = 34
-        versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
-        versionName = "$versionMajor.$versionMinor.$versionPatch$versionExt"
+        versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100
+        versionName = "$versionMajor.$versionMinor.$versionPatch"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

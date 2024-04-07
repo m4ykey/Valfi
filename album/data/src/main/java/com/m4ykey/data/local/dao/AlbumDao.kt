@@ -67,4 +67,7 @@ interface AlbumDao {
     @Query("SELECT * FROM album_table WHERE albumType = :albumType")
     fun getAlbumType(albumType : String) : PagingSource<Int, AlbumEntity>
 
+    @Query("SELECT * FROM album_table WHERE name LIKE '%' || :searchQuery || '%'")
+    fun searchAlbumsByName(searchQuery : String) : PagingSource<Int, AlbumEntity>
+
 }

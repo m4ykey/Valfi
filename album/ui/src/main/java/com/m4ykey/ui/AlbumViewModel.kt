@@ -51,8 +51,19 @@ class AlbumViewModel @Inject constructor(
     private var _albumPaging = MutableLiveData<PagingData<AlbumEntity>>()
     val albumPaging : LiveData<PagingData<AlbumEntity>> get() = _albumPaging
 
+    private var _searchResult = MutableLiveData<PagingData<AlbumEntity>>()
+    val searchResult : LiveData<PagingData<AlbumEntity>> get() = _searchResult
+
     init {
         getNewReleases()
+    }
+
+    fun searchAlbumByName(albumName : String) {
+        viewModelScope.launch {
+            repository.searchAlbumByName(albumName)
+                .cachedIn(viewModelScope)
+                .collect { pagingData -> _searchResult.value = pagingData }
+        }
     }
 
     fun getAlbumType(albumType : String) {

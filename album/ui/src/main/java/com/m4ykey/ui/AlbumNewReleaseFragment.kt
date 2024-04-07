@@ -72,8 +72,8 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
 
     }
 
-    private fun FragmentAlbumNewReleaseBinding.setupRecyclerView() {
-        with(recyclerViewNewRelease) {
+    private fun setupRecyclerView() {
+        with(binding.recyclerViewNewRelease) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
 
             val headerAdapter = LoadStateAdapter { newReleaseAdapter.retry() }
@@ -103,14 +103,16 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
         }
     }
 
-    private fun FragmentAlbumNewReleaseBinding.handleLoadState(loadState : CombinedLoadStates) {
-        progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+    private fun handleLoadState(loadState : CombinedLoadStates) {
+        with(binding) {
+            progressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
-        val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
-                loadState.append.endOfPaginationReached &&
-                newReleaseAdapter.itemCount < 1
+            val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
+                    loadState.append.endOfPaginationReached &&
+                    newReleaseAdapter.itemCount < 1
 
-        recyclerViewNewRelease.isVisible = !isNothingFound
+            recyclerViewNewRelease.isVisible = !isNothingFound
+        }
     }
 
     private fun handleNewReleaseState(state : AlbumListUiState?) {

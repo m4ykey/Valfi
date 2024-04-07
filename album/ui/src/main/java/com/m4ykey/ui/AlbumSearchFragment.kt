@@ -92,24 +92,26 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         }
     }
 
-    private fun FragmentAlbumSearchBinding.searchAlbums() {
-        etSearch.setOnEditorActionListener { _, actionId, _ ->
-            when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> {
-                    val searchQuery = etSearch.text.toString()
-                    if (searchQuery.isNotEmpty()) {
-                        lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
-                    } else {
-                        showToast(requireContext(), getString(R.string.empty_search))
+    private fun searchAlbums() {
+        with(binding.etSearch) {
+            setOnEditorActionListener { _, actionId, _ ->
+                when (actionId) {
+                    EditorInfo.IME_ACTION_SEARCH -> {
+                        val searchQuery = text.toString()
+                        if (searchQuery.isNotEmpty()) {
+                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                        } else {
+                            showToast(requireContext(), getString(R.string.empty_search))
+                        }
                     }
                 }
+                actionId == EditorInfo.IME_ACTION_SEARCH
             }
-            actionId == EditorInfo.IME_ACTION_SEARCH
         }
     }
 
-    private fun FragmentAlbumSearchBinding.setupRecyclerView() {
-        with(rvSearchAlbums) {
+    private fun setupRecyclerView() {
+        with(binding.rvSearchAlbums) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             val headerAdapter = LoadStateAdapter { searchAdapter.retry() }
@@ -139,20 +141,22 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         }
     }
 
-    private fun FragmentAlbumSearchBinding.handleLoadState(loadState : CombinedLoadStates) {
-        progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+    private fun handleLoadState(loadState : CombinedLoadStates) {
+        with(binding) {
+            progressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
-        val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
-                loadState.append.endOfPaginationReached &&
-                searchAdapter.itemCount < 1
+            val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
+                    loadState.append.endOfPaginationReached &&
+                    searchAdapter.itemCount < 1
 
-        rvSearchAlbums.isVisible = !isNothingFound
-        layoutNothingFound.root.isVisible = isNothingFound
+            rvSearchAlbums.isVisible = !isNothingFound
+            layoutNothingFound.root.isVisible = isNothingFound
+        }
     }
 
-    private fun FragmentAlbumSearchBinding.setupToolbar() {
-        with(toolbar) {
-            setNavigationOnClickListener { navController.navigateUp() }
+    private fun setupToolbar() {
+        with(binding) {
+            toolbar.setNavigationOnClickListener { navController.navigateUp() }
             etSearch.doOnTextChanged { text, _, _, _ ->
                 val isSearchEmpty = text.isNullOrBlank()
                 handleClearButtonVisibility(isSearchEmpty)
@@ -165,7 +169,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         }
     }
 
-    private fun FragmentAlbumSearchBinding.handleClearButtonVisibility(isSearchEmpty : Boolean) {
+    private fun handleClearButtonVisibility(isSearchEmpty : Boolean) {
         if (!isSearchEmpty && !isClearButtonVisible) {
             showClearButtonWithAnimation()
             isClearButtonVisible = true
@@ -183,8 +187,8 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             .start()
     }
 
-    private fun FragmentAlbumSearchBinding.showClearButtonWithAnimation() {
-        imgClear.apply {
+    private fun showClearButtonWithAnimation() {
+        binding.imgClear.apply {
             translationX = 100f
             alpha = 0f
             show()
@@ -193,25 +197,27 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         }
     }
 
-    private fun FragmentAlbumSearchBinding.hideClearButtonWithAnimation() {
-        imgClear.apply {
+    private fun hideClearButtonWithAnimation() {
+        binding.imgClear.apply {
             animationProperties(width.toFloat(), 0f, AccelerateInterpolator())
         }
     }
 
-    private fun FragmentAlbumSearchBinding.resetSearchState() {
-        if (etSearch.text.isNullOrBlank()) {
-            imgClear.isVisible = false
-            isClearButtonVisible = false
-        } else {
-            imgClear.isVisible = true
-            isClearButtonVisible = true
+    private fun resetSearchState() {
+        with(binding) {
+            if (etSearch.text.isNullOrBlank()) {
+                imgClear.isVisible = false
+                isClearButtonVisible = false
+            } else {
+                imgClear.isVisible = true
+                isClearButtonVisible = true
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        binding.resetSearchState()
+        resetSearchState()
     }
 
     override fun onDestroyView() {

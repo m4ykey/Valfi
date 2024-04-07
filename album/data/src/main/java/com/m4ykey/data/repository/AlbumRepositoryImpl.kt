@@ -137,4 +137,11 @@ class AlbumRepositoryImpl @Inject constructor(
             pagingSourceFactory = { dao.getAlbumType(albumType) }
         ).flow
     }
+
+    override fun searchAlbumByName(searchQuery: String): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { dao.searchAlbumsByName(searchQuery) }
+        ).flow
+    }
 }
