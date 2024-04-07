@@ -31,6 +31,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:hint="@string/search"
                     style="@style/EditTextSearchStyle"
                     android:textCursorDrawable="@null"
                     android:id="@+id/etSearch"

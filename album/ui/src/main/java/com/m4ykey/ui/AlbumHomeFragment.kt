@@ -150,7 +150,8 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                     isListViewChanged -> chipList.setChipIconResource(R.drawable.ic_grid)
                     else -> chipList.setChipIconResource(R.drawable.ic_list)
                 }
-                setRecyclerViewLayout(isListViewChanged)
+                val viewType = setRecyclerViewLayout(isListViewChanged)
+                albumAdapter.viewType = viewType
             }
 
             chipSortBy.setOnClickListener { listTypeDialog() }
@@ -224,20 +225,27 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun setRecyclerViewLayout(isListView: Boolean) {
-        if (isListView) { ViewType.LIST } else { ViewType.GRID }
+    private fun setRecyclerViewLayout(isListView: Boolean) : ViewType {
+        val viewType = if (isListView) ViewType.LIST else ViewType.GRID
         binding.rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
             GridLayoutManager(requireContext(), 3)
         }
+        return viewType
     }
 
     private fun setupRecyclerView() {
         with(binding.rvAlbums) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            layoutManager = GridLayoutManager(requireContext(), 3)
+            val layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
+                LinearLayoutManager(requireContext())
+            } else {
+                GridLayoutManager(requireContext(), 3)
+            }
+            this.layoutManager = layoutManager
+
             adapter = albumAdapter.withLoadStateHeaderAndFooter(
                 footer = LoadStateAdapter { albumAdapter.retry() },
                 header = LoadStateAdapter { albumAdapter.retry() }

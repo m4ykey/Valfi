@@ -166,12 +166,14 @@
                         android:layout_height="wrap_content">
 
                         <EditText
+                            android:hint="@string/search"
                             android:textSize="14sp"
                             style="@style/EditTextSearchStyle"
                             android:id="@+id/etSearch"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="32dp"/>
+                            android:layout_height="32dp"
+                            android:importantForAutofill="no" />
 
                         <ImageView
                             app:tint="@color/navigationIconColor"
