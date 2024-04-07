@@ -36,7 +36,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
-import com.m4ykey.ui.helpers.ViewType
+import com.m4ykey.core.views.ViewType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -87,6 +87,23 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         bottomNavigationVisibility?.showBottomNavigation()
 
         lifecycleScope.launch {
+            val selectedViewType = dataManager.getSelectedViewType(requireContext())
+
+            if (selectedViewType != null) {
+                albumAdapter.viewType = selectedViewType
+                binding.chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
+            } else {
+                val defaultViewType = ViewType.GRID
+                albumAdapter.viewType = defaultViewType
+                binding.chipList.setChipIconResource(R.drawable.ic_list)
+            }
+
+            val layoutManager = when (albumAdapter.viewType) {
+                ViewType.LIST -> LinearLayoutManager(requireContext())
+                ViewType.GRID -> GridLayoutManager(requireContext(), 3)
+            }
+            binding.rvAlbums.layoutManager = layoutManager
+
             val selectedAlbum = dataManager.getSelectedAlbumType(requireContext())
             when (selectedAlbum) {
                 ALBUM -> {
@@ -147,73 +164,38 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
             chipList.setOnClickListener {
                 isListViewChanged = !isListViewChanged
                 when {
-                    isListViewChanged -> chipList.setChipIconResource(R.drawable.ic_grid)
-                    else -> chipList.setChipIconResource(R.drawable.ic_list)
+                    isListViewChanged -> {
+                        chipList.setChipIconResource(R.drawable.ic_grid)
+                        lifecycleScope.launch { dataManager.saveSelectedViewType(requireContext(), ViewType.LIST) }
+                    }
+                    else -> {
+                        chipList.setChipIconResource(R.drawable.ic_list)
+                        lifecycleScope.launch { dataManager.clearSelectedViewType(requireContext()) }
+                    }
                 }
-                val viewType = setRecyclerViewLayout(isListViewChanged)
-                albumAdapter.viewType = viewType
+                setRecyclerViewLayout(isListViewChanged)
             }
 
             chipSortBy.setOnClickListener { listTypeDialog() }
             chipSearch.setOnClickListener { showSearchEditText() }
 
-            val chipClickListener: View.OnClickListener = View.OnClickListener { view ->
+            val chipClickListener : View.OnClickListener = View.OnClickListener { view ->
                 when (view.id) {
                     R.id.chipAlbum -> {
                         isAlbumSelected = !isAlbumSelected
-                        if (isAlbumSelected) {
-                            viewModel.getAlbumType(ALBUM)
-                            lifecycleScope.launch {
-                                dataManager.saveSelectedAlbumType(requireContext(), ALBUM)
-                            }
-                        } else {
-                            viewModel.getSavedAlbums()
-                            lifecycleScope.launch {
-                                dataManager.clearSelectedAlbumType(requireContext())
-                            }
-                        }
-                    }
-                    R.id.chipSingle -> {
-                        isSingleSelected = !isSingleSelected
-                        if (isSingleSelected) {
-                            viewModel.getAlbumType(SINGLE)
-                            lifecycleScope.launch {
-                                dataManager.saveSelectedAlbumType(requireContext(), SINGLE)
-                            }
-                        } else {
-                            viewModel.getSavedAlbums()
-                            lifecycleScope.launch {
-                                dataManager.clearSelectedAlbumType(requireContext())
-                            }
-                        }
+                        handleChipClick(isAlbumSelected, ALBUM)
                     }
                     R.id.chipEp -> {
                         isEPSelected = !isEPSelected
-                        if (isEPSelected) {
-                            viewModel.getAlbumType(EP)
-                            lifecycleScope.launch {
-                                dataManager.saveSelectedAlbumType(requireContext(), EP)
-                            }
-                        } else {
-                            viewModel.getSavedAlbums()
-                            lifecycleScope.launch {
-                                dataManager.clearSelectedAlbumType(requireContext())
-                            }
-                        }
+                        handleChipClick(isEPSelected, EP)
+                    }
+                    R.id.chipSingle -> {
+                        isSingleSelected = !isSingleSelected
+                        handleChipClick(isSingleSelected, SINGLE)
                     }
                     R.id.chipCompilation -> {
                         isCompilationSelected = !isCompilationSelected
-                        if (isCompilationSelected) {
-                            viewModel.getAlbumType(COMPILATION)
-                            lifecycleScope.launch {
-                                dataManager.saveSelectedAlbumType(requireContext(), COMPILATION)
-                            }
-                        } else {
-                            viewModel.getSavedAlbums()
-                            lifecycleScope.launch {
-                                dataManager.clearSelectedAlbumType(requireContext())
-                            }
-                        }
+                        handleChipClick(isCompilationSelected, COMPILATION)
                     }
                 }
             }
@@ -225,14 +207,24 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         }
     }
 
-    private fun setRecyclerViewLayout(isListView: Boolean) : ViewType {
+    private fun handleChipClick(isSelected : Boolean, albumType : String) {
+        if (isSelected) {
+            viewModel.getAlbumType(albumType)
+            lifecycleScope.launch { dataManager.saveSelectedAlbumType(requireContext(), albumType) }
+        } else {
+            viewModel.getSavedAlbums()
+            lifecycleScope.launch { dataManager.clearSelectedAlbumType(requireContext()) }
+        }
+    }
+
+    private fun setRecyclerViewLayout(isListView: Boolean) {
         val viewType = if (isListView) ViewType.LIST else ViewType.GRID
         binding.rvAlbums.layoutManager = if (isListView) {
             LinearLayoutManager(requireContext())
         } else {
             GridLayoutManager(requireContext(), 3)
         }
-        return viewType
+        albumAdapter.viewType = viewType
     }
 
     private fun setupRecyclerView() {

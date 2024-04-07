@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.m4ykey.core.views.ViewType
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -20,6 +21,13 @@ class DataManager {
 
     companion object {
         private val KEY_SELECTED_ALBUM_TYPE = stringPreferencesKey("selected_album_type")
+        private val KEY_SELECTED_VIEW_TYPE = stringPreferencesKey("selected_view_type")
+    }
+
+    suspend fun saveSelectedViewType(context: Context, viewType: ViewType) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_SELECTED_VIEW_TYPE] = viewType.name
+        }
     }
 
     suspend fun saveSelectedAlbumType(context: Context, albumType : String) {
@@ -28,10 +36,33 @@ class DataManager {
         }
     }
 
+    suspend fun clearSelectedViewType(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.remove(KEY_SELECTED_VIEW_TYPE)
+        }
+    }
+
     suspend fun clearSelectedAlbumType(context: Context) {
         context.dataStore.edit { preferences ->
             preferences.remove(KEY_SELECTED_ALBUM_TYPE)
         }
+    }
+
+    suspend fun getSelectedViewType(context: Context) : ViewType? {
+        val albumType = context.dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[KEY_SELECTED_VIEW_TYPE]
+            }
+            .first()
+
+        return albumType?.let { ViewType.valueOf(it) }
     }
 
     suspend fun getSelectedAlbumType(context: Context) : String? {
@@ -48,5 +79,4 @@ class DataManager {
             }
             .first()
     }
-
 }

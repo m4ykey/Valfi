@@ -8,7 +8,7 @@ import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
-import com.m4ykey.ui.helpers.ViewType
+import com.m4ykey.core.views.ViewType
 
 class AlbumPagingAdapter(
     private val listener: OnItemClickListener<AlbumEntity>
