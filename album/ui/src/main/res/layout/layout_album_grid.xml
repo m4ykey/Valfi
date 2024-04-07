@@ -80,9 +80,11 @@
             app:tint="@color/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_favorite"/>
+            android:src="@drawable/ic_favorite"
+            android:contentDescription="@null" />
 
         <ImageView
+            android:contentDescription="@null"
             android:layout_marginStart="5dp"
             android:id="@+id/imgListenLater"
             android:visibility="gone"

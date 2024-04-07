@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Valfi</string>
     <string name="album" translatable="false">Album</string>
-    <string name="movie">Movie</string>
 </resources>
