@@ -96,10 +96,7 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
             }
 
             this@with.layoutManager = layoutManager
-
-            newReleaseAdapter.addLoadStateListener { loadState ->
-                handleLoadState(loadState)
-            }
+            newReleaseAdapter.addLoadStateListener { loadState -> handleLoadState(loadState) }
         }
     }
 
@@ -122,7 +119,6 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
             recyclerViewNewRelease.isVisible = !state.isLoading
             state.error?.let { showToast(requireContext(), it) }
             state.albumList?.let { items ->
-                recyclerViewNewRelease.isVisible = true
                 newReleaseAdapter.submitData(lifecycle, items)
             }
         }

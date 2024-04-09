@@ -68,14 +68,12 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
         bottomNavigationVisibility?.hideBottomNavigation()
         navController = findNavController()
 
-        with(binding) {
-            setupToolbar()
-            setupRecyclerView()
-            searchAlbums()
+        setupToolbar()
+        setupRecyclerView()
+        searchAlbums()
 
-            lifecycleScope.launch {
-                viewModel.albums.observe(viewLifecycleOwner) { state -> handleSearchState(state) }
-            }
+        lifecycleScope.launch {
+            viewModel.albums.observe(viewLifecycleOwner) { state -> handleSearchState(state) }
         }
     }
 
@@ -86,7 +84,6 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
             rvSearchAlbums.isVisible = !state.isLoading
             state.error?.let { showToast(requireContext(), it) }
             state.albumList?.let { search ->
-                rvSearchAlbums.isVisible = true
                 searchAdapter.submitData(lifecycle, search)
             }
         }
