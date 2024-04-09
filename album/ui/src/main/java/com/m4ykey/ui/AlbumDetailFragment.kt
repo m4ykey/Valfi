@@ -85,43 +85,22 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
         with(binding) {
             setupRecyclerView()
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
-            if (!isDataLoaded) {
-                lifecycleScope.launch {
-                    viewModel.apply {
-                        getAlbumTracks(args.albumId)
-                        tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
-                        networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
-                            if (isInternetAvailable) {
-                                getAlbumById(args.albumId)
-                                handleOnlineMode()
-                            } else {
-                                handleOfflineMode()
-                            }
+            lifecycleScope.launch {
+                viewModel.apply {
+                    networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
+                        if (isInternetAvailable) {
+                            getAlbumById(args.albumId)
+                            getAlbumTracks(args.albumId)
+                            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                            detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+                        } else {
+                            getAlbumTracks(args.albumId)
+                            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                            getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
                         }
                     }
                 }
             }
-        }
-    }
-
-    private fun handleOfflineMode() {
-        if (!isDataLoaded) {
-            viewModel.apply {
-                lifecycleScope.launch {
-                    getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
-                }
-                binding.progressBar.isVisible = false
-            }
-            isDataLoaded = true
-        }
-    }
-
-    private fun handleOnlineMode() {
-        if (!isDataLoaded) {
-            viewModel.apply {
-                detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-            }
-            isDataLoaded = true
         }
     }
 
@@ -221,11 +200,10 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun handleTrackState(state: AlbumTrackUiState?) {
         state ?: return
         with(binding) {
-            progressBar.isVisible = state.isLoading
-            nestedScrollView.isVisible = !state.isLoading
+            progressBar.isVisible = state.isLoading && !isDataLoaded
+            nestedScrollView.isVisible = !state.isLoading || isDataLoaded
             state.error?.let { showToast(requireContext(), it) }
             state.albumTracks?.let { tracks ->
-                rvTrackList.isVisible = true
                 lifecycleScope.launch {
                     delay(500L)
                     trackAdapter.submitData(lifecycle, tracks)
@@ -237,11 +215,14 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private fun handleUiState(state: AlbumDetailUiState?) {
         state ?: return
         with(binding) {
-            progressBar.isVisible = state.isLoading
-            nestedScrollView.isVisible = !state.isLoading
+            progressBar.isVisible = state.isLoading && !isDataLoaded
+            nestedScrollView.isVisible = !state.isLoading || isDataLoaded
             state.error?.let { showToast(requireContext(), it) }
             state.albumDetail?.let { detail ->
-                displayAlbumDetail(detail)
+                lifecycleScope.launch {
+                    delay(200L)
+                    displayAlbumDetail(detail)
+                }
             }
         }
     }
