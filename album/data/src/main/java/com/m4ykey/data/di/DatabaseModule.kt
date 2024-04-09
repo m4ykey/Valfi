@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.database.migration.MIGRATION_1_TO_2
+import com.m4ykey.data.local.database.migration.MIGRATION_2_TO_3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,7 @@ object DatabaseModule {
             context.applicationContext,
             AlbumDatabase::class.java,
             "album_database"
-        ).addMigrations(MIGRATION_1_TO_2).build()
+        ).addMigrations(MIGRATION_1_TO_2, MIGRATION_2_TO_3).build()
     }
 
 }
