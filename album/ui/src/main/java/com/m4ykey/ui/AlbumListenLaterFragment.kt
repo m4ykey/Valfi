@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,15 +16,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
+import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -34,6 +41,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
     private val albumAdapter by lazy { AlbumPagingAdapter(this) }
+    private var isSearchEditTextVisible = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,11 +76,58 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 albumPaging.observe(viewLifecycleOwner) { pagingData ->
                     albumAdapter.submitData(lifecycle, pagingData)
                 }
+                etSearch.doOnTextChanged { text, _, _, _ -> searchAlbumsListenLater(text.toString()) }
+                searchResult.observe(viewLifecycleOwner) { pagingData ->
+                    albumAdapter.submitData(lifecycle, pagingData)
+                }
                 lifecycleScope.launch {
                     val albumCount = getListenLaterCount().firstOrNull() ?: 0
                     txtAlbumCount.text = getString(R.string.album_count, albumCount)
                 }
             }
+
+            imgHide.setOnClickListener {
+                hideSearchEditText()
+                etSearch.setText("")
+            }
+
+            chipSearch.setOnClickListener { showSearchEditText() }
+        }
+    }
+
+    private fun resetSearchState() {
+        with(binding) {
+            if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
+                linearLayoutSearch.isVisible = false
+                etSearch.setText("")
+            } else {
+                linearLayoutSearch.isVisible = true
+            }
+        }
+    }
+
+    private fun showSearchEditText() {
+        if (!isSearchEditTextVisible) {
+            binding.linearLayoutSearch.apply {
+                translationY = -30f
+                show()
+                animationPropertiesY(0f, 1f, DecelerateInterpolator())
+            }
+            isSearchEditTextVisible = true
+        }
+    }
+
+    private fun hideSearchEditText() {
+        if (isSearchEditTextVisible) {
+            binding.linearLayoutSearch.apply {
+                translationY = 0f
+                animationPropertiesY(-30f, 0f, DecelerateInterpolator())
+                lifecycleScope.launch {
+                    delay(400)
+                    hide()
+                }
+            }
+            isSearchEditTextVisible = false
         }
     }
 
@@ -111,6 +166,11 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
                 true
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resetSearchState()
     }
 
     override fun onDestroyView() {

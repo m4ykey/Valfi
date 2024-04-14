@@ -73,4 +73,10 @@ interface AlbumDao {
             "LIKE '%' || :searchQuery || '%'")
     fun searchAlbumsByName(searchQuery : String) : PagingSource<Int, AlbumEntity>
 
+    @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
+            "album_table.id = listen_later_table.albumId WHERE " +
+            "listen_later_table.isListenLaterSaved = 1 AND album_table.name " +
+            "LIKE '%' || :searchQuery || '%'")
+    fun searchAlbumsListenLater(searchQuery: String) : PagingSource<Int, AlbumEntity>
+
 }

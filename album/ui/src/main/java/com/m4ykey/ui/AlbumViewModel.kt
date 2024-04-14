@@ -66,6 +66,14 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
+    fun searchAlbumsListenLater(albumName : String) {
+        viewModelScope.launch {
+            repository.searchAlbumsListenLater(albumName)
+                .cachedIn(viewModelScope)
+                .collect { paging -> _searchResult.value = paging }
+        }
+    }
+
     fun getAlbumType(albumType : String) {
         viewModelScope.launch {
             repository.getAlbumType(albumType).cachedIn(viewModelScope).collect { pagingData ->

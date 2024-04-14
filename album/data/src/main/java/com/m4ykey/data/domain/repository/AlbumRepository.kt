@@ -36,5 +36,6 @@ interface AlbumRepository {
     fun getListenLaterCount() : Flow<Int>
 
     fun searchAlbumByName(searchQuery : String) : Flow<PagingData<AlbumEntity>>
+    fun searchAlbumsListenLater(searchQuery: String) : Flow<PagingData<AlbumEntity>>
 
 }

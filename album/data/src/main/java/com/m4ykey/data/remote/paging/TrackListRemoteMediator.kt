@@ -46,6 +46,7 @@ class TrackListRemoteMediator @Inject constructor(
             )
 
             val items = response.items.map { it.toTrackEntity(id) }
+            val albumWithStates = database.albumDao().getAlbumWithStates(id)
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {

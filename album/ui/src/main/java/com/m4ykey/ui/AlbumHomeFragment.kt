@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.Interpolator
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -31,12 +30,13 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
+import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
-import com.m4ykey.core.views.sorting.ViewType
+import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -353,20 +353,12 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         return regex.find(url)?.groupValues?.getOrNull(1)
     }
 
-    private fun View.animationProperties(translationYValue : Float, alphaValue : Float, interpolator : Interpolator) {
-        animate()
-            .translationY(translationYValue)
-            .alpha(alphaValue)
-            .setInterpolator(interpolator)
-            .start()
-    }
-
     private fun showSearchEditText() {
         if (!isSearchEditTextVisible) {
             binding.linearLayoutSearch.apply {
                 translationY = -100f
                 show()
-                animationProperties(0f, 1f, DecelerateInterpolator())
+                animationPropertiesY(0f, 1f, DecelerateInterpolator())
             }
             isSearchEditTextVisible = true
         }
@@ -376,7 +368,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         if (isSearchEditTextVisible) {
             binding.linearLayoutSearch.apply {
                 translationY = 0f
-                animationProperties(-100f, 0f, DecelerateInterpolator())
+                animationPropertiesY(-100f, 0f, DecelerateInterpolator())
                 lifecycleScope.launch {
                     delay(400)
                     hide()

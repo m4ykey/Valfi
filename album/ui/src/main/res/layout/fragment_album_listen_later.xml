@@ -32,8 +32,6 @@
         app:layout_constraintTop_toBottomOf="@id/appBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -48,17 +46,69 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:fontFamily="@font/outfit_regular"
-            app:icon="@drawable/ic_random"
-            app:iconGravity="textStart"
-            app:iconTint="@color/white"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/buttonColor"
-            android:text="@string/random_album"
-            android:id="@+id/btnListenLater"
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:fontFamily="@font/outfit_regular"
+                app:icon="@drawable/ic_random"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/buttonColor"
+                android:text="@string/random_album"
+                android:layout_weight="1"
+                android:id="@+id/btnListenLater"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.chip.Chip
+                style="@style/ChipStyle"
+                android:id="@+id/chipSearch"
+                app:chipIcon="@drawable/ic_search"
+                app:chipEndPadding="-9dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/linearLayoutSearch"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:hint="@string/search"
+                android:textSize="14sp"
+                style="@style/EditTextSearchStyle"
+                android:id="@+id/etSearch"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:importantForAutofill="no" />
+
+            <ImageView
+                app:tint="@color/navigationIconColor"
+                android:layout_marginStart="10dp"
+                android:id="@+id/imgHide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clear"
+                android:contentDescription="@null" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
