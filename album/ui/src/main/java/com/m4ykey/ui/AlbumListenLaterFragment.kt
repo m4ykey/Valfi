@@ -42,6 +42,7 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private val viewModel : AlbumViewModel by viewModels()
     private val albumAdapter by lazy { AlbumPagingAdapter(this) }
     private var isSearchEditTextVisible = false
+    private var isHidingAnimationRunning = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -118,16 +119,18 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     }
 
     private fun hideSearchEditText() {
-        if (isSearchEditTextVisible) {
+        if (isSearchEditTextVisible && !isHidingAnimationRunning) {
+            isHidingAnimationRunning = true
             binding.linearLayoutSearch.apply {
                 translationY = 0f
                 animationPropertiesY(-30f, 0f, DecelerateInterpolator())
-                lifecycleScope.launch {
-                    delay(400)
-                    hide()
-                }
             }
-            isSearchEditTextVisible = false
+            lifecycleScope.launch {
+                delay(400)
+                binding.linearLayoutSearch.hide()
+                isSearchEditTextVisible = false
+                isHidingAnimationRunning = false
+            }
         }
     }
 
