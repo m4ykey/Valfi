@@ -27,7 +27,6 @@ import com.m4ykey.core.DataManager
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.sorting.ViewType
@@ -46,7 +45,7 @@ import java.net.URL
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
+class AlbumHomeFragment : Fragment() {
 
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
@@ -54,7 +53,7 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
     private lateinit var navController : NavController
     private var isListViewChanged = false
     private val viewModel : AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumPagingAdapter(this) }
+    private lateinit var albumAdapter : AlbumPagingAdapter
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
     private var isAlbumSelected = false
@@ -232,6 +231,13 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         with(binding.rvAlbums) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
+            val onAlbumClick : (AlbumEntity) -> Unit = { album ->
+                val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
+                navController.navigate(action)
+            }
+
+            albumAdapter = AlbumPagingAdapter(onAlbumClick)
+
             val layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())
             } else {
@@ -404,10 +410,5 @@ class AlbumHomeFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     companion object {
         const val TAG = "AlbumHomeFragment"
-    }
-
-    override fun onItemClick(position: Int, item: AlbumEntity) {
-        val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(item.id)
-        navController.navigate(action)
     }
 }

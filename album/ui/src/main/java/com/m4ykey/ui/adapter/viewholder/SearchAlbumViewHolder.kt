@@ -4,9 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.loadImage
-import com.m4ykey.core.views.recyclerview.BaseViewHolder
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.AlbumViewModel
@@ -17,32 +16,31 @@ import kotlinx.coroutines.withContext
 
 class SearchAlbumViewHolder(
     private val binding: LayoutAlbumGridBinding,
-    listener: OnItemClickListener<AlbumItem>?,
-    private val viewModel: AlbumViewModel
-) : BaseViewHolder<AlbumItem>(listener, binding.root) {
+    private val viewModel: AlbumViewModel,
+    private val onAlbumClick : (AlbumItem) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
         fun create(
-            view: ViewGroup,
-            listener: OnItemClickListener<AlbumItem>?,
+            parent: ViewGroup,
+            onAlbumClick: (AlbumItem) -> Unit,
             viewModel: AlbumViewModel
         ) : SearchAlbumViewHolder {
             return SearchAlbumViewHolder(
-                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(view.context), view, false),
-                listener = listener,
+                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                onAlbumClick = onAlbumClick,
                 viewModel = viewModel
             )
         }
     }
 
-    private lateinit var currentAlbumItem: AlbumItem
-
-    override fun bind(item: AlbumItem) {
-        currentAlbumItem = item
+    fun bind(item: AlbumItem) {
         with(binding) {
+            layoutAlbum.setOnClickListener { onAlbumClick(item) }
+
             val image = item.images.maxByOrNull { it.height * it.width }?.url
             val artistList = item.artists.joinToString(", ") { it.name }
-            loadImage(imgAlbum, image.toString(), binding.root.context)
+            loadImage(imgAlbum, image.toString(), imgAlbum.context)
             txtAlbum.text = item.name
             txtArtist.text = artistList
 
@@ -65,6 +63,4 @@ class SearchAlbumViewHolder(
     private fun isListenLaterSaved(albumWithStates: AlbumWithStates?) : Boolean {
         return albumWithStates?.isListenLaterSaved != null
     }
-
-    override fun getItem(position: Int): AlbumItem = currentAlbumItem
 }

@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
@@ -35,7 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
+class AlbumSearchFragment : Fragment() {
 
     private var _binding : FragmentAlbumSearchBinding? = null
     private val binding get() = _binding!!
@@ -43,7 +42,7 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
-    private val searchAdapter by lazy { SearchAlbumPagingAdapter(this, viewModel) }
+    private lateinit var searchAdapter : SearchAlbumPagingAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -110,6 +109,13 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     private fun setupRecyclerView() {
         with(binding.rvSearchAlbums) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+
+            val onAlbumClick : (AlbumItem) -> Unit = { album ->
+                val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
+                navController.navigate(action)
+            }
+
+            searchAdapter = SearchAlbumPagingAdapter(onAlbumClick, viewModel)
 
             val headerAdapter = LoadStateAdapter { searchAdapter.retry() }
             val footerAdapter = LoadStateAdapter { searchAdapter.retry() }
@@ -220,11 +226,5 @@ class AlbumSearchFragment : Fragment(), OnItemClickListener<AlbumItem> {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onItemClick(position: Int, item: AlbumItem) {
-        val albumId = item.id
-        val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(albumId = albumId)
-        findNavController().navigate(action)
     }
 }

@@ -2,38 +2,35 @@ package com.m4ykey.ui.adapter.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.loadImage
-import com.m4ykey.core.views.recyclerview.BaseViewHolder
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.databinding.LayoutAlbumListBinding
 
 class AlbumListViewHolder(
     private val binding : LayoutAlbumListBinding,
-    listener : OnItemClickListener<AlbumEntity>
-) : BaseViewHolder<AlbumEntity>(listener, binding.root) {
+    private val onAlbumClick : (AlbumEntity) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
-        fun create(view: ViewGroup, listener: OnItemClickListener<AlbumEntity>) : AlbumListViewHolder {
+        fun create(
+            parent : ViewGroup,
+            onAlbumClick: (AlbumEntity) -> Unit
+        ) : AlbumListViewHolder {
             return AlbumListViewHolder(
-                binding = LayoutAlbumListBinding.inflate(LayoutInflater.from(view.context), view, false),
-                listener = listener
+                onAlbumClick = onAlbumClick,
+                binding = LayoutAlbumListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
         }
     }
 
-    private lateinit var currentAlbum : AlbumEntity
-
-    override fun bind(item: AlbumEntity) {
-        currentAlbum = item
+    fun bind(item: AlbumEntity) {
         with(binding) {
-            with(item) {
-                txtArtist.text = artists
-                txtAlbum.text = name
-                loadImage(imgAlbum, images, binding.root.context)
-            }
+            layoutAlbum.setOnClickListener { onAlbumClick(item) }
+
+            txtArtist.text = item.artists
+            txtAlbum.text = item.name
+            loadImage(imgAlbum, item.images, imgAlbum.context)
         }
     }
-
-    override fun getItem(position: Int): AlbumEntity = currentAlbum
 }

@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
@@ -29,14 +28,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
+class AlbumNewReleaseFragment : Fragment() {
 
     private var _binding : FragmentAlbumNewReleaseBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    private val newReleaseAdapter by lazy { NewReleasePagingAdapter(this) }
+    private lateinit var albumAdapter : NewReleasePagingAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -76,10 +75,17 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
         with(binding.recyclerViewNewRelease) {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
 
-            val headerAdapter = LoadStateAdapter { newReleaseAdapter.retry() }
-            val footerAdapter = LoadStateAdapter { newReleaseAdapter.retry() }
+            val onAlbumClick : (AlbumItem) -> Unit = { album ->
+                val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(album.id)
+                navController.navigate(action)
+            }
 
-            adapter = newReleaseAdapter.withLoadStateHeaderAndFooter(
+            albumAdapter = NewReleasePagingAdapter(onAlbumClick)
+
+            val headerAdapter = LoadStateAdapter { albumAdapter.retry() }
+            val footerAdapter = LoadStateAdapter { albumAdapter.retry() }
+
+            adapter = albumAdapter.withLoadStateHeaderAndFooter(
                 header = headerAdapter,
                 footer = footerAdapter
             )
@@ -96,7 +102,7 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
             }
 
             this@with.layoutManager = layoutManager
-            newReleaseAdapter.addLoadStateListener { loadState -> handleLoadState(loadState) }
+            albumAdapter.addLoadStateListener { loadState -> handleLoadState(loadState) }
         }
     }
 
@@ -106,7 +112,7 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
 
             val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
                     loadState.append.endOfPaginationReached &&
-                    newReleaseAdapter.itemCount < 1
+                    albumAdapter.itemCount < 1
 
             recyclerViewNewRelease.isVisible = !isNothingFound
         }
@@ -119,19 +125,13 @@ class AlbumNewReleaseFragment : Fragment(), OnItemClickListener<AlbumItem> {
             recyclerViewNewRelease.isVisible = !state.isLoading
             state.error?.let { showToast(requireContext(), it) }
             state.albumList?.let { items ->
-                newReleaseAdapter.submitData(lifecycle, items)
+                albumAdapter.submitData(lifecycle, items)
             }
         }
-    }
-
-    override fun onItemClick(position: Int, item: AlbumItem) {
-        val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(item.id)
-        navController.navigate(action)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

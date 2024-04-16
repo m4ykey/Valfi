@@ -3,13 +3,12 @@ package com.m4ykey.ui.adapter
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.AlbumViewModel
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
 
 class SearchAlbumPagingAdapter(
-    private val listener: OnItemClickListener<AlbumItem>,
+    private val onAlbumClick : (AlbumItem) -> Unit,
     private val viewModel: AlbumViewModel
 ) : PagingDataAdapter<AlbumItem, SearchAlbumViewHolder>(COMPARATOR) {
 
@@ -18,7 +17,7 @@ class SearchAlbumPagingAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAlbumViewHolder {
-        return SearchAlbumViewHolder.create(parent, listener, viewModel)
+        return SearchAlbumViewHolder.create(parent, onAlbumClick, viewModel)
     }
 
     companion object {

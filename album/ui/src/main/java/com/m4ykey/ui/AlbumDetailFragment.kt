@@ -24,7 +24,6 @@ import com.m4ykey.core.views.utils.copyName
 import com.m4ykey.core.views.utils.formatAirDate
 import com.m4ykey.core.views.utils.getColorFromImage
 import com.m4ykey.core.views.loadImage
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -42,7 +41,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
+class AlbumDetailFragment : Fragment() {
 
     private var _binding: FragmentAlbumDetailBinding? = null
     private val binding get() = _binding!!
@@ -50,7 +49,7 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     private var bottomNavigationVisibility: BottomNavigationVisibility? = null
     private lateinit var navController: NavController
     private val viewModel: AlbumViewModel by viewModels()
-    private val trackAdapter by lazy { TrackListPagingAdapter(this) }
+    private lateinit var trackAdapter : TrackListPagingAdapter
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
     private var isDataLoaded = false
 
@@ -175,6 +174,13 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
 
     private fun setupRecyclerView() {
         with(binding) {
+
+            val onTrackClick : (TrackItem) -> Unit = { track ->
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
+            }
+
+            trackAdapter = TrackListPagingAdapter(onTrackClick)
+
             rvTrackList.adapter = trackAdapter.withLoadStateHeaderAndFooter(
                 footer = LoadStateAdapter { trackAdapter.retry() },
                 header = LoadStateAdapter { trackAdapter.retry() }
@@ -349,10 +355,5 @@ class AlbumDetailFragment : Fragment(), OnItemClickListener<TrackItem> {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onItemClick(position: Int, item: TrackItem) {
-        val trackId = item.externalUrls.spotify
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(trackId)))
     }
 }

@@ -18,7 +18,6 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.OnItemClickListener
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
@@ -33,14 +32,14 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
+class AlbumListenLaterFragment : Fragment() {
 
     private var _binding : FragmentAlbumListenLaterBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumPagingAdapter(this) }
+    private lateinit var albumAdapter : AlbumPagingAdapter
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
 
@@ -150,6 +149,14 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
 
     private fun setupRecyclerView() {
         binding.recyclerViewListenLater.apply {
+
+            val onAlbumClick : (AlbumEntity) -> Unit = { album ->
+                val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
+                navController.navigate(action)
+            }
+
+            albumAdapter = AlbumPagingAdapter(onAlbumClick)
+
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             layoutManager = GridLayoutManager(requireContext(), 3)
@@ -180,10 +187,4 @@ class AlbumListenLaterFragment : Fragment(), OnItemClickListener<AlbumEntity> {
         super.onDestroyView()
         _binding = null
     }
-
-    override fun onItemClick(position: Int, item: AlbumEntity) {
-        val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(item.id)
-        navController.navigate(action)
-    }
-
 }
