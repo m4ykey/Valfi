@@ -46,7 +46,6 @@ class AlbumStatisticsFragment : Fragment() {
         with(binding) {
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
         }
-
     }
 
     override fun onDestroyView() {

@@ -3,8 +3,7 @@ package com.m4ykey.data.di
 import android.content.Context
 import androidx.room.Room
 import com.m4ykey.data.local.database.AlbumDatabase
-import com.m4ykey.data.local.database.migration.MIGRATION_1_TO_2
-import com.m4ykey.data.local.database.migration.MIGRATION_2_TO_3
+import com.m4ykey.data.local.database.migration.DatabaseMigration
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,12 +17,21 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAlbumDatabase(@ApplicationContext context: Context) : AlbumDatabase {
+    fun provideAlbumDatabase(
+        @ApplicationContext context: Context,
+        migrations : DatabaseMigration
+    ) : AlbumDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             AlbumDatabase::class.java,
             "album_database"
-        ).addMigrations(MIGRATION_1_TO_2, MIGRATION_2_TO_3).build()
+        ).apply {
+            migrations.getAllMigrations().forEach { addMigrations(it) }
+        }.build()
     }
+
+    @Provides
+    @Singleton
+    fun provideMigrations() : DatabaseMigration = DatabaseMigration()
 
 }
