@@ -4,10 +4,10 @@ import com.m4ykey.data.remote.model.album.ArtistDto
 import com.m4ykey.data.remote.model.album.ExternalUrlsDto
 
 data class TrackItemDto(
-    val artists: List<ArtistDto>,
-    val duration_ms: Int,
-    val explicit: Boolean,
-    val external_urls: ExternalUrlsDto,
-    val id: String,
-    val name: String
+    val artists: List<ArtistDto>?,
+    val duration_ms: Int?,
+    val explicit: Boolean?,
+    val external_urls: ExternalUrlsDto?,
+    val id: String?,
+    val name: String?
 )

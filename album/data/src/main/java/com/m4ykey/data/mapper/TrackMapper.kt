@@ -6,20 +6,19 @@ import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.remote.model.tracks.TrackItemDto
 
-fun TrackItemDto.toTrackEntity(albumId : String) : TrackEntity {
-    return TrackEntity(
+fun TrackItemDto.toTrackEntity(albumId : String) : TrackEntity =
+    TrackEntity(
         albumId = albumId,
-        name = name,
-        id = id,
-        durationMs = duration_ms,
-        externalUrls = external_urls.spotify,
-        explicit = explicit,
-        artistList = artists.joinToString(", ") { it.name }
+        name = name ?: "",
+        id = id ?: "",
+        durationMs = duration_ms ?: 0,
+        externalUrls = external_urls?.spotify!!,
+        explicit = explicit ?: false,
+        artistList = artists?.joinToString(", ") { it.name ?: "" }!!
     )
-}
 
-fun TrackEntity.toTrackItem() : TrackItem {
-    return TrackItem(
+fun TrackEntity.toTrackItem() : TrackItem =
+    TrackItem(
         id = id,
         name = name,
         explicit = explicit,
@@ -27,4 +26,3 @@ fun TrackEntity.toTrackItem() : TrackItem {
         externalUrls = ExternalUrls(externalUrls),
         artists = artistList.split(", ").map { Artist(it, ExternalUrls(it)) }
     )
-}

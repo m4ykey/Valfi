@@ -271,8 +271,8 @@ class AlbumDetailFragment : Fragment() {
                     }
                 )
 
-                buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
-                buttonsIntents(button = btnArtist, url = artistUrl, requireContext())
+                buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
+                buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
 
                 val album = AlbumEntity(
                     id = item.id,
@@ -282,8 +282,8 @@ class AlbumDetailFragment : Fragment() {
                     images = image.toString(),
                     albumType = albumType,
                     artists = artistList,
-                    albumUrl = albumUrl,
-                    artistUrl = artistUrl
+                    albumUrl = albumUrl ?: "",
+                    artistUrl = artistUrl ?: ""
                 )
 
                 val albumWithStates = viewModel.getAlbumWithStates(item.id)

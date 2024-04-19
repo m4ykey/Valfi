@@ -5,11 +5,14 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.m4ykey.core.network.NetworkError
 import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.mapper.toTrackEntity
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -46,7 +49,6 @@ class TrackListRemoteMediator @Inject constructor(
             )
 
             val items = response.items.map { it.toTrackEntity(id) }
-            val albumWithStates = database.albumDao().getAlbumWithStates(id)
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -58,6 +60,10 @@ class TrackListRemoteMediator @Inject constructor(
             return MediatorResult.Success(endOfPaginationReached = response.next.isNullOrEmpty())
         } catch (e : Exception) {
             return MediatorResult.Error(e)
+        } catch (e : HttpException) {
+            return MediatorResult.Error(NetworkError.HttpError(e.message(), e))
+        } catch (e: IOException) {
+            return MediatorResult.Error(NetworkError.NoInternetConnection(e.message, e))
         }
     }
 }
