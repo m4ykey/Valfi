@@ -65,35 +65,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="5dp"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/imgSavedAlbum"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:tint="@color/red"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_favorite"
-            android:contentDescription="@null" />
-
-        <ImageView
-            android:contentDescription="@null"
-            android:layout_marginStart="5dp"
-            android:id="@+id/imgListenLater"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:tint="@color/red"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_listen_later"/>
-
-    </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

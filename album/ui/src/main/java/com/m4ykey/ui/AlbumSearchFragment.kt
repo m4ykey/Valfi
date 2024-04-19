@@ -115,7 +115,7 @@ class AlbumSearchFragment : Fragment() {
                 navController.navigate(action)
             }
 
-            searchAdapter = SearchAlbumPagingAdapter(onAlbumClick, viewModel)
+            searchAdapter = SearchAlbumPagingAdapter(onAlbumClick)
 
             val headerAdapter = LoadStateAdapter { searchAdapter.retry() }
             val footerAdapter = LoadStateAdapter { searchAdapter.retry() }
