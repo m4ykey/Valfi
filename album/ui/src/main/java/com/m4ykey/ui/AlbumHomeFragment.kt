@@ -23,12 +23,13 @@ import com.m4ykey.core.Constants.COMPILATION
 import com.m4ykey.core.Constants.EP
 import com.m4ykey.core.Constants.SINGLE
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
-import com.m4ykey.core.DataManager
+import com.m4ykey.core.AlbumSettings
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
+import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
@@ -61,7 +62,8 @@ class AlbumHomeFragment : Fragment() {
     private var isSingleSelected = false
     private var isCompilationSelected = false
     @Inject
-    lateinit var dataManager: DataManager
+    lateinit var dataManager: AlbumSettings
+    private var selectedSortType : SortType = SortType.LATEST
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -85,49 +87,6 @@ class AlbumHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.showBottomNavigation()
-
-        lifecycleScope.launch {
-            val selectedViewType = dataManager.getSelectedViewType(requireContext())
-
-            if (selectedViewType != null) {
-                albumAdapter.viewType = selectedViewType
-                binding.chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
-                isListViewChanged = selectedViewType == ViewType.LIST
-            } else {
-                val defaultViewType = ViewType.GRID
-                albumAdapter.viewType = defaultViewType
-                binding.chipList.setChipIconResource(R.drawable.ic_list)
-            }
-
-            val layoutManager = when (albumAdapter.viewType) {
-                ViewType.LIST -> LinearLayoutManager(requireContext())
-                ViewType.GRID -> GridLayoutManager(requireContext(), 3)
-            }
-            binding.rvAlbums.layoutManager = layoutManager
-
-            val selectedAlbum = dataManager.getSelectedAlbumType(requireContext())
-            when (selectedAlbum) {
-                ALBUM -> {
-                    isAlbumSelected = true
-                    viewModel.getAlbumType(ALBUM)
-                }
-                EP -> {
-                    isEPSelected = true
-                    viewModel.getAlbumType(EP)
-                }
-                SINGLE -> {
-                    isSingleSelected = true
-                    viewModel.getAlbumType(SINGLE)
-                }
-                COMPILATION -> {
-                    isCompilationSelected = true
-                    viewModel.getAlbumType(COMPILATION)
-                }
-                else -> viewModel.getSavedAlbums()
-            }
-
-            updateChipSelection()
-        }
 
         with(binding) {
             setupToolbar()
@@ -169,14 +128,14 @@ class AlbumHomeFragment : Fragment() {
                         dataManager.saveSelectedViewType(requireContext(), ViewType.LIST)
                         chipList.setChipIconResource(R.drawable.ic_grid)
                     } else {
-                        dataManager.clearSelectedViewType(requireContext())
+                        dataManager.deleteSelectedViewType(requireContext())
                         chipList.setChipIconResource(R.drawable.ic_list)
                     }
                     setRecyclerViewLayout(isListViewChanged)
                 }
             }
 
-            chipSortBy.setOnClickListener { listTypeDialog() }
+            chipSortBy.setOnClickListener { sortTypeDialog() }
             chipSearch.setOnClickListener { showSearchEditText() }
 
             val chipClickListener : View.OnClickListener = View.OnClickListener { view ->
@@ -213,7 +172,7 @@ class AlbumHomeFragment : Fragment() {
             lifecycleScope.launch { dataManager.saveSelectedAlbumType(requireContext(), albumType) }
         } else {
             viewModel.getSavedAlbums()
-            lifecycleScope.launch { dataManager.clearSelectedAlbumType(requireContext()) }
+            lifecycleScope.launch { dataManager.deleteSelectedAlbumType(requireContext()) }
         }
     }
 
@@ -252,29 +211,50 @@ class AlbumHomeFragment : Fragment() {
         }
     }
 
-    private fun listTypeDialog() {
-        with(binding) {
-            val sortOptions = resources.getStringArray(R.array.sort_options)
-
-            MaterialAlertDialogBuilder(requireContext(), R.style.SortMaterialAlertDialog)
-                .setTitle(R.string.sort_by)
-                .setItems(sortOptions) { _, index ->
-                    when (index) {
-                        0 -> {
-                            chipSortBy.text = getString(R.string.latest)
-                            viewModel.getSavedAlbums()
-                        }
-                        1 -> {
-                            chipSortBy.text = getString(R.string.oldest)
-                            viewModel.getSavedAlbumDesc()
-                        }
-                        2 -> {
-                            chipSortBy.text = getString(R.string.alphabetical)
-                            viewModel.getAlbumSortedByName()
-                        }
-                    }
+    private fun sortTypeDialog() {
+        val sortOptions = resources.getStringArray(R.array.sort_options)
+        MaterialAlertDialogBuilder(requireContext(), R.style.SortMaterialAlertDialog)
+            .setTitle(R.string.sort_by)
+            .setItems(sortOptions) { _, index ->
+                val listType = when (index) {
+                    0 -> SortType.LATEST
+                    1 -> SortType.OLDEST
+                    2 -> SortType.ALPHABETICAL
+                    else -> throw IllegalArgumentException("Invalid sort index")
                 }
-                .show()
+                updateListWithSortType(listType)
+                saveSelectedSortType(listType)
+            }
+            .show()
+    }
+
+    private fun saveSelectedSortType(sortType: SortType) {
+        lifecycleScope.launch {
+            if (sortType == SortType.LATEST) {
+                dataManager.deleteSelectedSortType(requireContext())
+            } else {
+                dataManager.saveSelectedSortType(requireContext(), sortType)
+            }
+        }
+    }
+
+    private fun updateListWithSortType(sortType: SortType) {
+        with(binding) {
+            when (sortType) {
+                SortType.LATEST -> {
+                    chipSortBy.text = getString(R.string.latest)
+                    viewModel.getSavedAlbums()
+                }
+                SortType.OLDEST -> {
+                    chipSortBy.text = getString(R.string.oldest)
+                    viewModel.getSavedAlbumDesc()
+                }
+                SortType.ALPHABETICAL -> {
+                    chipSortBy.text = getString(R.string.alphabetical)
+                    viewModel.getAlbumSortedByName()
+                }
+            }
+            selectedSortType = sortType
         }
     }
 
@@ -402,6 +382,72 @@ class AlbumHomeFragment : Fragment() {
                 linearLayoutSearch.isVisible = true
             }
         }
+    }
+
+    private fun readSelectedSortType() {
+        lifecycleScope.launch {
+            val savedSortType = dataManager.getSelectedSortType(requireContext())
+            if (savedSortType != null) {
+                selectedSortType = savedSortType
+                updateListWithSortType(savedSortType)
+            }
+        }
+    }
+
+    private fun readSelectedViewType() {
+        lifecycleScope.launch {
+            val selectedViewType = dataManager.getSelectedViewType(requireContext())
+
+            if (selectedViewType != null) {
+                albumAdapter.viewType = selectedViewType
+                binding.chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
+                isListViewChanged = selectedViewType == ViewType.LIST
+            } else {
+                val defaultViewType = ViewType.GRID
+                albumAdapter.viewType = defaultViewType
+                binding.chipList.setChipIconResource(R.drawable.ic_list)
+            }
+
+            val layoutManager = when (albumAdapter.viewType) {
+                ViewType.LIST -> LinearLayoutManager(requireContext())
+                ViewType.GRID -> GridLayoutManager(requireContext(), 3)
+            }
+            binding.rvAlbums.layoutManager = layoutManager
+        }
+    }
+
+    private fun readSelectedAlbumType() {
+        lifecycleScope.launch {
+            val selectedAlbum = dataManager.getSelectedAlbumType(requireContext())
+            when (selectedAlbum) {
+                ALBUM -> {
+                    isAlbumSelected = true
+                    viewModel.getAlbumType(ALBUM)
+                }
+                EP -> {
+                    isEPSelected = true
+                    viewModel.getAlbumType(EP)
+                }
+                SINGLE -> {
+                    isSingleSelected = true
+                    viewModel.getAlbumType(SINGLE)
+                }
+                COMPILATION -> {
+                    isCompilationSelected = true
+                    viewModel.getAlbumType(COMPILATION)
+                }
+                else -> viewModel.getSavedAlbums()
+            }
+
+            updateChipSelection()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        readSelectedAlbumType()
+        readSelectedSortType()
+        readSelectedViewType()
     }
 
     override fun onResume() {

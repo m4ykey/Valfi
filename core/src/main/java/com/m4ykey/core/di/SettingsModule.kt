@@ -1,6 +1,6 @@
 package com.m4ykey.core.di
 
-import com.m4ykey.core.DataManager
+import com.m4ykey.core.AlbumSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,10 +9,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataManagerModule {
+object SettingsModule {
 
     @Singleton
     @Provides
-    fun provideDataManager() : DataManager = DataManager()
+    fun provideAlbumSettings() : AlbumSettings = AlbumSettings()
 
 }

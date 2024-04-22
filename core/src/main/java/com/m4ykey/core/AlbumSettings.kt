@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -15,13 +16,20 @@ import java.io.IOException
 import javax.inject.Singleton
 
 @Singleton
-class DataManager {
+class AlbumSettings {
 
     private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = "album_preferences")
 
     companion object {
         private val KEY_SELECTED_ALBUM_TYPE = stringPreferencesKey("selected_album_type")
         private val KEY_SELECTED_VIEW_TYPE = stringPreferencesKey("selected_view_type")
+        private val KEY_SELECTED_SORT_TYPE = stringPreferencesKey("selected_sort_type")
+    }
+
+    suspend fun saveSelectedSortType(context: Context, listType: SortType) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_SELECTED_SORT_TYPE] = listType.name
+        }
     }
 
     suspend fun saveSelectedViewType(context: Context, viewType: ViewType) {
@@ -36,13 +44,19 @@ class DataManager {
         }
     }
 
-    suspend fun clearSelectedViewType(context: Context) {
+    suspend fun deleteSelectedSortType(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.remove(KEY_SELECTED_SORT_TYPE)
+        }
+    }
+
+    suspend fun deleteSelectedViewType(context: Context) {
         context.dataStore.edit { preferences ->
             preferences.remove(KEY_SELECTED_VIEW_TYPE)
         }
     }
 
-    suspend fun clearSelectedAlbumType(context: Context) {
+    suspend fun deleteSelectedAlbumType(context: Context) {
         context.dataStore.edit { preferences ->
             preferences.remove(KEY_SELECTED_ALBUM_TYPE)
         }
@@ -79,4 +93,22 @@ class DataManager {
             }
             .first()
     }
+
+    suspend fun getSelectedSortType(context: Context) : SortType? {
+        val sortType = context.dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[KEY_SELECTED_SORT_TYPE]
+            }
+            .first()
+
+        return sortType?.let { SortType.valueOf(it) }
+    }
+
 }
