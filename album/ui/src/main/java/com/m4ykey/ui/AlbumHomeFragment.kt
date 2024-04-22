@@ -261,10 +261,16 @@ class AlbumHomeFragment : Fragment() {
                 .setItems(sortOptions) { _, index ->
                     when (index) {
                         0 -> {
-                            chipSortBy.text = getString(R.string.recently_added)
+                            chipSortBy.text = getString(R.string.latest)
+                            viewModel.getSavedAlbums()
                         }
                         1 -> {
+                            chipSortBy.text = getString(R.string.oldest)
+                            viewModel.getSavedAlbumDesc()
+                        }
+                        2 -> {
                             chipSortBy.text = getString(R.string.alphabetical)
+                            viewModel.getAlbumSortedByName()
                         }
                     }
                 }

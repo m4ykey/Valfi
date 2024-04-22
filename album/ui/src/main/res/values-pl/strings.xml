@@ -4,8 +4,6 @@
     <string name="sort_by">Sortuj według</string>
     <string name="list_view">Lista</string>
     <string name="grid_view">Siatka</string>
-    <string name="alphabetical">Alfabetycznie</string>
-    <string name="recently_added">Ostatnio dodane</string>
     <string name="must_implement_bottom_navigation">musi zawierać BottomNavigationView</string>
     <string name="collection">Kolekcja</string>
     <string name="remove_text">Wyczyść tekst</string>
@@ -33,4 +31,7 @@
     <string name="first_add_something_to_list">Najpierw musisz dodać coś do listy</string>
     <string name="new_releases">Nowe wydania</string>
     <string name="album_info">%1$s • %2$s • %3$d %4$s</string>
+    <string name="latest">Najnowsze</string>
+    <string name="oldest">Najstarsze</string>
+    <string name="alphabetical">Alfabetycznie</string>
 </resources>

@@ -30,10 +30,13 @@ interface AlbumRepository {
     fun getSavedAlbums() : Flow<PagingData<AlbumEntity>>
     fun getListenLaterAlbums() : Flow<PagingData<AlbumEntity>>
     fun getAlbumType(albumType : String) : Flow<PagingData<AlbumEntity>>
+    fun getAlbumSortedByName() : Flow<PagingData<AlbumEntity>>
+    fun getSavedAlbumDesc() : Flow<PagingData<AlbumEntity>>
 
     suspend fun getRandomAlbum() : AlbumEntity?
 
     fun getListenLaterCount() : Flow<Int>
+    fun getAlbumTypeCount(albumType : String) : Flow<Int>
 
     fun searchAlbumByName(searchQuery : String) : Flow<PagingData<AlbumEntity>>
     fun searchAlbumsListenLater(searchQuery: String) : Flow<PagingData<AlbumEntity>>

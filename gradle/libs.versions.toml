@@ -20,10 +20,10 @@ leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = 
 
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
-androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.12.0" }
+androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.13.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
-androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.0.0" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.0" }
 androidx-paging = { group = "androidx.paging", name = "paging-runtime", version = "3.2.1" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }

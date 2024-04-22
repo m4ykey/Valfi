@@ -151,4 +151,22 @@ class AlbumRepositoryImpl @Inject constructor(
             pagingSourceFactory = { dao.searchAlbumsListenLater(searchQuery) }
         ).flow
     }
+
+    override fun getAlbumTypeCount(albumType: String): Flow<Int> {
+        return dao.getAlbumTypeCount(albumType)
+    }
+
+    override fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { dao.getAlbumSortedByName() }
+        ).flow
+    }
+
+    override fun getSavedAlbumDesc(): Flow<PagingData<AlbumEntity>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { dao.getSavedAlbumDesc() }
+        ).flow
+    }
 }

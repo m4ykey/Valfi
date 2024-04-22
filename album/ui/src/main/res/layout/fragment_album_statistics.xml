@@ -41,17 +41,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.patrykandpatrick.vico.views.chart.ChartView
-            android:id="@+id/chart"
-            android:layout_margin="10dp"
-            app:showBottomAxis="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:chart="column"
-            app:layout_constraintTop_toBottomOf="@id/appBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

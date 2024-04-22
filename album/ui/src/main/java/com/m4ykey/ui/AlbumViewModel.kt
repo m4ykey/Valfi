@@ -76,14 +76,18 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumType(albumType : String) {
         viewModelScope.launch {
-            repository.getAlbumType(albumType).cachedIn(viewModelScope).collect { pagingData ->
-                _albumPaging.value = pagingData
-            }
+            repository.getAlbumType(albumType)
+                .cachedIn(viewModelScope)
+                .collect { pagingData -> _albumPaging.value = pagingData }
         }
     }
 
     fun getListenLaterCount() : Flow<Int> {
         return repository.getListenLaterCount()
+    }
+
+    fun getAlbumTypeCount(albumType : String) : Flow<Int> {
+        return repository.getAlbumTypeCount(albumType)
     }
 
     suspend fun getRandomAlbum() : AlbumEntity? {
@@ -92,17 +96,33 @@ class AlbumViewModel @Inject constructor(
 
     fun getSavedAlbums() {
         viewModelScope.launch {
-            repository.getSavedAlbums().cachedIn(viewModelScope).collect { albums ->
-                _albumPaging.value = albums
-            }
+            repository.getSavedAlbums()
+                .cachedIn(viewModelScope)
+                .collect { albums -> _albumPaging.value = albums }
+        }
+    }
+
+    fun getSavedAlbumDesc() {
+        viewModelScope.launch {
+            repository.getSavedAlbumDesc()
+                .cachedIn(viewModelScope)
+                .collect { albums -> _albumPaging.value = albums }
+        }
+    }
+
+    fun getAlbumSortedByName() {
+        viewModelScope.launch {
+            repository.getAlbumSortedByName()
+                .cachedIn(viewModelScope)
+                .collect { albums -> _albumPaging.value = albums }
         }
     }
 
     fun getListenLaterAlbums() {
         viewModelScope.launch {
-            repository.getListenLaterAlbums().cachedIn(viewModelScope).collect { albums ->
-                _albumPaging.value = albums
-            }
+            repository.getListenLaterAlbums()
+                .cachedIn(viewModelScope)
+                .collect { albums -> _albumPaging.value = albums }
         }
     }
 

@@ -3,8 +3,6 @@
     <string name="sort_by">Sort by</string>
     <string name="list_view">List View</string>
     <string name="grid_view">Grid View</string>
-    <string name="alphabetical">Alphabetical</string>
-    <string name="recently_added">Recently added</string>
     <string name="must_implement_bottom_navigation">must implement BottomNavigationView</string>
     <string name="collection">Collection</string>
     <string name="album" translatable="false">Album</string>
@@ -36,9 +34,13 @@
     <string name="first_add_something_to_list">First you have to add something to the list</string>
     <string name="new_releases">New releases</string>
     <string name="album_info">%1$s • %2$s • %3$d %4$s</string>
+    <string name="latest">Latest</string>
+    <string name="oldest">Oldest</string>
+    <string name="alphabetical">Alphabetical</string>
 
     <string-array name="sort_options">
-        <item>@string/recently_added</item>
+        <item>@string/latest</item>
+        <item>@string/oldest</item>
         <item>@string/alphabetical</item>
     </string-array>
 
