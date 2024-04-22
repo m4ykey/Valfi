@@ -16,8 +16,8 @@ suspend fun <T : Any> fetchAccessToken(clientId : String, clientSecret : String,
                     token = token
                 )
 
-                if (response.accessToken != null) {
-                    return response.accessToken
+                if (response.access_token != null) {
+                    return response.access_token
                 } else {
                     throw RuntimeException("Failed to fetch access token")
                 }
