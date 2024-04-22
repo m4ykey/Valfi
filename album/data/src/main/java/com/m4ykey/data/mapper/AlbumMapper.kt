@@ -31,7 +31,8 @@ fun AlbumItemDto.toAlbumItem() : AlbumItem =
         artists = artists?.map { it.toArtist() }!!,
         id = id ?: "",
         images = images?.map { it.toImage() }!!,
-        name = name ?: ""
+        name = name ?: "",
+        albumType = album_type ?: ""
     )
 
 fun AlbumDetailDto.toAlbumDetail() : AlbumDetail =

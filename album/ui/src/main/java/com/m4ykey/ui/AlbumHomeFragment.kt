@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -187,8 +188,8 @@ class AlbumHomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        with(binding.rvAlbums) {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+        with(binding) {
+            rvAlbums.addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             val onAlbumClick : (AlbumEntity) -> Unit = { album ->
                 val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
@@ -202,12 +203,18 @@ class AlbumHomeFragment : Fragment() {
             } else {
                 GridLayoutManager(requireContext(), 3)
             }
-            this.layoutManager = layoutManager
+            this.rvAlbums.layoutManager = layoutManager
 
-            adapter = albumAdapter.withLoadStateHeaderAndFooter(
+            rvAlbums.adapter = albumAdapter.withLoadStateHeaderAndFooter(
                 footer = LoadStateAdapter { albumAdapter.retry() },
                 header = LoadStateAdapter { albumAdapter.retry() }
             )
+
+            albumAdapter.addLoadStateListener { loadState ->
+                val isEmpty = albumAdapter.itemCount == 0
+                val isError = loadState.refresh is LoadState.Error
+                linearLayoutEmptyList.isVisible = isEmpty && !isError
+            }
         }
     }
 

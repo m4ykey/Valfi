@@ -4,5 +4,6 @@ data class AlbumItemDto(
     val artists: List<ArtistDto>?,
     val id: String?,
     val images: List<ImageDto>?,
-    val name: String?
+    val name: String?,
+    val album_type: String?
 )

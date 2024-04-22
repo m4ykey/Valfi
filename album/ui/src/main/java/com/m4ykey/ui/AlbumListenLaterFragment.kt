@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -148,7 +149,7 @@ class AlbumListenLaterFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerViewListenLater.apply {
+        binding.apply {
 
             val onAlbumClick : (AlbumEntity) -> Unit = { album ->
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
@@ -157,13 +158,20 @@ class AlbumListenLaterFragment : Fragment() {
 
             albumAdapter = AlbumPagingAdapter(onAlbumClick)
 
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+            recyclerViewListenLater.apply {
+                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+                layoutManager = GridLayoutManager(requireContext(), 3)
+                adapter = albumAdapter.withLoadStateHeaderAndFooter(
+                    footer = LoadStateAdapter { albumAdapter.retry() },
+                    header = LoadStateAdapter { albumAdapter.retry() }
+                )
+            }
 
-            layoutManager = GridLayoutManager(requireContext(), 3)
-            adapter = albumAdapter.withLoadStateHeaderAndFooter(
-                footer = LoadStateAdapter { albumAdapter.retry() },
-                header = LoadStateAdapter { albumAdapter.retry() }
-            )
+            albumAdapter.addLoadStateListener { loadState ->
+                val isEmpty = albumAdapter.itemCount == 0
+                val isError = loadState.refresh is LoadState.Error
+                linearLayoutEmptyList.isVisible = isEmpty && !isError
+            }
         }
     }
 

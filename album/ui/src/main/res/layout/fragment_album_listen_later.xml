@@ -122,4 +122,44 @@
         android:layout_width="0dp"
         android:layout_height="0dp"/>
 
+    <LinearLayout
+        android:id="@+id/linearLayoutEmptyList"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutRandomAlbum"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            app:tint="@color/textColor"
+            android:src="@drawable/ic_music"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:textSize="24sp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/textColor"
+            android:fontFamily="@font/outfit_medium"
+            android:text="@string/you_don_t_have_any_albums"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textSize="16sp"
+            android:textColor="@color/textColor2"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/outfit_regular"
+            android:text="@string/here_are_the_albums_to_listen_to_in_future"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
