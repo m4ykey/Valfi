@@ -95,4 +95,14 @@ interface AlbumDao {
             "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime DESC")
     fun getSavedAlbumDesc() : PagingSource<Int, AlbumEntity>
 
+    @Query("SELECT COUNT(*) FROM album_table INNER JOIN album_saved_table ON " +
+            "album_table.id = album_saved_table.albumId WHERE " +
+            "album_saved_table.isAlbumSaved = 1")
+    fun getAlbumCount() : Flow<Int>
+
+    @Query("SELECT SUM(album_table.totalTracks) FROM album_table INNER JOIN album_saved_table ON " +
+            "album_table.id = album_saved_table.albumId WHERE " +
+            "album_saved_table.isAlbumSaved = 1")
+    fun getTotalTracksCount() : Flow<Int>
+
 }

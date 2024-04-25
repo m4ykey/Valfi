@@ -41,6 +41,8 @@
     <string name="add_your_favorite_albums_to_the_list">Add your favorite albums to the list</string>
     <string name="you_don_t_have_any_albums">You don\'t have any albums</string>
     <string name="here_are_the_albums_to_listen_to_in_future">Here are the albums to listen to in future</string>
+    <string name="favorite_albums">Favorite albums</string>
+    <string name="total_number_of_tracks">Total number of tracks</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>

@@ -6,6 +6,7 @@
     <color name="searchIconEditText">#F5F5F5</color>
     <color name="searchBox">#252525</color>
     <color name="textColor2">#BDBDBD</color>
+    <color name="cardViewStats">#424242</color>
 
     <color name="navigationIconColor">@color/white</color>
 

@@ -61,6 +61,7 @@ dependencies {
         implementation(hilt.android)
 
         implementation(vico.views)
+        implementation(vico.core)
 
         implementation(coroutines)
 

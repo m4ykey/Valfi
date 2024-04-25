@@ -69,45 +69,22 @@ class AlbumRepositoryImpl @Inject constructor(
         })
     }
 
-    override suspend fun insertAlbum(album: AlbumEntity) {
-        return dao.insertAlbum(album)
-    }
+    override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
+    override suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = dao.insertSavedAlbum(isAlbumSaved)
+    override suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) = dao.insertListenLaterAlbum(isListenLaterSaved)
+    override suspend fun getAlbum(albumId: String): AlbumEntity? = dao.getAlbum(albumId)
+    override suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? = dao.getSavedAlbumState(albumId)
+    override suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? = dao.getListenLaterState(albumId)
+    override suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? = dao.getAlbumWithStates(albumId)
+    override suspend fun deleteAlbum(albumId: String) = dao.deleteAlbum(albumId)
+    override suspend fun deleteSavedAlbumState(albumId: String) = dao.deleteSavedAlbumState(albumId)
+    override suspend fun deleteListenLaterState(albumId: String) = dao.deleteListenLaterState(albumId)
+    override suspend fun getRandomAlbum(): AlbumEntity? = dao.getRandomAlbum()
 
-    override suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) {
-        return dao.insertSavedAlbum(isAlbumSaved)
-    }
-
-    override suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) {
-        return dao.insertListenLaterAlbum(isListenLaterSaved)
-    }
-
-    override suspend fun getAlbum(albumId: String): AlbumEntity? {
-        return dao.getAlbum(albumId)
-    }
-
-    override suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? {
-        return dao.getSavedAlbumState(albumId)
-    }
-
-    override suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? {
-        return dao.getListenLaterState(albumId)
-    }
-
-    override suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? {
-        return dao.getAlbumWithStates(albumId)
-    }
-
-    override suspend fun deleteAlbum(albumId: String) {
-        return dao.deleteAlbum(albumId)
-    }
-
-    override suspend fun deleteSavedAlbumState(albumId: String) {
-        return dao.deleteSavedAlbumState(albumId)
-    }
-
-    override suspend fun deleteListenLaterState(albumId: String) {
-        return dao.deleteListenLaterState(albumId)
-    }
+    override fun getAlbumCount(): Flow<Int> = dao.getAlbumCount()
+    override fun getTotalTracksCount(): Flow<Int> = dao.getTotalTracksCount()
+    override fun getListenLaterCount(): Flow<Int> = dao.getListenLaterCount()
+    override fun getAlbumTypeCount(albumType: String): Flow<Int> = dao.getAlbumTypeCount(albumType)
 
     override fun getSavedAlbums(): Flow<PagingData<AlbumEntity>> {
         return Pager(
@@ -121,14 +98,6 @@ class AlbumRepositoryImpl @Inject constructor(
             config = pagingConfig,
             pagingSourceFactory = { dao.getListenLaterAlbums() }
         ).flow
-    }
-
-    override suspend fun getRandomAlbum(): AlbumEntity? {
-        return dao.getRandomAlbum()
-    }
-
-    override fun getListenLaterCount(): Flow<Int> {
-        return dao.getListenLaterCount()
     }
 
     override fun getAlbumType(albumType: String): Flow<PagingData<AlbumEntity>> {
@@ -150,10 +119,6 @@ class AlbumRepositoryImpl @Inject constructor(
             config = pagingConfig,
             pagingSourceFactory = { dao.searchAlbumsListenLater(searchQuery) }
         ).flow
-    }
-
-    override fun getAlbumTypeCount(albumType: String): Flow<Int> {
-        return dao.getAlbumTypeCount(albumType)
     }
 
     override fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> {

@@ -11,6 +11,7 @@
     <color name="textColor2">#424242</color>
     <color name="buttonColor">#4FC3F7</color>
     <color name="red">#ad1726</color>
+    <color name="cardViewStats">#E0E0E0</color>
 
     <color name="navigationIconColor">@color/black</color>
 

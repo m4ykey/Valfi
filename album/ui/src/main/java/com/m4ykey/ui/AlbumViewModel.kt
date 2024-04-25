@@ -82,6 +82,14 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
+    fun getAlbumCount() : Flow<Int> {
+        return repository.getAlbumCount()
+    }
+
+    fun getTotalTracksCount() : Flow<Int> {
+        return repository.getTotalTracksCount()
+    }
+
     fun getListenLaterCount() : Flow<Int> {
         return repository.getListenLaterCount()
     }
