@@ -67,17 +67,21 @@ class AlbumStatisticsFragment : Fragment() {
 
                 val albumCount = viewModel.getAlbumCount().firstOrNull() ?: 0
                 val tracksCount = viewModel.getTotalTracksCount().firstOrNull() ?: 0
-                val animator = ValueAnimator.ofInt(albumCount, tracksCount).apply {
-                    duration = 2000
-                    addUpdateListener { animation ->
-                        val animatedValue = animation.animatedValue as Int
-                        txtAlbumCount.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
-                        txtTotalSongsPlayed.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
-                    }
-                }
-                animator.start()
+                startAnimation(albumCount, tracksCount)
             }
         }
+    }
+
+    private fun startAnimation(albumCount : Int, tracksCount : Int) {
+        val animator = ValueAnimator.ofInt(albumCount, tracksCount).apply {
+            duration = 2000
+            addUpdateListener { animation ->
+                val animatedValue = animation.animatedValue as Int
+                binding.txtAlbumCount.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
+                binding.txtTotalSongsPlayed.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
+            }
+        }
+        animator.start()
     }
 
     override fun onDestroyView() {
