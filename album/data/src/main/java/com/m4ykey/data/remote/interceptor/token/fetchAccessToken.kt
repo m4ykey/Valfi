@@ -1,29 +1,13 @@
 package com.m4ykey.data.remote.interceptor.token
 
-import android.util.Base64
 import com.m4ykey.data.remote.api.AuthApi
 
 suspend fun <T : Any> fetchAccessToken(clientId : String, clientSecret : String, api : T) : String {
-    val token = "Basic " + Base64.encodeToString(
-        "$clientId:$clientSecret".toByteArray(),
-        Base64.NO_WRAP
-    )
+    val token = generateToken(clientId, clientSecret)
 
     try {
-        when (api) {
-            is AuthApi -> {
-                val response = api.getAccessToken(
-                    token = token
-                )
-
-                if (response.access_token != null) {
-                    return response.access_token
-                } else {
-                    throw RuntimeException("Failed to fetch access token")
-                }
-            }
-            else -> throw IllegalArgumentException("Unsupported API type")
-        }
+        val response = (api as AuthApi).getAccessToken(token = token)
+        return response.access_token ?: throw RuntimeException("Failed to fetch access token")
     } catch (e : Exception) {
         throw RuntimeException("Error", e)
     }

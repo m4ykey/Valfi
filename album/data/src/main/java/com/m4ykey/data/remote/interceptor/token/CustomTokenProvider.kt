@@ -1,6 +1,5 @@
 package com.m4ykey.data.remote.interceptor.token
 
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
@@ -8,15 +7,13 @@ import javax.inject.Inject
 class CustomTokenProvider @Inject constructor(
     private val tokenHeaderProvider: TokenHeaderProvider
 ) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
-        val request = chain.request()
-
+    override fun intercept(chain: Interceptor.Chain): Response {
         val accessToken = tokenHeaderProvider.getAuthorizationToken()
 
-        val newRequest = request.newBuilder()
+        val newRequest = chain.request().newBuilder()
             .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", accessToken)
+            .addHeader("Authorization", accessToken ?: "")
             .build()
-        chain.proceed(newRequest)
+        return chain.proceed(newRequest)
     }
 }

@@ -5,5 +5,5 @@ interface TokenProvider {
 }
 
 interface TokenHeaderProvider {
-    fun getAuthorizationToken() : String
+    fun getAuthorizationToken() : String?
 }

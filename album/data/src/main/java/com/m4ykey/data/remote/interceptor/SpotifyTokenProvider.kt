@@ -10,7 +10,7 @@ import com.m4ykey.data.BuildConfig.SPOTIFY_CLIENT_SECRET
 import com.m4ykey.data.remote.api.AuthApi
 import com.m4ykey.data.remote.interceptor.token.TokenProvider
 import com.m4ykey.data.remote.interceptor.token.fetchAccessToken
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 class SpotifyTokenProvider @Inject constructor(
@@ -22,8 +22,8 @@ class SpotifyTokenProvider @Inject constructor(
     private val expireKey = longPreferencesKey("expire_token")
 
     override suspend fun getAccessToken(): String {
-        val cachedToken = dataStore.data.first()[accessTokenKey]
-        val expireTime = dataStore.data.first()[expireKey] ?: 0L
+        val cachedToken = dataStore.data.firstOrNull()?.get(accessTokenKey)
+        val expireTime = dataStore.data.firstOrNull()?.get(expireKey) ?: 0L
 
         return if (!cachedToken.isNullOrBlank() && System.currentTimeMillis() < expireTime) {
             cachedToken
