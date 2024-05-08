@@ -6,12 +6,8 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.safeargs) apply false
-    alias(libs.plugins.crashlytics) apply false
     alias(libs.plugins.gms) apply false
-}
-
-subprojects {
-    apply(plugin = "com.google.devtools.ksp")
+    alias(libs.plugins.crashlytics) apply false
 }
 
 tasks.register("clean", Delete::class) {

@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"/>
 
         <LinearLayout
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -126,7 +126,7 @@
         android:id="@+id/linearLayoutEmptyList"
         android:gravity="center"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutRandomAlbum"
+        app:layout_constraintTop_toBottomOf="@id/appBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -151,6 +151,7 @@
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:textAlignment="center"
             android:textSize="16sp"
             android:textColor="@color/textColor2"
             android:layout_marginTop="5dp"

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -43,12 +44,10 @@ dependencies {
         implementation(converter.moshi)
         implementation(retrofit)
 
-        implementation(timber)
-
-        implementation(firebase.crashlytics)
-
         ksp(hilt.compiler)
         implementation(hilt.android)
+
+        implementation(androidx.datastore)
 
         implementation(okhttp)
         implementation(okhttp.logging.interceptor)

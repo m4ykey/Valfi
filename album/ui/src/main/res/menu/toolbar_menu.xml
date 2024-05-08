@@ -11,7 +11,7 @@
     <item android:id="@+id/imgLink"
         app:iconTint="@color/navigationIconColor"
         android:icon="@drawable/ic_link"
-        android:title="@string/link"
+        android:title="@string/enter_album_url"
         app:showAsAction="ifRoom"/>
 
 </menu>

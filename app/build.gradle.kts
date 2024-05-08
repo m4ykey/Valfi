@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.crashlytics)
     alias(libs.plugins.gms)
+    alias(libs.plugins.ksp)
 }
 
 val versionMajor = 0
@@ -50,6 +50,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":album:ui"))
+    implementation(project(":album:data"))
 
     libs.apply {
 
@@ -57,8 +58,6 @@ dependencies {
         implementation(android.material)
         implementation(androidx.constraintlayout)
         implementation(androidx.core)
-
-        implementation(firebase.crashlytics)
 
         testImplementation(junit)
         androidTestImplementation(ext.junit)
@@ -68,6 +67,8 @@ dependencies {
         ksp(hilt.compiler)
 
         implementation(bundles.navigation)
+
+        implementation(timber)
 
     }
 }

@@ -14,7 +14,6 @@
     <string name="listen_later_album">Listen later album</string>
     <string name="artist">Artist</string>
     <string name="tracks">Tracks</string>
-    <string name="link" translatable="false">Link</string>
     <string name="enter_album_url">Enter Album URL</string>
     <string name="close">Close</string>
     <string name="invalid_album_url">Invalid album URL</string>
