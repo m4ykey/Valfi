@@ -8,7 +8,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.m4ykey.core.network.Resource
-import com.m4ykey.core.network.handleResult
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -17,6 +16,7 @@ import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -24,9 +24,7 @@ import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,252 +34,181 @@ class AlbumViewModel @Inject constructor(
     private val trackRepository: TrackRepository
 ) : ViewModel() {
 
-    private var _search = MutableLiveData<AlbumListUiState>()
+    private var _search = MutableLiveData(AlbumListUiState())
     val albums : LiveData<AlbumListUiState> get() = _search
 
-    private var _newRelease = MutableLiveData<AlbumListUiState>()
+    private var _newRelease = MutableLiveData(AlbumListUiState())
     val newRelease : LiveData<AlbumListUiState> get() = _newRelease
 
-    private var _detail = MutableLiveData<AlbumDetailUiState>()
+    private var _detail = MutableLiveData(AlbumDetailUiState())
     val detail : LiveData<AlbumDetailUiState> get() = _detail
 
-    private var _tracks = MutableLiveData<AlbumTrackUiState>()
+    private var _tracks = MutableLiveData(AlbumTrackUiState())
     val tracks : LiveData<AlbumTrackUiState> get() = _tracks
 
-    private var _albumPaging = MutableLiveData<PagingData<AlbumEntity>>()
+    private var _albumPaging = MutableLiveData<PagingData<AlbumEntity>>(PagingData.empty())
     val albumPaging : LiveData<PagingData<AlbumEntity>> get() = _albumPaging
 
-    private var _searchResult = MutableLiveData<PagingData<AlbumEntity>>()
+    private var _searchResult = MutableLiveData<PagingData<AlbumEntity>>(PagingData.empty())
     val searchResult : LiveData<PagingData<AlbumEntity>> get() = _searchResult
 
-    init {
-        getNewReleases()
-    }
+    init { getNewReleases() }
 
     fun searchAlbumByName(albumName : String) {
-        viewModelScope.launch {
-            repository.searchAlbumByName(albumName)
-                .cachedIn(viewModelScope)
-                .collect { pagingData -> _searchResult.value = pagingData }
-        }
+        launchPaging(
+            source = { repository.searchAlbumByName(albumName) },
+            onDataCollected = { search -> _albumPaging.value = search }
+        )
     }
 
     fun searchAlbumsListenLater(albumName : String) {
-        viewModelScope.launch {
-            repository.searchAlbumsListenLater(albumName)
-                .cachedIn(viewModelScope)
-                .collect { paging -> _searchResult.value = paging }
-        }
+        launchPaging(
+            source = { repository.searchAlbumsListenLater(albumName) },
+            onDataCollected = { search -> _albumPaging.value = search }
+        )
     }
 
     fun getAlbumType(albumType : String) {
-        viewModelScope.launch {
-            repository.getAlbumType(albumType)
-                .cachedIn(viewModelScope)
-                .collect { pagingData -> _albumPaging.value = pagingData }
-        }
+        launchPaging(
+            source = { repository.getAlbumType(albumType) },
+            onDataCollected = { type -> _albumPaging.value = type }
+        )
     }
 
-    fun getAlbumCount() : Flow<Int> {
-        return repository.getAlbumCount()
-    }
+    fun getAlbumCount() : Flow<Int> = repository.getAlbumCount()
 
-    fun getTotalTracksCount() : Flow<Int> {
-        return repository.getTotalTracksCount()
-    }
+    fun getTotalTracksCount() : Flow<Int> = repository.getTotalTracksCount()
 
-    fun getListenLaterCount() : Flow<Int> {
-        return repository.getListenLaterCount()
-    }
+    fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
 
-    fun getAlbumTypeCount(albumType : String) : Flow<Int> {
-        return repository.getAlbumTypeCount(albumType)
-    }
+    fun getAlbumTypeCount(albumType : String) : Flow<Int> =repository.getAlbumTypeCount(albumType)
 
-    suspend fun getRandomAlbum() : AlbumEntity? {
-        return repository.getRandomAlbum()
-    }
+    suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
 
     fun getSavedAlbums() {
-        viewModelScope.launch {
-            repository.getSavedAlbums()
-                .cachedIn(viewModelScope)
-                .collect { albums -> _albumPaging.value = albums }
-        }
+        launchPaging(
+            source = { repository.getSavedAlbums() },
+            onDataCollected = { album -> _albumPaging.value = album }
+        )
     }
 
     fun getSavedAlbumDesc() {
-        viewModelScope.launch {
-            repository.getSavedAlbumDesc()
-                .cachedIn(viewModelScope)
-                .collect { albums -> _albumPaging.value = albums }
-        }
+        launchPaging(
+            source = { repository.getSavedAlbumDesc() },
+            onDataCollected = { album -> _albumPaging.value = album }
+        )
     }
 
     fun getAlbumSortedByName() {
-        viewModelScope.launch {
-            repository.getAlbumSortedByName()
-                .cachedIn(viewModelScope)
-                .collect { albums -> _albumPaging.value = albums }
-        }
+        launchPaging(
+            source = { repository.getAlbumSortedByName() },
+            onDataCollected = { sort -> _albumPaging.value = sort }
+        )
     }
 
     fun getListenLaterAlbums() {
-        viewModelScope.launch {
-            repository.getListenLaterAlbums()
-                .cachedIn(viewModelScope)
-                .collect { albums -> _albumPaging.value = albums }
-        }
+        launchPaging(
+            source = { repository.getListenLaterAlbums() },
+            onDataCollected = { later -> _albumPaging.value = later }
+        )
     }
 
-    suspend fun insertAlbum(album : AlbumEntity) {
-        repository.insertAlbum(album)
-    }
+    suspend fun insertAlbum(album : AlbumEntity) = repository.insertAlbum(album)
 
-    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) {
-        repository.insertSavedAlbum(isAlbumSaved)
-    }
+    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = repository.insertSavedAlbum(isAlbumSaved)
 
-    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) {
-        repository.insertListenLaterAlbum(isListenLaterSaved)
-    }
+    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) = repository.insertListenLaterAlbum(isListenLaterSaved)
 
-    suspend fun getAlbum(albumId : String) : AlbumEntity? {
-        return repository.getAlbum(albumId)
-    }
+    suspend fun getAlbum(albumId : String) : AlbumEntity? = repository.getAlbum(albumId)
 
-    suspend fun getSavedAlbumState(albumId : String) : IsAlbumSaved? {
-        return repository.getSavedAlbumState(albumId)
-    }
+    suspend fun getSavedAlbumState(albumId : String) : IsAlbumSaved? = repository.getSavedAlbumState(albumId)
 
-    suspend fun getListenLaterState(albumId: String) : IsListenLaterSaved? {
-        return repository.getListenLaterState(albumId)
-    }
+    suspend fun getListenLaterState(albumId: String) : IsListenLaterSaved? = repository.getListenLaterState(albumId)
 
-    suspend fun getAlbumWithStates(albumId : String) : AlbumWithStates? {
-        return repository.getAlbumWithStates(albumId)
-    }
+    suspend fun getAlbumWithStates(albumId : String) : AlbumWithStates? = repository.getAlbumWithStates(albumId)
 
-    suspend fun deleteAlbum(albumId: String) {
-        repository.deleteAlbum(albumId)
-    }
+    suspend fun deleteAlbum(albumId: String) = repository.deleteAlbum(albumId)
 
-    suspend fun deleteSavedAlbumState(albumId : String) {
-        repository.deleteSavedAlbumState(albumId)
-    }
+    suspend fun deleteSavedAlbumState(albumId : String) = repository.deleteSavedAlbumState(albumId)
 
-    suspend fun deleteListenLaterState(albumId: String) {
-        repository.deleteListenLaterState(albumId)
-    }
+    suspend fun deleteListenLaterState(albumId: String) = repository.deleteListenLaterState(albumId)
 
     suspend fun getAlbumById(id : String) {
-        repository.getAlbumById(id).onEach { result ->
-            _detail.value = handleDetailState(result)
-        }.launchIn(viewModelScope)
+        repository.getAlbumById(id).collect { resource ->
+            _detail.value = resource.toUiState()
+        }
     }
 
     private fun getNewReleases() {
-        viewModelScope.launch {
-            _newRelease.value = AlbumListUiState(isLoading = true)
-            try {
-                val result = repository.getNewReleases()
-                    .cachedIn(viewModelScope)
-                    .map { Resource.Success(it) }
-                handleNewReleaseResult(result)
-            } finally {
-                _newRelease.value = _newRelease.value?.copy(isLoading = false)
+        _newRelease.value = AlbumListUiState(isLoading = true)
+        launchPaging(
+            source = { repository.getNewReleases() },
+            onDataCollected = { pagingData: PagingData<AlbumItem> ->
+                val newState = AlbumListUiState(albumList = pagingData)
+                _newRelease.value = newState
             }
-        }
+        )
     }
 
     fun searchAlbums(query : String) {
-        viewModelScope.launch {
-            _search.value = AlbumListUiState(isLoading = true)
-            try {
-                val result = repository.searchAlbums(query)
-                    .cachedIn(viewModelScope)
-                    .map { Resource.Success(it) }
-                handleSearchResult(result)
-            } finally {
-                _search.value = _search.value?.copy(isLoading = false)
+        _search.value = AlbumListUiState(isLoading = true)
+        launchPaging(
+            source = { repository.searchAlbums(query) },
+            onDataCollected = { pagingData: PagingData<AlbumItem> ->
+                val newState = AlbumListUiState(albumList = pagingData)
+                _search.value = newState
             }
-        }
+        )
     }
 
     fun getAlbumTracks(id : String) {
+        _tracks.value = AlbumTrackUiState(isLoading = true)
         viewModelScope.launch {
-            _tracks.value = AlbumTrackUiState(isLoading = true)
-            try {
-                val result = trackRepository.getAlbumTracks(id)
-                    .cachedIn(viewModelScope)
-                    .map { pagingData -> pagingData.map { trackEntity -> trackEntity.toTrackItem() } }
-                    .map { Resource.Success(it) }
-                handleTrackResult(result)
-            } catch (e: Exception) {
-                val errorMessage = e.message ?: "Unknown error"
-                _tracks.value = AlbumTrackUiState(error = errorMessage)
-            } finally {
-                _tracks.value = _tracks.value?.copy(isLoading = false)
-            }
+            trackRepository.getAlbumTracks(id)
+                .cachedIn(viewModelScope)
+                .map { it.map(TrackEntity::toTrackItem) }
+                .map { Resource.Success(it) }
+                .collectResult { _tracks.value = it.toUiState() }
         }
     }
 
-    private fun handleDetailState(result : Resource<AlbumDetail>) : AlbumDetailUiState {
-        return when (result) {
-            is Resource.Success -> AlbumDetailUiState(albumDetail = result.data)
-            is Resource.Error -> AlbumDetailUiState(error = result.message)
+    private fun Resource<AlbumDetail>.toUiState() : AlbumDetailUiState {
+        return when (this) {
+            is Resource.Success -> AlbumDetailUiState(albumDetail = this.data)
             is Resource.Loading -> AlbumDetailUiState(isLoading = true)
+            is Resource.Error -> AlbumDetailUiState(error = this.message)
         }
     }
 
-    private fun handleSearchError(e : Exception) {
-        _search.value = AlbumListUiState(error = e.message)
+    private fun Resource<PagingData<TrackItem>>.toUiState() : AlbumTrackUiState {
+        return when (this) {
+            is Resource.Success -> AlbumTrackUiState(albumTracks = this.data)
+            is Resource.Loading -> AlbumTrackUiState(isLoading = true)
+            is Resource.Error -> AlbumTrackUiState(error = this.message)
+        }
     }
 
-    private fun handleNewReleaseError(e : Exception) {
-        _newRelease.value = AlbumListUiState(error = e.message)
-    }
-
-    private fun handleTrackError(e : Exception) {
-        _tracks.value = AlbumTrackUiState(error = e.message)
-    }
-
-    private fun handleSearchResult(result : Flow<Resource<PagingData<AlbumItem>>>) {
+    private fun <T: Any> launchPaging(
+        source : () -> Flow<PagingData<T>>,
+        onDataCollected : (PagingData<T>) -> Unit
+    ) {
         viewModelScope.launch {
-            result.collect { resource ->
-                resource.handleResult(
-                    onSuccess = { albums ->
-                        _search.value = AlbumListUiState(albumList = albums)
-                    },
-                    onError = { e -> handleSearchError(e) }
-                )
+            source()
+                .cachedIn(this)
+                .collect { pagingData ->
+                    onDataCollected(pagingData)
+                }
+        }
+    }
+
+    private inline fun <T : Any> Flow<Resource<PagingData<T>>>.collectResult(
+        crossinline onResult: (Resource<PagingData<T>>) -> Unit
+    ) {
+        viewModelScope.launch {
+            this@collectResult.collect { resource ->
+                onResult(resource)
             }
         }
     }
 
-    private fun handleTrackResult(result : Flow<Resource<PagingData<TrackItem>>>) {
-        viewModelScope.launch {
-            result.collect { resource ->
-                resource.handleResult(
-                    onSuccess = { tracks ->
-                        _tracks.value = AlbumTrackUiState(albumTracks = tracks)
-                    },
-                    onError = { e -> handleTrackError(e)}
-                )
-            }
-        }
-    }
-
-    private fun handleNewReleaseResult(result : Flow<Resource<PagingData<AlbumItem>>>) {
-        viewModelScope.launch {
-            result.collect { resource ->
-                resource.handleResult(
-                    onError = { e -> handleNewReleaseError(e) },
-                    onSuccess = { albums ->
-                        _newRelease.value = AlbumListUiState(albumList = albums)
-                    }
-                )
-            }
-        }
-    }
 }

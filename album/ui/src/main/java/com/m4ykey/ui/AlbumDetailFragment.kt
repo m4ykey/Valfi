@@ -20,10 +20,10 @@ import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
+import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.utils.copyName
 import com.m4ykey.core.views.utils.formatAirDate
 import com.m4ykey.core.views.utils.getColorFromImage
-import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -37,6 +37,7 @@ import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -86,15 +87,15 @@ class AlbumDetailFragment : Fragment() {
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
             lifecycleScope.launch {
                 viewModel.apply {
+                    val albumDeferred = async { getAlbumById(args.albumId) }
+                    tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                    getAlbumTracks(args.albumId)
+
                     networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
                         if (isInternetAvailable) {
-                            getAlbumById(args.albumId)
-                            getAlbumTracks(args.albumId)
-                            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                            albumDeferred.await()
                             detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
                         } else {
-                            getAlbumTracks(args.albumId)
-                            tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
                             getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
                         }
                     }

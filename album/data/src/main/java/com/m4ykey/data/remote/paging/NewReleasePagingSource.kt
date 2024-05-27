@@ -36,7 +36,7 @@ class NewReleasePagingSource @Inject constructor(
             ).albums
 
             LoadResult.Page(
-                data = response.items?.map { it.toAlbumItem() }!!,
+                data = response.items?.map { it.toAlbumItem() }.orEmpty(),
                 nextKey = if (response.next.isNullOrEmpty()) null else page + 1,
                 prevKey = if (page > 0) page - 1 else null
             )

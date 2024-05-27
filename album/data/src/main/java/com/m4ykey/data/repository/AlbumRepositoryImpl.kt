@@ -3,6 +3,7 @@ package com.m4ykey.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.Resource
 import com.m4ykey.core.network.safeApiCall
@@ -25,7 +26,7 @@ import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
-    private val interceptor: SpotifyTokenProvider,
+    private val token: SpotifyTokenProvider,
     private val dao : AlbumDao
 ) : AlbumRepository {
 
@@ -34,39 +35,23 @@ class AlbumRepositoryImpl @Inject constructor(
         enablePlaceholders = false
     )
 
-    override fun getNewReleases(): Flow<PagingData<AlbumItem>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = {
-                NewReleasePagingSource(
-                    api = api,
-                    token = interceptor
-                )
-            }
-        ).flow
+    override fun getNewReleases(): Flow<PagingData<AlbumItem>> = createPager {
+        NewReleasePagingSource(api, token)
     }
 
-    override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = {
-                SearchAlbumPagingSource(
-                    api = api,
-                    token = interceptor,
-                    query = query
-                )
-            }
-        ).flow
+    override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> = createPager {
+        SearchAlbumPagingSource(api = api, query = query, token = token)
     }
 
     override suspend fun getAlbumById(id: String): Flow<Resource<AlbumDetail>> = flow {
         emit(Resource.Loading())
-        emit(safeApiCall {
+        val result = safeApiCall {
             api.getAlbumById(
-                token = "Bearer ${interceptor.getAccessToken()}",
+                token = "Bearer ${token.getAccessToken()}",
                 id = id
             ).toAlbumDetail()
-        })
+        }
+        emit(result)
     }
 
     override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
@@ -86,52 +71,19 @@ class AlbumRepositoryImpl @Inject constructor(
     override fun getListenLaterCount(): Flow<Int> = dao.getListenLaterCount()
     override fun getAlbumTypeCount(albumType: String): Flow<Int> = dao.getAlbumTypeCount(albumType)
 
-    override fun getSavedAlbums(): Flow<PagingData<AlbumEntity>> {
+    override fun getSavedAlbums(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbums() }
+    override fun getListenLaterAlbums(): Flow<PagingData<AlbumEntity>> = createPager { dao.getListenLaterAlbums() }
+    override fun getAlbumType(albumType: String): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumType(albumType) }
+    override fun searchAlbumByName(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsByName(searchQuery) }
+    override fun searchAlbumsListenLater(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsListenLater(searchQuery) }
+    override fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumSortedByName() }
+    override fun getSavedAlbumDesc(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbumDesc() }
+
+    private fun <T: Any> createPager(pagingSourceFactory: () -> PagingSource<Int, T>) : Flow<PagingData<T>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { dao.getSavedAlbums() }
+            pagingSourceFactory = pagingSourceFactory
         ).flow
     }
 
-    override fun getListenLaterAlbums(): Flow<PagingData<AlbumEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { dao.getListenLaterAlbums() }
-        ).flow
-    }
-
-    override fun getAlbumType(albumType: String): Flow<PagingData<AlbumEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumType(albumType) }
-        ).flow
-    }
-
-    override fun searchAlbumByName(searchQuery: String): Flow<PagingData<AlbumEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { dao.searchAlbumsByName(searchQuery) }
-        ).flow
-    }
-
-    override fun searchAlbumsListenLater(searchQuery: String): Flow<PagingData<AlbumEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { dao.searchAlbumsListenLater(searchQuery) }
-        ).flow
-    }
-
-    override fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { dao.getAlbumSortedByName() }
-        ).flow
-    }
-
-    override fun getSavedAlbumDesc(): Flow<PagingData<AlbumEntity>> {
-        return Pager(
-            config = pagingConfig,
-            pagingSourceFactory = { dao.getSavedAlbumDesc() }
-        ).flow
-    }
 }
