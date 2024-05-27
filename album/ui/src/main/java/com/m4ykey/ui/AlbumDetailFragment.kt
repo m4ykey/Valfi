@@ -141,9 +141,16 @@ class AlbumDetailFragment : Fragment() {
                 imgSave.setOnClickListener {
                     lifecycleScope.launch {
                         val isAlbumSaved = viewModel.getSavedAlbumState(id)
+                        val isListenLaterSaved = viewModel.getListenLaterState(id)
+                        if (isListenLaterSaved?.isListenLaterSaved == true) {
+                            viewModel.deleteListenLaterState(id)
+                            if (isAlbumSaved == null) {
+                                viewModel.deleteAlbum(id)
+                            }
+                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                        }
                         if (isAlbumSaved != null) {
                             viewModel.deleteSavedAlbumState(id)
-                            val isListenLaterSaved = viewModel.getListenLaterState(id)
                             if (isListenLaterSaved == null) {
                                 viewModel.deleteAlbum(id)
                             }
@@ -297,9 +304,16 @@ class AlbumDetailFragment : Fragment() {
                 imgSave.setOnClickListener {
                     lifecycleScope.launch {
                         val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
+                        val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                        if (isListenLaterSaved?.isListenLaterSaved == true) {
+                            viewModel.deleteListenLaterState(item.id)
+                            if (isAlbumSaved == null) {
+                                viewModel.deleteAlbum(item.id)
+                            }
+                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                        }
                         if (isAlbumSaved != null) {
                             viewModel.deleteSavedAlbumState(item.id)
-                            val isListenLaterSaved = viewModel.getListenLaterState(item.id)
                             if (isListenLaterSaved == null) {
                                 viewModel.deleteAlbum(item.id)
                             }
