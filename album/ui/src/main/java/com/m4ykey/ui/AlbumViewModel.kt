@@ -92,9 +92,9 @@ class AlbumViewModel @Inject constructor(
         )
     }
 
-    fun getSavedAlbumDesc() {
+    fun getSavedAlbumAsc() {
         launchPaging(
-            source = { repository.getSavedAlbumDesc() },
+            source = { repository.getSavedAlbumAsc() },
             onDataCollected = { album -> _albumPaging.value = album }
         )
     }

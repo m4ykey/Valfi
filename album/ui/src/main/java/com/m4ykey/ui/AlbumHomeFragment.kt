@@ -254,7 +254,7 @@ class AlbumHomeFragment : Fragment() {
                 }
                 SortType.OLDEST -> {
                     chipSortBy.text = getString(R.string.oldest)
-                    viewModel.getSavedAlbumDesc()
+                    viewModel.getSavedAlbumAsc()
                 }
                 SortType.ALPHABETICAL -> {
                     chipSortBy.text = getString(R.string.alphabetical)

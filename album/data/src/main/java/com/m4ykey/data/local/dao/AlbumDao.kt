@@ -48,7 +48,7 @@ interface AlbumDao {
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
-            "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime ASC")
+            "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime DESC")
     fun getSavedAlbums() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
@@ -92,8 +92,8 @@ interface AlbumDao {
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
-            "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime DESC")
-    fun getSavedAlbumDesc() : PagingSource<Int, AlbumEntity>
+            "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime ASC")
+    fun getSavedAlbumAsc() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT COUNT(*) FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +

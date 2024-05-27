@@ -77,7 +77,7 @@ class AlbumRepositoryImpl @Inject constructor(
     override fun searchAlbumByName(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsByName(searchQuery) }
     override fun searchAlbumsListenLater(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsListenLater(searchQuery) }
     override fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumSortedByName() }
-    override fun getSavedAlbumDesc(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbumDesc() }
+    override fun getSavedAlbumAsc(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbumAsc() }
 
     private fun <T: Any> createPager(pagingSourceFactory: () -> PagingSource<Int, T>) : Flow<PagingData<T>> {
         return Pager(
