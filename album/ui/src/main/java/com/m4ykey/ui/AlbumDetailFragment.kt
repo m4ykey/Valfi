@@ -1,7 +1,10 @@
 package com.m4ykey.ui
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.buttonAnimation
@@ -265,12 +269,10 @@ class AlbumDetailFragment : Fragment() {
 
                 getColorFromImage(
                     image.toString(),
-                    context = requireContext(),
-                    onColorReady = { color ->
-                        btnAlbum.setBackgroundColor(color)
-                        btnArtist.setBackgroundColor(color)
-                    }
-                )
+                    context = requireContext()
+                ) { color ->
+                    animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+                }
 
                 buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
                 buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
@@ -346,6 +348,17 @@ class AlbumDetailFragment : Fragment() {
                 else R.drawable.ic_listen_later_border
             )
         }
+    }
+
+    private fun animateColorTransition(startColor : Int, endColor: Int, vararg buttons : MaterialButton) {
+        val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), startColor, endColor)
+        colorAnimator.duration = 2500
+
+        colorAnimator.addUpdateListener { animator ->
+            val animatedValue = animator.animatedValue as Int
+            buttons.forEach { it.setBackgroundColor(animatedValue) }
+        }
+        colorAnimator.start()
     }
 
     override fun onDestroy() {

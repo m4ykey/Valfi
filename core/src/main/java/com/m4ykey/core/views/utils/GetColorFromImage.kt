@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 
-fun getColorFromImage(imageUrl : String, onColorReady : (Int) -> Unit, context : Context) {
+fun getColorFromImage(imageUrl : String, context : Context, onColorReady : (Int) -> Unit) {
     Glide.with(context)
         .asBitmap()
         .load(imageUrl)
