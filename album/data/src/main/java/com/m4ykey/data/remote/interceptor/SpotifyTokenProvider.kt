@@ -22,28 +22,33 @@ class SpotifyTokenProvider @Inject constructor(
     private val expireKey = longPreferencesKey("expire_token")
 
     override suspend fun getAccessToken(): String {
-        val cachedToken = dataStore.data.firstOrNull()?.get(accessTokenKey)
-        val expireTime = dataStore.data.firstOrNull()?.get(expireKey) ?: 0L
+        try {
+            val dataStoreData = dataStore.data.firstOrNull() ?: return ""
+            val cachedToken = dataStoreData[accessTokenKey]
+            val expireTime = dataStoreData[expireKey] ?: 0L
 
-        return if (!cachedToken.isNullOrBlank() && System.currentTimeMillis() < expireTime) {
-            cachedToken
-        } else {
-            val newAccessToken = fetchAccessToken(
-                api = api,
-                clientSecret = SPOTIFY_CLIENT_SECRET,
-                clientId = SPOTIFY_CLIENT_ID
-            )
+            if (!cachedToken.isNullOrBlank() && System.currentTimeMillis() < expireTime) {
+                return cachedToken
+            } else {
+                val newAccessToken = fetchAccessToken(
+                    api = api,
+                    clientSecret = SPOTIFY_CLIENT_SECRET,
+                    clientId = SPOTIFY_CLIENT_ID
+                )
 
-            val newExpireTime = System.currentTimeMillis() + 3600 * 1000
-            saveAccessToken(newAccessToken, newExpireTime)
-            newAccessToken
+                val newExpireTime = System.currentTimeMillis() + 3600 * 1000
+                saveAccessToken(newAccessToken, newExpireTime)
+                return newAccessToken
+            }
+        } catch (e : Exception) {
+            throw RuntimeException("Error fetching access token", e)
         }
     }
 
-    private suspend fun saveAccessToken(token : String, time : Long) {
+    private suspend fun saveAccessToken(token : String, expireTime : Long) {
         dataStore.edit { preferences ->
             preferences[accessTokenKey] = token
-            preferences[expireKey] = time
+            preferences[expireKey] = expireTime
         }
     }
 }

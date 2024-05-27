@@ -3,8 +3,7 @@ package com.m4ykey.data.remote.interceptor.token
 import android.util.Base64
 
 fun generateToken(clientId : String, clientSecret : String) : String {
-    return "Basic " + Base64.encodeToString(
-        "$clientId:$clientSecret".toByteArray(),
-        Base64.NO_WRAP
-    )
+    val credentials = "$clientId:$clientSecret"
+    val base64Credentials = Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)
+    return "Basic $base64Credentials"
 }

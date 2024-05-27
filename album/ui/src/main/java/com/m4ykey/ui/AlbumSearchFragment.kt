@@ -31,6 +31,8 @@ import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.ui.uistate.AlbumListUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -43,6 +45,7 @@ class AlbumSearchFragment : Fragment() {
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
     private lateinit var searchAdapter : SearchAlbumPagingAdapter
+    private val debouncingSearch = DebouncingSearch()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -93,9 +96,10 @@ class AlbumSearchFragment : Fragment() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
-                        val searchQuery = text.toString()
+                        val searchQuery = text.toString().trim()
                         if (searchQuery.isNotEmpty()) {
-                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                            debouncingSearch.submit(searchQuery)
+                            binding.rvSearchAlbums.isEnabled = false
                         } else {
                             showToast(requireContext(), getString(R.string.empty_search))
                         }
@@ -227,4 +231,18 @@ class AlbumSearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private inner class DebouncingSearch {
+        private var searchJob : Job? = null
+
+        fun submit(searchQuery : String) {
+            searchJob?.cancel()
+            searchJob = lifecycleScope.launch {
+                delay(500L)
+                viewModel.searchAlbums(searchQuery)
+                binding.rvSearchAlbums.isEnabled = true
+            }
+        }
+    }
+
 }

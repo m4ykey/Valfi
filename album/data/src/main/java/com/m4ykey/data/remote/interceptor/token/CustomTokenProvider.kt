@@ -8,11 +8,11 @@ class CustomTokenProvider @Inject constructor(
     private val tokenHeaderProvider: TokenHeaderProvider
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val accessToken = tokenHeaderProvider.getAuthorizationToken()
+        val accessToken = tokenHeaderProvider.getAuthorizationToken() ?: throw RuntimeException("Failed to get access token")
 
         val newRequest = chain.request().newBuilder()
             .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", accessToken ?: "")
+            .addHeader("Authorization", accessToken)
             .build()
         return chain.proceed(newRequest)
     }
