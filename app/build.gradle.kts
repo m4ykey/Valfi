@@ -9,7 +9,7 @@ plugins {
 
 val versionMajor = 0
 val versionMinor = 4
-val versionPatch = 6
+val versionPatch = 7
 
 android {
     namespace = "com.m4ykey.valfi2"

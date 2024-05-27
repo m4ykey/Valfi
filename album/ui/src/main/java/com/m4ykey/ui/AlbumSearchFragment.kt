@@ -88,10 +88,6 @@ class AlbumSearchFragment : Fragment() {
             state.albumList?.let { search ->
                 searchAdapter.submitData(lifecycle, search)
             }
-
-            if (!state.isLoading) {
-                rvSearchAlbums.isEnabled = true
-            }
         }
     }
 

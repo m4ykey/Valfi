@@ -73,7 +73,10 @@ class AlbumListenLaterFragment : Fragment() {
             getRandomAlbum()
 
             viewModel.apply {
-                getListenLaterAlbums()
+                lifecycleScope.launch {
+                    delay(500L)
+                    getListenLaterAlbums()
+                }
                 albumPaging.observe(viewLifecycleOwner) { pagingData ->
                     albumAdapter.submitData(lifecycle, pagingData)
                 }

@@ -25,6 +25,7 @@ import com.m4ykey.ui.adapter.NewReleasePagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.ui.uistate.AlbumListUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -62,9 +63,10 @@ class AlbumNewReleaseFragment : Fragment() {
 
         with(binding) {
             lifecycleScope.launch {
-                viewModel.newRelease.observe(viewLifecycleOwner) { state -> handleNewReleaseState(state) }
+                delay(500L)
+                viewModel.getNewReleases()
             }
-
+            viewModel.newRelease.observe(viewLifecycleOwner) { state -> handleNewReleaseState(state) }
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
             setupRecyclerView()
         }

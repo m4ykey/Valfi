@@ -95,7 +95,10 @@ class AlbumHomeFragment : Fragment() {
             setupRecyclerView()
 
             viewModel.apply {
-                getSavedAlbums()
+                lifecycleScope.launch {
+                    delay(500L)
+                    getSavedAlbums()
+                }
                 albumPaging.observe(viewLifecycleOwner) { pagingData ->
                     albumAdapter.submitData(lifecycle, pagingData)
                 }

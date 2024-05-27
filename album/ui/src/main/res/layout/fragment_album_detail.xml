@@ -112,6 +112,7 @@
                 <ImageView
                     app:tint="@color/textColor"
                     android:id="@+id/imgSave"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_favorite_border"
@@ -122,7 +123,6 @@
                     android:id="@+id/imgListenLater"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:src="@drawable/ic_listen_later_border"
                     android:contentDescription="@string/listen_later_album" />
 
