@@ -71,10 +71,7 @@ class AlbumSettings {
                     throw exception
                 }
             }
-            .map { preferences ->
-                preferences[KEY_SELECTED_VIEW_TYPE]
-            }
-            .first()
+            .map { preferences -> preferences[KEY_SELECTED_VIEW_TYPE] }.first()
 
         return albumType?.let { ViewType.valueOf(it) }
     }
@@ -88,10 +85,7 @@ class AlbumSettings {
                     throw exception
                 }
             }
-            .map { preferences ->
-                preferences[KEY_SELECTED_ALBUM_TYPE]
-            }
-            .first()
+            .map { preferences -> preferences[KEY_SELECTED_ALBUM_TYPE] }.first()
     }
 
     suspend fun getSelectedSortType(context: Context) : SortType? {
@@ -103,12 +97,8 @@ class AlbumSettings {
                     throw exception
                 }
             }
-            .map { preferences ->
-                preferences[KEY_SELECTED_SORT_TYPE]
-            }
-            .first()
+            .map { preferences -> preferences[KEY_SELECTED_SORT_TYPE] }.first()
 
         return sortType?.let { SortType.valueOf(it) }
     }
-
 }

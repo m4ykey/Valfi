@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.safeargs)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -43,26 +43,26 @@ dependencies {
     implementation(project(":album:data"))
 
     libs.apply {
-        implementation(androidx.core)
-        implementation(androidx.appcompat)
-        implementation(androidx.palette)
-        implementation(androidx.constraintlayout)
-        implementation(android.material)
-        implementation(androidx.paging)
+        implementation(androidxCore)
+        implementation(androidxAppCompat)
+        implementation(androidxPalette)
+        implementation(androidxConstraintLayout)
+        implementation(androidMaterial)
+        implementation(androidxPaging)
 
         testImplementation(junit)
 
-        androidTestImplementation(ext.junit)
+        androidTestImplementation(extJunit)
         androidTestImplementation(espresso)
 
         implementation(bundles.navigation)
         implementation(bundles.lifecycle)
 
-        ksp(hilt.compiler)
-        implementation(hilt.android)
+        ksp(hiltCompiler)
+        implementation(hiltAndroid)
 
-        implementation(vico.views)
-        implementation(vico.core)
+        implementation(vicoViews)
+        implementation(vicoCore)
 
         implementation(coroutines)
 

@@ -14,8 +14,6 @@
             <option value="$PROJECT_DIR$/album/ui" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/settings" />
-            <option value="$PROJECT_DIR$/settings/data" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

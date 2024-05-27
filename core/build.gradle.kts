@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -36,25 +36,25 @@ android {
 dependencies {
 
     libs.apply {
-        implementation(androidx.appcompat)
-        implementation(androidx.core)
-        implementation(android.material)
+        implementation(androidxAppCompat)
+        implementation(androidxCore)
+        implementation(androidMaterial)
 
-        implementation(moshi.kotlin)
-        implementation(converter.moshi)
+        implementation(moshiKotlin)
+        implementation(converterMoshi)
         implementation(retrofit)
 
-        ksp(hilt.compiler)
-        implementation(hilt.android)
+        ksp(hiltCompiler)
+        implementation(hiltAndroid)
 
-        implementation(androidx.datastore)
+        implementation(androidxDatastore)
 
         implementation(okhttp)
-        implementation(okhttp.logging.interceptor)
+        implementation(okhttpLoggingInterceptor)
 
         implementation(glide)
 
-        implementation(androidx.palette)
+        implementation(androidxPalette)
 
     }
 }

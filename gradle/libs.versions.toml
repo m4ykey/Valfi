@@ -1,71 +1,74 @@
 [versions]
-application = "8.4.0"
+application = "8.4.1"
 navigation = "2.7.7"
 retrofit = "2.11.0"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0"
 hilt = "2.51.1"
 okhttp = "4.12.0"
 room = "2.6.1"
 vico = "1.14.0"
+libraries = "11.1.4"
 
 [libraries]
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.0" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.0" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version = "23.0.0" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.0" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.0" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
+extJunit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version = "3.5.1" }
 truth = { group = "com.google.truth", name = "truth", version = "1.4.2" }
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "3.0-alpha-1" }
 
-androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
-androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
-androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
-androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.0" }
-androidx-paging = { group = "androidx.paging", name = "paging-runtime", version = "3.2.1" }
-androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
-androidx-palette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
+androidxNavigationFragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+androidxNavigationUI = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
+androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
+androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
+androidxPaging = { group = "androidx.paging", name = "paging-runtime", version = "3.3.0" }
+androidxLifecycleViewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidxLifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidxRoomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+androidxPalette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
 
-android-material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
+androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
+converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.8.0" }
 
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
-vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
-vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
+vicoViews = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
+vicoCore = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
 
+aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries", version.ref = "libraries" }
+
 [plugins]
-android-application = { id = "com.android.application", version.ref = "application" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.23" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.23-1.0.19" }
+androidApplication = { id = "com.android.application", version.ref = "application" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.0" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 gms = { id = "com.google.gms.google-services", version = "4.4.1" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.0" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
+aboutLibrariesPlugin = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries" }
 
 [bundles]
-navigation = ["androidx-navigation-fragment", "androidx-navigation-ui"]
-lifecycle = ["androidx-lifecycle-runtime", "androidx-lifecycle-viewmodel"]
-okhttp = ["okhttp", "okhttp-logging-interceptor"]
+navigation = ["androidxNavigationFragment", "androidxNavigationUI"]
+lifecycle = ["androidxLifecycleRuntime", "androidxLifecycleViewmodel"]
+okhttp = ["okhttp", "okhttpLoggingInterceptor"]

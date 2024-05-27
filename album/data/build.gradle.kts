@@ -2,7 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -57,19 +57,23 @@ dependencies {
     libs.apply {
 
         implementation(retrofit)
-        implementation(converter.moshi)
+        implementation(converterMoshi)
+
+        testImplementation(junit)
+        androidTestImplementation(extJunit)
+        androidTestImplementation(espresso)
 
         implementation(coroutines)
 
-        implementation(hilt.android)
-        ksp(hilt.compiler)
+        implementation(hiltAndroid)
+        ksp(hiltCompiler)
 
-        implementation(androidx.paging)
-        implementation(androidx.datastore)
-        implementation(androidx.room.runtime)
-        implementation(androidx.room.ktx)
-        ksp(androidx.room.compiler)
-        implementation(androidx.room.paging)
+        implementation(androidxPaging)
+        implementation(androidxDatastore)
+        implementation(androidxRoomRuntime)
+        implementation(androidxRoomKtx)
+        ksp(androidxRoomCompiler)
+        implementation(androidxRoomPaging)
 
         implementation(bundles.okhttp)
 
