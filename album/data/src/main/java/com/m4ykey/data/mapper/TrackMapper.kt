@@ -14,15 +14,17 @@ fun TrackItemDto.toTrackEntity(albumId : String) : TrackEntity =
         durationMs = duration_ms ?: 0,
         externalUrls = external_urls?.spotify!!,
         explicit = explicit ?: false,
-        artistList = artists?.joinToString(", ") { it.name ?: "" }!!
+        artistList = artists?.joinToString(", ") { it.name ?: "" }.orEmpty(),
+        discNumber = disc_number ?: 0
     )
 
 fun TrackEntity.toTrackItem() : TrackItem =
     TrackItem(
+        discNumber = discNumber,
         id = id,
         name = name,
         explicit = explicit,
         durationMs = durationMs,
         externalUrls = ExternalUrls(externalUrls),
-        artists = artistList.split(", ").map { Artist(it, ExternalUrls(it)) }
+        artists = artistList.split(", ").map { Artist(it, ExternalUrls(it), id) }
     )

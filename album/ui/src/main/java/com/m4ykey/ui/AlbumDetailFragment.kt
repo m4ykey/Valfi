@@ -32,6 +32,7 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.ArtistEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
@@ -128,14 +129,14 @@ class AlbumDetailFragment : Fragment() {
                     }
                 )
 
-                buttonsIntents(button = btnArtist, url = artistUrl, requireContext())
+                buttonsIntents(button = btnArtist, url = artists[0].urls, requireContext())
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
 
                 txtAlbumName.apply {
                     text = name
                     setOnClickListener { copyName(name, requireContext()) }
                 }
-                txtArtist.text = artists
+                txtArtist.text = artists.joinToString(separator = ", ") { it.name }
                 txtInfo.text = getString(R.string.album_info, albumType, releaseDate, totalTracks, getString(R.string.tracks))
 
                 imgSave.setOnClickListener {
@@ -284,6 +285,15 @@ class AlbumDetailFragment : Fragment() {
                 buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
                 buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
 
+                val artistsEntity = item.artists.map { artist ->
+                    ArtistEntity(
+                        name = artist.name,
+                        artistId = artist.id,
+                        urls = artistUrl.orEmpty(),
+                        albumId = args.albumId
+                    )
+                }
+
                 val album = AlbumEntity(
                     id = item.id,
                     name = item.name,
@@ -291,9 +301,8 @@ class AlbumDetailFragment : Fragment() {
                     totalTracks = item.totalTracks,
                     images = image.toString(),
                     albumType = albumType,
-                    artists = artistList,
-                    albumUrl = albumUrl ?: "",
-                    artistUrl = artistUrl ?: ""
+                    artists = artistsEntity,
+                    albumUrl = albumUrl ?: ""
                 )
 
                 val albumWithStates = viewModel.getAlbumWithStates(item.id)

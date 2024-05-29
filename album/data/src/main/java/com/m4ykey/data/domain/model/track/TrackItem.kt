@@ -9,5 +9,6 @@ data class TrackItem(
     val explicit: Boolean,
     val externalUrls: ExternalUrls,
     val id: String,
-    val name: String
+    val name: String,
+    val discNumber: Int
 )

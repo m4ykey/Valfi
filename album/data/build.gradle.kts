@@ -58,6 +58,7 @@ dependencies {
 
         implementation(retrofit)
         implementation(converterMoshi)
+        implementation(moshiKotlin)
 
         testImplementation(junit)
         androidTestImplementation(extJunit)

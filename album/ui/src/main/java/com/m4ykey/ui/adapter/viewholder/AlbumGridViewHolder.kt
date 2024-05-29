@@ -28,7 +28,7 @@ class AlbumGridViewHolder(
         with(binding) {
             layoutAlbum.setOnClickListener { onAlbumClick(item) }
 
-            txtArtist.text = item.artists
+            txtArtist.text = item.artists.joinToString(", ") { it.name }
             txtAlbum.text = item.name
             loadImage(imgAlbum, item.images, imgAlbum.context)
         }

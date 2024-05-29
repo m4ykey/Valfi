@@ -15,5 +15,6 @@ data class TrackEntity(
     val externalUrls: String,
     val explicit : Boolean,
     val durationMs : Int,
-    val artistList : String
+    val artistList : String,
+    val discNumber : Int
 )

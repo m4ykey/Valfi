@@ -28,7 +28,7 @@ class AlbumListViewHolder(
         with(binding) {
             layoutAlbum.setOnClickListener { onAlbumClick(item) }
 
-            txtArtist.text = item.artists
+            txtArtist.text = item.artists.joinToString(separator = ", ") { it.name }
             txtAlbum.text = item.name
             loadImage(imgAlbum, item.images, imgAlbum.context)
         }
