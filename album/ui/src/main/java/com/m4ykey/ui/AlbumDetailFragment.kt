@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -38,6 +39,8 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
+import com.m4ykey.ui.adapter.decoration.DecoratedTrackItem
+import com.m4ykey.ui.adapter.decoration.decorateTrackItems
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
@@ -223,9 +226,10 @@ class AlbumDetailFragment : Fragment() {
             nestedScrollView.isVisible = !state.isLoading || isDataLoaded
             state.error?.let { showToast(requireContext(), it) }
             state.albumTracks?.let { tracks ->
+                val decoratedTrackItem = decorateTrackItems(tracks)
                 lifecycleScope.launch {
                     delay(500L)
-                    trackAdapter.submitData(lifecycle, tracks)
+                    trackAdapter.submitData(lifecycle, decoratedTrackItem)
                 }
             }
         }
