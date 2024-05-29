@@ -6,4 +6,8 @@
         android:title="@string/album"
         android:id="@+id/albumHomeFragment"/>
 
+    <item
+        android:icon="@drawable/ic_new"
+        android:title="@string/news"/>
+
 </menu>
