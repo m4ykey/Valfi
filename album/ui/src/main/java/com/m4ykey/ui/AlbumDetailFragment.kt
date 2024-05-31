@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 class AlbumDetailFragment : Fragment() {
 
     private var _binding: FragmentAlbumDetailBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
     private val args: AlbumDetailFragmentArgs by navArgs()
     private var bottomNavigationVisibility: BottomNavigationVisibility? = null
     private lateinit var navController: NavController
@@ -78,7 +78,7 @@ class AlbumDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumDetailBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root ?: throw IllegalStateException("Binding root is null")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,7 +87,7 @@ class AlbumDetailFragment : Fragment() {
         navController = findNavController()
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        with(binding) {
+        binding?.apply {
             setupRecyclerView()
             toolbar.setNavigationOnClickListener { navController.navigateUp() }
             lifecycleScope.launch {
@@ -110,7 +110,7 @@ class AlbumDetailFragment : Fragment() {
     }
 
     private fun displayAlbumFromDatabase(album: AlbumEntity) {
-        with(binding) {
+        binding?.apply {
             with(album) {
                 lifecycleScope.launch {
                     val albumWithStates = viewModel.getAlbumWithStates(id)
@@ -186,8 +186,7 @@ class AlbumDetailFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        with(binding) {
-
+        binding?.apply {
             val onTrackClick : (TrackItem) -> Unit = { track ->
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
             }
@@ -217,7 +216,7 @@ class AlbumDetailFragment : Fragment() {
     }
 
     private fun handleUiState(state : Any?) {
-        binding.apply {
+        binding?.apply {
             state ?: return
             nestedScrollView.isVisible = !progressbar.isVisible
             progressbar.isVisible = when (state) {
@@ -251,109 +250,109 @@ class AlbumDetailFragment : Fragment() {
     }
 
     private fun displayAlbumDetail(item: AlbumDetail) {
-        lifecycleScope.launch {
-            with(binding) {
-                val image = item.images.maxByOrNull { it.height * it.width }?.url
-                val artistList = item.artists.joinToString(", ") { it.name }
-                val albumType = when {
-                    item.totalTracks in 2..6 && item.albumType.equals(
-                        "Single",
-                        ignoreCase = true
-                    ) -> "EP"
+        binding?.apply {
+            val image = item.images.maxByOrNull { it.height * it.width }?.url
+            val artistList = item.artists.joinToString(", ") { it.name }
+            val albumType = when {
+                item.totalTracks in 2..6 && item.albumType.equals(
+                    "Single",
+                    ignoreCase = true
+                ) -> "EP"
 
-                    else -> item.albumType.replaceFirstChar { it.uppercase() }
-                }
-                val formatAirDate = formatAirDate(item.releaseDate)
-                val albumInfo = "$albumType • $formatAirDate • ${item.totalTracks} " + getString(
-                    R.string.tracks
+                else -> item.albumType.replaceFirstChar { it.uppercase() }
+            }
+            val formatAirDate = formatAirDate(item.releaseDate)
+            val albumInfo = "$albumType • $formatAirDate • ${item.totalTracks} " + getString(
+                R.string.tracks
+            )
+            val albumUrl = item.externalUrls.spotify
+            val artistUrl = item.artists[0].externalUrls.spotify
+
+            txtAlbumName.apply {
+                text = item.name
+                setOnClickListener { copyName(item.name, requireContext()) }
+            }
+            txtArtist.text = artistList
+            txtInfo.text = albumInfo
+
+            loadImage(imgAlbum, image.toString(), requireContext())
+
+            getColorFromImage(
+                image.toString(),
+                context = requireContext()
+            ) { color ->
+                animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+            }
+
+            buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
+            buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
+
+            val artistsEntity = item.artists.map { artist ->
+                ArtistEntity(
+                    name = artist.name,
+                    artistId = artist.id,
+                    urls = artistUrl.orEmpty(),
+                    albumId = args.albumId
                 )
-                val albumUrl = item.externalUrls.spotify
-                val artistUrl = item.artists[0].externalUrls.spotify
+            }
 
-                txtAlbumName.apply {
-                    text = item.name
-                    setOnClickListener { copyName(item.name, requireContext()) }
-                }
-                txtArtist.text = artistList
-                txtInfo.text = albumInfo
+            val album = AlbumEntity(
+                id = item.id,
+                name = item.name,
+                releaseDate = formatAirDate.toString(),
+                totalTracks = item.totalTracks,
+                images = image.toString(),
+                albumType = albumType,
+                artists = artistsEntity,
+                albumUrl = albumUrl ?: ""
+            )
 
-                loadImage(imgAlbum, image.toString(), requireContext())
-
-                getColorFromImage(
-                    image.toString(),
-                    context = requireContext()
-                ) { color ->
-                    animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
-                }
-
-                buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
-                buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
-
-                val artistsEntity = item.artists.map { artist ->
-                    ArtistEntity(
-                        name = artist.name,
-                        artistId = artist.id,
-                        urls = artistUrl.orEmpty(),
-                        albumId = args.albumId
-                    )
-                }
-
-                val album = AlbumEntity(
-                    id = item.id,
-                    name = item.name,
-                    releaseDate = formatAirDate.toString(),
-                    totalTracks = item.totalTracks,
-                    images = image.toString(),
-                    albumType = albumType,
-                    artists = artistsEntity,
-                    albumUrl = albumUrl ?: ""
-                )
-
+            lifecycleScope.launch {
                 val albumWithStates = viewModel.getAlbumWithStates(item.id)
                 if (albumWithStates != null) {
                     updateIcons(albumWithStates)
                 }
+            }
 
-                imgSave.setOnClickListener {
-                    lifecycleScope.launch {
-                        val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
-                        val isListenLaterSaved = viewModel.getListenLaterState(item.id)
-                        if (isListenLaterSaved?.isListenLaterSaved == true) {
-                            viewModel.deleteListenLaterState(item.id)
-                            if (isAlbumSaved == null) {
-                                viewModel.deleteAlbum(item.id)
-                            }
-                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+            imgSave.setOnClickListener {
+                lifecycleScope.launch {
+                    val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
+                    val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                    if (isListenLaterSaved?.isListenLaterSaved == true) {
+                        viewModel.deleteListenLaterState(item.id)
+                        if (isAlbumSaved == null) {
+                            viewModel.deleteAlbum(item.id)
                         }
-                        if (isAlbumSaved != null) {
-                            viewModel.deleteSavedAlbumState(item.id)
-                            if (isListenLaterSaved == null) {
-                                viewModel.deleteAlbum(item.id)
-                            }
-                            imgSave.buttonAnimation(R.drawable.ic_favorite_border)
-                        } else {
-                            viewModel.insertAlbum(album)
-                            viewModel.insertSavedAlbum(IsAlbumSaved(item.id, true))
-                            imgSave.buttonAnimation(R.drawable.ic_favorite)
+                        imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                    }
+                    if (isAlbumSaved != null) {
+                        viewModel.deleteSavedAlbumState(item.id)
+                        if (isListenLaterSaved == null) {
+                            viewModel.deleteAlbum(item.id)
                         }
+                        imgSave.buttonAnimation(R.drawable.ic_favorite_border)
+                    } else {
+                        viewModel.insertAlbum(album)
+                        viewModel.insertSavedAlbum(IsAlbumSaved(item.id, true))
+                        imgSave.buttonAnimation(R.drawable.ic_favorite)
                     }
                 }
+            }
 
-                imgListenLater.setOnClickListener {
-                    lifecycleScope.launch {
-                        val isListenLaterSaved = viewModel.getListenLaterState(item.id)
-                        if (isListenLaterSaved != null) {
-                            viewModel.deleteListenLaterState(item.id)
-                            val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
-                            if (isAlbumSaved == null) {
-                                viewModel.deleteAlbum(item.id)
-                            }
-                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
-                        } else {
-                            viewModel.insertAlbum(album)
-                            viewModel.insertListenLaterAlbum(IsListenLaterSaved(item.id, true))
-                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
+            imgListenLater.setOnClickListener {
+                lifecycleScope.launch {
+                    val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                    if (isListenLaterSaved != null) {
+                        viewModel.deleteListenLaterState(item.id)
+                        val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
+                        if (isAlbumSaved == null) {
+                            viewModel.deleteAlbum(item.id)
                         }
+                        imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                    } else {
+                        viewModel.insertAlbum(album)
+                        viewModel.insertListenLaterAlbum(IsListenLaterSaved(item.id, true))
+                        imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
                     }
                 }
             }
@@ -364,7 +363,7 @@ class AlbumDetailFragment : Fragment() {
         val isAlbumSaved = albumWithStates.isAlbumSaved?.isAlbumSaved
         val isListenLaterSaved = albumWithStates.isListenLaterSaved?.isListenLaterSaved
 
-        binding.apply {
+        binding?.apply {
             imgSave.setImageResource(
                 if (isAlbumSaved == true) R.drawable.ic_favorite
                 else R.drawable.ic_favorite_border

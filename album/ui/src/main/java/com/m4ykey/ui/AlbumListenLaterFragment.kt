@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 class AlbumListenLaterFragment : Fragment() {
 
     private var _binding : FragmentAlbumListenLaterBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
@@ -58,7 +58,7 @@ class AlbumListenLaterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumListenLaterBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root ?: throw IllegalStateException("Binding root is null")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class AlbumListenLaterFragment : Fragment() {
         navController = findNavController()
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        with(binding) {
+        binding?.apply {
             setupToolbar()
             setupRecyclerView()
             getRandomAlbum()
@@ -100,7 +100,7 @@ class AlbumListenLaterFragment : Fragment() {
     }
 
     private fun resetSearchState() {
-        with(binding) {
+        binding?.apply {
             if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
                 linearLayoutSearch.isVisible = false
                 etSearch.setText("")
@@ -112,7 +112,7 @@ class AlbumListenLaterFragment : Fragment() {
 
     private fun showSearchEditText() {
         if (!isSearchEditTextVisible) {
-            binding.linearLayoutSearch.apply {
+            binding?.linearLayoutSearch?.apply {
                 translationY = -30f
                 show()
                 animationPropertiesY(0f, 1f, DecelerateInterpolator())
@@ -124,13 +124,13 @@ class AlbumListenLaterFragment : Fragment() {
     private fun hideSearchEditText() {
         if (isSearchEditTextVisible && !isHidingAnimationRunning) {
             isHidingAnimationRunning = true
-            binding.linearLayoutSearch.apply {
+            binding?.linearLayoutSearch?.apply {
                 translationY = 0f
                 animationPropertiesY(-30f, 0f, DecelerateInterpolator())
             }
             lifecycleScope.launch {
                 delay(400)
-                binding.linearLayoutSearch.hide()
+                binding?.linearLayoutSearch?.hide()
                 isSearchEditTextVisible = false
                 isHidingAnimationRunning = false
             }
@@ -138,7 +138,7 @@ class AlbumListenLaterFragment : Fragment() {
     }
 
     private fun getRandomAlbum() {
-        binding.btnListenLater.setOnClickListener {
+        binding?.btnListenLater?.setOnClickListener {
             lifecycleScope.launch {
                 val randomAlbum = viewModel.getRandomAlbum()
                 if (randomAlbum != null) {
@@ -152,7 +152,7 @@ class AlbumListenLaterFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding.apply {
+        binding?.apply {
 
             val onAlbumClick : (AlbumEntity) -> Unit = { album ->
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
@@ -179,7 +179,7 @@ class AlbumListenLaterFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.apply {
+        binding?.toolbar?.apply {
             setNavigationOnClickListener { navController.navigateUp() }
             menu.findItem(R.id.imgAdd).setOnMenuItemClickListener {
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumSearchFragment()

@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 class AlbumNewReleaseFragment : Fragment() {
 
     private var _binding : FragmentAlbumNewReleaseBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private val viewModel : AlbumViewModel by viewModels()
     private lateinit var albumAdapter : NewReleasePagingAdapter
@@ -50,7 +50,7 @@ class AlbumNewReleaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumNewReleaseBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root ?: throw IllegalStateException("Binding root is null")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class AlbumNewReleaseFragment : Fragment() {
 
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        with(binding) {
+        binding?.apply {
             lifecycleScope.launch {
                 delay(500L)
                 viewModel.getNewReleases()
@@ -71,7 +71,7 @@ class AlbumNewReleaseFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        with(binding.recyclerViewNewRelease) {
+        binding?.recyclerViewNewRelease?.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
 
             val onAlbumClick : (AlbumItem) -> Unit = { album ->
@@ -100,13 +100,13 @@ class AlbumNewReleaseFragment : Fragment() {
                 }
             }
 
-            this@with.layoutManager = layoutManager
+            this.layoutManager = layoutManager
             albumAdapter.addLoadStateListener { loadState -> handleLoadState(loadState) }
         }
     }
 
     private fun handleLoadState(loadState : CombinedLoadStates) {
-        with(binding) {
+        binding?.apply {
             progressbar.isVisible = loadState.source.refresh is LoadState.Loading
 
             val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
@@ -119,7 +119,7 @@ class AlbumNewReleaseFragment : Fragment() {
 
     private fun handleNewReleaseState(state : AlbumListUiState?) {
         state ?: return
-        with(binding) {
+        binding?.apply {
             progressbar.isVisible = state.isLoading
             recyclerViewNewRelease.isVisible = !state.isLoading
             state.error?.let { showToast(requireContext(), it) }

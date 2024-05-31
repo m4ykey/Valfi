@@ -26,9 +26,8 @@ import kotlinx.coroutines.launch
 class AlbumStatisticsFragment : Fragment() {
 
     private var _binding : FragmentAlbumStatisticsBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
-    private lateinit var navController: NavController
     private val viewModel : AlbumViewModel by viewModels()
 
     override fun onAttach(context: Context) {
@@ -45,17 +44,16 @@ class AlbumStatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumStatisticsBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root ?: throw IllegalStateException("Binding root is null")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = findNavController()
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        with(binding) {
-            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        binding?.apply {
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
             lifecycleScope.launch {
                 val album = viewModel.getAlbumTypeCount(ALBUM).firstOrNull() ?: 0
@@ -77,8 +75,8 @@ class AlbumStatisticsFragment : Fragment() {
             duration = 2000
             addUpdateListener { animation ->
                 val animatedValue = animation.animatedValue as Int
-                binding.txtAlbumCount.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
-                binding.txtTotalSongsPlayed.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
+                binding?.txtAlbumCount?.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
+                binding?.txtTotalSongsPlayed?.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
             }
         }
         animator.start()

@@ -52,7 +52,6 @@ class AlbumHomeFragment : Fragment() {
     private var _binding : FragmentAlbumHomeBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
-    private lateinit var navController : NavController
     private var isListViewChanged = false
     private val viewModel : AlbumViewModel by viewModels()
     private lateinit var albumAdapter : AlbumPagingAdapter
@@ -68,7 +67,6 @@ class AlbumHomeFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navController = findNavController()
         if (context is BottomNavigationVisibility) {
             bottomNavigationVisibility = context
         } else {
@@ -196,7 +194,7 @@ class AlbumHomeFragment : Fragment() {
 
             val onAlbumClick : (AlbumEntity) -> Unit = { album ->
                 val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
-                navController.navigate(action)
+                findNavController().navigate(action)
             }
 
             albumAdapter = AlbumPagingAdapter(onAlbumClick)
@@ -273,7 +271,7 @@ class AlbumHomeFragment : Fragment() {
             val buttons = listOf(
                 Pair(R.id.imgSearch) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
-                    navController.navigate(action)
+                    findNavController().navigate(action)
                 },
                 Pair(R.id.imgLink) {
                     showInsertAlbumLinkDialog()
@@ -289,18 +287,18 @@ class AlbumHomeFragment : Fragment() {
             val drawerButtons = listOf(
                 Pair(R.id.imgStatistics) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumStatisticsFragment()
-                    navController.navigate(action)
+                    findNavController().navigate(action)
                     drawerLayout.close()
                 },
                 Pair(R.id.imgSettings) {  },
                 Pair(R.id.imgListenLater) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
-                    navController.navigate(action)
+                    findNavController().navigate(action)
                     drawerLayout.close()
                 },
                 Pair(R.id.imgNewReleases) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumNewReleaseFragment()
-                    navController.navigate(action)
+                    findNavController().navigate(action)
                     drawerLayout.close()
                 }
             )
@@ -324,7 +322,7 @@ class AlbumHomeFragment : Fragment() {
                 if (isValidAlbumUrl(albumUrl)) {
                     val albumId = getAlbumIdFromUrl(albumUrl)
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
-                    navController.navigate(action)
+                    findNavController().navigate(action)
                 } else {
                     showToast(requireContext(), getString(R.string.invalid_album_url))
                 }

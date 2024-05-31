@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -16,7 +18,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -24,20 +26,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
 
-    implementation(libs.androidxCore)
-    implementation(libs.androidxAppCompat)
-    implementation(libs.androidMaterial)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.extJunit)
-    androidTestImplementation(libs.espresso)
+    implementation(project(":core"))
+
+    libs.apply {
+        implementation(androidxCore)
+        implementation(androidxAppCompat)
+        implementation(androidxConstraintLayout)
+        implementation(androidMaterial)
+
+        testImplementation(junit)
+
+        androidTestImplementation(extJunit)
+        androidTestImplementation(espresso)
+
+        implementation(bundles.navigation)
+        implementation(bundles.lifecycle)
+
+        ksp(hiltCompiler)
+        implementation(hiltAndroid)
+
+    }
 }

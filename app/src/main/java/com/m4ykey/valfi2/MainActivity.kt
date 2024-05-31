@@ -2,6 +2,8 @@ package com.m4ykey.valfi2
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
@@ -18,6 +20,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        with(binding) {
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            bottomNavigation.setupWithNavController(navController)
+        }
     }
 
     override fun showBottomNavigation() {

@@ -2,12 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/album_nav_graph"
         android:icon="@drawable/selector_album"
-        android:title="@string/album"
-        android:id="@+id/albumHomeFragment"/>
+        android:title="@string/album" />
 
     <item
-        android:icon="@drawable/ic_new"
-        android:title="@string/news"/>
+        android:id="@+id/news_nav_graph"
+        android:icon="@drawable/ic_news"
+        android:title="@string/news" />
 
 </menu>
