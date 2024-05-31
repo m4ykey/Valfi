@@ -1,10 +1,7 @@
 package com.m4ykey.core.network
 
-sealed class Resource<T>(
-    val data : T? = null,
-    val message : String? = null
-) {
-    class Loading<T> : Resource<T>()
-    class Success<T>(data: T) : Resource<T>(data)
-    class Error<T>(data: T? = null, message: String) : Resource<T>(data, message)
+sealed class Resource<out T> {
+    data class Success<out T>(val data : T) : Resource<T>()
+    data class Error(val message : String, val data : Any? = null) : Resource<Nothing>()
+    data object Loading : Resource<Nothing>()
 }

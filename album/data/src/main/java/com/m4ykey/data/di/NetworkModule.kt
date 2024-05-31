@@ -24,13 +24,13 @@ object NetworkModule {
     @Singleton
     fun provideAuthApi(
         moshi: Moshi
-    ): AuthApi = createApi(Constants.SPOTIFY_AUTH_URL, moshi, AuthApi::class.java)
+    ): AuthApi = createApi(Constants.SPOTIFY_AUTH_URL, moshi)
 
     @Provides
     @Singleton
     fun provideAlbumApi(
         moshi: Moshi
-    ): AlbumApi = createApi(Constants.SPOTIFY_BASE_URL, moshi, AlbumApi::class.java)
+    ): AlbumApi = createApi(Constants.SPOTIFY_BASE_URL, moshi)
 
     @Provides
     @Singleton

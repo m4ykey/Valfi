@@ -38,6 +38,10 @@ dependencies {
     libs.apply {
         implementation(androidxAppCompat)
         implementation(androidxCore)
+        implementation(androidxPalette)
+        implementation(androidxDatastore)
+        implementation(androidxPaging)
+
         implementation(androidMaterial)
 
         implementation(moshiKotlin)
@@ -47,14 +51,10 @@ dependencies {
         ksp(hiltCompiler)
         implementation(hiltAndroid)
 
-        implementation(androidxDatastore)
-
         implementation(okhttp)
         implementation(okhttpLoggingInterceptor)
 
         implementation(glide)
-
-        implementation(androidxPalette)
 
     }
 }

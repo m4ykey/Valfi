@@ -58,7 +58,6 @@ class AlbumDetailFragment : Fragment() {
     private val viewModel: AlbumViewModel by viewModels()
     private lateinit var trackAdapter : TrackListPagingAdapter
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
-    private var isDataLoaded = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -94,7 +93,7 @@ class AlbumDetailFragment : Fragment() {
             lifecycleScope.launch {
                 viewModel.apply {
                     val albumDeferred = async { getAlbumById(args.albumId) }
-                    tracks.observe(viewLifecycleOwner) { state -> handleTrackState(state) }
+                    tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
                     getAlbumTracks(args.albumId)
 
                     networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
@@ -217,32 +216,35 @@ class AlbumDetailFragment : Fragment() {
         }
     }
 
-    private fun handleTrackState(state: AlbumTrackUiState?) {
-        state ?: return
-        with(binding) {
-            progressbar.isVisible = state.isLoading && !isDataLoaded
-            nestedScrollView.isVisible = !state.isLoading || isDataLoaded
-            state.error?.let { showToast(requireContext(), it) }
-            state.albumTracks?.let { tracks ->
-                val decoratedTrackItem = decorateTrackItems(tracks)
-                lifecycleScope.launch {
-                    delay(500L)
-                    trackAdapter.submitData(lifecycle, decoratedTrackItem)
-                }
+    private fun handleUiState(state : Any?) {
+        binding.apply {
+            state ?: return
+            nestedScrollView.isVisible = !progressbar.isVisible
+            progressbar.isVisible = when (state) {
+                is AlbumDetailUiState -> state.isLoading
+                is AlbumTrackUiState -> state.isLoading
+                else -> false
             }
-        }
-    }
 
-    private fun handleUiState(state: AlbumDetailUiState?) {
-        state ?: return
-        with(binding) {
-            progressbar.isVisible = state.isLoading && !isDataLoaded
-            nestedScrollView.isVisible = !state.isLoading || isDataLoaded
-            state.error?.let { showToast(requireContext(), it) }
-            state.albumDetail?.let { detail ->
-                lifecycleScope.launch {
-                    delay(200L)
-                    displayAlbumDetail(detail)
+            when (state) {
+                is AlbumTrackUiState -> {
+                    state.error?.let { showToast(requireContext(), it) }
+                    state.albumTracks?.let { tracks ->
+                        val decoratedTrackItem = decorateTrackItems(tracks)
+                        lifecycleScope.launch {
+                            delay(500L)
+                            trackAdapter.submitData(lifecycle, decoratedTrackItem)
+                        }
+                    }
+                }
+                is AlbumDetailUiState -> {
+                    state.error?.let { showToast(requireContext(), it) }
+                    state.albumDetail?.let { detail ->
+                        lifecycleScope.launch {
+                            delay(200L)
+                            displayAlbumDetail(detail)
+                        }
+                    }
                 }
             }
         }

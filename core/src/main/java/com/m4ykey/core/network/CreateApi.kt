@@ -4,10 +4,13 @@ import com.squareup.moshi.Moshi
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-fun <T> createApi(baseUrl : String, moshi : Moshi, apiClass : Class<T>) : T {
-    return Retrofit.Builder()
+inline fun <reified T> createApi(baseUrl : String, moshi : Moshi) : T {
+    require(baseUrl.isNotBlank()) { "Base Url cannot be blank" }
+
+    val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
-        .create(apiClass)
+
+    return retrofit.create(T::class.java)
 }
