@@ -2,7 +2,7 @@
 application = "8.4.1"
 navigation = "2.7.7"
 retrofit = "2.11.0"
-lifecycle = "2.8.0"
+lifecycle = "2.8.1"
 hilt = "2.51.1"
 okhttp = "4.12.0"
 room = "2.6.1"
@@ -10,8 +10,8 @@ vico = "1.14.0"
 libraries = "11.1.4"
 
 [libraries]
-firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.0" }
-firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.0" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.1" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.1" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
@@ -22,7 +22,7 @@ leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = 
 androidxNavigationFragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidxNavigationUI = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
-androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
+androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
 androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
 androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
 androidxPaging = { group = "androidx.paging", name = "paging-runtime", version = "3.3.0" }
@@ -64,7 +64,7 @@ ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
-gms = { id = "com.google.gms.google-services", version = "4.4.1" }
+gms = { id = "com.google.gms.google-services", version = "4.4.2" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
 aboutLibrariesPlugin = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries" }
 

@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
@@ -39,7 +38,6 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
-import com.m4ykey.ui.adapter.decoration.DecoratedTrackItem
 import com.m4ykey.ui.adapter.decoration.decorateTrackItems
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -204,7 +202,7 @@ class AlbumDetailFragment : Fragment() {
 
             trackAdapter.addLoadStateListener { loadState ->
                 rvTrackList.isVisible = loadState.source.refresh is LoadState.NotLoading
-                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+                progressbar.isVisible = loadState.source.refresh is LoadState.Loading
 
                 handleLoadStateError(loadState)
             }
@@ -222,7 +220,7 @@ class AlbumDetailFragment : Fragment() {
     private fun handleTrackState(state: AlbumTrackUiState?) {
         state ?: return
         with(binding) {
-            progressBar.isVisible = state.isLoading && !isDataLoaded
+            progressbar.isVisible = state.isLoading && !isDataLoaded
             nestedScrollView.isVisible = !state.isLoading || isDataLoaded
             state.error?.let { showToast(requireContext(), it) }
             state.albumTracks?.let { tracks ->
@@ -238,7 +236,7 @@ class AlbumDetailFragment : Fragment() {
     private fun handleUiState(state: AlbumDetailUiState?) {
         state ?: return
         with(binding) {
-            progressBar.isVisible = state.isLoading && !isDataLoaded
+            progressbar.isVisible = state.isLoading && !isDataLoaded
             nestedScrollView.isVisible = !state.isLoading || isDataLoaded
             state.error?.let { showToast(requireContext(), it) }
             state.albumDetail?.let { detail ->

@@ -14,7 +14,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
@@ -40,7 +40,6 @@ class AlbumSearchFragment : Fragment() {
 
     private var _binding : FragmentAlbumSearchBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
     private var isClearButtonVisible = false
     private val viewModel : AlbumViewModel by viewModels()
@@ -68,7 +67,6 @@ class AlbumSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.hideBottomNavigation()
-        navController = findNavController()
 
         setupToolbar()
         setupRecyclerView()
@@ -82,7 +80,7 @@ class AlbumSearchFragment : Fragment() {
     private fun handleSearchState(state : AlbumListUiState?) {
         state ?: return
         with(binding) {
-            progressBar.isVisible = state.isLoading
+            progressbar.isVisible = state.isLoading
             rvSearchAlbums.isVisible = !state.isLoading
             state.error?.let { showToast(requireContext(), it) }
             state.albumList?.let { search ->
@@ -116,7 +114,7 @@ class AlbumSearchFragment : Fragment() {
 
             val onAlbumClick : (AlbumItem) -> Unit = { album ->
                 val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
-                navController.navigate(action)
+                findNavController().navigate(action)
             }
 
             searchAdapter = SearchAlbumPagingAdapter(onAlbumClick)
@@ -150,7 +148,7 @@ class AlbumSearchFragment : Fragment() {
 
     private fun handleLoadState(loadState : CombinedLoadStates) {
         with(binding) {
-            progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            progressbar.isVisible = loadState.source.refresh is LoadState.Loading
 
             val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
                     loadState.append.endOfPaginationReached &&
@@ -163,7 +161,7 @@ class AlbumSearchFragment : Fragment() {
 
     private fun setupToolbar() {
         with(binding) {
-            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             etSearch.doOnTextChanged { text, _, _, _ ->
                 val isSearchEmpty = text.isNullOrBlank()
                 handleClearButtonVisibility(isSearchEmpty)

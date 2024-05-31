@@ -50,7 +50,7 @@
 
     <ProgressBar
         android:indeterminateTint="@color/progressBar"
-        android:id="@+id/progressBar"
+        android:id="@+id/progressbar"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

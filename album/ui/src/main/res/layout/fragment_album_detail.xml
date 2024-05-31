@@ -9,7 +9,7 @@
     tools:context=".AlbumDetailFragment">
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/progressBar"

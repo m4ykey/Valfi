@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
@@ -34,7 +33,6 @@ class AlbumNewReleaseFragment : Fragment() {
     private var _binding : FragmentAlbumNewReleaseBinding? = null
     private val binding get() = _binding!!
     private var bottomNavigationVisibility : BottomNavigationVisibility? = null
-    private lateinit var navController : NavController
     private val viewModel : AlbumViewModel by viewModels()
     private lateinit var albumAdapter : NewReleasePagingAdapter
 
@@ -58,7 +56,6 @@ class AlbumNewReleaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = findNavController()
         bottomNavigationVisibility?.hideBottomNavigation()
 
         with(binding) {
@@ -67,7 +64,7 @@ class AlbumNewReleaseFragment : Fragment() {
                 viewModel.getNewReleases()
             }
             viewModel.newRelease.observe(viewLifecycleOwner) { state -> handleNewReleaseState(state) }
-            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             setupRecyclerView()
         }
 
@@ -79,7 +76,7 @@ class AlbumNewReleaseFragment : Fragment() {
 
             val onAlbumClick : (AlbumItem) -> Unit = { album ->
                 val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(album.id)
-                navController.navigate(action)
+                findNavController().navigate(action)
             }
 
             albumAdapter = NewReleasePagingAdapter(onAlbumClick)
@@ -110,7 +107,7 @@ class AlbumNewReleaseFragment : Fragment() {
 
     private fun handleLoadState(loadState : CombinedLoadStates) {
         with(binding) {
-            progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            progressbar.isVisible = loadState.source.refresh is LoadState.Loading
 
             val isNothingFound = loadState.source.refresh is LoadState.NotLoading &&
                     loadState.append.endOfPaginationReached &&
@@ -123,7 +120,7 @@ class AlbumNewReleaseFragment : Fragment() {
     private fun handleNewReleaseState(state : AlbumListUiState?) {
         state ?: return
         with(binding) {
-            progressBar.isVisible = state.isLoading
+            progressbar.isVisible = state.isLoading
             recyclerViewNewRelease.isVisible = !state.isLoading
             state.error?.let { showToast(requireContext(), it) }
             state.albumList?.let { items ->

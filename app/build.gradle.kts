@@ -8,8 +8,8 @@ plugins {
 }
 
 val versionMajor = 0
-val versionMinor = 4
-val versionPatch = 7
+val versionMinor = 5
+val versionPatch = 0
 
 android {
     namespace = "com.m4ykey.valfi2"
@@ -51,6 +51,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":album:ui"))
+    implementation(project(":news:ui"))
     implementation(project(":album:data"))
 
     libs.apply {
