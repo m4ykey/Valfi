@@ -20,8 +20,6 @@
     <string name="couldn_t_find_albums">Sorry, we couldn\'t find albums for this search.</string>
     <string name="can_t_find_your_favorite_album">If you can\'t find your favorite album, consider adding it to your local collection.</string>
     <string name="add">Add</string>
-    <string name="refresh">Refresh</string>
-    <string name="results_cannot_be_loaded">Results cannot be loaded</string>
     <string name="add_album">Add Album</string>
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>

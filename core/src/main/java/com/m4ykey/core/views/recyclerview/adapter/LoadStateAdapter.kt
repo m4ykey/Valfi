@@ -1,9 +1,8 @@
-package com.m4ykey.ui.adapter
+package com.m4ykey.core.views.recyclerview.adapter
 
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import com.m4ykey.ui.adapter.viewholder.LoadStateViewHolder
 
 class LoadStateAdapter(private val retry : () -> Unit) : LoadStateAdapter<LoadStateViewHolder>() {
 

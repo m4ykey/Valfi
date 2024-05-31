@@ -40,11 +40,14 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":news:data"))
 
     libs.apply {
         implementation(androidxCore)
         implementation(androidxAppCompat)
         implementation(androidxConstraintLayout)
+        implementation(androidxPaging)
+
         implementation(androidMaterial)
 
         testImplementation(junit)

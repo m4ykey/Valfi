@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.m4ykey.core.network.Resource
+import com.m4ykey.core.paging.launchPaging
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -54,6 +55,7 @@ class AlbumViewModel @Inject constructor(
 
     fun searchAlbumByName(albumName : String) {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.searchAlbumByName(albumName) },
             onDataCollected = { search -> _albumPaging.value = search }
         )
@@ -61,6 +63,7 @@ class AlbumViewModel @Inject constructor(
 
     fun searchAlbumsListenLater(albumName : String) {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.searchAlbumsListenLater(albumName) },
             onDataCollected = { search -> _albumPaging.value = search }
         )
@@ -68,6 +71,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumType(albumType : String) {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.getAlbumType(albumType) },
             onDataCollected = { type -> _albumPaging.value = type }
         )
@@ -85,6 +89,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getSavedAlbums() {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.getSavedAlbums() },
             onDataCollected = { album -> _albumPaging.value = album }
         )
@@ -92,6 +97,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getSavedAlbumAsc() {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.getSavedAlbumAsc() },
             onDataCollected = { album -> _albumPaging.value = album }
         )
@@ -99,6 +105,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumSortedByName() {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.getAlbumSortedByName() },
             onDataCollected = { sort -> _albumPaging.value = sort }
         )
@@ -106,6 +113,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getListenLaterAlbums() {
         launchPaging(
+            scope = viewModelScope,
             source = { repository.getListenLaterAlbums() },
             onDataCollected = { later -> _albumPaging.value = later }
         )
@@ -140,6 +148,7 @@ class AlbumViewModel @Inject constructor(
     fun getNewReleases() {
         _newRelease.value = AlbumListUiState(isLoading = true)
         launchPaging(
+            scope = viewModelScope,
             source = { repository.getNewReleases() },
             onDataCollected = { pagingData: PagingData<AlbumItem> ->
                 val newState = AlbumListUiState(albumList = pagingData)
@@ -151,6 +160,7 @@ class AlbumViewModel @Inject constructor(
     fun searchAlbums(query : String) {
         _search.value = AlbumListUiState(isLoading = true)
         launchPaging(
+            scope = viewModelScope,
             source = { repository.searchAlbums(query) },
             onDataCollected = { pagingData: PagingData<AlbumItem> ->
                 val newState = AlbumListUiState(albumList = pagingData)
@@ -183,19 +193,6 @@ class AlbumViewModel @Inject constructor(
             is Resource.Success -> AlbumTrackUiState(albumTracks = this.data)
             is Resource.Loading -> AlbumTrackUiState(isLoading = true)
             is Resource.Error -> AlbumTrackUiState(error = this.message)
-        }
-    }
-
-    private fun <T: Any> launchPaging(
-        source : () -> Flow<PagingData<T>>,
-        onDataCollected : (PagingData<T>) -> Unit
-    ) {
-        viewModelScope.launch {
-            source()
-                .cachedIn(this)
-                .collect { pagingData ->
-                    onDataCollected(pagingData)
-                }
         }
     }
 

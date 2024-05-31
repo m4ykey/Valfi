@@ -7,8 +7,9 @@ import com.m4ykey.data.domain.repository.NewsRepository
 import com.m4ykey.data.remote.api.NewsApi
 import com.m4ykey.data.remote.paging.NewsPagingSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class NewsRepositoryImpl(private val api : NewsApi) : NewsRepository {
+class NewsRepositoryImpl @Inject constructor(private val api : NewsApi) : NewsRepository {
 
     override fun getMusicNews(): Flow<PagingData<Article>> = createPager {
         NewsPagingSource(api = api)

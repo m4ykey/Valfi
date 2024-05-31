@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="results_cannot_be_loaded">Results cannot be loaded</string>
+    <string name="refresh">Refresh</string>
+</resources>

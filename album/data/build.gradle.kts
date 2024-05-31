@@ -18,17 +18,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    val apiKeys by lazy {
-        rootProject.file("local.properties").inputStream().use { input ->
-            Properties().apply { load(input) }
-        }
-    }
-
-    buildTypes.all {
-        buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"${apiKeys.getProperty("SPOTIFY_CLIENT_ID")}\"")
-        buildConfigField("String", "SPOTIFY_CLIENT_SECRET", "\"${apiKeys.getProperty("SPOTIFY_CLIENT_SECRET")}\"")
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -44,9 +33,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-    }
-    buildFeatures {
-        buildConfig = true
     }
 }
 

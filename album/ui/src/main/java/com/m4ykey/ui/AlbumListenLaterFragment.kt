@@ -24,7 +24,7 @@ import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
-import com.m4ykey.ui.adapter.LoadStateAdapter
+import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint

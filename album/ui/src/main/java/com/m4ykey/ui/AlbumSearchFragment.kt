@@ -26,7 +26,7 @@ import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.ui.adapter.LoadStateAdapter
+import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.ui.uistate.AlbumListUiState

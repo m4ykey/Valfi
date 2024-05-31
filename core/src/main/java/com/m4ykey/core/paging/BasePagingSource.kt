@@ -8,7 +8,7 @@ import java.io.IOException
 
 abstract class BasePagingSource<T: Any>(open val api : Any) : PagingSource<Int, T>() {
 
-    abstract suspend fun loadPage(params : LoadParams<Int>, page : Int, limit : Int?) : List<T>
+    abstract suspend fun loadPage(params : LoadParams<Int>, page : Int) : List<T>
 
     override fun getRefreshKey(state: PagingState<Int, T>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -21,9 +21,7 @@ abstract class BasePagingSource<T: Any>(open val api : Any) : PagingSource<Int, 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         return try {
             val page = params.key ?: 0
-            val limit = params.loadSize.coerceIn(1, 20)
-
-            val response = loadPage(params, page, limit)
+            val response = loadPage(params, page)
 
             LoadResult.Page(
                 data = response,

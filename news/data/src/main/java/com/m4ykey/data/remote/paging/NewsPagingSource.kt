@@ -10,12 +10,10 @@ class NewsPagingSource @Inject constructor(
     override val api : NewsApi
 ) : BasePagingSource<Article>(api) {
 
-    override suspend fun loadPage(params: LoadParams<Int>, page: Int, limit: Int?): List<Article> {
-        val response = api.getMusicNews(
-            page = page,
+    override suspend fun loadPage(params: LoadParams<Int>, page: Int): List<Article> {
+        return api.getMusicNews(
+            page = page + 1,
             pageSize = params.loadSize
-        ).articles
-
-        return response?.map { it!!.toArticle() }.orEmpty()
+        ).articles?.map { it.toArticle() }.orEmpty()
     }
 }

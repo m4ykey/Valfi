@@ -36,7 +36,7 @@ import com.m4ykey.data.local.model.ArtistEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
-import com.m4ykey.ui.adapter.LoadStateAdapter
+import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.ui.adapter.TrackListPagingAdapter
 import com.m4ykey.ui.adapter.decoration.decorateTrackItems
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding

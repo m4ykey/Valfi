@@ -1,11 +1,11 @@
-package com.m4ykey.ui.adapter.viewholder
+package com.m4ykey.core.views.recyclerview.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
-import com.m4ykey.ui.databinding.LayoutLoadStateBinding
+import com.m4ykey.core.databinding.LayoutLoadStateBinding
 
 class LoadStateViewHolder(
     private val binding : LayoutLoadStateBinding,
@@ -23,7 +23,7 @@ class LoadStateViewHolder(
 
     fun bind(loadState: LoadState) {
         binding.apply {
-            progressBar.isVisible = loadState is LoadState.Loading
+            progressbar.isVisible = loadState is LoadState.Loading
             btnRetry.isVisible = loadState !is LoadState.Loading
             txtError.isVisible = loadState !is LoadState.Loading
         }

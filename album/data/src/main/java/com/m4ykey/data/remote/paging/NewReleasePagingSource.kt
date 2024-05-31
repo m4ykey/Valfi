@@ -14,15 +14,12 @@ class NewReleasePagingSource @Inject constructor(
 
     override suspend fun loadPage(
         params: LoadParams<Int>,
-        page: Int,
-        limit: Int?
+        page: Int
     ): List<AlbumItem> {
-        val response = api.getNewReleases(
-            limit = limit ?: 0,
+       return api.getNewReleases(
+            limit = params.loadSize.coerceIn(1, 20),
             offset = page * params.loadSize,
             token = "Bearer ${token.getAccessToken()}"
-        ).albums
-
-        return response.items?.map { it.toAlbumItem() }.orEmpty()
+        ).albums.items?.map { it.toAlbumItem() }.orEmpty()
     }
 }

@@ -5,8 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.m4ykey.data.BuildConfig.SPOTIFY_CLIENT_ID
-import com.m4ykey.data.BuildConfig.SPOTIFY_CLIENT_SECRET
+import com.m4ykey.core.Keys.SPOTIFY_CLIENT_ID
+import com.m4ykey.core.Keys.SPOTIFY_CLIENT_SECRET
 import com.m4ykey.data.remote.api.AuthApi
 import com.m4ykey.data.remote.interceptor.token.TokenProvider
 import com.m4ykey.data.remote.interceptor.token.fetchAccessToken
