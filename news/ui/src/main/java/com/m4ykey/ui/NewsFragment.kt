@@ -2,10 +2,10 @@ package com.m4ykey.ui
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.ui.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint

@@ -8,7 +8,7 @@ import java.io.IOException
 
 abstract class BasePagingSource<T: Any>(open val api : Any) : PagingSource<Int, T>() {
 
-    abstract suspend fun loadPage(params : LoadParams<Int>, page : Int, limit : Int) : List<T>
+    abstract suspend fun loadPage(params : LoadParams<Int>, page : Int, limit : Int?) : List<T>
 
     override fun getRefreshKey(state: PagingState<Int, T>): Int? {
         return state.anchorPosition?.let { anchorPosition ->

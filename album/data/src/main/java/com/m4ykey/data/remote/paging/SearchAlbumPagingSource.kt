@@ -13,10 +13,10 @@ class SearchAlbumPagingSource @Inject constructor(
     private val token : SpotifyTokenProvider
 ) : BasePagingSource<AlbumItem>(api) {
 
-    override suspend fun loadPage(params: LoadParams<Int>, page: Int, limit: Int): List<AlbumItem> {
+    override suspend fun loadPage(params: LoadParams<Int>, page: Int, limit: Int?): List<AlbumItem> {
         val response = api.searchAlbums(
             query = query,
-            limit = limit,
+            limit = limit ?: 0,
             offset = page * params.loadSize,
             token = "Bearer ${token.getAccessToken()}"
         ).albums

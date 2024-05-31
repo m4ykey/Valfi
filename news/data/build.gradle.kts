@@ -1,6 +1,10 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -14,9 +18,19 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    val apiKey by lazy {
+        rootProject.file("local.properties").inputStream().use { input ->
+            Properties().apply { load(input) }
+        }
+    }
+
+    buildTypes.all {
+        buildConfigField("String", "NEWS_API_KEY", "\"${apiKey.getProperty("NEWS_API_KEY")}\"")
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -24,20 +38,38 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
 dependencies {
 
-    implementation(libs.androidxCore)
-    implementation(libs.androidxAppCompat)
-    implementation(libs.androidMaterial)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.extJunit)
-    androidTestImplementation(libs.espresso)
+    implementation(project(":core"))
+
+    libs.apply {
+
+        implementation(retrofit)
+        implementation(converterMoshi)
+
+        testImplementation(junit)
+        androidTestImplementation(extJunit)
+        androidTestImplementation(espresso)
+
+        implementation(coroutines)
+
+        implementation(hiltAndroid)
+        ksp(hiltCompiler)
+
+        implementation(androidxPaging)
+
+        implementation(bundles.okhttp)
+
+    }
 }
