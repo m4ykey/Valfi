@@ -12,6 +12,7 @@ libraries = "11.1.4"
 [libraries]
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.1" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.1" }
+firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.1" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
@@ -28,11 +29,13 @@ androidxDatastore = { group = "androidx.datastore", name = "datastore-preference
 androidxPaging = { group = "androidx.paging", name = "paging-runtime", version = "3.3.0" }
 androidxLifecycleViewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidxLifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidxLifecycleLivedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidxRoomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 androidxPalette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
+androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 
 androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 
@@ -67,8 +70,9 @@ safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigati
 gms = { id = "com.google.gms.google-services", version = "4.4.2" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
 aboutLibrariesPlugin = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries" }
+performance = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
 
 [bundles]
 navigation = ["androidxNavigationFragment", "androidxNavigationUI"]
-lifecycle = ["androidxLifecycleRuntime", "androidxLifecycleViewmodel"]
+lifecycle = ["androidxLifecycleRuntime", "androidxLifecycleViewmodel", "androidxLifecycleLivedata"]
 okhttp = ["okhttp", "okhttpLoggingInterceptor"]

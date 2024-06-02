@@ -5,11 +5,12 @@ plugins {
     alias(libs.plugins.gms)
     alias(libs.plugins.ksp)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.performance)
 }
 
 val versionMajor = 0
 val versionMinor = 5
-val versionPatch = 1
+val versionPatch = 2
 
 android {
     namespace = "com.m4ykey.valfi2"
@@ -52,6 +53,7 @@ dependencies {
     implementation(project(":album:ui"))
     implementation(project(":news:ui"))
     implementation(project(":album:data"))
+    implementation(project(":news:data"))
 
     libs.apply {
 
@@ -72,5 +74,6 @@ dependencies {
         implementation(timber)
 
         implementation(firebaseCrashlytics)
+        implementation(firebasePerformance)
     }
 }

@@ -1,10 +1,12 @@
 package com.m4ykey.ui
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -70,7 +72,12 @@ class NewsFragment : Fragment() {
         binding?.recyclerViewNews?.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            newsAdapter = NewsPagingAdapter()
+            val onNewsClick : (Article) -> Unit = { article ->
+                val customTabsIntent = CustomTabsIntent.Builder().build()
+                customTabsIntent.launchUrl(requireContext(), Uri.parse(article.url))
+            }
+
+            newsAdapter = NewsPagingAdapter(onNewsClick)
 
             adapter = newsAdapter.withLoadStateHeaderAndFooter(
                 header = LoadStateAdapter { newsAdapter.retry() },

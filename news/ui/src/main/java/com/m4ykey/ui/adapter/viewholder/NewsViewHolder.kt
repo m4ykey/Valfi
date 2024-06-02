@@ -20,14 +20,17 @@ import java.time.format.DateTimeParseException
 import java.util.Locale
 
 class NewsViewHolder(
-    private val binding: LayoutNewsListBinding
+    private val binding: LayoutNewsListBinding,
+    private val onNewsClick : (Article) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
         fun create(
-            parent: ViewGroup
+            parent: ViewGroup,
+            onNewsClick: (Article) -> Unit
         ) : NewsViewHolder {
             return NewsViewHolder(
+                onNewsClick = onNewsClick,
                 binding = LayoutNewsListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
         }
@@ -35,6 +38,8 @@ class NewsViewHolder(
 
     fun bind(item : Article) {
         with(binding) {
+            linearLayoutArticle.setOnClickListener { onNewsClick(item) }
+
             val logos = mapOf(
                 "Rolling Stone" to ROLLING_STONE_LOGO,
                 "Pitchfork" to PITCHFORK_LOGO,

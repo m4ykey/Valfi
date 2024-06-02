@@ -6,6 +6,7 @@
     app:startDestination="@id/albumHomeFragment">
 
     <fragment
+        tools:layout="@layout/fragment_album_home"
         android:id="@+id/albumHomeFragment"
         android:name="com.m4ykey.ui.AlbumHomeFragment"
         android:label="AlbumHomeFragment" >
@@ -46,6 +47,7 @@
             app:destination="@id/albumNewReleaseFragment" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_album_search"
         android:id="@+id/albumSearchFragment"
         android:name="com.m4ykey.ui.AlbumSearchFragment"
         android:label="AlbumSearchFragment" >
@@ -58,6 +60,7 @@
             app:destination="@id/albumDetailFragment" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_album_detail"
         android:id="@+id/albumDetailFragment"
         android:name="com.m4ykey.ui.AlbumDetailFragment"
         android:label="AlbumDetailFragment" >

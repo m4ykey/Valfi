@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.ui.adapter.viewholder.NewsViewHolder
 
-class NewsPagingAdapter : PagingDataAdapter<Article, NewsViewHolder>(COMPARATOR) {
+class NewsPagingAdapter(
+    private val onNewsClick : (Article) -> Unit
+) : PagingDataAdapter<Article, NewsViewHolder>(COMPARATOR) {
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
@@ -20,6 +22,6 @@ class NewsPagingAdapter : PagingDataAdapter<Article, NewsViewHolder>(COMPARATOR)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        return NewsViewHolder.create(parent)
+        return NewsViewHolder.create(parent, onNewsClick)
     }
 }
