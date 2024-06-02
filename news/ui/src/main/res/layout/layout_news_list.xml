@@ -8,9 +8,10 @@
     <androidx.cardview.widget.CardView
         app:cardCornerRadius="10dp"
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="220dp">
 
         <ImageView
+            android:contentDescription="@string/article_image"
             android:id="@+id/imgArticle"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
@@ -19,9 +20,43 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:textColor="@color/textColor"
+        android:layout_marginTop="5dp"
         android:id="@+id/txtTitle"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
+        android:textSize="18sp"
+        android:fontFamily="@font/inter_medium"
+        android:maxLines="3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:gravity="center|start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="100dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp">
+
+            <ImageView
+                android:contentDescription="@string/logo"
+                android:id="@+id/imgLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:textColor="@color/textColor2"
+            android:id="@+id/txtSourceNameDate"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

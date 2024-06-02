@@ -1,5 +1,7 @@
 <resources>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="must_implement_bottom_navigation">must implement BottomNavigationView</string>
+    <string name="latest_news">Latest News</string>
+    <string name="source_date" translatable="false">%1$s • %2$s</string>
+    <string name="article_image">Article Image</string>
+    <string name="logo" translatable="false">Logo</string>
 </resources>

@@ -1,8 +1,8 @@
 package com.m4ykey.data.remote.api
 
+import com.m4ykey.core.BuildConfig.NEWS_API_KEY
 import com.m4ykey.core.Constants.DOMAINS
 import com.m4ykey.core.Constants.PAGE_SIZE
-import com.m4ykey.core.Keys.NEWS_API_KEY
 import com.m4ykey.data.remote.model.NewsDto
 import retrofit2.http.GET
 import retrofit2.http.Query
