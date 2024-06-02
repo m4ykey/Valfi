@@ -50,12 +50,13 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
+            android:fontFamily="@font/outfit_medium"
             android:textColor="@color/textColor2"
             android:id="@+id/txtSourceNameDate"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="5dp"/>
 
     </LinearLayout>
 
