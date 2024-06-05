@@ -8,12 +8,17 @@ okhttp = "4.12.0"
 room = "2.6.1"
 vico = "1.14.0"
 libraries = "11.1.4"
+coroutines = "1.9.0-RC"
 
 [libraries]
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.1" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.1" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.1" }
 
+androidxArchCoreTesting = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
+androidxTestCore = { group = "androidx.test", name = "core", version = "1.5.0" }
+coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+androidXRoomTesting = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version = "3.5.1" }
@@ -45,7 +50,7 @@ moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "
 
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 
-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.8.0" }
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }

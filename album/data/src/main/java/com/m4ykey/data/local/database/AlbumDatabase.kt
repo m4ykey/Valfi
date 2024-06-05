@@ -10,7 +10,7 @@ import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 
 @Database(
-    version = 4,
+    version = 1,
     exportSchema = false,
     entities = [
         AlbumEntity::class,

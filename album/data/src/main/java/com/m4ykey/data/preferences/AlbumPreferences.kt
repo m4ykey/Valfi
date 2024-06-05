@@ -1,4 +1,4 @@
-package com.m4ykey.core
+package com.m4ykey.data.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -16,7 +16,7 @@ import java.io.IOException
 import javax.inject.Singleton
 
 @Singleton
-class AlbumSettings {
+class AlbumPreferences {
 
     private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = "album_preferences")
 
@@ -26,9 +26,9 @@ class AlbumSettings {
         private val KEY_SELECTED_SORT_TYPE = stringPreferencesKey("selected_sort_type")
     }
 
-    suspend fun saveSelectedSortType(context: Context, listType: SortType) {
+    suspend fun saveSelectedSortType(context: Context, sortType: SortType) {
         context.dataStore.edit { preferences ->
-            preferences[KEY_SELECTED_SORT_TYPE] = listType.name
+            preferences[KEY_SELECTED_SORT_TYPE] = sortType.name
         }
     }
 
@@ -63,7 +63,7 @@ class AlbumSettings {
     }
 
     suspend fun getSelectedViewType(context: Context) : ViewType? {
-        val albumType = context.dataStore.data
+        val viewType = context.dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
                     emit(emptyPreferences())
@@ -73,7 +73,7 @@ class AlbumSettings {
             }
             .map { preferences -> preferences[KEY_SELECTED_VIEW_TYPE] }.first()
 
-        return albumType?.let { ViewType.valueOf(it) }
+        return viewType?.let { ViewType.valueOf(it) }
     }
 
     suspend fun getSelectedAlbumType(context: Context) : String? {

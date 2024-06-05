@@ -11,7 +11,6 @@ import androidx.room.PrimaryKey
 data class AlbumEntity(
     val albumType : String,
     val artists : List<ArtistEntity>,
-    val artistUrl : String = "",
     val albumUrl : String,
     @PrimaryKey(autoGenerate = false) val id : String,
     val images : String,

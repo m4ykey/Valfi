@@ -1,5 +1,6 @@
 package com.m4ykey.core.di
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -19,10 +20,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLoggingInterceptor() : HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.d("OkHttp", message)
         }
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        return interceptor
     }
 
 }

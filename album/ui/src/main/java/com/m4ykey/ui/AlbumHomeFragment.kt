@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
-import com.m4ykey.core.AlbumSettings
 import com.m4ykey.core.Constants.ALBUM
 import com.m4ykey.core.Constants.COMPILATION
 import com.m4ykey.core.Constants.EP
@@ -30,6 +29,7 @@ import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.preferences.AlbumPreferences
 import com.m4ykey.ui.adapter.AlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.animationPropertiesY
@@ -56,7 +56,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private var isSingleSelected = false
     private var isCompilationSelected = false
     @Inject
-    lateinit var dataManager: AlbumSettings
+    lateinit var dataManager: AlbumPreferences
     private var selectedSortType : SortType = SortType.LATEST
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,10 +69,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         setupRecyclerView()
 
         viewModel.apply {
-            lifecycleScope.launch {
-                delay(500L)
-                getSavedAlbums()
-            }
+            getSavedAlbums()
             albumPaging.observe(viewLifecycleOwner) { pagingData ->
                 albumAdapter.submitData(lifecycle, pagingData)
             }
@@ -145,11 +142,15 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun handleChipClick(isSelected : Boolean, albumType : String) {
         if (isSelected) {
-            viewModel.getAlbumType(albumType)
-            lifecycleScope.launch { dataManager.saveSelectedAlbumType(requireContext(), albumType) }
+            lifecycleScope.launch {
+                viewModel.getAlbumType(albumType)
+                dataManager.saveSelectedAlbumType(requireContext(), albumType)
+            }
         } else {
-            viewModel.getSavedAlbums()
-            lifecycleScope.launch { dataManager.deleteSelectedAlbumType(requireContext()) }
+            lifecycleScope.launch {
+                viewModel.getSavedAlbums()
+                dataManager.deleteSelectedAlbumType(requireContext())
+            }
         }
     }
 
@@ -421,7 +422,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 }
                 else -> viewModel.getSavedAlbums()
             }
-
             updateChipSelection()
         }
     }
