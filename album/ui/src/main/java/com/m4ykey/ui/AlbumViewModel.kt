@@ -17,7 +17,6 @@ import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
-import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.ui.uistate.AlbumDetailUiState
@@ -171,13 +170,14 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumTracks(id : String) {
         _tracks.value = AlbumTrackUiState(isLoading = true)
-        viewModelScope.launch {
-            trackRepository.getAlbumTracks(id)
-                .cachedIn(viewModelScope)
-                .map { it.map(TrackEntity::toTrackItem) }
-                .map { Resource.Success(it) }
-                .collectResult { _tracks.value = it.toUiState() }
-        }
+        launchPaging(
+            scope = viewModelScope,
+            source = { trackRepository.getAlbumTracks(id) },
+            onDataCollected = { pagingData : PagingData<TrackItem> ->
+                val newState = AlbumTrackUiState(albumTracks = pagingData)
+                _tracks.value = newState
+            }
+        )
     }
 
     private fun Resource<AlbumDetail>.toUiState() : AlbumDetailUiState {

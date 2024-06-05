@@ -111,7 +111,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                     loadState = loadState,
                     adapter = searchAdapter,
                     recyclerView = this,
-                    progressBar = binding!!.progressbar
+                    progressBar = binding?.progressbar!!
                 )
             }
         }

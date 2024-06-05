@@ -25,9 +25,7 @@ object DatabaseModule {
             context.applicationContext,
             AlbumDatabase::class.java,
             "album_database"
-        ).apply {
-            migrations.getAllMigrations().forEach { addMigrations(it) }
-        }.build()
+        ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
     }
 
     @Provides

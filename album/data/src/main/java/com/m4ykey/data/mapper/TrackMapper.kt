@@ -3,28 +3,15 @@ package com.m4ykey.data.mapper
 import com.m4ykey.data.domain.model.album.Artist
 import com.m4ykey.data.domain.model.album.ExternalUrls
 import com.m4ykey.data.domain.model.track.TrackItem
-import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.remote.model.tracks.TrackItemDto
 
-fun TrackItemDto.toTrackEntity(albumId : String) : TrackEntity =
-    TrackEntity(
-        albumId = albumId,
-        name = name ?: "",
-        id = id ?: "",
-        durationMs = duration_ms ?: 0,
-        externalUrls = external_urls?.spotify!!,
-        explicit = explicit ?: false,
-        artistList = artists?.joinToString(", ") { it.name ?: "" }.orEmpty(),
-        discNumber = disc_number ?: 0
-    )
-
-fun TrackEntity.toTrackItem() : TrackItem =
+fun TrackItemDto.toTrackItem() : TrackItem =
     TrackItem(
-        discNumber = discNumber,
-        id = id,
-        name = name,
-        explicit = explicit,
-        durationMs = durationMs,
-        externalUrls = ExternalUrls(externalUrls),
-        artists = artistList.split(", ").map { Artist(it, ExternalUrls(it), id) }
+        id = id.orEmpty(),
+        discNumber = disc_number ?: 0,
+        durationMs = duration_ms ?: 0,
+        explicit = explicit == true,
+        name = name.orEmpty(),
+        artists = artists!!.map { it.toArtist() },
+        externalUrls = external_urls!!.toExternalUrls()
     )

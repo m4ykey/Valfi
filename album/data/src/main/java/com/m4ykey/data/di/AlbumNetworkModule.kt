@@ -1,5 +1,6 @@
 package com.m4ykey.data.di
 
+import android.util.Log
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.createApi
 import com.m4ykey.data.remote.api.AlbumApi
@@ -43,5 +44,15 @@ object AlbumNetworkModule {
         .readTimeout(30, TimeUnit.SECONDS)
         .connectTimeout(30, TimeUnit.SECONDS)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.d("OkHttp", message)
+        }
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        return interceptor
+    }
 
 }

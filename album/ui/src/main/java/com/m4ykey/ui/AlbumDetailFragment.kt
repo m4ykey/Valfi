@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -63,8 +64,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         setupRecyclerView()
         binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
         viewModel.apply {
+            lifecycleScope.launch {
+                delay(500L)
+                getAlbumTracks(args.albumId)
+            }
             tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-            getAlbumTracks(args.albumId)
             lifecycleScope.launch {
                 networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
                     if (isInternetAvailable) {
@@ -168,6 +172,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             )
 
             trackAdapter.addLoadStateListener { loadState ->
+                Log.d("LoadState", "setupRecyclerView: $loadState")
                 handleLoadState(
                     loadState = loadState,
                     progressBar = binding!!.progressbar,
@@ -181,7 +186,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private fun handleUiState(state : Any?) {
         binding?.apply {
             state ?: return
-            nestedScrollView.isVisible = !progressbar.isVisible
             progressbar.isVisible = when (state) {
                 is AlbumDetailUiState -> state.isLoading
                 is AlbumTrackUiState -> state.isLoading
@@ -193,20 +197,12 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     state.error?.let { showToast(requireContext(), it) }
                     state.albumTracks?.let { tracks ->
                         val decoratedTrackItem = decorateTrackItems(tracks)
-                        lifecycleScope.launch {
-                            delay(500L)
-                            trackAdapter.submitData(lifecycle, decoratedTrackItem)
-                        }
+                        trackAdapter.submitData(lifecycle, decoratedTrackItem)
                     }
                 }
                 is AlbumDetailUiState -> {
                     state.error?.let { showToast(requireContext(), it) }
-                    state.albumDetail?.let { detail ->
-                        lifecycleScope.launch {
-                            delay(200L)
-                            displayAlbumDetail(detail)
-                        }
-                    }
+                    state.albumDetail?.let { detail -> displayAlbumDetail(detail) }
                 }
             }
         }

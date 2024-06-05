@@ -1,7 +1,6 @@
 package com.m4ykey.data.di
 
 import com.m4ykey.data.local.dao.AlbumDao
-import com.m4ykey.data.local.dao.TrackDao
 import com.m4ykey.data.local.database.AlbumDatabase
 import dagger.Module
 import dagger.Provides
@@ -16,9 +15,5 @@ object DaoModule {
     @Provides
     @Singleton
     fun provideAlbumDao(database : AlbumDatabase) : AlbumDao = database.albumDao()
-
-    @Provides
-    @Singleton
-    fun provideTrackDao(database: AlbumDatabase) : TrackDao = database.trackDao()
 
 }
