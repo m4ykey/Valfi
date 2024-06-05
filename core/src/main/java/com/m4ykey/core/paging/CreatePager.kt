@@ -7,7 +7,7 @@ import androidx.paging.PagingSource
 import com.m4ykey.core.Constants
 import kotlinx.coroutines.flow.Flow
 
-private val pagingConfig = PagingConfig(
+val pagingConfig = PagingConfig(
     pageSize = Constants.PAGE_SIZE,
     enablePlaceholders = false
 )

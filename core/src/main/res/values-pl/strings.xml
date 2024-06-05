@@ -2,4 +2,5 @@
 <resources>
     <string name="results_cannot_be_loaded">Wyniki nie mogą zostać załadowane</string>
     <string name="refresh">Odśwież</string>
+    <string name="must_implement_bottom_navigation">musi zawierać BottomNavigationView</string>
 </resources>

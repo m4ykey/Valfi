@@ -4,7 +4,6 @@
     <string name="sort_by">Sortuj według</string>
     <string name="list_view">Lista</string>
     <string name="grid_view">Siatka</string>
-    <string name="must_implement_bottom_navigation">musi zawierać BottomNavigationView</string>
     <string name="collection">Kolekcja</string>
     <string name="remove_text">Wyczyść tekst</string>
     <string name="album_cover">Okładka albumu</string>

@@ -2,4 +2,5 @@
 <resources>
     <string name="results_cannot_be_loaded">Results cannot be loaded</string>
     <string name="refresh">Refresh</string>
+    <string name="must_implement_bottom_navigation">must implement BottomNavigationView</string>
 </resources>

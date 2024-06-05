@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.filter
 import com.m4ykey.core.Constants
+import com.m4ykey.core.paging.pagingConfig
 import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.local.dao.TrackDao
 import com.m4ykey.data.local.database.AlbumDatabase
@@ -23,14 +24,10 @@ class TrackRepositoryImpl @Inject constructor(
     private val interceptor : SpotifyTokenProvider,
     private val dao : TrackDao
 ) : TrackRepository {
-
     @OptIn(ExperimentalPagingApi::class)
     override fun getAlbumTracks(id: String): Flow<PagingData<TrackEntity>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = Constants.PAGE_SIZE,
-                enablePlaceholders = false
-            ),
+            config = pagingConfig,
             remoteMediator = TrackListRemoteMediator(
                 id = id,
                 api = api,
@@ -44,5 +41,4 @@ class TrackRepositoryImpl @Inject constructor(
             }
         }
     }
-
 }

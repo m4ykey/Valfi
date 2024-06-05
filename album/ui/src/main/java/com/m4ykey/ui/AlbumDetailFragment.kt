@@ -2,26 +2,20 @@ package com.m4ykey.ui
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.network.NetworkMonitor
-import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.paging.handleLoadState
+import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
 import com.m4ykey.core.views.loadImage
@@ -47,60 +41,37 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumDetailFragment : Fragment() {
+class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
+    FragmentAlbumDetailBinding::inflate
+) {
 
-    private var _binding: FragmentAlbumDetailBinding? = null
-    private val binding get() = _binding
-    private val args: AlbumDetailFragmentArgs by navArgs()
-    private var bottomNavigationVisibility: BottomNavigationVisibility? = null
-    private lateinit var navController: NavController
-    private val viewModel: AlbumViewModel by viewModels()
+    private val args by navArgs<AlbumDetailFragmentArgs>()
+    private val viewModel by viewModels<AlbumViewModel>()
     private lateinit var trackAdapter : TrackListPagingAdapter
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is BottomNavigationVisibility) {
-            bottomNavigationVisibility = context
-        } else {
-            throw RuntimeException("$context ${getString(R.string.must_implement_bottom_navigation)}")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         networkStateMonitor.startMonitoring()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAlbumDetailBinding.inflate(inflater, container, false)
-        return binding?.root ?: throw IllegalStateException("Binding root is null")
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = findNavController()
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        binding?.apply {
-            setupRecyclerView()
-            toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        setupRecyclerView()
+        binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
+        viewModel.apply {
+            tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+            getAlbumTracks(args.albumId)
             lifecycleScope.launch {
-                viewModel.apply {
-                    tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-                    getAlbumTracks(args.albumId)
-
-                    networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
-                        if (isInternetAvailable) {
-                            getAlbumById(args.albumId)
-                            detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-                        } else {
-                            getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
-                        }
+                networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
+                    if (isInternetAvailable) {
+                        getAlbumById(args.albumId)
+                        detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+                    } else {
+                        getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
                     }
                 }
             }
@@ -197,19 +168,13 @@ class AlbumDetailFragment : Fragment() {
             )
 
             trackAdapter.addLoadStateListener { loadState ->
-                rvTrackList.isVisible = loadState.source.refresh is LoadState.NotLoading
-                progressbar.isVisible = loadState.source.refresh is LoadState.Loading
-
-                handleLoadStateError(loadState)
+                handleLoadState(
+                    loadState = loadState,
+                    progressBar = binding!!.progressbar,
+                    adapter = trackAdapter,
+                    recyclerView = binding!!.rvTrackList
+                )
             }
-        }
-    }
-
-    private fun handleLoadStateError(loadStates: CombinedLoadStates) {
-        val errorState = loadStates.source.refresh as? LoadState.Error
-        val error = errorState?.error
-        if (error != null) {
-            showToast(requireContext(), error.message.toString())
         }
     }
 
@@ -388,10 +353,5 @@ class AlbumDetailFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         networkStateMonitor.stopMonitoring()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

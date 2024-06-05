@@ -3,7 +3,6 @@
     <string name="sort_by">Sort by</string>
     <string name="list_view">List View</string>
     <string name="grid_view">Grid View</string>
-    <string name="must_implement_bottom_navigation">must implement BottomNavigationView</string>
     <string name="collection">Collection</string>
     <string name="album" translatable="false">Album</string>
     <string name="single" translatable="false">Single</string>
