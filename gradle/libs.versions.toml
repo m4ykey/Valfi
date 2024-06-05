@@ -56,7 +56,7 @@ okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-int
 vicoViews = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
 vicoCore = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 
-glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version = "5.0.0-rc01" }
 
 aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries", version.ref = "libraries" }
 

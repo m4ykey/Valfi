@@ -6,4 +6,7 @@
     <color name="progressBar">#151515</color>
     <color name="textColor">@color/black</color>
     <color name="buttonColor">#4FC3F7</color>
+    <color name="background">@color/white</color>
+    <color name="textColor2">#424242</color>
+
 </resources>

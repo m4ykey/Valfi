@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -38,7 +37,6 @@ import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -65,15 +63,12 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
         viewModel.apply {
             lifecycleScope.launch {
-                delay(500L)
-                getAlbumTracks(args.albumId)
-            }
-            tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-            lifecycleScope.launch {
                 networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
                     if (isInternetAvailable) {
                         getAlbumById(args.albumId)
+                        getAlbumTracks(args.albumId)
                         detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
+                        tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
                     } else {
                         getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
                     }
@@ -172,7 +167,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             )
 
             trackAdapter.addLoadStateListener { loadState ->
-                Log.d("LoadState", "setupRecyclerView: $loadState")
                 handleLoadState(
                     loadState = loadState,
                     progressBar = binding!!.progressbar,

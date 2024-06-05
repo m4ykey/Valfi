@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.m4ykey.core.network.Resource
 import com.m4ykey.core.paging.launchPaging
 import com.m4ykey.data.domain.model.album.AlbumDetail
@@ -18,14 +16,11 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
-import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.ui.uistate.AlbumDetailUiState
 import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -187,23 +182,4 @@ class AlbumViewModel @Inject constructor(
             is Resource.Error -> AlbumDetailUiState(error = this.message)
         }
     }
-
-    private fun Resource<PagingData<TrackItem>>.toUiState() : AlbumTrackUiState {
-        return when (this) {
-            is Resource.Success -> AlbumTrackUiState(albumTracks = this.data)
-            is Resource.Loading -> AlbumTrackUiState(isLoading = true)
-            is Resource.Error -> AlbumTrackUiState(error = this.message)
-        }
-    }
-
-    private inline fun <T : Any> Flow<Resource<PagingData<T>>>.collectResult(
-        crossinline onResult: (Resource<PagingData<T>>) -> Unit
-    ) {
-        viewModelScope.launch {
-            this@collectResult.collect { resource ->
-                onResult(resource)
-            }
-        }
-    }
-
 }
