@@ -52,7 +52,7 @@ class DatabaseMigration {
                         val contentValues = ContentValues().apply {
                             put("albumId", albumId)
                             put("name", artist.name)
-                            put("urls", artist.urls)
+                            put("urls", artist.url)
                             put("artistId", artist.artistId)
                         }
                         db.insert("artist_table", SQLiteDatabase.CONFLICT_REPLACE, contentValues)

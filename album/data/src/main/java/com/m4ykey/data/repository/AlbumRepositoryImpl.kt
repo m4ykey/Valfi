@@ -27,11 +27,11 @@ class AlbumRepositoryImpl @Inject constructor(
     private val dao : AlbumDao
 ) : AlbumRepository {
 
-    override fun getNewReleases(): Flow<PagingData<AlbumItem>> = createPager {
+    override suspend fun getNewReleases(): Flow<PagingData<AlbumItem>> = createPager {
         NewReleasePagingSource(api, token)
     }
 
-    override fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> = createPager {
+    override suspend fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> = createPager {
         SearchAlbumPagingSource(api = api, query = query, token = token)
     }
 
@@ -63,12 +63,12 @@ class AlbumRepositoryImpl @Inject constructor(
     override fun getListenLaterCount(): Flow<Int> = dao.getListenLaterCount()
     override fun getAlbumTypeCount(albumType: String): Flow<Int> = dao.getAlbumTypeCount(albumType)
 
-    override fun getSavedAlbums(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbums() }
-    override fun getListenLaterAlbums(): Flow<PagingData<AlbumEntity>> = createPager { dao.getListenLaterAlbums() }
-    override fun getAlbumType(albumType: String): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumType(albumType) }
-    override fun searchAlbumByName(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsByName(searchQuery) }
-    override fun searchAlbumsListenLater(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsListenLater(searchQuery) }
-    override fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumSortedByName() }
-    override fun getSavedAlbumAsc(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbumAsc() }
+    override suspend fun getSavedAlbums(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbums() }
+    override suspend fun getListenLaterAlbums(): Flow<PagingData<AlbumEntity>> = createPager { dao.getListenLaterAlbums() }
+    override suspend fun getAlbumType(albumType: String): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumType(albumType) }
+    override suspend fun searchAlbumByName(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsByName(searchQuery) }
+    override suspend fun searchAlbumsListenLater(searchQuery: String): Flow<PagingData<AlbumEntity>> = createPager { dao.searchAlbumsListenLater(searchQuery) }
+    override suspend fun getAlbumSortedByName(): Flow<PagingData<AlbumEntity>> = createPager { dao.getAlbumSortedByName() }
+    override suspend fun getSavedAlbumAsc(): Flow<PagingData<AlbumEntity>> = createPager { dao.getSavedAlbumAsc() }
 
 }

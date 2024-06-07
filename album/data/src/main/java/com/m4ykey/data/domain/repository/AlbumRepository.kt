@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AlbumRepository {
 
-    fun searchAlbums(query : String) : Flow<PagingData<AlbumItem>>
+    suspend fun searchAlbums(query : String) : Flow<PagingData<AlbumItem>>
     suspend fun getAlbumById(id : String) : Flow<Resource<AlbumDetail>>
-    fun getNewReleases() : Flow<PagingData<AlbumItem>>
+    suspend fun getNewReleases() : Flow<PagingData<AlbumItem>>
 
     suspend fun insertAlbum(album : AlbumEntity)
     suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved)
@@ -27,11 +27,11 @@ interface AlbumRepository {
     suspend fun deleteSavedAlbumState(albumId : String)
     suspend fun deleteListenLaterState(albumId: String)
 
-    fun getSavedAlbums() : Flow<PagingData<AlbumEntity>>
-    fun getListenLaterAlbums() : Flow<PagingData<AlbumEntity>>
-    fun getAlbumType(albumType : String) : Flow<PagingData<AlbumEntity>>
-    fun getAlbumSortedByName() : Flow<PagingData<AlbumEntity>>
-    fun getSavedAlbumAsc() : Flow<PagingData<AlbumEntity>>
+    suspend fun getSavedAlbums() : Flow<PagingData<AlbumEntity>>
+    suspend fun getListenLaterAlbums() : Flow<PagingData<AlbumEntity>>
+    suspend fun getAlbumType(albumType : String) : Flow<PagingData<AlbumEntity>>
+    suspend fun getAlbumSortedByName() : Flow<PagingData<AlbumEntity>>
+    suspend fun getSavedAlbumAsc() : Flow<PagingData<AlbumEntity>>
 
     suspend fun getRandomAlbum() : AlbumEntity?
 
@@ -40,7 +40,7 @@ interface AlbumRepository {
     fun getAlbumCount() : Flow<Int>
     fun getTotalTracksCount() : Flow<Int>
 
-    fun searchAlbumByName(searchQuery : String) : Flow<PagingData<AlbumEntity>>
-    fun searchAlbumsListenLater(searchQuery: String) : Flow<PagingData<AlbumEntity>>
+    suspend fun searchAlbumByName(searchQuery : String) : Flow<PagingData<AlbumEntity>>
+    suspend fun searchAlbumsListenLater(searchQuery: String) : Flow<PagingData<AlbumEntity>>
 
 }

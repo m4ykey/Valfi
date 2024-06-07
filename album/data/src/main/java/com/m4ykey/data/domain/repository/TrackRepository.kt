@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
 
-    fun getAlbumTracks(id : String) : Flow<PagingData<TrackItem>>
+    suspend fun getAlbumTracks(id : String) : Flow<PagingData<TrackItem>>
 
 }

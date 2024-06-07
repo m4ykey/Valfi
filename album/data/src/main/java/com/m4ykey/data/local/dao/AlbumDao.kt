@@ -48,7 +48,7 @@ interface AlbumDao {
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
-            "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime DESC")
+            "album_saved_table.isAlbumSaved = 1 ORDER BY save_time DESC")
     fun getSavedAlbums() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
@@ -66,7 +66,7 @@ interface AlbumDao {
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
-            "album_saved_table.isAlbumSaved = 1 AND album_table.albumType = :albumType")
+            "album_saved_table.isAlbumSaved = 1 AND album_table.album_type = :albumType")
     fun getAlbumType(albumType : String) : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
@@ -83,7 +83,7 @@ interface AlbumDao {
 
     @Query("SELECT COUNT(*) FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
-            "album_saved_table.isAlbumSaved = 1 AND albumType = :albumType")
+            "album_saved_table.isAlbumSaved = 1 AND album_type = :albumType")
     fun getAlbumTypeCount(albumType : String) : Flow<Int>
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
@@ -93,7 +93,7 @@ interface AlbumDao {
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
-            "album_saved_table.isAlbumSaved = 1 ORDER BY saveTime ASC")
+            "album_saved_table.isAlbumSaved = 1 ORDER BY save_time ASC")
     fun getSavedAlbumAsc() : PagingSource<Int, AlbumEntity>
 
     @Query("SELECT COUNT(*) FROM album_table INNER JOIN album_saved_table ON " +
@@ -101,7 +101,7 @@ interface AlbumDao {
             "album_saved_table.isAlbumSaved = 1")
     fun getAlbumCount() : Flow<Int>
 
-    @Query("SELECT SUM(album_table.totalTracks) FROM album_table INNER JOIN album_saved_table ON " +
+    @Query("SELECT SUM(album_table.total_tracks) FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
             "album_saved_table.isAlbumSaved = 1")
     fun getTotalTracksCount() : Flow<Int>

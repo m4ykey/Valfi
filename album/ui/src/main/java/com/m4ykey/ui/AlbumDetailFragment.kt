@@ -97,7 +97,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     }
                 )
 
-                buttonsIntents(button = btnArtist, url = artists[0].urls, requireContext())
+                buttonsIntents(button = btnArtist, url = artists[0].url, requireContext())
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
 
                 txtAlbumName.apply {
@@ -244,7 +244,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 ArtistEntity(
                     name = artist.name,
                     artistId = artist.id,
-                    urls = artistUrl.orEmpty(),
+                    url = artistUrl.orEmpty(),
                     albumId = args.albumId
                 )
             }

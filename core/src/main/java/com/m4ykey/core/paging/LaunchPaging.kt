@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 fun <T: Any> launchPaging(
     scope : CoroutineScope,
-    source : () -> Flow<PagingData<T>>,
+    source : suspend () -> Flow<PagingData<T>>,
     onDataCollected : (PagingData<T>) -> Unit
 ) {
     scope.launch {

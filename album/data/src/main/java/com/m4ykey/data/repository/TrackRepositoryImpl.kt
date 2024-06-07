@@ -14,7 +14,7 @@ class TrackRepositoryImpl @Inject constructor(
     private val api : AlbumApi,
     private val token : SpotifyTokenProvider
 ) : TrackRepository {
-    override fun getAlbumTracks(id: String): Flow<PagingData<TrackItem>> = createPager {
+    override suspend fun getAlbumTracks(id: String): Flow<PagingData<TrackItem>> = createPager {
         TrackListPagingSource(api = api, id = id, token = token)
     }
 }

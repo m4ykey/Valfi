@@ -38,4 +38,5 @@
     <string name="favorite_albums">Ulubione albumy</string>
     <string name="total_number_of_tracks">Łączna ilość utworów</string>
     <string name="disc">Płyta %1$d</string>
+    <string name="back">Back</string>
 </resources>
