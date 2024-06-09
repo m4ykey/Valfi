@@ -68,17 +68,33 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             lifecycleScope.launch { getSavedAlbums() }
             albumPaging.observe(viewLifecycleOwner) { albums ->
                 if (albums.isEmpty()) {
+                    albumAdapter.submitList(emptyList())
                     binding?.linearLayoutEmptyList?.isVisible = true
+                    binding?.linearLayoutEmptySearch?.isVisible = false
                 } else {
-                    albumAdapter.submitList(albums)
-                    binding?.linearLayoutEmptyList?.isVisible = false
+                   binding?.linearLayoutEmptyList?.isVisible = false
+                    if (binding?.etSearch?.text.isNullOrEmpty()) {
+                        albumAdapter.submitList(albums)
+                        binding?.linearLayoutEmptySearch?.isVisible = false
+                    }
                 }
             }
             binding?.etSearch?.doOnTextChanged { text, _, _, _ ->
-                lifecycleScope.launch { searchAlbumByName(text.toString()) }
+                if (text.isNullOrEmpty()) {
+                    lifecycleScope.launch { getSavedAlbums() }
+                } else {
+                    lifecycleScope.launch { searchAlbumByName(text.toString()) }
+                }
             }
             searchResult.observe(viewLifecycleOwner) { albums ->
-                albumAdapter.submitList(albums)
+                if (albums.isEmpty()) {
+                    albumAdapter.submitList(emptyList())
+                    binding?.linearLayoutEmptySearch?.isVisible = true
+                    binding?.linearLayoutEmptyList?.isVisible = false
+                } else {
+                    albumAdapter.submitList(albums)
+                    binding?.linearLayoutEmptySearch?.isVisible = false
+                }
             }
         }
         binding?.imgHide?.setOnClickListener {

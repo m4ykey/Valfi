@@ -1,28 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutTracks"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/txtDiscHeader"
-        android:text="@string/disc"
-        android:fontFamily="@font/outfit_medium"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/textColor2"
-        android:drawableTint="@color/textColor"
-        android:visibility="gone"
-        app:drawableStartCompat="@drawable/ic_album"
-        tools:visibility="visible"
-        android:textSize="18sp"
-        android:layout_gravity="center|start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"

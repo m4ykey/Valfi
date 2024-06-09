@@ -47,18 +47,37 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 lifecycleScope.launch { getListenLaterAlbums() }
                 albumPaging.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
-                        linearLayoutEmptyList.isVisible = true
+                        albumAdapter.submitList(emptyList())
+                        binding?.linearLayoutEmptyList?.isVisible = true
+                        binding?.linearLayoutEmptySearch?.isVisible = false
                     } else {
-                        albumAdapter.submitList(albums)
-                        linearLayoutEmptyList.isVisible = false
+                        binding?.linearLayoutEmptyList?.isVisible = false
+                        if (binding?.etSearch?.text.isNullOrEmpty()) {
+                            albumAdapter.submitList(albums)
+                            binding?.linearLayoutEmptySearch?.isVisible = false
+                        }
                     }
                 }
-                etSearch.doOnTextChanged { text, _, _, _ ->
-                    lifecycleScope.launch { searchAlbumsListenLater(text.toString()) }
+
+                binding?.etSearch?.doOnTextChanged { text, _, _, _ ->
+                    if (text.isNullOrEmpty()) {
+                        lifecycleScope.launch { getListenLaterAlbums() }
+                    } else {
+                        lifecycleScope.launch { searchAlbumsListenLater(text.toString()) }
+                    }
                 }
+
                 searchResult.observe(viewLifecycleOwner) { albums ->
-                    albumAdapter.submitList(albums)
+                    if (albums.isEmpty()) {
+                        albumAdapter.submitList(emptyList())
+                        binding?.linearLayoutEmptySearch?.isVisible = true
+                        binding?.linearLayoutEmptyList?.isVisible = false
+                    } else {
+                        albumAdapter.submitList(albums)
+                        binding?.linearLayoutEmptySearch?.isVisible = false
+                    }
                 }
+
                 lifecycleScope.launch {
                     val albumCount = getListenLaterCount().firstOrNull() ?: 0
                     txtAlbumCount.text = getString(R.string.album_count, albumCount)
