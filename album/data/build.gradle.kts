@@ -59,12 +59,10 @@ dependencies {
         implementation(hiltAndroid)
         ksp(hiltCompiler)
 
-        implementation(androidxPaging)
         implementation(androidxDatastore)
         implementation(androidxRoomRuntime)
         implementation(androidxRoomKtx)
         ksp(androidxRoomCompiler)
-        implementation(androidxRoomPaging)
 
     }
 }

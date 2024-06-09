@@ -18,7 +18,6 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
@@ -140,7 +139,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         binding?.imgClear?.apply {
             translationX = 100f
             alpha = 0f
-            show()
+            isVisible = true
 
             animationProperties(0f, 1f, DecelerateInterpolator())
         }

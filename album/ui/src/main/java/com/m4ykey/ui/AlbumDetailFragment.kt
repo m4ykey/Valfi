@@ -15,14 +15,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
-import com.m4ykey.core.Constants
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
 import com.m4ykey.core.views.loadImage
-import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.utils.copyName
 import com.m4ykey.core.views.utils.formatAirDate
 import com.m4ykey.core.views.utils.getColorFromImage
@@ -172,8 +169,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun setupRecyclerView() {
         binding?.rvTrackList?.apply {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
-
             val onTrackClick : (TrackItem) -> Unit = { track ->
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
             }

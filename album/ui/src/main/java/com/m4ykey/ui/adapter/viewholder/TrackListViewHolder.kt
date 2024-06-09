@@ -1,8 +1,7 @@
 package com.m4ykey.ui.adapter.viewholder
 
-import com.m4ykey.core.views.hide
+import androidx.core.view.isVisible
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
-import com.m4ykey.core.views.show
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.databinding.LayoutTracksBinding
 import com.m4ykey.ui.helpers.formatDuration
@@ -25,7 +24,7 @@ class TrackListViewHolder(
             }
             txtTrackName.text = item.name
             txtDuration.text = trackDuration
-            if (item.explicit) txtExplicit.show() else txtExplicit.hide()
+            txtExplicit.isVisible = item.explicit
         }
     }
 }

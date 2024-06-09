@@ -47,7 +47,6 @@ dependencies {
         implementation(androidxCore)
         implementation(androidxAppCompat)
         implementation(androidxConstraintLayout)
-        implementation(androidxPaging)
         implementation(androidxBrowser)
         implementation(androidxNavigationFragment)
         implementation(androidxNavigationUI)

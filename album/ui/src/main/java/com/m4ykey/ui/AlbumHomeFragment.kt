@@ -9,7 +9,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -20,17 +19,14 @@ import com.m4ykey.core.Constants.EP
 import com.m4ykey.core.Constants.SINGLE
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
-import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.show
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.preferences.AlbumPreferences
-import com.m4ykey.ui.adapter.AlbumPagingAdapter
+import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +44,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private var isListViewChanged = false
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var albumAdapter : AlbumPagingAdapter
+    private lateinit var albumAdapter : AlbumAdapter
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
     private var isAlbumSelected = false
@@ -69,13 +65,20 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         setupRecyclerView()
 
         viewModel.apply {
-            getSavedAlbums()
-            albumPaging.observe(viewLifecycleOwner) { pagingData ->
-                albumAdapter.submitData(lifecycle, pagingData)
+            lifecycleScope.launch { getSavedAlbums() }
+            albumPaging.observe(viewLifecycleOwner) { albums ->
+                if (albums.isEmpty()) {
+                    binding?.linearLayoutEmptyList?.isVisible = true
+                } else {
+                    albumAdapter.submitList(albums)
+                    binding?.linearLayoutEmptyList?.isVisible = false
+                }
             }
-            binding?.etSearch?.doOnTextChanged { text, _, _, _ -> searchAlbumByName(text.toString()) }
-            searchResult.observe(viewLifecycleOwner) { pagingData ->
-                albumAdapter.submitData(lifecycle, pagingData)
+            binding?.etSearch?.doOnTextChanged { text, _, _, _ ->
+                lifecycleScope.launch { searchAlbumByName(text.toString()) }
+            }
+            searchResult.observe(viewLifecycleOwner) { albums ->
+                albumAdapter.submitList(albums)
             }
         }
         binding?.imgHide?.setOnClickListener {
@@ -173,7 +176,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 findNavController().navigate(action)
             }
 
-            albumAdapter = AlbumPagingAdapter(onAlbumClick)
+            albumAdapter = AlbumAdapter(onAlbumClick)
 
             val layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())
@@ -181,17 +184,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 GridLayoutManager(requireContext(), 3)
             }
             this.rvAlbums.layoutManager = layoutManager
-
-            rvAlbums.adapter = albumAdapter.withLoadStateHeaderAndFooter(
-                footer = LoadStateAdapter { albumAdapter.retry() },
-                header = LoadStateAdapter { albumAdapter.retry() }
-            )
-
-            albumAdapter.addLoadStateListener { loadState ->
-                val isEmpty = albumAdapter.itemCount == 0
-                val isError = loadState.refresh is LoadState.Error
-                linearLayoutEmptyList.isVisible = isEmpty && !isError
-            }
+            rvAlbums.adapter = albumAdapter
         }
     }
 
@@ -224,21 +217,23 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun updateListWithSortType(sortType: SortType) {
         binding?.apply {
-            when (sortType) {
-                SortType.LATEST -> {
-                    chipSortBy.text = getString(R.string.latest)
-                    viewModel.getSavedAlbums()
+            lifecycleScope.launch {
+                when (sortType) {
+                    SortType.LATEST -> {
+                        chipSortBy.text = getString(R.string.latest)
+                        viewModel.getSavedAlbums()
+                    }
+                    SortType.OLDEST -> {
+                        chipSortBy.text = getString(R.string.oldest)
+                        viewModel.getSavedAlbumAsc()
+                    }
+                    SortType.ALPHABETICAL -> {
+                        chipSortBy.text = getString(R.string.alphabetical)
+                        viewModel.getAlbumSortedByName()
+                    }
                 }
-                SortType.OLDEST -> {
-                    chipSortBy.text = getString(R.string.oldest)
-                    viewModel.getSavedAlbumAsc()
-                }
-                SortType.ALPHABETICAL -> {
-                    chipSortBy.text = getString(R.string.alphabetical)
-                    viewModel.getAlbumSortedByName()
-                }
+                selectedSortType = sortType
             }
-            selectedSortType = sortType
         }
     }
 
@@ -334,7 +329,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         if (!isSearchEditTextVisible) {
             binding?.linearLayoutSearch?.apply {
                 translationY = -100f
-                show()
+                isVisible = true
                 animationPropertiesY(0f, 1f, DecelerateInterpolator())
             }
             isSearchEditTextVisible = true
@@ -350,7 +345,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             }
             lifecycleScope.launch {
                 delay(400)
-                binding?.linearLayoutSearch?.hide()
+                binding?.linearLayoutSearch?.isVisible = false
                 isSearchEditTextVisible = false
                 isHidingAnimationRunning = false
             }

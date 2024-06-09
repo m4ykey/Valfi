@@ -2,12 +2,11 @@ package com.m4ykey.valfi2
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.m4ykey.core.views.BottomNavigationVisibility
-import com.m4ykey.core.views.hide
-import com.m4ykey.core.views.show
 import com.m4ykey.valfi2.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,11 +30,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     override fun showBottomNavigation() {
         val bottomNavigation : BottomNavigationView = findViewById(R.id.bottomNavigation)
-        bottomNavigation.show()
+        bottomNavigation.isVisible = true
     }
 
     override fun hideBottomNavigation() {
         val bottomNavigation : BottomNavigationView = findViewById(R.id.bottomNavigation)
-        bottomNavigation.hide()
+        bottomNavigation.isVisible = false
     }
 }

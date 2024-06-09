@@ -58,7 +58,6 @@ dependencies {
         implementation(androidxCore)
         implementation(androidxPalette)
         implementation(androidxDatastore)
-        implementation(androidxPaging)
 
         implementation(androidMaterial)
 

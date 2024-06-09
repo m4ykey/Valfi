@@ -8,18 +8,14 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
-import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.ui.adapter.AlbumPagingAdapter
+import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +29,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 ) {
 
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var albumAdapter : AlbumPagingAdapter
+    private lateinit var albumAdapter : AlbumAdapter
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
 
@@ -48,16 +44,20 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
             getRandomAlbum()
 
             viewModel.apply {
-                lifecycleScope.launch {
-                    delay(500L)
-                    getListenLaterAlbums()
+                lifecycleScope.launch { getListenLaterAlbums() }
+                albumPaging.observe(viewLifecycleOwner) { albums ->
+                    if (albums.isEmpty()) {
+                        linearLayoutEmptyList.isVisible = true
+                    } else {
+                        albumAdapter.submitList(albums)
+                        linearLayoutEmptyList.isVisible = false
+                    }
                 }
-                albumPaging.observe(viewLifecycleOwner) { pagingData ->
-                    albumAdapter.submitData(lifecycle, pagingData)
+                etSearch.doOnTextChanged { text, _, _, _ ->
+                    lifecycleScope.launch { searchAlbumsListenLater(text.toString()) }
                 }
-                etSearch.doOnTextChanged { text, _, _, _ -> searchAlbumsListenLater(text.toString()) }
-                searchResult.observe(viewLifecycleOwner) { pagingData ->
-                    albumAdapter.submitData(lifecycle, pagingData)
+                searchResult.observe(viewLifecycleOwner) { albums ->
+                    albumAdapter.submitList(albums)
                 }
                 lifecycleScope.launch {
                     val albumCount = getListenLaterCount().firstOrNull() ?: 0
@@ -89,7 +89,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         if (!isSearchEditTextVisible) {
             binding?.linearLayoutSearch?.apply {
                 translationY = -30f
-                show()
+                isVisible = true
                 animationPropertiesY(0f, 1f, DecelerateInterpolator())
             }
             isSearchEditTextVisible = true
@@ -105,7 +105,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
             }
             lifecycleScope.launch {
                 delay(400)
-                binding?.linearLayoutSearch?.hide()
+                binding?.linearLayoutSearch?.isVisible = false
                 isSearchEditTextVisible = false
                 isHidingAnimationRunning = false
             }
@@ -134,21 +134,12 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 findNavController().navigate(action)
             }
 
-            albumAdapter = AlbumPagingAdapter(onAlbumClick)
+            albumAdapter = AlbumAdapter(onAlbumClick)
 
             recyclerViewListenLater.apply {
                 addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
                 layoutManager = GridLayoutManager(requireContext(), 3)
-                adapter = albumAdapter.withLoadStateHeaderAndFooter(
-                    footer = LoadStateAdapter { albumAdapter.retry() },
-                    header = LoadStateAdapter { albumAdapter.retry() }
-                )
-            }
-
-            albumAdapter.addLoadStateListener { loadState ->
-                val isEmpty = albumAdapter.itemCount == 0
-                val isError = loadState.refresh is LoadState.Error
-                linearLayoutEmptyList.isVisible = isEmpty && !isError
+                adapter = albumAdapter
             }
         }
     }

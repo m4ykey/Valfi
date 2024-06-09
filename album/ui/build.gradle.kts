@@ -48,7 +48,6 @@ dependencies {
         implementation(androidxPalette)
         implementation(androidxConstraintLayout)
         implementation(androidMaterial)
-        implementation(androidxPaging)
         implementation(androidxNavigationFragment)
         implementation(androidxNavigationUI)
         implementation(androidxLifecycleRuntime)

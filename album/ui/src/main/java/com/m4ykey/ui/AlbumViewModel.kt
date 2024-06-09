@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import com.m4ykey.core.Constants.PAGE_SIZE
-import com.m4ykey.core.paging.launchPaging
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -39,11 +37,11 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableLiveData<List<TrackItem>>()
     val tracks : LiveData<List<TrackItem>> get() = _tracks
 
-    private var _albumPaging = MutableLiveData<PagingData<AlbumEntity>>(PagingData.empty())
-    val albumPaging : LiveData<PagingData<AlbumEntity>> get() = _albumPaging
+    private var _albumPaging = MutableLiveData<List<AlbumEntity>>()
+    val albumPaging : LiveData<List<AlbumEntity>> get() = _albumPaging
 
-    private var _searchResult = MutableLiveData<PagingData<AlbumEntity>>(PagingData.empty())
-    val searchResult : LiveData<PagingData<AlbumEntity>> get() = _searchResult
+    private var _searchResult = MutableLiveData<List<AlbumEntity>>()
+    val searchResult : LiveData<List<AlbumEntity>> get() = _searchResult
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> get() = _isLoading
@@ -169,28 +167,25 @@ class AlbumViewModel @Inject constructor(
         _search.value = emptyList()
     }
 
-    fun searchAlbumByName(albumName : String) {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.searchAlbumByName(albumName) },
-            onDataCollected = { search -> _albumPaging.value = search }
-        )
+    suspend fun searchAlbumByName(albumName : String) {
+        viewModelScope.launch {
+            val result = repository.searchAlbumByName(albumName)
+            _searchResult.value = result
+        }
     }
 
-    fun searchAlbumsListenLater(albumName : String) {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.searchAlbumsListenLater(albumName) },
-            onDataCollected = { search -> _albumPaging.value = search }
-        )
+    suspend fun searchAlbumsListenLater(albumName : String) {
+        viewModelScope.launch {
+            val result = repository.searchAlbumsListenLater(albumName)
+            _searchResult.value = result
+        }
     }
 
-    fun getAlbumType(albumType : String) {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.getAlbumType(albumType) },
-            onDataCollected = { type -> _albumPaging.value = type }
-        )
+    suspend fun getAlbumType(albumType : String) {
+        viewModelScope.launch {
+            val result = repository.getAlbumType(albumType)
+            _albumPaging.value = result
+        }
     }
 
     fun getAlbumCount() : Flow<Int> = repository.getAlbumCount()
@@ -203,36 +198,32 @@ class AlbumViewModel @Inject constructor(
 
     suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
 
-    fun getSavedAlbums() {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.getSavedAlbums() },
-            onDataCollected = { album -> _albumPaging.value = album }
-        )
+    suspend fun getSavedAlbums() {
+        viewModelScope.launch {
+            val result = repository.getSavedAlbums()
+            _albumPaging.value = result
+        }
     }
 
-    fun getSavedAlbumAsc() {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.getSavedAlbumAsc() },
-            onDataCollected = { album -> _albumPaging.value = album }
-        )
+    suspend fun getSavedAlbumAsc() {
+        viewModelScope.launch {
+            val result = repository.getSavedAlbumAsc()
+            _albumPaging.value = result
+        }
     }
 
-    fun getAlbumSortedByName() {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.getAlbumSortedByName() },
-            onDataCollected = { sort -> _albumPaging.value = sort }
-        )
+    suspend fun getAlbumSortedByName() {
+        viewModelScope.launch {
+            val result = repository.getAlbumSortedByName()
+            _albumPaging.value = result
+        }
     }
 
-    fun getListenLaterAlbums() {
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.getListenLaterAlbums() },
-            onDataCollected = { later -> _albumPaging.value = later }
-        )
+    suspend fun getListenLaterAlbums() {
+        viewModelScope.launch {
+            val result = repository.getListenLaterAlbums()
+            _albumPaging.value = result
+        }
     }
 
     suspend fun insertAlbum(album : AlbumEntity) = repository.insertAlbum(album)
