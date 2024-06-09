@@ -67,6 +67,13 @@
         <argument
             android:name="albumId"
             app:argType="string" />
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_albumDetailFragment_to_albumCoverFragment"
+            app:destination="@id/albumCoverFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"
@@ -106,5 +113,12 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumNewReleaseFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumCoverFragment"
+        android:name="com.m4ykey.ui.AlbumCoverFragment"
+        android:label="fragment_album_cover"
+        tools:layout="@layout/fragment_album_cover" >
+        <argument android:name="imgUrl" />
     </fragment>
 </navigation>

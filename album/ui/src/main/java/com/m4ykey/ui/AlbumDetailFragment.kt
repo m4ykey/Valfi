@@ -111,6 +111,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     }
                 )
 
+                cardView.setOnClickListener {
+                    val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(images)
+                    findNavController().navigate(action)
+                }
+
                 buttonsIntents(button = btnArtist, url = artists[0].url, requireContext())
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
 
@@ -220,6 +225,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
             txtArtist.text = artistList
             txtInfo.text = albumInfo
+
+            cardView.setOnClickListener {
+                val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(image.toString())
+                findNavController().navigate(action)
+            }
 
             loadImage(imgAlbum, image.toString(), requireContext())
 
