@@ -1,7 +1,6 @@
 package com.m4ykey.data.repository
 
 import androidx.paging.PagingData
-import com.m4ykey.core.network.Resource
 import com.m4ykey.core.network.safeApiCall
 import com.m4ykey.core.paging.createPager
 import com.m4ykey.data.domain.model.album.AlbumDetail
@@ -16,7 +15,6 @@ import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.mapper.toAlbumItem
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
-import com.m4ykey.data.remote.paging.NewReleasePagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -32,9 +30,15 @@ class AlbumRepositoryImpl @Inject constructor(
 
     private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }
 
-    override suspend fun getNewReleases(): Flow<PagingData<AlbumItem>> = createPager {
-        NewReleasePagingSource(api, tokenProvider)
-    }
+    override suspend fun getNewReleases(offset: Int, limit: Int): Flow<List<AlbumItem>> = flow {
+        try {
+            val result = api.getNewReleases(token = token, offset = offset, limit = limit)
+            val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
+            emit(albumResult)
+        } catch (e : Exception) {
+            emit(emptyList())
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<List<AlbumItem>> = flow {
         try {
@@ -46,16 +50,19 @@ class AlbumRepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun getAlbumById(id: String): Flow<Resource<AlbumDetail>> = flow {
-        emit(Resource.Loading)
+    override suspend fun getAlbumById(id: String): Flow<AlbumDetail> = flow {
         val result = safeApiCall {
             api.getAlbumById(
                 token = "Bearer ${tokenProvider.getAccessToken()}",
                 id = id
             ).toAlbumDetail()
         }
-        //emit(result)
-    }
+        if (result.isSuccess) {
+            emit(result.getOrThrow())
+        } else {
+            throw result.exceptionOrNull() ?: Exception("Unknown error")
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)
     override suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = dao.insertSavedAlbum(isAlbumSaved)

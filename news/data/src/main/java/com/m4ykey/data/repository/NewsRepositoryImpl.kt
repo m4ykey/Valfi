@@ -1,17 +1,24 @@
 package com.m4ykey.data.repository
 
-import androidx.paging.PagingData
-import com.m4ykey.core.paging.createPager
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.data.domain.repository.NewsRepository
+import com.m4ykey.data.mapper.toArticle
 import com.m4ykey.data.remote.api.NewsApi
-import com.m4ykey.data.remote.paging.NewsPagingSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(private val api : NewsApi) : NewsRepository {
 
-    override fun getMusicNews(): Flow<PagingData<Article>> = createPager {
-        NewsPagingSource(api = api)
-    }
+    override fun getMusicNews(page: Int, pageSize: Int): Flow<List<Article>> = flow {
+        try {
+            val result = api.getMusicNews(page = page, pageSize = pageSize)
+            val newsResult = result.articles?.map { it.toArticle() } ?: emptyList()
+            emit(newsResult)
+        } catch (e : Exception) {
+            emit(emptyList())
+        }
+    }.flowOn(Dispatchers.IO)
 }

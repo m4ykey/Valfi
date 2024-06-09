@@ -184,7 +184,6 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/layout_tracks"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"

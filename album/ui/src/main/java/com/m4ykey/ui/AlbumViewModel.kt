@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.m4ykey.core.Constants.PAGE_SIZE
-import com.m4ykey.core.network.Resource
 import com.m4ykey.core.paging.launchPaging
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
@@ -17,9 +16,6 @@ import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
-import com.m4ykey.ui.uistate.AlbumDetailUiState
-import com.m4ykey.ui.uistate.AlbumListUiState
-import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -34,14 +30,14 @@ class AlbumViewModel @Inject constructor(
     private var _search = MutableLiveData<List<AlbumItem>>()
     val albums : LiveData<List<AlbumItem>> get() = _search
 
-    private var _newRelease = MutableLiveData(AlbumListUiState())
-    val newRelease : LiveData<AlbumListUiState> get() = _newRelease
+    private var _newRelease = MutableLiveData<List<AlbumItem>>()
+    val newRelease : LiveData<List<AlbumItem>> get() = _newRelease
 
-    private var _detail = MutableLiveData(AlbumDetailUiState())
-    val detail : LiveData<AlbumDetailUiState> get() = _detail
+    private var _detail = MutableLiveData<AlbumDetail>()
+    val detail : LiveData<AlbumDetail> get() = _detail
 
-    private var _tracks = MutableLiveData(AlbumTrackUiState())
-    val tracks : LiveData<AlbumTrackUiState> get() = _tracks
+    private var _tracks = MutableLiveData<List<TrackItem>>()
+    val tracks : LiveData<List<TrackItem>> get() = _tracks
 
     private var _albumPaging = MutableLiveData<PagingData<AlbumEntity>>(PagingData.empty())
     val albumPaging : LiveData<PagingData<AlbumEntity>> get() = _albumPaging
@@ -52,11 +48,89 @@ class AlbumViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> get() = _isLoading
 
+    private val _isLoadingTracks = MutableLiveData<Boolean>()
+    val isLoadingTracks : LiveData<Boolean> get() = _isLoadingTracks
+
     private val _isError = MutableLiveData<Boolean>()
     val isError : LiveData<Boolean> get() = _isError
 
     private var offset = 0
     var isPaginationEnded = false
+
+    suspend fun getAlbumTracks(id : String) {
+        if (_isLoadingTracks.value == true || isPaginationEnded) return
+
+        _isLoadingTracks.value = true
+        _isError.value = false
+        viewModelScope.launch {
+            try {
+                trackRepository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
+                    .collect { tracks ->
+                        if (tracks.isNotEmpty()) {
+                            val currentList = _tracks.value?.toMutableList() ?: mutableListOf()
+                            currentList.addAll(tracks)
+                            _tracks.value = currentList
+                            offset += PAGE_SIZE
+                            if (tracks.size < PAGE_SIZE) {
+                                isPaginationEnded = true
+                            }
+                        } else {
+                            isPaginationEnded = true
+                        }
+                    }
+            } catch (e : Exception) {
+                _isError.value = true
+            } finally {
+                _isLoadingTracks.value = false
+            }
+        }
+    }
+
+    suspend fun getAlbumById(id : String) {
+        _isLoading.value = true
+        _isError.value = false
+
+        viewModelScope.launch {
+            try {
+                repository.getAlbumById(id).collect { result ->
+                    _detail.value = result
+                }
+            } catch (e : Exception) {
+                _isError.value = true
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    suspend fun getNewReleases() {
+        if (_isLoading.value == true || isPaginationEnded) return
+
+        _isLoading.value = true
+        _isError.value = false
+        viewModelScope.launch {
+            try {
+                repository.getNewReleases(offset = offset, limit = PAGE_SIZE)
+                    .collect { albums ->
+                        if (albums.isNotEmpty()) {
+                            val currentList = _newRelease.value?.toMutableList() ?: mutableListOf()
+                            currentList.addAll(albums)
+                            _newRelease.value = currentList
+                            offset += PAGE_SIZE
+                            if (albums.size < PAGE_SIZE) {
+                                isPaginationEnded = true
+                            }
+                        } else {
+                            isPaginationEnded = true
+                        }
+                    }
+            } catch (e : Exception) {
+                _isError.value = true
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
     suspend fun searchAlbums(query : String) {
         if (_isLoading.value == true || isPaginationEnded) return
@@ -180,42 +254,4 @@ class AlbumViewModel @Inject constructor(
     suspend fun deleteSavedAlbumState(albumId : String) = repository.deleteSavedAlbumState(albumId)
 
     suspend fun deleteListenLaterState(albumId: String) = repository.deleteListenLaterState(albumId)
-
-    suspend fun getAlbumById(id : String) {
-        repository.getAlbumById(id).collect { resource ->
-            _detail.value = resource.toUiState()
-        }
-    }
-
-    fun getNewReleases() {
-        _newRelease.value = AlbumListUiState(isLoading = true)
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.getNewReleases() },
-            onDataCollected = { pagingData: PagingData<AlbumItem> ->
-                val newState = AlbumListUiState(albumList = pagingData)
-                _newRelease.value = newState
-            }
-        )
-    }
-
-    fun getAlbumTracks(id : String) {
-        _tracks.value = AlbumTrackUiState(isLoading = true)
-        launchPaging(
-            scope = viewModelScope,
-            source = { trackRepository.getAlbumTracks(id) },
-            onDataCollected = { pagingData : PagingData<TrackItem> ->
-                val newState = AlbumTrackUiState(albumTracks = pagingData)
-                _tracks.value = newState
-            }
-        )
-    }
-
-    private fun Resource<AlbumDetail>.toUiState() : AlbumDetailUiState {
-        return when (this) {
-            is Resource.Success -> AlbumDetailUiState(albumDetail = this.data)
-            is Resource.Loading -> AlbumDetailUiState(isLoading = true)
-            is Resource.Error -> AlbumDetailUiState(error = this.message)
-        }
-    }
 }

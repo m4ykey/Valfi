@@ -1,30 +1,16 @@
 package com.m4ykey.ui.adapter.viewholder
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.loadImage
+import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 
 class SearchAlbumViewHolder(
-    private val binding: LayoutAlbumGridBinding,
+    binding: LayoutAlbumGridBinding,
     private val onAlbumClick: (AlbumItem) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+) : BaseViewHolder<AlbumItem, LayoutAlbumGridBinding>(binding) {
 
-    companion object {
-        fun create(
-            parent: ViewGroup,
-            onAlbumClick: (AlbumItem) -> Unit
-        ) : SearchAlbumViewHolder {
-            return SearchAlbumViewHolder(
-                binding = LayoutAlbumGridBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-                onAlbumClick = onAlbumClick
-            )
-        }
-    }
-
-    fun bind(item: AlbumItem) {
+    override fun bind(item: AlbumItem) {
         with(binding) {
             layoutAlbum.setOnClickListener { onAlbumClick(item) }
 

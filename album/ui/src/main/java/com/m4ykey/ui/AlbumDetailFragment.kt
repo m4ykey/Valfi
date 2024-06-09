@@ -12,14 +12,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.m4ykey.core.Constants
 import com.m4ykey.core.network.NetworkMonitor
-import com.m4ykey.core.paging.handleLoadState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
 import com.m4ykey.core.views.loadImage
-import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
+import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
+import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.utils.copyName
 import com.m4ykey.core.views.utils.formatAirDate
 import com.m4ykey.core.views.utils.getColorFromImage
@@ -31,11 +34,8 @@ import com.m4ykey.data.local.model.ArtistEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
-import com.m4ykey.ui.adapter.TrackListPagingAdapter
-import com.m4ykey.ui.adapter.decoration.decorateTrackItems
+import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
-import com.m4ykey.ui.uistate.AlbumDetailUiState
-import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -46,7 +46,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private val args by navArgs<AlbumDetailFragmentArgs>()
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var trackAdapter : TrackListPagingAdapter
+    private lateinit var trackAdapter : TrackAdapter
     private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,17 +61,34 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
         setupRecyclerView()
         binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
-        viewModel.apply {
-            lifecycleScope.launch {
-                networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
-                    if (isInternetAvailable) {
-                        getAlbumById(args.albumId)
-                        getAlbumTracks(args.albumId)
-                        detail.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-                        tracks.observe(viewLifecycleOwner) { state -> handleUiState(state) }
-                    } else {
-                        getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
+        lifecycleScope.launch {
+            networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
+                if (isInternetAvailable) {
+                    viewModel.getAlbumById(args.albumId)
+                    viewModel.getAlbumTracks(args.albumId)
+
+                    viewModel.detail.observe(viewLifecycleOwner) { items ->
+                        displayAlbumDetail(items)
                     }
+                    viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+                        trackAdapter.submitList(tracks)
+                    }
+
+                    viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                        binding?.progressbar?.isVisible = isLoading
+                    }
+
+                    viewModel.isLoadingTracks.observe(viewLifecycleOwner) { isLoading ->
+                        if (!viewModel.isLoading.value!!) {
+                            binding?.progressbar?.isVisible = isLoading
+                        }
+                    }
+
+                    viewModel.isError.observe(viewLifecycleOwner) { isError ->
+                        if (isError) showToast(requireContext(), "Error loading data")
+                    }
+                } else {
+                    viewModel.getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
                 }
             }
         }
@@ -154,51 +171,32 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding?.apply {
+        binding?.rvTrackList?.apply {
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
+
             val onTrackClick : (TrackItem) -> Unit = { track ->
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
             }
 
-            trackAdapter = TrackListPagingAdapter(onTrackClick)
+            trackAdapter = TrackAdapter(onTrackClick)
+            adapter = trackAdapter
 
-            rvTrackList.adapter = trackAdapter.withLoadStateHeaderAndFooter(
-                footer = LoadStateAdapter { trackAdapter.retry() },
-                header = LoadStateAdapter { trackAdapter.retry() }
-            )
+            layoutManager = LinearLayoutManager(requireContext())
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-            trackAdapter.addLoadStateListener { loadState ->
-                handleLoadState(
-                    loadState = loadState,
-                    progressBar = binding!!.progressbar,
-                    adapter = trackAdapter,
-                    recyclerView = binding!!.rvTrackList
-                )
-            }
-        }
-    }
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    val totalItemCount = layoutManager.itemCount
 
-    private fun handleUiState(state : Any?) {
-        binding?.apply {
-            state ?: return
-            progressbar.isVisible = when (state) {
-                is AlbumDetailUiState -> state.isLoading
-                is AlbumTrackUiState -> state.isLoading
-                else -> false
-            }
-
-            when (state) {
-                is AlbumTrackUiState -> {
-                    state.error?.let { showToast(requireContext(), it) }
-                    state.albumTracks?.let { tracks ->
-                        val decoratedTrackItem = decorateTrackItems(tracks)
-                        trackAdapter.submitData(lifecycle, decoratedTrackItem)
+                    if (lastVisibleItemPosition == totalItemCount - 1) {
+                        if (!viewModel.isPaginationEnded && viewModel.isLoadingTracks.value == false) {
+                            lifecycleScope.launch { viewModel.getAlbumTracks(args.albumId) }
+                        }
                     }
                 }
-                is AlbumDetailUiState -> {
-                    state.error?.let { showToast(requireContext(), it) }
-                    state.albumDetail?.let { detail -> displayAlbumDetail(detail) }
-                }
-            }
+            })
         }
     }
 

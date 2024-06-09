@@ -21,7 +21,7 @@ import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
+import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -33,7 +33,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
     private var isClearButtonVisible = false
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var searchAdapter : SearchAlbumPagingAdapter
+    private lateinit var searchAdapter : SearchAlbumAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -85,7 +85,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 findNavController().navigate(action)
             }
 
-            searchAdapter = SearchAlbumPagingAdapter(onAlbumClick)
+            searchAdapter = SearchAlbumAdapter(onAlbumClick)
             adapter = searchAdapter
 
             layoutManager = GridLayoutManager(requireContext(), 3)

@@ -2,15 +2,15 @@ package com.m4ykey.ui.adapter.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.loadImage
+import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.databinding.LayoutAlbumListBinding
 
 class AlbumListViewHolder(
-    private val binding : LayoutAlbumListBinding,
+    binding : LayoutAlbumListBinding,
     private val onAlbumClick : (AlbumEntity) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+) : BaseViewHolder<AlbumEntity, LayoutAlbumListBinding>(binding) {
 
     companion object {
         fun create(
@@ -24,7 +24,7 @@ class AlbumListViewHolder(
         }
     }
 
-    fun bind(item: AlbumEntity) {
+    override fun bind(item: AlbumEntity) {
         with(binding) {
             layoutAlbum.setOnClickListener { onAlbumClick(item) }
 

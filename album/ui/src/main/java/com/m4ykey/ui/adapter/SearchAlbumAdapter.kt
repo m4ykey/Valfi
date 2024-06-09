@@ -9,7 +9,7 @@ import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 
-class SearchAlbumPagingAdapter(
+class SearchAlbumAdapter(
     private val onAlbumClick : (AlbumItem) -> Unit
 ) : RecyclerView.Adapter<SearchAlbumViewHolder>() {
 

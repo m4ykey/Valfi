@@ -2,7 +2,6 @@ package com.m4ykey.data.remote.api
 
 import com.m4ykey.data.remote.model.album.AlbumDetailDto
 import com.m4ykey.data.remote.model.album.AlbumListDto
-import com.m4ykey.data.remote.model.tracks.TrackListDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -24,14 +23,6 @@ interface AlbumApi {
         @Header("Authorization") token : String,
         @Path("id") id : String
     ) : AlbumDetailDto
-
-    @GET("albums/{id}/tracks")
-    suspend fun getAlbumTracks(
-        @Header("Authorization") token : String,
-        @Path("id") id : String,
-        @Query("limit") limit : Int,
-        @Query("offset") offset : Int
-    ) : TrackListDto
 
     @GET("browse/new-releases")
     suspend fun getNewReleases(

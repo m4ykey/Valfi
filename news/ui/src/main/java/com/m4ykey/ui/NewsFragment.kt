@@ -7,18 +7,16 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
-import com.m4ykey.core.paging.handleLoadState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.Article
-import com.m4ykey.ui.adapter.NewsPagingAdapter
+import com.m4ykey.ui.adapter.NewsAdapter
 import com.m4ykey.ui.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,7 +25,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 ) {
 
     private val viewModel by viewModels<NewsViewModel>()
-    private lateinit var newsAdapter: NewsPagingAdapter
+    private lateinit var newsAdapter: NewsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,10 +33,19 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
         bottomNavigationVisibility?.showBottomNavigation()
 
         lifecycleScope.launch {
-            delay(500L)
             viewModel.getMusicNews()
         }
-        viewModel.news.observe(viewLifecycleOwner) { state -> handleNewsState(state) }
+
+        viewModel.news.observe(viewLifecycleOwner) { articles -> newsAdapter.submitList(articles) }
+
+        viewModel.isError.observe(viewLifecycleOwner) { isError ->
+            if (isError) showToast(requireContext(), "Error loading data")
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding?.progressbar?.isVisible = isLoading
+        }
+
         setupRecyclerView()
     }
 
@@ -51,33 +58,19 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                 customTabsIntent.launchUrl(requireContext(), Uri.parse(article.url))
             }
 
-            newsAdapter = NewsPagingAdapter(onNewsClick)
+            newsAdapter = NewsAdapter(onNewsClick)
+            adapter = newsAdapter
 
-            adapter = newsAdapter.withLoadStateHeaderAndFooter(
-                header = LoadStateAdapter { newsAdapter.retry() },
-                footer = LoadStateAdapter { newsAdapter.retry() }
-            )
-
-            newsAdapter.addLoadStateListener { loadState ->
-                handleLoadState(
-                    loadState = loadState,
-                    progressBar = binding!!.progressbar,
-                    recyclerView = this,
-                    adapter = newsAdapter
-                )
-            }
-        }
-    }
-
-    private fun handleNewsState(state : NewsUiState?) {
-        state ?: return
-        binding?.apply {
-            progressbar.isVisible = state.isLoading
-            recyclerViewNews.isVisible = !state.isLoading
-            state.error?.let { showToast(requireContext(), it) }
-            state.newsList?.let { items ->
-                newsAdapter.submitData(lifecycle, items)
-            }
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!recyclerView.canScrollVertically(1)) {
+                        if (!viewModel.isPaginationEnded && viewModel.isLoading.value == false) {
+                            lifecycleScope.launch { viewModel.getMusicNews() }
+                        }
+                    }
+                }
+            })
         }
     }
 }

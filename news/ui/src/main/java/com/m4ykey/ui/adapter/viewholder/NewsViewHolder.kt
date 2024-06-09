@@ -1,9 +1,7 @@
 package com.m4ykey.ui.adapter.viewholder
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.loadImage
+import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.ui.R
 import com.m4ykey.ui.databinding.LayoutNewsListBinding
@@ -20,23 +18,11 @@ import java.time.format.DateTimeParseException
 import java.util.Locale
 
 class NewsViewHolder(
-    private val binding: LayoutNewsListBinding,
+    binding: LayoutNewsListBinding,
     private val onNewsClick : (Article) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+) : BaseViewHolder<Article, LayoutNewsListBinding>(binding) {
 
-    companion object {
-        fun create(
-            parent: ViewGroup,
-            onNewsClick: (Article) -> Unit
-        ) : NewsViewHolder {
-            return NewsViewHolder(
-                onNewsClick = onNewsClick,
-                binding = LayoutNewsListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )
-        }
-    }
-
-    fun bind(item : Article) {
+    override fun bind(item : Article) {
         with(binding) {
             linearLayoutArticle.setOnClickListener { onNewsClick(item) }
 
