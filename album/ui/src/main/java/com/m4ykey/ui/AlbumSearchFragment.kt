@@ -12,22 +12,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
-import com.m4ykey.core.paging.handleLoadState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
-import com.m4ykey.core.views.recyclerview.adapter.LoadStateAdapter
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.recyclerview.createGridLayoutManager
 import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.SearchAlbumPagingAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
-import com.m4ykey.ui.uistate.AlbumListUiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,7 +34,6 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     private var isClearButtonVisible = false
     private val viewModel by viewModels<AlbumViewModel>()
     private lateinit var searchAdapter : SearchAlbumPagingAdapter
-    private val debouncingSearch = DebouncingSearch()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,38 +45,34 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         searchAlbums()
 
         lifecycleScope.launch {
-            viewModel.albums.observe(viewLifecycleOwner) { state -> handleSearchState(state) }
-        }
-    }
+            viewModel.albums.observe(viewLifecycleOwner) { albums ->
+                searchAdapter.submitList(albums)
+            }
 
-    private fun handleSearchState(state : AlbumListUiState?) {
-        state ?: return
-        binding?.apply {
-            progressbar.isVisible = state.isLoading
-            rvSearchAlbums.isVisible = !state.isLoading
-            state.error?.let { showToast(requireContext(), it) }
-            state.albumList?.let { search ->
-                searchAdapter.submitData(lifecycle, search)
+            viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                binding?.progressbar?.isVisible = isLoading
+            }
+
+            viewModel.isError.observe(viewLifecycleOwner) { isError ->
+                if (isError) showToast(requireContext(), "Error loading data")
             }
         }
     }
 
     private fun searchAlbums() {
-        binding?.etSearch?.apply {
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_SEARCH -> {
-                        val searchQuery = text.toString().trim()
-                        if (searchQuery.isNotEmpty()) {
-                            debouncingSearch.submit(searchQuery)
-                            binding?.rvSearchAlbums?.isEnabled = false
-                        } else {
-                            showToast(requireContext(), getString(R.string.empty_search))
-                        }
+        binding?.etSearch?.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH -> {
+                    val searchQuery = binding?.etSearch?.text?.toString()
+                    if (searchQuery?.isNotEmpty() == true) {
+                        viewModel.resetSearch()
+                        lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                    } else {
+                        showToast(requireContext(), getString(R.string.empty_search))
                     }
                 }
-                actionId == EditorInfo.IME_ACTION_SEARCH
             }
+            actionId == EditorInfo.IME_ACTION_SEARCH
         }
     }
 
@@ -95,25 +86,20 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             }
 
             searchAdapter = SearchAlbumPagingAdapter(onAlbumClick)
+            adapter = searchAdapter
 
-            val headerAdapter = LoadStateAdapter { searchAdapter.retry() }
-            val footerAdapter = LoadStateAdapter { searchAdapter.retry() }
-
-            adapter = searchAdapter.withLoadStateHeaderAndFooter(
-                header = headerAdapter,
-                footer = footerAdapter
-            )
-
-            layoutManager = createGridLayoutManager(headerAdapter, footerAdapter)
-
-            searchAdapter.addLoadStateListener { loadState ->
-                handleLoadState(
-                    loadState = loadState,
-                    adapter = searchAdapter,
-                    recyclerView = this,
-                    progressBar = binding?.progressbar!!
-                )
-            }
+            layoutManager = GridLayoutManager(requireContext(), 3)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!recyclerView.canScrollVertically(1)) {
+                        val searchQuery = binding?.etSearch?.text.toString()
+                        if (!viewModel.isPaginationEnded && viewModel.isLoading.value == false && searchQuery.isNotEmpty()) {
+                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                        }
+                    }
+                }
+            })
         }
     }
 
@@ -181,18 +167,5 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     override fun onResume() {
         super.onResume()
         resetSearchState()
-    }
-
-    private inner class DebouncingSearch {
-        private var searchJob : Job? = null
-
-        fun submit(searchQuery : String) {
-            searchJob?.cancel()
-            searchJob = lifecycleScope.launch {
-                delay(500L)
-                viewModel.searchAlbums(searchQuery)
-                binding?.rvSearchAlbums?.isEnabled = true
-            }
-        }
     }
 }

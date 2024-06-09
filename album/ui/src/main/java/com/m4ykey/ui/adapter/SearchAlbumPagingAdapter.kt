@@ -1,22 +1,35 @@
 package com.m4ykey.ui.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
+import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 
 class SearchAlbumPagingAdapter(
     private val onAlbumClick : (AlbumItem) -> Unit
-) : PagingDataAdapter<AlbumItem, SearchAlbumViewHolder>(COMPARATOR) {
+) : RecyclerView.Adapter<SearchAlbumViewHolder>() {
 
-    override fun onBindViewHolder(holder: SearchAlbumViewHolder, position: Int) {
-        holder.bind(getItem(position) ?: return)
+    private val asyncListDiffer = AsyncListDiffer(this, COMPARATOR)
+
+    fun submitList(albums : List<AlbumItem>) {
+        asyncListDiffer.submitList(albums)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAlbumViewHolder {
-        return SearchAlbumViewHolder.create(parent, onAlbumClick)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = LayoutAlbumGridBinding.inflate(inflater, parent, false)
+        return SearchAlbumViewHolder(binding, onAlbumClick)
     }
+
+    override fun onBindViewHolder(holder: SearchAlbumViewHolder, position: Int) {
+        holder.bind(asyncListDiffer.currentList[position])
+    }
+
+    override fun getItemCount(): Int = asyncListDiffer.currentList.size
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<AlbumItem>() {

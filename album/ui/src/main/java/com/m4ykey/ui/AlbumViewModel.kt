@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.Resource
 import com.m4ykey.core.paging.launchPaging
 import com.m4ykey.data.domain.model.album.AlbumDetail
@@ -21,6 +22,7 @@ import com.m4ykey.ui.uistate.AlbumListUiState
 import com.m4ykey.ui.uistate.AlbumTrackUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,8 +31,8 @@ class AlbumViewModel @Inject constructor(
     private val trackRepository: TrackRepository
 ) : ViewModel() {
 
-    private var _search = MutableLiveData(AlbumListUiState())
-    val albums : LiveData<AlbumListUiState> get() = _search
+    private var _search = MutableLiveData<List<AlbumItem>>()
+    val albums : LiveData<List<AlbumItem>> get() = _search
 
     private var _newRelease = MutableLiveData(AlbumListUiState())
     val newRelease : LiveData<AlbumListUiState> get() = _newRelease
@@ -46,6 +48,52 @@ class AlbumViewModel @Inject constructor(
 
     private var _searchResult = MutableLiveData<PagingData<AlbumEntity>>(PagingData.empty())
     val searchResult : LiveData<PagingData<AlbumEntity>> get() = _searchResult
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> get() = _isLoading
+
+    private val _isError = MutableLiveData<Boolean>()
+    val isError : LiveData<Boolean> get() = _isError
+
+    private var offset = 0
+    var isPaginationEnded = false
+
+    suspend fun searchAlbums(query : String) {
+        if (_isLoading.value == true || isPaginationEnded) return
+
+        _isLoading.value = true
+        _isError.value = false
+        viewModelScope.launch {
+            try {
+                repository.searchAlbums(query, offset = offset, limit = PAGE_SIZE)
+                    .collect { searchResult ->
+                        if (searchResult.isNotEmpty()) {
+                            val currentList = _search.value?.toMutableList() ?: mutableListOf()
+                            currentList.addAll(searchResult)
+                            _search.value = currentList
+                            offset += PAGE_SIZE
+                            if (searchResult.size < PAGE_SIZE) {
+                                isPaginationEnded = true
+                            }
+                        } else {
+                            isPaginationEnded = true
+                        }
+                    }
+            } catch (e : Exception) {
+                _isError.value = true
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun resetSearch() {
+        offset = 0
+        _isLoading.value = false
+        _isError.value = false
+        isPaginationEnded = false
+        _search.value = emptyList()
+    }
 
     fun searchAlbumByName(albumName : String) {
         launchPaging(
@@ -147,18 +195,6 @@ class AlbumViewModel @Inject constructor(
             onDataCollected = { pagingData: PagingData<AlbumItem> ->
                 val newState = AlbumListUiState(albumList = pagingData)
                 _newRelease.value = newState
-            }
-        )
-    }
-
-    fun searchAlbums(query : String) {
-        _search.value = AlbumListUiState(isLoading = true)
-        launchPaging(
-            scope = viewModelScope,
-            source = { repository.searchAlbums(query) },
-            onDataCollected = { pagingData: PagingData<AlbumItem> ->
-                val newState = AlbumListUiState(albumList = pagingData)
-                _search.value = newState
             }
         )
     }

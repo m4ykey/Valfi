@@ -13,37 +13,48 @@ import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toAlbumDetail
+import com.m4ykey.data.mapper.toAlbumItem
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
 import com.m4ykey.data.remote.paging.NewReleasePagingSource
-import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
-    private val token: SpotifyTokenProvider,
+    private val tokenProvider: SpotifyTokenProvider,
     private val dao : AlbumDao
 ) : AlbumRepository {
 
+    private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }
+
     override suspend fun getNewReleases(): Flow<PagingData<AlbumItem>> = createPager {
-        NewReleasePagingSource(api, token)
+        NewReleasePagingSource(api, tokenProvider)
     }
 
-    override suspend fun searchAlbums(query: String): Flow<PagingData<AlbumItem>> = createPager {
-        SearchAlbumPagingSource(api = api, query = query, token = token)
-    }
+    override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<List<AlbumItem>> = flow {
+        try {
+            val result = api.searchAlbums(token = token, query = query, offset = offset, limit = limit)
+            val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
+            emit(albumResult)
+        } catch (e: Exception) {
+            emit(emptyList())
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getAlbumById(id: String): Flow<Resource<AlbumDetail>> = flow {
         emit(Resource.Loading)
         val result = safeApiCall {
             api.getAlbumById(
-                token = "Bearer ${token.getAccessToken()}",
+                token = "Bearer ${tokenProvider.getAccessToken()}",
                 id = id
             ).toAlbumDetail()
         }
-        emit(result)
+        //emit(result)
     }
 
     override suspend fun insertAlbum(album: AlbumEntity) = dao.insertAlbum(album)

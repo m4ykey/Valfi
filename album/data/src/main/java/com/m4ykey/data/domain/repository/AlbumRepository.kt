@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AlbumRepository {
 
-    suspend fun searchAlbums(query : String) : Flow<PagingData<AlbumItem>>
+    suspend fun searchAlbums(query : String, offset : Int, limit : Int) : Flow<List<AlbumItem>>
     suspend fun getAlbumById(id : String) : Flow<Resource<AlbumDetail>>
     suspend fun getNewReleases() : Flow<PagingData<AlbumItem>>
 
