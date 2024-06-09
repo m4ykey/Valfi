@@ -76,8 +76,3 @@ gms = { id = "com.google.gms.google-services", version = "4.4.2" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
 aboutLibrariesPlugin = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries" }
 performance = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
-
-[bundles]
-navigation = ["androidxNavigationFragment", "androidxNavigationUI"]
-lifecycle = ["androidxLifecycleRuntime", "androidxLifecycleViewmodel", "androidxLifecycleLivedata"]
-okhttp = ["okhttp", "okhttpLoggingInterceptor"]

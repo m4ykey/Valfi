@@ -43,6 +43,8 @@ dependencies {
         implementation(retrofit)
         implementation(converterMoshi)
         implementation(moshiKotlin)
+        implementation(okhttp)
+        implementation(okhttpLoggingInterceptor)
 
         testImplementation(junit)
         androidTestImplementation(extJunit)
@@ -63,8 +65,6 @@ dependencies {
         implementation(androidxRoomKtx)
         ksp(androidxRoomCompiler)
         implementation(androidxRoomPaging)
-
-        implementation(bundles.okhttp)
 
     }
 }

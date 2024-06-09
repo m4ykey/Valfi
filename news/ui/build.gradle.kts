@@ -49,6 +49,11 @@ dependencies {
         implementation(androidxConstraintLayout)
         implementation(androidxPaging)
         implementation(androidxBrowser)
+        implementation(androidxNavigationFragment)
+        implementation(androidxNavigationUI)
+        implementation(androidxLifecycleRuntime)
+        implementation(androidxLifecycleViewmodel)
+        implementation(androidxLifecycleLivedata)
 
         implementation(androidMaterial)
 
@@ -56,9 +61,6 @@ dependencies {
 
         androidTestImplementation(extJunit)
         androidTestImplementation(espresso)
-
-        implementation(bundles.navigation)
-        implementation(bundles.lifecycle)
 
         ksp(hiltCompiler)
         implementation(hiltAndroid)

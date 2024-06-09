@@ -65,12 +65,11 @@ dependencies {
         implementation(moshiKotlin)
         implementation(converterMoshi)
         implementation(retrofit)
+        implementation(okhttp)
+        implementation(okhttpLoggingInterceptor)
 
         ksp(hiltCompiler)
         implementation(hiltAndroid)
-
-        implementation(okhttp)
-        implementation(okhttpLoggingInterceptor)
 
         implementation(glide)
 

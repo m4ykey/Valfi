@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
@@ -44,6 +42,8 @@ dependencies {
 
         implementation(retrofit)
         implementation(converterMoshi)
+        implementation(okhttpLoggingInterceptor)
+        implementation(okhttp)
 
         testImplementation(junit)
         androidTestImplementation(extJunit)
@@ -53,10 +53,6 @@ dependencies {
 
         implementation(hiltAndroid)
         ksp(hiltCompiler)
-
-        implementation(androidxPaging)
-
-        implementation(bundles.okhttp)
 
     }
 }

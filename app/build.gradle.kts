@@ -10,7 +10,7 @@ plugins {
 
 val versionMajor = 0
 val versionMinor = 5
-val versionPatch = 2
+val versionPatch = 3
 
 android {
     namespace = "com.m4ykey.valfi2"
@@ -61,6 +61,8 @@ dependencies {
         implementation(androidMaterial)
         implementation(androidxConstraintLayout)
         implementation(androidxCore)
+        implementation(androidxNavigationUI)
+        implementation(androidxNavigationFragment)
 
         testImplementation(junit)
         androidTestImplementation(extJunit)
@@ -68,8 +70,6 @@ dependencies {
 
         implementation(hiltAndroid)
         ksp(hiltCompiler)
-
-        implementation(bundles.navigation)
 
         implementation(timber)
 
