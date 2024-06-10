@@ -1,7 +1,5 @@
 package com.m4ykey.data.mapper
 
-import com.m4ykey.data.domain.model.album.Artist
-import com.m4ykey.data.domain.model.album.ExternalUrls
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.remote.model.tracks.TrackItemDto
 

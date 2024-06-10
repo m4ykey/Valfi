@@ -1,11 +1,10 @@
 package com.m4ykey.data.test_dao
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Rule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.PagingSource
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.m4ykey.core.Constants
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.database.AlbumDatabase
@@ -15,9 +14,9 @@ import okio.IOException
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.jvm.Throws
 
 @RunWith(AndroidJUnit4::class)
 class AlbumDaoTest {
