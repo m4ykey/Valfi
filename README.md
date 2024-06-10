@@ -26,3 +26,6 @@ NEWS_API_KEY = "YOUR_NEWS_API_KEY"
 - [Consequence](https://consequence.net/)
 - [Stereogum](https://www.stereogum.com/)
 - [The FADER](https://www.thefader.com/)
+
+## Icons
+The icons used in the application are from the website [svgrepo.com](https://www.svgrepo.com/) and [Google Icons](https://fonts.google.com/icons)
