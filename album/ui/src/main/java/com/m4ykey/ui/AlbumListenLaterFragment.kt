@@ -1,18 +1,20 @@
 package com.m4ykey.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumAdapter
@@ -23,6 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.R)
 @AndroidEntryPoint
 class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     FragmentAlbumListenLaterBinding::inflate
@@ -157,7 +160,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
             recyclerViewListenLater.apply {
                 addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-                layoutManager = GridLayoutManager(requireContext(), 3)
+                layoutManager = setupGridLayoutManager(requireContext(), 110f)
                 adapter = albumAdapter
             }
         }

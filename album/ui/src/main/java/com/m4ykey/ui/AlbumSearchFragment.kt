@@ -1,23 +1,25 @@
 package com.m4ykey.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.inputmethod.EditorInfo
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
@@ -25,6 +27,7 @@ import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.R)
 @AndroidEntryPoint
 class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     FragmentAlbumSearchBinding::inflate
@@ -32,7 +35,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
     private var isClearButtonVisible = false
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var searchAdapter : SearchAlbumAdapter
+    private lateinit var searchAdapter: SearchAlbumAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,15 +82,18 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         binding?.rvSearchAlbums?.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            val onAlbumClick : (AlbumItem) -> Unit = { album ->
-                val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
+            val onAlbumClick: (AlbumItem) -> Unit = { album ->
+                val action =
+                    AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(
+                        album.id
+                    )
                 findNavController().navigate(action)
             }
 
             searchAdapter = SearchAlbumAdapter(onAlbumClick)
             adapter = searchAdapter
 
-            layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager = setupGridLayoutManager(requireContext(), 110f)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -117,7 +123,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         }
     }
 
-    private fun handleClearButtonVisibility(isSearchEmpty : Boolean) {
+    private fun handleClearButtonVisibility(isSearchEmpty: Boolean) {
         if (!isSearchEmpty && !isClearButtonVisible) {
             showClearButtonWithAnimation()
             isClearButtonVisible = true
@@ -127,7 +133,11 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         }
     }
 
-    private fun View.animationProperties(translationXValue : Float, alphaValue : Float, interpolator : Interpolator) {
+    private fun View.animationProperties(
+        translationXValue: Float,
+        alphaValue: Float,
+        interpolator: Interpolator
+    ) {
         animate()
             .translationX(translationXValue)
             .alpha(alphaValue)

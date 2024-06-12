@@ -20,21 +20,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        with(binding) {
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = navHostFragment.navController
-            bottomNavigation.setupWithNavController(navController)
-        }
+        setupNavigation()
+    }
+
+    private fun setupNavigation() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.setupWithNavController(navController)
     }
 
     override fun showBottomNavigation() {
-        val bottomNavigation : BottomNavigationView = findViewById(R.id.bottomNavigation)
-        bottomNavigation.isVisible = true
+        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = true
     }
 
     override fun hideBottomNavigation() {
-        val bottomNavigation : BottomNavigationView = findViewById(R.id.bottomNavigation)
-        bottomNavigation.isVisible = false
+        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = false
     }
 }
