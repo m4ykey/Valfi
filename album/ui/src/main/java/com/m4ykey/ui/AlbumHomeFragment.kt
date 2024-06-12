@@ -1,5 +1,6 @@
 package com.m4ykey.ui
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -22,7 +24,6 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
-import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
@@ -182,10 +183,13 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             layoutManager = if (isListView) {
                LinearLayoutManager(requireContext())
             } else {
-                setupGridLayoutManager(requireContext(), 110f)
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    GridLayoutManager(requireContext(), 5)
+                } else {
+                    GridLayoutManager(requireContext(), 3)
+                }
             }
             albumAdapter.viewType = viewType
-            adapter = albumAdapter
         }
     }
 
@@ -203,7 +207,11 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())
             } else {
-                setupGridLayoutManager(requireContext(), 110f)
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    GridLayoutManager(requireContext(), 5)
+                } else {
+                    GridLayoutManager(requireContext(), 3)
+                }
             }
             adapter = albumAdapter
         }
@@ -410,7 +418,11 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             val layoutManager = when (albumAdapter.viewType) {
                 ViewType.LIST -> LinearLayoutManager(requireContext())
-                ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
+                ViewType.GRID ->  if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    GridLayoutManager(requireContext(), 5)
+                } else {
+                    GridLayoutManager(requireContext(), 3)
+                }
             }
             binding?.rvAlbums?.layoutManager = layoutManager
         }
