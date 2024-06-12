@@ -8,4 +8,7 @@
     <color name="bottomNavigationItemColorSelected">#171717</color>
     <color name="bottomNavigationItemColorUnSelected">#303030</color>
 
+    <color name="noInternetBackground">@color/black</color>
+    <color name="noInternetText">@color/white</color>
+
 </resources>

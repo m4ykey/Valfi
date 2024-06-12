@@ -4,4 +4,7 @@
     <color name="bottomNavigationItemIndicatorSelected">#5e5c5c</color>
     <color name="bottomNavigationItemColorSelected">@color/white</color>
     <color name="bottomNavigationItemColorUnSelected">#8d8d8d</color>
+
+    <color name="noInternetBackground">@color/white</color>
+    <color name="noInternetText">@color/black</color>
 </resources>
