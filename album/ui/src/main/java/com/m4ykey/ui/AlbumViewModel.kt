@@ -55,6 +55,13 @@ class AlbumViewModel @Inject constructor(
     private var offset = 0
     var isPaginationEnded = false
 
+    fun getAlbumDetails(id : String) {
+        viewModelScope.launch {
+            getAlbumTracks(id)
+            getAlbumById(id)
+        }
+    }
+
     suspend fun getAlbumTracks(id : String) {
         if (_isLoadingTracks.value == true || isPaginationEnded) return
 
@@ -84,7 +91,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAlbumById(id : String) {
+    private suspend fun getAlbumById(id : String) {
         _isLoading.value = true
         _isError.value = false
 

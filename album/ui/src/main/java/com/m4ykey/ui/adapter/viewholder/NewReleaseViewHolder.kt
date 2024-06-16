@@ -4,10 +4,11 @@ import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
+import com.m4ykey.ui.helpers.OnAlbumClick
 
 class NewReleaseViewHolder(
     binding : LayoutAlbumGridBinding,
-    private val onAlbumClick : (AlbumItem) -> Unit
+    private val onAlbumClick : OnAlbumClick
 ) : BaseViewHolder<AlbumItem, LayoutAlbumGridBinding>(binding) {
 
     override fun bind(item: AlbumItem) {

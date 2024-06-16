@@ -2,16 +2,16 @@ package com.m4ykey.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.adapter.viewholder.TrackListViewHolder
 import com.m4ykey.ui.databinding.LayoutTracksBinding
+import com.m4ykey.ui.helpers.OnTrackClick
 
 class TrackAdapter(
-    private val onTrackClick: (TrackItem) -> Unit
+    private val onTrackClick: OnTrackClick
 ) : RecyclerView.Adapter<TrackListViewHolder>() {
 
     private val asyncListDiffer = AsyncListDiffer(this, COMPARATOR)
@@ -36,13 +36,7 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackListViewHolder, position: Int) {
-        val item = asyncListDiffer.currentList[position]
-        item?.let {
-            holder.bind(it)
-            val fadeIn = AlphaAnimation(0f, 1f)
-            fadeIn.duration = 500
-            holder.itemView.startAnimation(fadeIn)
-        }
+        holder.bind(asyncListDiffer.currentList[position])
     }
 
     override fun getItemCount(): Int = asyncListDiffer.currentList.size

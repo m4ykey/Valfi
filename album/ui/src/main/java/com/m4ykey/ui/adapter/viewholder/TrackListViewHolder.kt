@@ -4,11 +4,12 @@ import androidx.core.view.isVisible
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.databinding.LayoutTracksBinding
+import com.m4ykey.ui.helpers.OnTrackClick
 import com.m4ykey.ui.helpers.formatDuration
 
 class TrackListViewHolder(
     binding : LayoutTracksBinding,
-    private val onTrackClick : (TrackItem) -> Unit
+    private val onTrackClick : OnTrackClick
 ) : BaseViewHolder<TrackItem, LayoutTracksBinding>(binding) {
 
     override fun bind(item: TrackItem) {

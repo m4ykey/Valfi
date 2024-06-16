@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
 import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
+import com.m4ykey.ui.helpers.OnAlbumClick
 
 class SearchAlbumAdapter(
-    private val onAlbumClick : (AlbumItem) -> Unit
+    private val onAlbumClick : OnAlbumClick
 ) : RecyclerView.Adapter<SearchAlbumViewHolder>() {
 
     private val asyncListDiffer = AsyncListDiffer(this, COMPARATOR)
@@ -30,9 +31,11 @@ class SearchAlbumAdapter(
         val item = asyncListDiffer.currentList[position]
         item?.let {
             holder.bind(it)
-            val fadeIn = AlphaAnimation(0f, 1f)
-            fadeIn.duration = 500
-            holder.itemView.startAnimation(fadeIn)
+            if (holder.itemView.animation == null) {
+                val fadeIn = AlphaAnimation(0f, 1f)
+                fadeIn.duration = 300
+                holder.itemView.animation = fadeIn
+            }
         }
     }
 
