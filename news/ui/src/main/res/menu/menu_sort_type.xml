@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/publishedAt"
+        android:title="@string/published_at"/>
+
+    <item android:id="@+id/popularity"
+        android:title="@string/popularity"/>
+
+</menu>

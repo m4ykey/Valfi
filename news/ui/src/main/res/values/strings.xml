@@ -3,4 +3,6 @@
     <string name="source_date" translatable="false">%1$s • %2$s</string>
     <string name="article_image">Article Image</string>
     <string name="logo" translatable="false">Logo</string>
+    <string name="published_at">Latest</string>
+    <string name="popularity">Popular</string>
 </resources>

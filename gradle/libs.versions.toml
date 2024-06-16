@@ -1,8 +1,8 @@
 [versions]
-application = "8.4.2"
+application = "8.5.0"
 navigation = "2.7.7"
 retrofit = "2.11.0"
-lifecycle = "2.8.1"
+lifecycle = "2.8.2"
 hilt = "2.51.1"
 okhttp = "4.12.0"
 room = "2.6.1"
@@ -66,7 +66,7 @@ aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries", version.ref 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.0" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.22" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }

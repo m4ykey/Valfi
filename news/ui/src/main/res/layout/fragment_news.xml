@@ -18,10 +18,13 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:menu="@menu/menu_sort_type"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
             <TextView
+                android:id="@+id/txtTitle"
                 android:textSize="20sp"
                 android:textColor="@color/textColor"
                 android:fontFamily="@font/inter_medium"
@@ -53,5 +56,15 @@
         android:id="@+id/recyclerViewNews"
         android:layout_width="0dp"
         android:layout_height="0dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnToTop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_arrow_up"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

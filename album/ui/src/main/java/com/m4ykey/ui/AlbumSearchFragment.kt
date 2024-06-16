@@ -117,7 +117,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             }
 
             imgClear.setOnClickListener {
-                etSearch.setText("")
+                etSearch.setText(getString(R.string.empty_string))
                 hideClearButtonWithAnimation()
             }
         }

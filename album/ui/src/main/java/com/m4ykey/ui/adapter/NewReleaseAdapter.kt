@@ -2,6 +2,7 @@ package com.m4ykey.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +30,13 @@ class NewReleaseAdapter(
     }
 
     override fun onBindViewHolder(holder: NewReleaseViewHolder, position: Int) {
-        holder.bind(asyncListDiffer.currentList[position])
+        val item = asyncListDiffer.currentList[position]
+        item?.let {
+            holder.bind(it)
+            val fadeIn = AlphaAnimation(0f, 1f)
+            fadeIn.duration = 500
+            holder.itemView.startAnimation(fadeIn)
+        }
     }
 
     override fun getItemCount(): Int = asyncListDiffer.currentList.size

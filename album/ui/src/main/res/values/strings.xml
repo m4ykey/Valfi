@@ -40,6 +40,7 @@
     <string name="favorite_albums">Favorite albums</string>
     <string name="total_number_of_tracks">Total number of tracks</string>
     <string name="nothing_found">Nothing found</string>
+    <string name="empty_string" translatable="false" />
 
     <string-array name="sort_options">
         <item>@string/latest</item>

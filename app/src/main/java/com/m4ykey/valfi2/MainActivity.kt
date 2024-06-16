@@ -1,6 +1,5 @@
 package com.m4ykey.valfi2
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -8,7 +7,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigationrail.NavigationRailView
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.valfi2.databinding.ActivityMainBinding
@@ -30,14 +28,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
         networkMonitor = NetworkMonitor(this)
         setupNavigation()
-
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.layoutHorizontal.isVisible = true
-            binding.layoutvertical.isVisible = false
-        } else {
-            binding.layoutHorizontal.isVisible = false
-            binding.layoutvertical.isVisible = true
-        }
     }
 
     override fun onStart() {
@@ -61,36 +51,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
     }
 
     private fun updateTextViewBasedOnInternet() {
-        if (isInternetAvailable) {
-            binding.txtNoInternetH.isVisible = false
-            binding.txtNoInternetV.isVisible = false
-        } else {
-            binding.txtNoInternetH.isVisible = true
-            binding.txtNoInternetV.isVisible = true
-        }
+        binding.txtNoInternet.isVisible = !isInternetAvailable
     }
 
     private fun setupNavigation() {
-        val currentOrientation = resources.configuration.orientation
-        val navHostFragment = if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_horizontal) as NavHostFragment
-        } else {
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_vertical) as NavHostFragment
-        }
-
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
         findViewById<BottomNavigationView>(R.id.bottomNavigation)?.setupWithNavController(navController)
-        findViewById<NavigationRailView>(R.id.navigationRailView)?.setupWithNavController(navController)
     }
 
     override fun showBottomNavigation() {
         findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = true
-        findViewById<NavigationRailView>(R.id.navigationRailView)?.isVisible = true
     }
 
     override fun hideBottomNavigation() {
         findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = false
-        findViewById<NavigationRailView>(R.id.navigationRailView)?.isVisible = false
     }
 }

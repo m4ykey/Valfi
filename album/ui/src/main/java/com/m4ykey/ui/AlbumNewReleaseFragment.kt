@@ -67,7 +67,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
             albumAdapter = NewReleaseAdapter(onAlbumClick)
             adapter = albumAdapter
 
-            layoutManager = setupGridLayoutManager(requireContext(), 110f)
+                layoutManager = setupGridLayoutManager(requireContext(), 110f)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

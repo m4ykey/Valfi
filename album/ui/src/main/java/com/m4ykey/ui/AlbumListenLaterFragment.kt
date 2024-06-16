@@ -89,7 +89,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
             imgHide.setOnClickListener {
                 hideSearchEditText()
-                etSearch.setText("")
+                etSearch.setText(getString(R.string.empty_string))
             }
 
             chipSearch.setOnClickListener { showSearchEditText() }
@@ -100,7 +100,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         binding?.apply {
             if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
                 linearLayoutSearch.isVisible = false
-                etSearch.setText("")
+                etSearch.setText(getString(R.string.empty_string))
             } else {
                 linearLayoutSearch.isVisible = true
             }
