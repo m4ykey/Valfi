@@ -46,7 +46,41 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
             binding?.progressbar?.isVisible = isLoading
         }
 
+        binding?.recyclerViewNews?.addOnScrollListener(scrollListener)
+
         setupRecyclerView()
+        setupToolbar()
+        binding?.btnToTop?.setOnClickListener {
+            binding?.recyclerViewNews?.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun setupToolbar() {
+        binding?.apply {
+            val buttons = listOf(
+                Pair(R.id.publishedAt) {
+
+                },
+                Pair(R.id.popularity) {
+
+                }
+            )
+            for ((itemId, action) in buttons) {
+                toolbar.menu.findItem(itemId)?.setOnMenuItemClickListener {
+                    action.invoke()
+                    true
+                }
+            }
+        }
+    }
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val shouldShowButton = recyclerView.computeVerticalScrollOffset() > 5000
+            binding?.btnToTop?.isVisible = shouldShowButton
+        }
     }
 
     private fun setupRecyclerView() {

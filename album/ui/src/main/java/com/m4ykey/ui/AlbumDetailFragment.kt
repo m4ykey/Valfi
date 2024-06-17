@@ -61,8 +61,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         lifecycleScope.launch {
             networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
                 if (isInternetAvailable) {
-                    viewModel.getAlbumById(args.albumId)
-                    viewModel.getAlbumTracks(args.albumId)
+                    viewModel.getAlbumDetails(args.albumId)
 
                     viewModel.detail.observe(viewLifecycleOwner) { items ->
                         displayAlbumDetail(items)

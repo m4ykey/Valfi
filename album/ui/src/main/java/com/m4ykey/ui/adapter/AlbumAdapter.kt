@@ -8,9 +8,10 @@ import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
+import com.m4ykey.ui.helpers.OnAlbumEntityClick
 
 class AlbumAdapter(
-    private val onAlbumClick : (AlbumEntity) -> Unit
+    private val onAlbumClick : OnAlbumEntityClick
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var viewType : ViewType = ViewType.GRID

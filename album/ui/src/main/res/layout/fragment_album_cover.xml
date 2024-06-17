@@ -27,8 +27,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
+        android:contentDescription="@string/album_cover"
         android:id="@+id/imgAlbum"
-        tools:background="@color/white"
+        tools:background="@drawable/album_error"
         android:scaleType="centerCrop"
         android:layout_width="0dp"
         android:layout_height="0dp"

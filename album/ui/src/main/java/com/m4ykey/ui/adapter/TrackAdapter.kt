@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.adapter.viewholder.TrackListViewHolder
 import com.m4ykey.ui.databinding.LayoutTracksBinding
+import com.m4ykey.ui.helpers.OnTrackClick
 
 class TrackAdapter(
-    private val onTrackClick: (TrackItem) -> Unit
+    private val onTrackClick: OnTrackClick
 ) : RecyclerView.Adapter<TrackListViewHolder>() {
 
     private val asyncListDiffer = AsyncListDiffer(this, COMPARATOR)

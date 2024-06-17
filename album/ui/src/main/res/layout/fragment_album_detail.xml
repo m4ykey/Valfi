@@ -66,6 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    tools:background="@drawable/album_error"
                     android:contentDescription="@string/album_cover" />
 
             </androidx.cardview.widget.CardView>

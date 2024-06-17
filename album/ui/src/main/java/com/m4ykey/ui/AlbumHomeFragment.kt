@@ -1,15 +1,16 @@
 package com.m4ykey.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -21,6 +22,7 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
@@ -37,6 +39,7 @@ import java.net.URISyntaxException
 import java.net.URL
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.R)
 @AndroidEntryPoint
 class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     FragmentAlbumHomeBinding::inflate
@@ -99,7 +102,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         }
         binding?.imgHide?.setOnClickListener {
             hideSearchEditText()
-            binding?.etSearch?.setText("")
+            binding?.etSearch?.setText(getString(R.string.empty_string))
         }
     }
 
@@ -175,17 +178,19 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun setRecyclerViewLayout(isListView: Boolean) {
         val viewType = if (isListView) ViewType.LIST else ViewType.GRID
-        binding?.rvAlbums?.layoutManager = if (isListView) {
-            LinearLayoutManager(requireContext())
-        } else {
-            GridLayoutManager(requireContext(), 3)
+        binding?.rvAlbums?.apply {
+            layoutManager = if (isListView) {
+                LinearLayoutManager(requireContext())
+            } else {
+                setupGridLayoutManager(requireContext(), 110f)
+            }
+            albumAdapter.viewType = viewType
         }
-        albumAdapter.viewType = viewType
     }
 
     private fun setupRecyclerView() {
-        binding?.apply {
-            rvAlbums.addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+        binding?.rvAlbums?.apply {
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             val onAlbumClick : (AlbumEntity) -> Unit = { album ->
                 val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
@@ -194,13 +199,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             albumAdapter = AlbumAdapter(onAlbumClick)
 
-            val layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
+            layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())
             } else {
-                GridLayoutManager(requireContext(), 3)
+                setupGridLayoutManager(requireContext(), 110f)
             }
-            this.rvAlbums.layoutManager = layoutManager
-            rvAlbums.adapter = albumAdapter
+            adapter = albumAdapter
         }
     }
 
@@ -372,7 +376,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         binding?.apply {
             if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
                 linearLayoutSearch.isVisible = false
-                etSearch.setText("")
+                etSearch.setText(getString(R.string.empty_string))
             } else {
                 linearLayoutSearch.isVisible = true
             }
@@ -405,7 +409,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             val layoutManager = when (albumAdapter.viewType) {
                 ViewType.LIST -> LinearLayoutManager(requireContext())
-                ViewType.GRID -> GridLayoutManager(requireContext(), 3)
+                ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
             }
             binding?.rvAlbums?.layoutManager = layoutManager
         }

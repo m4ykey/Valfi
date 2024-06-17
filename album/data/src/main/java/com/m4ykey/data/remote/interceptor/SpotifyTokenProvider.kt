@@ -1,5 +1,6 @@
 package com.m4ykey.data.remote.interceptor
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class SpotifyTokenProvider @Inject constructor(
     private val api : AuthApi,
-    private val dataStore : DataStore<Preferences>
+    private val dataStore : DataStore<Preferences>,
+    private val context : Context
 ) : TokenProvider {
 
     private val accessTokenKey = stringPreferencesKey("access_token")
@@ -33,7 +35,8 @@ class SpotifyTokenProvider @Inject constructor(
                 val newAccessToken = fetchAccessToken(
                     api = api,
                     clientSecret = SPOTIFY_CLIENT_SECRET,
-                    clientId = SPOTIFY_CLIENT_ID
+                    clientId = SPOTIFY_CLIENT_ID,
+                    context = context
                 )
 
                 val newExpireTime = System.currentTimeMillis() + 3600 * 1000
