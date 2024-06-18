@@ -1,8 +1,8 @@
 Valfi is an app that allows you to search and save your favorite albums, discover new releases, and stay updated on the latest music news.
 
 ## Screenshots
-| Album List | Album Search | Album Detail |
-|:---:|:---:|:---:|
+| Home | Search | Detail | News |
+|:-:|:-:|:-:|:-:|
 
 
 ## Helpful dependencies
