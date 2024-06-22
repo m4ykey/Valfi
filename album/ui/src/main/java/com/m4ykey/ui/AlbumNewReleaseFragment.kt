@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants
+import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -38,16 +39,21 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
             viewModel.getNewReleases()
         }
 
-        viewModel.newRelease.observe(viewLifecycleOwner) { albums ->
-            albumAdapter.submitList(albums)
+        lifecycleScope.launch {
+            viewModel.newRelease.collect { albumAdapter.submitList(it) }
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding?.progressbar?.isVisible = isLoading
+        lifecycleScope.launch {
+            viewModel.isLoading.collect { binding?.progressbar?.isVisible = it }
         }
 
-        viewModel.isError.observe(viewLifecycleOwner) { isError ->
-            if (isError) showToast(requireContext(), "Error loading data")
+        lifecycleScope.launch {
+            viewModel.isError.collect { errorState ->
+                when (errorState) {
+                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
+                    else -> {}
+                }
+            }
         }
 
         binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
@@ -72,7 +78,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
-                        if (!viewModel.isPaginationEnded && viewModel.isLoading.value == false) {
+                        if (!viewModel.isPaginationEnded && !viewModel.isLoading.value) {
                             lifecycleScope.launch { viewModel.getNewReleases() }
                         }
                     }

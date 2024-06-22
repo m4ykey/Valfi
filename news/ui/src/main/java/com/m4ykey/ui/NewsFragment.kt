@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
+import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -33,24 +34,34 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 
         bottomNavigationVisibility?.showBottomNavigation()
 
+        setupRecyclerView()
+        setupToolbar()
+
         lifecycleScope.launch {
             viewModel.getMusicNews()
         }
 
-        viewModel.news.observe(viewLifecycleOwner) { articles -> newsAdapter.submitList(articles) }
-
-        viewModel.isError.observe(viewLifecycleOwner) { isError ->
-            if (isError) showToast(requireContext(), "Error loading data")
+        lifecycleScope.launch {
+            viewModel.news.collect { newsAdapter.submitList(it) }
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding?.progressbar?.isVisible = isLoading
+        lifecycleScope.launch {
+            viewModel.isError.collect { errorState ->
+                when (errorState) {
+                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
+                    else -> {}
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collect {
+                binding?.progressbar?.isVisible = it
+            }
         }
 
         binding?.recyclerViewNews?.addOnScrollListener(scrollListener(binding?.btnToTop!!))
 
-        setupRecyclerView()
-        setupToolbar()
         binding?.btnToTop?.setOnClickListener {
             binding?.recyclerViewNews?.smoothScrollToPosition(0)
         }
@@ -91,7 +102,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
-                        if (!viewModel.isPaginationEnded && viewModel.isLoading.value == false) {
+                        if (!viewModel.isPaginationEnded && !viewModel.isLoading.value) {
                             lifecycleScope.launch { viewModel.getMusicNews() }
                         }
                     }

@@ -1,10 +1,9 @@
 package com.m4ykey.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
+import com.m4ykey.core.network.ErrorState
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -16,6 +15,8 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,32 +26,32 @@ class AlbumViewModel @Inject constructor(
     private val trackRepository: TrackRepository
 ) : ViewModel() {
 
-    private var _search = MutableLiveData<List<AlbumItem>>()
-    val albums : LiveData<List<AlbumItem>> get() = _search
+    private var _search = MutableStateFlow<List<AlbumItem>>(emptyList())
+    val albums : StateFlow<List<AlbumItem>> get() = _search
 
-    private var _newRelease = MutableLiveData<List<AlbumItem>>()
-    val newRelease : LiveData<List<AlbumItem>> get() = _newRelease
+    private var _newRelease = MutableStateFlow<List<AlbumItem>>(emptyList())
+    val newRelease : StateFlow<List<AlbumItem>> get() = _newRelease
 
-    private var _detail = MutableLiveData<AlbumDetail>()
-    val detail : LiveData<AlbumDetail> get() = _detail
+    private var _detail = MutableStateFlow<AlbumDetail?>(null)
+    val detail : StateFlow<AlbumDetail?> get() = _detail
 
-    private var _tracks = MutableLiveData<List<TrackItem>>()
-    val tracks : LiveData<List<TrackItem>> get() = _tracks
+    private var _tracks = MutableStateFlow<List<TrackItem>>(emptyList())
+    val tracks : StateFlow<List<TrackItem>> get() = _tracks
 
-    private var _albumPaging = MutableLiveData<List<AlbumEntity>>()
-    val albumPaging : LiveData<List<AlbumEntity>> get() = _albumPaging
+    private var _albumPaging = MutableStateFlow<List<AlbumEntity>>(emptyList())
+    val albumPaging : StateFlow<List<AlbumEntity>> get() = _albumPaging
 
-    private var _searchResult = MutableLiveData<List<AlbumEntity>>()
-    val searchResult : LiveData<List<AlbumEntity>> get() = _searchResult
+    private var _searchResult = MutableStateFlow<List<AlbumEntity>>(emptyList())
+    val searchResult : StateFlow<List<AlbumEntity>> get() = _searchResult
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading : LiveData<Boolean> get() = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading : StateFlow<Boolean> get() = _isLoading
 
-    private val _isLoadingTracks = MutableLiveData<Boolean>()
-    val isLoadingTracks : LiveData<Boolean> get() = _isLoadingTracks
+    private val _isLoadingTracks = MutableStateFlow(false)
+    val isLoadingTracks : StateFlow<Boolean> get() = _isLoadingTracks
 
-    private val _isError = MutableLiveData<Boolean>()
-    val isError : LiveData<Boolean> get() = _isError
+    private val _isError = MutableStateFlow<ErrorState>(ErrorState.NoError)
+    val isError : StateFlow<ErrorState> get() = _isError
 
     private var offset = 0
     var isPaginationEnded = false
@@ -62,114 +63,100 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAlbumTracks(id : String) {
-        if (_isLoadingTracks.value == true || isPaginationEnded) return
+    suspend fun getAlbumTracks(id : String) = viewModelScope.launch {
+        if (_isLoadingTracks.value || isPaginationEnded) return@launch
 
         _isLoadingTracks.value = true
-        _isError.value = false
-        viewModelScope.launch {
-            try {
-                trackRepository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
-                    .collect { tracks ->
-                        if (tracks.isNotEmpty()) {
-                            val currentList = _tracks.value?.toMutableList() ?: mutableListOf()
-                            currentList.addAll(tracks)
-                            _tracks.value = currentList
-                            offset += PAGE_SIZE
-                            if (tracks.size < PAGE_SIZE) {
-                                isPaginationEnded = true
-                            }
-                        } else {
-                            isPaginationEnded = true
-                        }
+        _isError.value = ErrorState.NoError
+        try {
+            trackRepository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
+                .collect { tracks ->
+                    if (tracks.isNotEmpty()) {
+                        val currentList = _tracks.value.toMutableList()
+                        currentList.addAll(tracks)
+                        _tracks.value = currentList
+                        offset += PAGE_SIZE
+                        if (tracks.size < PAGE_SIZE) isPaginationEnded = true
+                    } else {
+                        isPaginationEnded = true
                     }
-            } catch (e : Exception) {
-                _isError.value = true
-            } finally {
-                _isLoadingTracks.value = false
-            }
-        }
-    }
-
-    private suspend fun getAlbumById(id : String) {
-        _isLoading.value = true
-        _isError.value = false
-
-        viewModelScope.launch {
-            try {
-                repository.getAlbumById(id).collect { result ->
-                    _detail.value = result
                 }
-            } catch (e : Exception) {
-                _isError.value = true
-            } finally {
-                _isLoading.value = false
-            }
+        } catch (e : Exception) {
+            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+        } finally {
+            _isLoadingTracks.value = false
         }
     }
 
-    suspend fun getNewReleases() {
-        if (_isLoading.value == true || isPaginationEnded) return
-
+    private suspend fun getAlbumById(id : String) = viewModelScope.launch {
         _isLoading.value = true
-        _isError.value = false
-        viewModelScope.launch {
-            try {
-                repository.getNewReleases(offset = offset, limit = PAGE_SIZE)
-                    .collect { albums ->
-                        if (albums.isNotEmpty()) {
-                            val currentList = _newRelease.value?.toMutableList() ?: mutableListOf()
-                            currentList.addAll(albums)
-                            _newRelease.value = currentList
-                            offset += PAGE_SIZE
-                            if (albums.size < PAGE_SIZE) {
-                                isPaginationEnded = true
-                            }
-                        } else {
-                            isPaginationEnded = true
-                        }
-                    }
-            } catch (e : Exception) {
-                _isError.value = true
-            } finally {
-                _isLoading.value = false
+        _isError.value = ErrorState.NoError
+
+        try {
+            repository.getAlbumById(id).collect { result ->
+                _detail.value = result
             }
+        } catch (e : Exception) {
+            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+        } finally {
+            _isLoading.value = false
         }
     }
 
-    suspend fun searchAlbums(query : String) {
-        if (_isLoading.value == true || isPaginationEnded) return
+    suspend fun getNewReleases() = viewModelScope.launch {
+        if (_isLoading.value || isPaginationEnded) return@launch
 
         _isLoading.value = true
-        _isError.value = false
-        viewModelScope.launch {
-            try {
-                repository.searchAlbums(query, offset = offset, limit = PAGE_SIZE)
-                    .collect { searchResult ->
-                        if (searchResult.isNotEmpty()) {
-                            val currentList = _search.value?.toMutableList() ?: mutableListOf()
-                            currentList.addAll(searchResult)
-                            _search.value = currentList
-                            offset += PAGE_SIZE
-                            if (searchResult.size < PAGE_SIZE) {
-                                isPaginationEnded = true
-                            }
-                        } else {
-                            isPaginationEnded = true
-                        }
+        _isError.value = ErrorState.NoError
+        try {
+            repository.getNewReleases(offset = offset, limit = PAGE_SIZE)
+                .collect { albums ->
+                    if (albums.isNotEmpty()) {
+                        val currentList = _newRelease.value.toMutableList()
+                        currentList.addAll(albums)
+                        _newRelease.value = currentList
+                        offset += PAGE_SIZE
+                        if (albums.size < PAGE_SIZE) isPaginationEnded = true
+                    } else {
+                        isPaginationEnded = true
                     }
-            } catch (e : Exception) {
-                _isError.value = true
-            } finally {
-                _isLoading.value = false
-            }
+                }
+        } catch (e : Exception) {
+            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+        } finally {
+            _isLoading.value = false
+        }
+    }
+
+    suspend fun searchAlbums(query : String) = viewModelScope.launch {
+        if (_isLoading.value || isPaginationEnded) return@launch
+
+        _isLoading.value = true
+        _isError.value = ErrorState.NoError
+        try {
+            repository.searchAlbums(query, offset = offset, limit = PAGE_SIZE)
+                .collect { searchResult ->
+                    if (searchResult.isNotEmpty()) {
+                        val currentList = _search.value.toMutableList()
+                        currentList.addAll(searchResult)
+                        _search.value = currentList
+                        offset += PAGE_SIZE
+                        if (searchResult.size < PAGE_SIZE) isPaginationEnded = true
+                    } else {
+                        isPaginationEnded = true
+                    }
+                }
+        } catch (e : Exception) {
+            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+        } finally {
+            _isLoading.value = false
         }
     }
 
     fun resetSearch() {
         offset = 0
         _isLoading.value = false
-        _isError.value = false
+        _isError.value = ErrorState.NoError
         isPaginationEnded = false
         _search.value = emptyList()
     }

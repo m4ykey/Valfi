@@ -52,7 +52,6 @@ dependencies {
         implementation(androidxNavigationUI)
         implementation(androidxLifecycleRuntime)
         implementation(androidxLifecycleViewmodel)
-        implementation(androidxLifecycleLivedata)
         implementation(androidxRecyclerView)
 
         testImplementation(junit)

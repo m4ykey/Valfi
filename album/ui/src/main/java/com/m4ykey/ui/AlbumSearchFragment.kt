@@ -16,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
+import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -47,18 +48,22 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         searchAlbums()
 
         lifecycleScope.launch {
-            viewModel.albums.observe(viewLifecycleOwner) { albums ->
-                searchAdapter.submitList(albums)
-            }
+            viewModel.albums.collect { searchAdapter.submitList(it) }
+        }
 
-            viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-                binding?.progressbar?.isVisible = isLoading
-            }
+        lifecycleScope.launch {
+            viewModel.isLoading.collect { binding?.progressbar?.isVisible = it }
+        }
 
-            viewModel.isError.observe(viewLifecycleOwner) { isError ->
-                if (isError) showToast(requireContext(), "Error loading data")
+        lifecycleScope.launch {
+            viewModel.isError.collect { errorState ->
+                when (errorState) {
+                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
+                    else -> {}
+                }
             }
         }
+
     }
 
     private fun searchAlbums() {
@@ -96,7 +101,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
                         val searchQuery = binding?.etSearch?.text.toString()
-                        if (!viewModel.isPaginationEnded && viewModel.isLoading.value == false && searchQuery.isNotEmpty()) {
+                        if (!viewModel.isPaginationEnded && !viewModel.isLoading.value && searchQuery.isNotEmpty()) {
                             lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
                         }
                     }

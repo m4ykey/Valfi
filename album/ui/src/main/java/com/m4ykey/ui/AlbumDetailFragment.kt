@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
@@ -61,32 +62,47 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         setupRecyclerView()
         binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
         lifecycleScope.launch {
-            networkStateMonitor.isInternetAvailable.collect { isInternetAvailable ->
-                if (isInternetAvailable) {
+            networkStateMonitor.isInternetAvailable.collect {
+                if (it) {
+                    observeViewModel()
                     viewModel.getAlbumDetails(args.albumId)
-
-                    viewModel.detail.observe(viewLifecycleOwner) { items ->
-                        displayAlbumDetail(items)
-                    }
-                    viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-                        trackAdapter.submitList(tracks)
-                    }
-
-                    viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-                        binding?.progressbar?.isVisible = isLoading
-                    }
-
-                    viewModel.isLoadingTracks.observe(viewLifecycleOwner) { isLoading ->
-                        if (!viewModel.isLoading.value!!) {
-                            binding?.progressbar?.isVisible = isLoading
-                        }
-                    }
-
-                    viewModel.isError.observe(viewLifecycleOwner) { isError ->
-                        if (isError) showToast(requireContext(), "Error loading data")
-                    }
                 } else {
-                    viewModel.getAlbum(args.albumId)?.let { album -> displayAlbumFromDatabase(album) }
+                    viewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
+                }
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.detail.collect { item ->
+                item?.let { displayAlbumDetail(it) }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.tracks.collect { trackAdapter.submitList(it) }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collect {
+                binding?.progressbar?.isVisible = it
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoadingTracks.collect {
+                if (!viewModel.isLoading.value) {
+                    binding?.progressbar?.isVisible = it
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isError.collect { errorState ->
+                when (errorState) {
+                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
+                    else -> {}
                 }
             }
         }
@@ -192,7 +208,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     val totalItemCount = layoutManager.itemCount
 
                     if (lastVisibleItemPosition == totalItemCount - 1) {
-                        if (!viewModel.isPaginationEnded && viewModel.isLoadingTracks.value == false) {
+                        if (!viewModel.isPaginationEnded && !viewModel.isLoadingTracks.value) {
                             lifecycleScope.launch { viewModel.getAlbumTracks(args.albumId) }
                         }
                     }
