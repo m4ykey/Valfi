@@ -15,9 +15,9 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.NewReleaseAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
+import com.m4ykey.ui.helpers.OnAlbumClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -59,7 +59,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         binding?.recyclerViewNewRelease?.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
 
-            val onAlbumClick : (AlbumItem) -> Unit = { album ->
+            val onAlbumClick : OnAlbumClick = { album ->
                 val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(album.id)
                 findNavController().navigate(action)
             }
@@ -67,7 +67,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
             albumAdapter = NewReleaseAdapter(onAlbumClick)
             adapter = albumAdapter
 
-                layoutManager = setupGridLayoutManager(requireContext(), 110f)
+            layoutManager = setupGridLayoutManager(requireContext(), 110f)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

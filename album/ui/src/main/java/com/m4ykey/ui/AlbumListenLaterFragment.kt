@@ -16,9 +16,9 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
+import com.m4ykey.ui.helpers.OnAlbumEntityClick
 import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -41,11 +41,11 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        binding?.apply {
-            setupToolbar()
-            setupRecyclerView()
-            getRandomAlbum()
+        setupToolbar()
+        setupRecyclerView()
+        getRandomAlbum()
 
+        binding?.apply {
             viewModel.apply {
                 lifecycleScope.launch { getListenLaterAlbums() }
                 albumPaging.observe(viewLifecycleOwner) { albums ->
@@ -151,7 +151,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun setupRecyclerView() {
         binding?.apply {
 
-            val onAlbumClick : (AlbumEntity) -> Unit = { album ->
+            val onAlbumClick : OnAlbumEntityClick = { album ->
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
                 findNavController().navigate(action)
             }

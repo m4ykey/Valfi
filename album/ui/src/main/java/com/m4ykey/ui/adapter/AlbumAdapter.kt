@@ -2,34 +2,34 @@ package com.m4ykey.ui.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.ui.adapter.callback.AlbumEntityCallback
 import com.m4ykey.ui.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.adapter.viewholder.AlbumListViewHolder
 import com.m4ykey.ui.helpers.OnAlbumEntityClick
 
 class AlbumAdapter(
     private val onAlbumClick : OnAlbumEntityClick
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : BaseRecyclerView<AlbumEntity, RecyclerView.ViewHolder>() {
 
     var viewType : ViewType = ViewType.GRID
 
-    private val asyncListDiffer = AsyncListDiffer(this, COMPARATOR)
-
-    fun submitList(albums : List<AlbumEntity>) {
-        asyncListDiffer.submitList(albums)
-    }
+    override val asyncListDiffer = AsyncListDiffer(this, AlbumEntityCallback())
 
     companion object {
-        val COMPARATOR = object : DiffUtil.ItemCallback<AlbumEntity>() {
-            override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean = oldItem == newItem
-        }
-
         private const val VIEW_TYPE_GRID = 0
         private const val VIEW_TYPE_LIST = 1
+    }
+
+    override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val album = asyncListDiffer.currentList[position]
+        when (holder) {
+            is AlbumGridViewHolder -> holder.bind(album)
+            is AlbumListViewHolder -> holder.bind(album)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -40,21 +40,10 @@ class AlbumAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val album = asyncListDiffer.currentList[position]
-        when (holder) {
-            is AlbumGridViewHolder -> holder.bind(album)
-            is AlbumListViewHolder -> holder.bind(album)
-        }
-    }
-
-    override fun getItemCount(): Int = asyncListDiffer.currentList.size
-
     override fun getItemViewType(position: Int): Int {
         return when (viewType) {
             ViewType.GRID -> VIEW_TYPE_GRID
             ViewType.LIST -> VIEW_TYPE_LIST
         }
     }
-
 }

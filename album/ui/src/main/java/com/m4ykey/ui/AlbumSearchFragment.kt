@@ -21,9 +21,9 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
+import com.m4ykey.ui.helpers.OnAlbumClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -82,11 +82,8 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         binding?.rvSearchAlbums?.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            val onAlbumClick: (AlbumItem) -> Unit = { album ->
-                val action =
-                    AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(
-                        album.id
-                    )
+            val onAlbumClick: OnAlbumClick = { album ->
+                val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
                 findNavController().navigate(action)
             }
 

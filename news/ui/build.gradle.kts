@@ -53,6 +53,7 @@ dependencies {
         implementation(androidxLifecycleRuntime)
         implementation(androidxLifecycleViewmodel)
         implementation(androidxLifecycleLivedata)
+        implementation(androidxRecyclerView)
 
         implementation(androidMaterial)
 

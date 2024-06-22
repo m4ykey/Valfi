@@ -12,6 +12,7 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.ui.adapter.NewsAdapter
@@ -46,7 +47,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
             binding?.progressbar?.isVisible = isLoading
         }
 
-        binding?.recyclerViewNews?.addOnScrollListener(scrollListener)
+        binding?.recyclerViewNews?.addOnScrollListener(scrollListener(binding?.btnToTop!!))
 
         setupRecyclerView()
         setupToolbar()
@@ -71,15 +72,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                     true
                 }
             }
-        }
-    }
-
-    private val scrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            val shouldShowButton = recyclerView.computeVerticalScrollOffset() > 5000
-            binding?.btnToTop?.isVisible = shouldShowButton
         }
     }
 
