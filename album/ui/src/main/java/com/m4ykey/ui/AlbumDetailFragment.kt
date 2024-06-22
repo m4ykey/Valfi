@@ -61,6 +61,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
         setupRecyclerView()
         binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding?.toolbarLoading?.setNavigationOnClickListener { findNavController().navigateUp() }
+        
         lifecycleScope.launch {
             networkStateMonitor.isInternetAvailable.collect {
                 if (it) {
@@ -86,15 +88,14 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
         lifecycleScope.launch {
             viewModel.isLoading.collect {
-                binding?.progressbar?.isVisible = it
+                binding?.layoutLoading?.isVisible = it
+                binding?.nestedScrollView?.isVisible = !it
             }
         }
 
         lifecycleScope.launch {
             viewModel.isLoadingTracks.collect {
-                if (!viewModel.isLoading.value) {
-                    binding?.progressbar?.isVisible = it
-                }
+                binding?.progressBarTracks?.isVisible = it
             }
         }
 

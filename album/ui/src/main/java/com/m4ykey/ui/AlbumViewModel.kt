@@ -1,5 +1,7 @@
 package com.m4ykey.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
@@ -38,11 +40,11 @@ class AlbumViewModel @Inject constructor(
     private var _tracks = MutableStateFlow<List<TrackItem>>(emptyList())
     val tracks : StateFlow<List<TrackItem>> get() = _tracks
 
-    private var _albumPaging = MutableStateFlow<List<AlbumEntity>>(emptyList())
-    val albumPaging : StateFlow<List<AlbumEntity>> get() = _albumPaging
+    private var _albumPaging = MutableLiveData<List<AlbumEntity>>()
+    val albumPaging : LiveData<List<AlbumEntity>> get() = _albumPaging
 
-    private var _searchResult = MutableStateFlow<List<AlbumEntity>>(emptyList())
-    val searchResult : StateFlow<List<AlbumEntity>> get() = _searchResult
+    private var _searchResult = MutableLiveData<List<AlbumEntity>>()
+    val searchResult : LiveData<List<AlbumEntity>> get() = _searchResult
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading : StateFlow<Boolean> get() = _isLoading
