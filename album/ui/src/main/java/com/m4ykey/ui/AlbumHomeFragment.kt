@@ -26,10 +26,10 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.preferences.AlbumPreferences
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
+import com.m4ykey.ui.helpers.OnAlbumEntityClick
 import com.m4ykey.ui.helpers.animationPropertiesY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -192,7 +192,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         binding?.rvAlbums?.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
-            val onAlbumClick : (AlbumEntity) -> Unit = { album ->
+            val onAlbumClick : OnAlbumEntityClick = { album ->
                 val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
                 findNavController().navigate(action)
             }

@@ -25,7 +25,6 @@ import com.m4ykey.core.views.utils.formatAirDate
 import com.m4ykey.core.views.utils.getColorFromImage
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
-import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ArtistEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
@@ -33,6 +32,7 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
+import com.m4ykey.ui.helpers.OnTrackClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -173,7 +173,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun setupRecyclerView() {
         binding?.rvTrackList?.apply {
-            val onTrackClick : (TrackItem) -> Unit = { track ->
+            val onTrackClick : OnTrackClick = { track ->
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
             }
 
