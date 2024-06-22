@@ -7,6 +7,7 @@ import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.databinding.LayoutAlbumListBinding
 import com.m4ykey.ui.helpers.OnAlbumEntityClick
+import com.m4ykey.ui.helpers.getArtistList
 
 class AlbumListViewHolder(
     binding : LayoutAlbumListBinding,
@@ -29,7 +30,7 @@ class AlbumListViewHolder(
         with(binding) {
             layoutAlbum.setOnClickListener { onAlbumClick(item) }
 
-            txtArtist.text = item.artists.joinToString(separator = ", ") { it.name }
+            txtArtist.text = item.getArtistList()
             txtAlbum.text = item.name
             loadImage(imgAlbum, item.images, imgAlbum.context)
         }

@@ -6,6 +6,7 @@ import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.databinding.LayoutTracksBinding
 import com.m4ykey.ui.helpers.OnTrackClick
 import com.m4ykey.ui.helpers.formatDuration
+import com.m4ykey.ui.helpers.getArtistList
 
 class TrackListViewHolder(
     binding : LayoutTracksBinding,
@@ -16,11 +17,10 @@ class TrackListViewHolder(
         with(binding) {
             linearLayoutTracks.setOnClickListener { onTrackClick(item) }
 
-            val artistList = item.artists.joinToString(", ") { it.name }
             val trackDuration = formatDuration(item.durationMs / 1000)
 
             txtArtist.apply {
-                text = artistList
+                text = item.getArtistList()
                 isSelected = true
             }
             txtTrackName.text = item.name

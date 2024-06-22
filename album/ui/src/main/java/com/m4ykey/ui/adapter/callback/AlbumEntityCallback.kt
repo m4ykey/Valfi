@@ -7,8 +7,5 @@ class AlbumEntityCallback : DiffUtil.ItemCallback<AlbumEntity>() {
     override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean =
         oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean =
-        oldItem.id == newItem.id &&
-                oldItem.name == newItem.name &&
-                oldItem.images == newItem.images
+    override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean = oldItem == newItem
 }

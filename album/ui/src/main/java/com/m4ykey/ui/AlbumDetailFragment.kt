@@ -33,6 +33,8 @@ import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.helpers.OnTrackClick
+import com.m4ykey.ui.helpers.getArtistList
+import com.m4ykey.ui.helpers.getLargestImageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -122,7 +124,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     text = name
                     setOnClickListener { copyName(name, requireContext()) }
                 }
-                txtArtist.text = artists.joinToString(separator = ", ") { it.name }
+                txtArtist.text = getArtistList()
                 txtInfo.text = getString(R.string.album_info, albumType, releaseDate, totalTracks, getString(R.string.tracks))
 
                 imgSave.setOnClickListener {
@@ -201,8 +203,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun displayAlbumDetail(item: AlbumDetail) {
         binding?.apply {
-            val image = item.images.maxByOrNull { it.height * it.width }?.url
-            val artistList = item.artists.joinToString(", ") { it.name }
             val albumType = when {
                 item.totalTracks in 2..6 && item.albumType.equals(
                     "Single",
@@ -222,18 +222,19 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 text = item.name
                 setOnClickListener { copyName(item.name, requireContext()) }
             }
-            txtArtist.text = artistList
+            txtArtist.text = item.getArtistList()
             txtInfo.text = albumInfo
 
             cardView.setOnClickListener {
-                val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(image.toString())
+                val action =
+                    AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(item.getLargestImageUrl().toString())
                 findNavController().navigate(action)
             }
 
-            loadImage(imgAlbum, image.toString(), requireContext())
+            loadImage(imgAlbum, item.getLargestImageUrl().toString(), requireContext())
 
             getColorFromImage(
-                image.toString(),
+                item.getLargestImageUrl().toString(),
                 context = requireContext()
             ) { color ->
                 animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
@@ -256,7 +257,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 name = item.name,
                 releaseDate = formatAirDate.toString(),
                 totalTracks = item.totalTracks,
-                images = image.toString(),
+                images = item.getLargestImageUrl().toString(),
                 albumType = albumType,
                 artists = artistsEntity,
                 albumUrl = albumUrl ?: ""
