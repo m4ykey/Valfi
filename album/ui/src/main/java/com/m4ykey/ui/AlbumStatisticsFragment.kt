@@ -32,7 +32,7 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
 
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        binding?.apply {
+        binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
             lifecycleScope.launch {
@@ -64,8 +64,8 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
             duration = 2000
             addUpdateListener { animation ->
                 val animatedValue = animation.animatedValue as Int
-                binding?.txtAlbumCount?.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
-                binding?.txtTotalSongsPlayed?.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
+                binding.txtAlbumCount.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
+                binding.txtTotalSongsPlayed.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
             }
         }
         animator.start()

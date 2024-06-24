@@ -22,8 +22,8 @@ class AlbumCoverFragment : BaseFragment<FragmentAlbumCoverBinding>(
 
         bottomNavigationVisibility?.hideBottomNavigation()
 
-        binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
-        loadImage(binding?.imgAlbum!!, args.imgUrl, requireContext())
+        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        loadImage(binding.imgAlbum, args.imgUrl, requireContext())
     }
 
 }

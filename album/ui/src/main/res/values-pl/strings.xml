@@ -38,4 +38,6 @@
     <string name="favorite_albums">Ulubione albumy</string>
     <string name="total_number_of_tracks">Łączna ilość utworów</string>
     <string name="nothing_found">Nic nie znaleziono</string>
+    <string name="speech_not_recognition">Rozpoznawanie mowy jest niedostępne</string>
+    <string name="enter_album_name">Wprowadź nazwę albumu</string>
 </resources>

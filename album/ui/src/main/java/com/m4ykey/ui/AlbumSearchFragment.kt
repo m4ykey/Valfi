@@ -49,10 +49,12 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             val matches = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             if (!matches.isNullOrEmpty()) {
                 val spokenText = matches[0]
-                binding?.etSearch?.setText(spokenText)
+                binding.etSearch.setText(spokenText)
             }
         }
     }
+
+    private var originalWidth : Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +70,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect { binding?.progressbar?.isVisible = it }
+            viewModel.isLoading.collect { binding.progressbar.isVisible = it }
         }
 
         lifecycleScope.launch {
@@ -80,13 +82,22 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             }
         }
 
+        binding.etSearch.post {
+            originalWidth = binding.etSearch.width
+        }
+    }
+
+    private fun resetSearchWidth() {
+        val params = binding.etSearch.layoutParams
+        params.width = originalWidth
+        binding.etSearch.layoutParams = params
     }
 
     private fun searchAlbums() {
-        binding?.etSearch?.setOnEditorActionListener { _, actionId, _ ->
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
-                    val searchQuery = binding?.etSearch?.text?.toString()
+                    val searchQuery = binding.etSearch.text?.toString()
                     if (searchQuery?.isNotEmpty() == true) {
                         viewModel.resetSearch()
                         lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
@@ -100,7 +111,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding?.rvSearchAlbums?.apply {
+        binding.rvSearchAlbums.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             val onAlbumClick: OnAlbumClick = { album ->
@@ -116,7 +127,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
-                        val searchQuery = binding?.etSearch?.text.toString()
+                        val searchQuery = binding.etSearch.text.toString()
                         if (!viewModel.isPaginationEnded && !viewModel.isLoading.value && searchQuery.isNotEmpty()) {
                             lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
                         }
@@ -127,7 +138,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     }
 
     private fun setupToolbar() {
-        binding?.apply {
+        binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             etSearch.doOnTextChanged { text, _, _, _ ->
                 val isSearchEmpty = text.isNullOrBlank()
@@ -144,13 +155,13 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
     private fun recordAudio() {
         if (!SpeechRecognizer.isRecognitionAvailable(requireContext())) {
-            showToast(requireContext(), "")
+            showToast(requireContext(), getString(R.string.speech_not_recognition))
         } else {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intent.apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                putExtra(RecognizerIntent.EXTRA_PROMPT, "Enter album name")
+                putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.enter_album_name))
             }
             speechRecognizerLauncher.launch(intent)
         }
@@ -179,7 +190,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     }
 
     private fun showClearButtonWithAnimation() {
-        binding?.imgClear?.apply {
+        binding.imgClear.apply {
             translationX = 100f
             alpha = 0f
             isVisible = true
@@ -189,13 +200,15 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     }
 
     private fun hideClearButtonWithAnimation() {
-        binding?.imgClear?.apply {
+        binding.imgClear.apply {
             animationProperties(width.toFloat(), 0f, AccelerateInterpolator())
+            visibility = View.GONE
         }
+        resetSearchWidth()
     }
 
     private fun resetSearchState() {
-        binding?.apply {
+        binding.apply {
             if (etSearch.text.isNullOrBlank()) {
                 imgClear.isVisible = false
                 isClearButtonVisible = false

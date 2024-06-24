@@ -45,24 +45,24 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         setupRecyclerView()
         getRandomAlbum()
 
-        binding?.apply {
+        binding.apply {
             viewModel.apply {
                 lifecycleScope.launch { getListenLaterAlbums() }
                 albumPaging.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
                         albumAdapter.submitList(emptyList())
-                        binding?.linearLayoutEmptyList?.isVisible = true
-                        binding?.linearLayoutEmptySearch?.isVisible = false
+                        binding.linearLayoutEmptyList.isVisible = true
+                        binding.linearLayoutEmptySearch.isVisible = false
                     } else {
-                        binding?.linearLayoutEmptyList?.isVisible = false
-                        if (binding?.etSearch?.text.isNullOrEmpty()) {
+                        binding.linearLayoutEmptyList.isVisible = false
+                        if (binding.etSearch.text.isNullOrEmpty()) {
                             albumAdapter.submitList(albums)
-                            binding?.linearLayoutEmptySearch?.isVisible = false
+                            binding.linearLayoutEmptySearch.isVisible = false
                         }
                     }
                 }
 
-                binding?.etSearch?.doOnTextChanged { text, _, _, _ ->
+                binding.etSearch.doOnTextChanged { text, _, _, _ ->
                     if (text.isNullOrEmpty()) {
                         lifecycleScope.launch { getListenLaterAlbums() }
                     } else {
@@ -73,11 +73,11 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 searchResult.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
                         albumAdapter.submitList(emptyList())
-                        binding?.linearLayoutEmptySearch?.isVisible = true
-                        binding?.linearLayoutEmptyList?.isVisible = false
+                        binding.linearLayoutEmptySearch.isVisible = true
+                        binding.linearLayoutEmptyList.isVisible = false
                     } else {
                         albumAdapter.submitList(albums)
-                        binding?.linearLayoutEmptySearch?.isVisible = false
+                        binding.linearLayoutEmptySearch.isVisible = false
                     }
                 }
 
@@ -97,7 +97,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun resetSearchState() {
-        binding?.apply {
+        binding.apply {
             if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
                 linearLayoutSearch.isVisible = false
                 etSearch.setText(getString(R.string.empty_string))
@@ -109,7 +109,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
     private fun showSearchEditText() {
         if (!isSearchEditTextVisible) {
-            binding?.linearLayoutSearch?.apply {
+            binding.linearLayoutSearch.apply {
                 translationY = -30f
                 isVisible = true
                 animationPropertiesY(0f, 1f, DecelerateInterpolator())
@@ -121,13 +121,13 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun hideSearchEditText() {
         if (isSearchEditTextVisible && !isHidingAnimationRunning) {
             isHidingAnimationRunning = true
-            binding?.linearLayoutSearch?.apply {
+            binding.linearLayoutSearch.apply {
                 translationY = 0f
                 animationPropertiesY(-30f, 0f, DecelerateInterpolator())
             }
             lifecycleScope.launch {
                 delay(400)
-                binding?.linearLayoutSearch?.isVisible = false
+                binding.linearLayoutSearch.isVisible = false
                 isSearchEditTextVisible = false
                 isHidingAnimationRunning = false
             }
@@ -135,7 +135,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun getRandomAlbum() {
-        binding?.btnListenLater?.setOnClickListener {
+        binding.btnListenLater.setOnClickListener {
             lifecycleScope.launch {
                 val randomAlbum = viewModel.getRandomAlbum()
                 if (randomAlbum != null) {
@@ -149,7 +149,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding?.apply {
+        binding.apply {
 
             val onAlbumClick : OnAlbumEntityClick = { album ->
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
@@ -167,7 +167,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun setupToolbar() {
-        binding?.toolbar?.apply {
+        binding.toolbar.apply {
             setNavigationOnClickListener { findNavController().navigateUp() }
             menu.findItem(R.id.imgAdd).setOnMenuItemClickListener {
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumSearchFragment()

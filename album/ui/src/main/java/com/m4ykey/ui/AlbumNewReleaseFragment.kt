@@ -44,7 +44,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect { binding?.progressbar?.isVisible = it }
+            viewModel.isLoading.collect { binding.progressbar.isVisible = it }
         }
 
         lifecycleScope.launch {
@@ -56,13 +56,13 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
             }
         }
 
-        binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         setupRecyclerView()
 
     }
 
     private fun setupRecyclerView() {
-        binding?.recyclerViewNewRelease?.apply {
+        binding.recyclerViewNewRelease.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
 
             val onAlbumClick : OnAlbumClick = { album ->

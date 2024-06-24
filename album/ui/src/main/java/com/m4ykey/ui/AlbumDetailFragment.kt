@@ -60,8 +60,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         bottomNavigationVisibility?.hideBottomNavigation()
 
         setupRecyclerView()
-        binding?.toolbar?.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding?.toolbarLoading?.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbarLoading.setNavigationOnClickListener { findNavController().navigateUp() }
         
         lifecycleScope.launch {
             networkStateMonitor.isInternetAvailable.collect {
@@ -88,14 +88,14 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
         lifecycleScope.launch {
             viewModel.isLoading.collect {
-                binding?.layoutLoading?.isVisible = it
-                binding?.nestedScrollView?.isVisible = !it
+                binding.layoutLoading.isVisible = it
+                binding.nestedScrollView.isVisible = !it
             }
         }
 
         lifecycleScope.launch {
             viewModel.isLoadingTracks.collect {
-                binding?.progressBarTracks?.isVisible = it
+                binding.progressBarTracks.isVisible = it
             }
         }
 
@@ -110,7 +110,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun displayAlbumFromDatabase(album: AlbumEntity) {
-        binding?.apply {
+        binding.apply {
             with(album) {
                 lifecycleScope.launch {
                     val albumWithStates = viewModel.getAlbumWithStates(id)
@@ -191,7 +191,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding?.rvTrackList?.apply {
+        binding.rvTrackList.apply {
             val onTrackClick : OnTrackClick = { track ->
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
             }
@@ -219,7 +219,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun displayAlbumDetail(item: AlbumDetail) {
-        binding?.apply {
+        binding.apply {
             val albumType = when {
                 item.totalTracks in 2..6 && item.albumType.equals(
                     "Single",
@@ -336,7 +336,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         val isAlbumSaved = albumWithStates.isAlbumSaved?.isAlbumSaved
         val isListenLaterSaved = albumWithStates.isListenLaterSaved?.isListenLaterSaved
 
-        binding?.apply {
+        binding.apply {
             imgSave.setImageResource(
                 if (isAlbumSaved == true) R.drawable.ic_favorite
                 else R.drawable.ic_favorite_border

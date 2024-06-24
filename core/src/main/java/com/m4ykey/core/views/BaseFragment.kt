@@ -14,7 +14,7 @@ abstract class BaseFragment<T : ViewBinding>(
 ) : Fragment() {
 
     private var _binding : T? = null
-    val binding get() = _binding
+    protected val binding get() = _binding!!
 
     protected var bottomNavigationVisibility : BottomNavigationVisibility? = null
 
@@ -23,8 +23,10 @@ abstract class BaseFragment<T : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = layoutInflater(inflater)
-        return binding?.root
+        if (_binding == null) {
+            _binding = layoutInflater(inflater)
+        }
+        return binding.root
     }
 
     override fun onAttach(context: Context) {

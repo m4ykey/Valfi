@@ -56,19 +56,19 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 
         lifecycleScope.launch {
             viewModel.isLoading.collect {
-                binding?.progressbar?.isVisible = it
+                binding.progressbar.isVisible = it
             }
         }
 
-        binding?.recyclerViewNews?.addOnScrollListener(scrollListener(binding?.btnToTop!!))
+        binding.recyclerViewNews.addOnScrollListener(scrollListener(binding.btnToTop))
 
-        binding?.btnToTop?.setOnClickListener {
-            binding?.recyclerViewNews?.smoothScrollToPosition(0)
+        binding.btnToTop.setOnClickListener {
+            binding.recyclerViewNews.smoothScrollToPosition(0)
         }
     }
 
     private fun setupToolbar() {
-        binding?.apply {
+        binding.apply {
             val buttons = listOf(
                 Pair(R.id.publishedAt) {
 
@@ -87,7 +87,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding?.recyclerViewNews?.apply {
+        binding.recyclerViewNews.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             val onNewsClick : (Article) -> Unit = { article ->

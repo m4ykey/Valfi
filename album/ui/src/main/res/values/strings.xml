@@ -41,6 +41,8 @@
     <string name="total_number_of_tracks">Total number of tracks</string>
     <string name="nothing_found">Nothing found</string>
     <string name="empty_string" translatable="false" />
+    <string name="speech_not_recognition">Speech recognition is not available</string>
+    <string name="enter_album_name">Enter album name</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>

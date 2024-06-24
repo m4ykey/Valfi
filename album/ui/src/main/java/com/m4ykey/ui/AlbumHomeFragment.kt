@@ -72,17 +72,17 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             albumPaging.observe(viewLifecycleOwner) { albums ->
                 if (albums.isEmpty()) {
                     albumAdapter.submitList(emptyList())
-                    binding?.linearLayoutEmptyList?.isVisible = true
-                    binding?.linearLayoutEmptySearch?.isVisible = false
+                    binding.linearLayoutEmptyList.isVisible = true
+                    binding.linearLayoutEmptySearch.isVisible = false
                 } else {
-                    binding?.linearLayoutEmptyList?.isVisible = false
-                    if (binding?.etSearch?.text.isNullOrEmpty()) {
+                    binding.linearLayoutEmptyList.isVisible = false
+                    if (binding.etSearch.text.isNullOrEmpty()) {
                         albumAdapter.submitList(albums)
-                        binding?.linearLayoutEmptySearch?.isVisible = false
+                        binding.linearLayoutEmptySearch.isVisible = false
                     }
                 }
             }
-            binding?.etSearch?.doOnTextChanged { text, _, _, _ ->
+            binding.etSearch.doOnTextChanged { text, _, _, _ ->
                 if (text.isNullOrEmpty()) {
                     lifecycleScope.launch { getSavedAlbums() }
                 } else {
@@ -92,22 +92,22 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             searchResult.observe(viewLifecycleOwner) { albums ->
                 if (albums.isEmpty()) {
                     albumAdapter.submitList(emptyList())
-                    binding?.linearLayoutEmptySearch?.isVisible = true
-                    binding?.linearLayoutEmptyList?.isVisible = false
+                    binding.linearLayoutEmptySearch.isVisible = true
+                    binding.linearLayoutEmptyList.isVisible = false
                 } else {
                     albumAdapter.submitList(albums)
-                    binding?.linearLayoutEmptySearch?.isVisible = false
+                    binding.linearLayoutEmptySearch.isVisible = false
                 }
             }
         }
-        binding?.imgHide?.setOnClickListener {
+        binding.imgHide.setOnClickListener {
             hideSearchEditText()
-            binding?.etSearch?.setText(getString(R.string.empty_string))
+            binding.etSearch.setText(getString(R.string.empty_string))
         }
     }
 
     private fun updateChipSelection() {
-        binding?.apply {
+        binding.apply {
             chipAlbum.isChecked = isAlbumSelected
             chipEp.isChecked = isEPSelected
             chipCompilation.isChecked = isCompilationSelected
@@ -116,7 +116,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun setupChips() {
-        binding?.apply {
+        binding.apply {
             chipList.setOnClickListener {
                 isListViewChanged = !isListViewChanged
                 lifecycleScope.launch {
@@ -140,14 +140,17 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                         isAlbumSelected = !isAlbumSelected
                         handleChipClick(isAlbumSelected, ALBUM)
                     }
+
                     R.id.chipEp -> {
                         isEPSelected = !isEPSelected
                         handleChipClick(isEPSelected, EP)
                     }
+
                     R.id.chipSingle -> {
                         isSingleSelected = !isSingleSelected
                         handleChipClick(isSingleSelected, SINGLE)
                     }
+
                     R.id.chipCompilation -> {
                         isCompilationSelected = !isCompilationSelected
                         handleChipClick(isCompilationSelected, COMPILATION)
@@ -178,7 +181,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun setRecyclerViewLayout(isListView: Boolean) {
         val viewType = if (isListView) ViewType.LIST else ViewType.GRID
-        binding?.rvAlbums?.apply {
+        binding.rvAlbums.apply {
             layoutManager = if (isListView) {
                 LinearLayoutManager(requireContext())
             } else {
@@ -189,7 +192,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding?.rvAlbums?.apply {
+        binding.rvAlbums.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
 
             val onAlbumClick : OnAlbumEntityClick = { album ->
@@ -236,17 +239,19 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun updateListWithSortType(sortType: SortType) {
-        binding?.apply {
+        binding.apply {
             lifecycleScope.launch {
                 when (sortType) {
                     SortType.LATEST -> {
                         chipSortBy.text = getString(R.string.latest)
                         viewModel.getSavedAlbums()
                     }
+
                     SortType.OLDEST -> {
                         chipSortBy.text = getString(R.string.oldest)
                         viewModel.getSavedAlbumAsc()
                     }
+
                     SortType.ALPHABETICAL -> {
                         chipSortBy.text = getString(R.string.alphabetical)
                         viewModel.getAlbumSortedByName()
@@ -258,7 +263,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun setupToolbar() {
-        binding?.apply {
+        binding.apply {
             val buttons = listOf(
                 Pair(R.id.imgSearch) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
@@ -347,7 +352,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun showSearchEditText() {
         if (!isSearchEditTextVisible) {
-            binding?.linearLayoutSearch?.apply {
+            binding.linearLayoutSearch.apply {
                 translationY = -100f
                 isVisible = true
                 animationPropertiesY(0f, 1f, DecelerateInterpolator())
@@ -359,13 +364,13 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private fun hideSearchEditText() {
         if (isSearchEditTextVisible && !isHidingAnimationRunning) {
             isHidingAnimationRunning = true
-            binding?.linearLayoutSearch?.apply {
+            binding.linearLayoutSearch.apply {
                 translationY = 0f
                 animationPropertiesY(-100f, 0f, DecelerateInterpolator())
             }
             lifecycleScope.launch {
                 delay(400)
-                binding?.linearLayoutSearch?.isVisible = false
+                binding.linearLayoutSearch.isVisible = false
                 isSearchEditTextVisible = false
                 isHidingAnimationRunning = false
             }
@@ -373,7 +378,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun resetSearchState() {
-        binding?.apply {
+        binding.apply {
             if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
                 linearLayoutSearch.isVisible = false
                 etSearch.setText(getString(R.string.empty_string))
@@ -399,19 +404,19 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             if (selectedViewType != null) {
                 albumAdapter.viewType = selectedViewType
-                binding?.chipList?.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
+                binding.chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
                 isListViewChanged = selectedViewType == ViewType.LIST
             } else {
                 val defaultViewType = ViewType.GRID
                 albumAdapter.viewType = defaultViewType
-                binding?.chipList?.setChipIconResource(R.drawable.ic_list)
+                binding.chipList.setChipIconResource(R.drawable.ic_list)
             }
 
             val layoutManager = when (albumAdapter.viewType) {
                 ViewType.LIST -> LinearLayoutManager(requireContext())
                 ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
             }
-            binding?.rvAlbums?.layoutManager = layoutManager
+            binding.rvAlbums.layoutManager = layoutManager
         }
     }
 
