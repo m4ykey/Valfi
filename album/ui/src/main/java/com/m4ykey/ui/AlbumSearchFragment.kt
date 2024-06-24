@@ -2,7 +2,6 @@ package com.m4ykey.ui
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -12,12 +11,10 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.inputmethod.EditorInfo
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
@@ -30,12 +27,10 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
-import com.m4ykey.ui.helpers.OnAlbumClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.R)
 @AndroidEntryPoint
 class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     FragmentAlbumSearchBinding::inflate

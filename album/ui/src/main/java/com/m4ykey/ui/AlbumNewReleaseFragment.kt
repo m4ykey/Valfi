@@ -1,9 +1,7 @@
 package com.m4ykey.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,11 +17,9 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.NewReleaseAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
-import com.m4ykey.ui.helpers.OnAlbumClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.R)
 @AndroidEntryPoint
 class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
     FragmentAlbumNewReleaseBinding::inflate
