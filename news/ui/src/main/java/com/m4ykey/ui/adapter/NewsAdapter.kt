@@ -3,8 +3,8 @@ package com.m4ykey.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
-import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.core.views.animations.applyAnimation
+import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.ui.adapter.callback.ArticleCallback
 import com.m4ykey.ui.adapter.viewholder.NewsViewHolder
@@ -13,6 +13,8 @@ import com.m4ykey.ui.databinding.LayoutNewsListBinding
 class NewsAdapter(
     private val onNewsClick : (Article) -> Unit
 ) : BaseRecyclerView<Article, NewsViewHolder>() {
+
+    private var lastVisibleItemPosition = -1
 
     override val asyncListDiffer = AsyncListDiffer(this, ArticleCallback())
 
@@ -26,7 +28,7 @@ class NewsAdapter(
         val item = asyncListDiffer.currentList[position]
         item?.let {
             holder.bind(it)
-            applyAnimation(holder.itemView)
+            holder.applyAnimation(position, lastVisibleItemPosition)
         }
     }
 }

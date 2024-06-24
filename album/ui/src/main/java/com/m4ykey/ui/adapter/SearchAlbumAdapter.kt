@@ -3,8 +3,8 @@ package com.m4ykey.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
-import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.core.views.animations.applyAnimation
+import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.callback.AlbumCallback
 import com.m4ykey.ui.adapter.viewholder.SearchAlbumViewHolder
@@ -15,13 +15,15 @@ class SearchAlbumAdapter(
     private val onAlbumClick : OnAlbumClick
 ) : BaseRecyclerView<AlbumItem, SearchAlbumViewHolder>() {
 
+    private var lastVisibleItemPosition = -1
+
     override val asyncListDiffer = AsyncListDiffer(this, AlbumCallback())
 
     override fun onItemBindViewHolder(holder: SearchAlbumViewHolder, position: Int) {
         val item = asyncListDiffer.currentList[position]
         item?.let {
             holder.bind(it)
-            applyAnimation(holder.itemView)
+            holder.applyAnimation(position, lastVisibleItemPosition)
         }
     }
 

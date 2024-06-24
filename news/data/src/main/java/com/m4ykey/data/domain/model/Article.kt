@@ -1,7 +1,5 @@
 package com.m4ykey.data.domain.model
 
-import com.m4ykey.data.remote.model.SourceDto
-
 data class Article(
     val author: String,
     val content: String,

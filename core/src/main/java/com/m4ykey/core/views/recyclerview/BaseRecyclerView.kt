@@ -18,4 +18,10 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder> : RecyclerVi
     }
 
     abstract fun onItemBindViewHolder(holder: VH, position: Int)
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        submitList(emptyList())
+    }
+
 }

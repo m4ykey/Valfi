@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_marginBottom="10dp"
     android:id="@+id/linearLayoutArticle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -60,5 +61,11 @@
             android:layout_marginStart="5dp"/>
 
     </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:background="#C5C5C5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 
 </LinearLayout>
