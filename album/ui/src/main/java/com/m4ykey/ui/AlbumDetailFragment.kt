@@ -33,7 +33,6 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
-import com.m4ykey.ui.helpers.OnTrackClick
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,8 +45,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private val args by navArgs<AlbumDetailFragmentArgs>()
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var trackAdapter : TrackAdapter
-    private val networkStateMonitor : NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
+    private val trackAdapter by lazy { createTrackAdapter() }
+    private val networkStateMonitor: NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +61,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         setupRecyclerView()
         binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.toolbarLoading.setNavigationOnClickListener { findNavController().navigateUp() }
-        
+
         lifecycleScope.launch {
             networkStateMonitor.isInternetAvailable.collect {
                 if (it) {
@@ -73,6 +72,14 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 }
             }
         }
+    }
+
+    private fun createTrackAdapter(): TrackAdapter {
+        return TrackAdapter(
+            onTrackClick = { track ->
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
+            }
+        )
     }
 
     private fun observeViewModel() {
@@ -86,12 +93,12 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             viewModel.tracks.collect { trackAdapter.submitList(it) }
         }
 
-            lifecycleScope.launch {
-                viewModel.isLoading.collect {
-                    binding.layoutLoading.isVisible = it
-                    binding.nestedScrollView.isVisible = !it
-                }
+        lifecycleScope.launch {
+            viewModel.isLoading.collect {
+                binding.layoutLoading.isVisible = it
+                binding.nestedScrollView.isVisible = !it
             }
+        }
 
         lifecycleScope.launch {
             viewModel.isLoadingTracks.collect {
@@ -102,7 +109,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         lifecycleScope.launch {
             viewModel.isError.collect { errorState ->
                 when (errorState) {
-                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
+                    is ErrorState.Error -> showToast(
+                        requireContext(),
+                        errorState.message.toString()
+                    )
+
                     else -> {}
                 }
             }
@@ -142,7 +153,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     setOnClickListener { copyName(name, requireContext()) }
                 }
                 txtArtist.text = getArtistList()
-                txtInfo.text = getString(R.string.album_info, albumType, releaseDate, totalTracks, getString(R.string.tracks))
+                txtInfo.text = getString(
+                    R.string.album_info,
+                    albumType,
+                    releaseDate,
+                    totalTracks,
+                    getString(R.string.tracks)
+                )
 
                 imgSave.setOnClickListener {
                     lifecycleScope.launch {
@@ -192,14 +209,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun setupRecyclerView() {
         binding.rvTrackList.apply {
-            val onTrackClick : OnTrackClick = { track ->
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
-            }
-
-            trackAdapter = TrackAdapter(onTrackClick)
             adapter = trackAdapter
 
-            layoutManager = LinearLayoutManager(requireContext())
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -244,7 +255,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             cardView.setOnClickListener {
                 val action =
-                    AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(item.getLargestImageUrl().toString())
+                    AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(
+                        item.getLargestImageUrl().toString()
+                    )
                 findNavController().navigate(action)
             }
 
@@ -349,7 +362,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
     }
 
-    private fun animateColorTransition(startColor : Int, endColor: Int, vararg buttons : MaterialButton) {
+    private fun animateColorTransition(
+        startColor: Int,
+        endColor: Int,
+        vararg buttons: MaterialButton
+    ) {
         val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), startColor, endColor)
         colorAnimator.duration = 2200
 

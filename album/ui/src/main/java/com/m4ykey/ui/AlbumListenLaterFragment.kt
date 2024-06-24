@@ -14,6 +14,7 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.AlbumAdapter
@@ -32,7 +33,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 ) {
 
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var albumAdapter : AlbumAdapter
+    private val albumAdapter by lazy { createAlbumAdapter() }
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
 
@@ -44,6 +45,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         setupToolbar()
         setupRecyclerView()
         getRandomAlbum()
+        handleRecyclerViewButton()
 
         binding.apply {
             viewModel.apply {
@@ -93,6 +95,23 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
             }
 
             chipSearch.setOnClickListener { showSearchEditText() }
+        }
+    }
+
+    private fun createAlbumAdapter() : AlbumAdapter {
+        return AlbumAdapter(
+            onAlbumClick = { album ->
+                val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
+                findNavController().navigate(action)
+            }
+        )
+    }
+
+    private fun handleRecyclerViewButton() {
+        binding.recyclerViewListenLater.addOnScrollListener(scrollListener(binding.btnToTop))
+
+        binding.btnToTop.setOnClickListener {
+            binding.recyclerViewListenLater.smoothScrollToPosition(0)
         }
     }
 
@@ -150,14 +169,6 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
     private fun setupRecyclerView() {
         binding.apply {
-
-            val onAlbumClick : OnAlbumEntityClick = { album ->
-                val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
-            }
-
-            albumAdapter = AlbumAdapter(onAlbumClick)
-
             recyclerViewListenLater.apply {
                 addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
                 layoutManager = setupGridLayoutManager(requireContext(), 110f)

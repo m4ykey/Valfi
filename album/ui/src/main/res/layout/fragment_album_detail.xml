@@ -188,6 +188,7 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:overScrollMode="never"
                     tools:listitem="@layout/layout_tracks"
                     android:id="@+id/rvTrackList"

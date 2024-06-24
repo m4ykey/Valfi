@@ -14,6 +14,7 @@ import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.NewReleaseAdapter
@@ -28,12 +29,14 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
     FragmentAlbumNewReleaseBinding::inflate
 ) {
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var albumAdapter : NewReleaseAdapter
+    private val albumAdapter by lazy { createNewReleaseAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.hideBottomNavigation()
+
+        handleRecyclerViewButton()
 
         lifecycleScope.launch {
             viewModel.getNewReleases()
@@ -61,18 +64,27 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 
     }
 
-    private fun setupRecyclerView() {
-        binding.recyclerViewNewRelease.apply {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
-
-            val onAlbumClick : OnAlbumClick = { album ->
+    private fun createNewReleaseAdapter() : NewReleaseAdapter {
+        return NewReleaseAdapter(
+            onAlbumClick = { album ->
                 val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(album.id)
                 findNavController().navigate(action)
             }
+        )
+    }
 
-            albumAdapter = NewReleaseAdapter(onAlbumClick)
+    private fun handleRecyclerViewButton() {
+        binding.recyclerViewNewRelease.addOnScrollListener(scrollListener(binding.btnToTop))
+
+        binding.btnToTop.setOnClickListener {
+            binding.recyclerViewNewRelease.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerViewNewRelease.apply {
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
             adapter = albumAdapter
-
             layoutManager = setupGridLayoutManager(requireContext(), 110f)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

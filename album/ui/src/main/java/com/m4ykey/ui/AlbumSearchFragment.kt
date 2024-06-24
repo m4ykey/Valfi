@@ -25,6 +25,7 @@ import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
@@ -42,7 +43,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
     private var isClearButtonVisible = false
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var searchAdapter: SearchAlbumAdapter
+    private val searchAdapter by lazy { createSearchAdapter() }
 
     private val speechRecognizerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK && result.data != null) {
@@ -64,6 +65,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         setupToolbar()
         setupRecyclerView()
         searchAlbums()
+        handleRecyclerViewButton()
 
         lifecycleScope.launch {
             viewModel.albums.collect { searchAdapter.submitList(it) }
@@ -84,6 +86,23 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
         binding.etSearch.post {
             originalWidth = binding.etSearch.width
+        }
+    }
+
+    private fun createSearchAdapter() : SearchAlbumAdapter {
+        return SearchAlbumAdapter(
+            onAlbumClick = { album ->
+                val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
+                findNavController().navigate(action)
+            }
+        )
+    }
+
+    private fun handleRecyclerViewButton() {
+        binding.rvSearchAlbums.addOnScrollListener(scrollListener(binding.btnToTop))
+
+        binding.btnToTop.setOnClickListener {
+            binding.rvSearchAlbums.smoothScrollToPosition(0)
         }
     }
 
@@ -113,15 +132,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     private fun setupRecyclerView() {
         binding.rvSearchAlbums.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-
-            val onAlbumClick: OnAlbumClick = { album ->
-                val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
-            }
-
-            searchAdapter = SearchAlbumAdapter(onAlbumClick)
             adapter = searchAdapter
-
             layoutManager = setupGridLayoutManager(requireContext(), 110f)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

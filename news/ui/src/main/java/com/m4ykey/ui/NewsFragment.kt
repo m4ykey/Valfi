@@ -29,7 +29,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 ) {
 
     private val viewModel by viewModels<NewsViewModel>()
-    private lateinit var newsAdapter: NewsAdapter
+    private val newsAdapter by lazy { createNewsAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +38,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 
         setupRecyclerView()
         setupToolbar()
+        handleRecyclerViewButton()
 
         lifecycleScope.launch {
             if (viewModel.news.value.isEmpty()) {
@@ -69,12 +70,23 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                 binding.progressbar.isVisible = it
             }
         }
+    }
 
+    private fun handleRecyclerViewButton() {
         binding.recyclerViewNews.addOnScrollListener(scrollListener(binding.btnToTop))
 
         binding.btnToTop.setOnClickListener {
             binding.recyclerViewNews.smoothScrollToPosition(0)
         }
+    }
+
+    private fun createNewsAdapter() : NewsAdapter {
+        return NewsAdapter(
+            onNewsClick = { article ->
+                val customTabsIntent = CustomTabsIntent.Builder().build()
+                customTabsIntent.launchUrl(requireContext(), Uri.parse(article.url))
+            }
+        )
     }
 
     private fun setupToolbar() {
@@ -101,15 +113,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
     private fun setupRecyclerView() {
         binding.recyclerViewNews.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-
-            val onNewsClick : (Article) -> Unit = { article ->
-                val customTabsIntent = CustomTabsIntent.Builder().build()
-                customTabsIntent.launchUrl(requireContext(), Uri.parse(article.url))
-            }
-
-            newsAdapter = NewsAdapter(onNewsClick)
             adapter = newsAdapter
-
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

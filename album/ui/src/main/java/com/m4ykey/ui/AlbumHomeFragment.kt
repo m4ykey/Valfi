@@ -22,6 +22,7 @@ import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
+import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
@@ -47,7 +48,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private var isListViewChanged = false
     private val viewModel by viewModels<AlbumViewModel>()
-    private lateinit var albumAdapter : AlbumAdapter
+    private val albumAdapter by lazy { createAlbumAdapter() }
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
     private var isAlbumSelected = false
@@ -66,6 +67,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         setupToolbar()
         setupChips()
         setupRecyclerView()
+        handleRecyclerViewButton()
 
         viewModel.apply {
             lifecycleScope.launch { getSavedAlbums() }
@@ -113,6 +115,23 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             chipCompilation.isChecked = isCompilationSelected
             chipSingle.isChecked = isSingleSelected
         }
+    }
+
+    private fun handleRecyclerViewButton() {
+        binding.rvAlbums.addOnScrollListener(scrollListener(binding.btnToTop))
+
+        binding.btnToTop.setOnClickListener {
+            binding.rvAlbums.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun createAlbumAdapter() : AlbumAdapter {
+        return AlbumAdapter(
+            onAlbumClick = { album ->
+                val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
+                findNavController().navigate(action)
+            }
+        )
     }
 
     private fun setupChips() {
@@ -194,13 +213,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private fun setupRecyclerView() {
         binding.rvAlbums.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-
-            val onAlbumClick : OnAlbumEntityClick = { album ->
-                val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
-            }
-
-            albumAdapter = AlbumAdapter(onAlbumClick)
 
             layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())

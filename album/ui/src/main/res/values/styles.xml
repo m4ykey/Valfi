@@ -74,4 +74,12 @@
         <item name="android:textColorHint">@color/searchIconEditText</item>
     </style>
 
+    <style name="FloatingActionButtonList">
+        <item name="tint">@color/white</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:src">@drawable/ic_arrow_up</item>
+        <item name="android:backgroundTint">@color/buttonColor</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>
