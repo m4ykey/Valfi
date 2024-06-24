@@ -33,7 +33,6 @@
                 <EditText
                     android:hint="@string/search"
                     style="@style/EditTextSearchStyle"
-                    android:textCursorDrawable="@null"
                     android:id="@+id/etSearch"
                     android:layout_width="0dp"
                     android:layout_height="36dp"

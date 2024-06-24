@@ -60,8 +60,13 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumDetails(id : String) {
         viewModelScope.launch {
-            getAlbumTracks(id)
-            getAlbumById(id)
+            _isLoading.value = true
+            try {
+                getAlbumTracks(id)
+                getAlbumById(id)
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 

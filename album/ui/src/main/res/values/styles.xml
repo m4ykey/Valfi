@@ -58,7 +58,7 @@
         <item name="android:textColorSecondary">@color/textColor2</item>
     </style>
 
-    <style name="EditTextSearchStyle">
+    <style name="EditTextSearchStyle" parent="Widget.AppCompat.EditText">
         <item name="android:fontFamily">@font/inter_medium</item>
         <item name="android:background">@drawable/drawable_et_search</item>
         <item name="android:drawableStart">@drawable/ic_search_2</item>
@@ -69,6 +69,8 @@
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:textColor">@color/textColor</item>
+        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
+        <item name="android:theme">@style/EditTextTheme</item>
         <item name="android:textColorHint">@color/searchIconEditText</item>
     </style>
 

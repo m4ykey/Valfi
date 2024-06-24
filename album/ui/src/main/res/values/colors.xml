@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="searchIconEditText">#424242</color>
-    <color name="searchBox">#40000000</color>
+    <color name="searchIconEditText">#515151</color>
+    <color name="searchBox">#33000000</color>
     <color name="red">#ad1726</color>
     <color name="cardViewStats">#E0E0E0</color>
 

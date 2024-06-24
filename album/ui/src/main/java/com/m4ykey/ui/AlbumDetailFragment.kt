@@ -86,12 +86,12 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             viewModel.tracks.collect { trackAdapter.submitList(it) }
         }
 
-        lifecycleScope.launch {
-            viewModel.isLoading.collect {
-                binding.layoutLoading.isVisible = it
-                binding.nestedScrollView.isVisible = !it
+            lifecycleScope.launch {
+                viewModel.isLoading.collect {
+                    binding.layoutLoading.isVisible = it
+                    binding.nestedScrollView.isVisible = !it
+                }
             }
-        }
 
         lifecycleScope.launch {
             viewModel.isLoadingTracks.collect {
@@ -351,7 +351,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun animateColorTransition(startColor : Int, endColor: Int, vararg buttons : MaterialButton) {
         val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), startColor, endColor)
-        colorAnimator.duration = 2500
+        colorAnimator.duration = 2200
 
         colorAnimator.addUpdateListener { animator ->
             val animatedValue = animator.animatedValue as Int
