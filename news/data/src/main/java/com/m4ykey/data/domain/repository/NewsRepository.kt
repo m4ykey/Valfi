@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
-    fun getMusicNews(page: Int, pageSize : Int) : Flow<List<Article>>
+    fun getMusicNews(page: Int, pageSize : Int, sortBy : String) : Flow<List<Article>>
 
 }

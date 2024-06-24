@@ -4,4 +4,5 @@
     <string name="article_image">Zdjęcie artykułu</string>
     <string name="published_at">Najnowsze</string>
     <string name="popularity">Popularne</string>
+    <string name="popular_news">Popularne Wiadomości</string>
 </resources>

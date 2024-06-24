@@ -5,4 +5,5 @@
     <string name="logo" translatable="false">Logo</string>
     <string name="published_at">Latest</string>
     <string name="popularity">Popular</string>
+    <string name="popular_news">Popular News</string>
 </resources>

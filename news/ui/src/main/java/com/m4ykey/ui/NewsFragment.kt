@@ -2,6 +2,8 @@ package com.m4ykey.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
@@ -38,11 +40,19 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
         setupToolbar()
 
         lifecycleScope.launch {
-            viewModel.getMusicNews()
+            if (viewModel.news.value.isEmpty()) {
+                viewModel.getMusicNews(clearList = true)
+            }
         }
 
         lifecycleScope.launch {
             viewModel.news.collect { newsAdapter.submitList(it) }
+        }
+
+        lifecycleScope.launch {
+            viewModel.currentSort.collect {
+                viewModel.setCurrentSort(it)
+            }
         }
 
         lifecycleScope.launch {
@@ -71,10 +81,12 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
         binding.apply {
             val buttons = listOf(
                 Pair(R.id.publishedAt) {
-
+                    txtTitle.text = getString(R.string.latest_news)
+                    viewModel.setCurrentSort(NewsSort.PUBLISHED_AT)
                 },
                 Pair(R.id.popularity) {
-
+                    txtTitle.text = getString(R.string.popular_news)
+                    viewModel.setCurrentSort(NewsSort.POPULARITY)
                 }
             )
             for ((itemId, action) in buttons) {
@@ -103,7 +115,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
                         if (!viewModel.isPaginationEnded && !viewModel.isLoading.value) {
-                            lifecycleScope.launch { viewModel.getMusicNews() }
+                            lifecycleScope.launch { viewModel.getMusicNews(clearList = false) }
                         }
                     }
                 }
