@@ -1,12 +1,17 @@
 package com.m4ykey.ui
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.inputmethod.EditorInfo
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -27,6 +32,7 @@ import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.ui.helpers.OnAlbumClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.R)
 @AndroidEntryPoint
@@ -37,6 +43,16 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     private var isClearButtonVisible = false
     private val viewModel by viewModels<AlbumViewModel>()
     private lateinit var searchAdapter: SearchAlbumAdapter
+
+    private val speechRecognizerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK && result.data != null) {
+            val matches = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            if (!matches.isNullOrEmpty()) {
+                val spokenText = matches[0]
+                binding?.etSearch?.setText(spokenText)
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,11 +133,26 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 val isSearchEmpty = text.isNullOrBlank()
                 handleClearButtonVisibility(isSearchEmpty)
             }
+            imgMicrophone.setOnClickListener { recordAudio() }
 
             imgClear.setOnClickListener {
                 etSearch.setText(getString(R.string.empty_string))
                 hideClearButtonWithAnimation()
             }
+        }
+    }
+
+    private fun recordAudio() {
+        if (!SpeechRecognizer.isRecognitionAvailable(requireContext())) {
+            showToast(requireContext(), "")
+        } else {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                putExtra(RecognizerIntent.EXTRA_PROMPT, "Enter album name")
+            }
+            speechRecognizerLauncher.launch(intent)
         }
     }
 
