@@ -67,7 +67,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect { binding.progressbar.isVisible = it }
+            viewModel.isLoading.collect { binding.progressBar.isVisible = it }
         }
 
         lifecycleScope.launch {

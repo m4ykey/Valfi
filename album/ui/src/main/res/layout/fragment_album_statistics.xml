@@ -128,12 +128,12 @@
 
     </LinearLayout>
 
-    <com.patrykandpatrick.vico.views.cartesian.CartesianChartView
+    <com.patrykandpatrick.vico.views.chart.ChartView
         android:id="@+id/chart"
         android:layout_margin="10dp"
         app:showBottomAxis="true"
         app:showStartAxis="true"
-        app:layers="column"
+        app:chart="column"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

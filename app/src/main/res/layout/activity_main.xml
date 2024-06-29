@@ -11,7 +11,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:defaultNavHost="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintBottom_toTopOf="@id/bottomnavigation"
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         app:itemIconTint="@color/bottom_nav_selector"
         android:background="@color/bottomNavigationColor"
         app:menu="@menu/menu_bottom_bar"
-        android:id="@+id/bottomNavigation"
+        android:id="@+id/bottomnavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -41,7 +41,7 @@
         android:layout_margin="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintBottom_toTopOf="@id/bottomnavigation"
         android:text="@string/no_internet_connection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"/>

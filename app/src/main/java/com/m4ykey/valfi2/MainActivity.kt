@@ -58,14 +58,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.setupWithNavController(navController)
+        findViewById<BottomNavigationView>(R.id.bottomnavigation)?.setupWithNavController(navController)
     }
 
     override fun showBottomNavigation() {
-        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = true
+        findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = true
     }
 
     override fun hideBottomNavigation() {
-        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = false
+        findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = false
     }
 }

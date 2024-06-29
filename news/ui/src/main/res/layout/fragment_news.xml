@@ -36,9 +36,10 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressbar"
-        android:indeterminateTint="@color/progressBar"
+        android:indeterminate="true"
+        app:indicatorColor="@color/progressBar"
         app:layout_constraintTop_toBottomOf="@id/appBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

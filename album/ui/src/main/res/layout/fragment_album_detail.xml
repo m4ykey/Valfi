@@ -238,7 +238,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             app:layout_constraintTop_toBottomOf="@id/appBarLoading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -246,7 +246,7 @@
             android:id="@+id/progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateTint="@color/progressBar"/>
+            style="@style/progressBarStyle"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

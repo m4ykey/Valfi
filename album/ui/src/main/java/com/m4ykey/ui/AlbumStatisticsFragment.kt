@@ -11,10 +11,7 @@ import com.m4ykey.core.Constants.EP
 import com.m4ykey.core.Constants.SINGLE
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.ui.databinding.FragmentAlbumStatisticsBinding
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
-import com.patrykandpatrick.vico.core.common.data.ExtraStore
+import com.patrykandpatrick.vico.core.entry.entryModelOf
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -46,16 +43,8 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
                 binding.txtAlbumCount.text = albumCount.toString()
                 binding.txtTotalSongsPlayed.text = tracksCount.toString()
 
-                val data = mapOf(ALBUM to album, EP to ep, SINGLE to single, COMPILATION to compilation)
-                val labelListKey = ExtraStore.Key<List<String>>()
-
-                val modelProvider = CartesianChartModelProducer.build()
-                chart.modelProducer = modelProvider
-                modelProvider.tryRunTransaction {
-                    columnSeries { series(data.values) }
-                    updateExtras { it[labelListKey] = data.keys.toList() }
-                }
-                CartesianValueFormatter { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
+                val chartEntryModel = entryModelOf(album, single, compilation, ep)
+                chart.setModel(chartEntryModel)
             }
         }
     }
