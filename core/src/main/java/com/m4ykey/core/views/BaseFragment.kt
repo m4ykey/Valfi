@@ -10,7 +10,7 @@ import androidx.viewbinding.ViewBinding
 import com.m4ykey.core.R
 
 abstract class BaseFragment<T : ViewBinding>(
-    private val layoutInflater : (LayoutInflater) -> T
+    private val layoutInflater : (LayoutInflater, ViewGroup?, Boolean) -> T
 ) : Fragment() {
 
     private var _binding : T? = null
@@ -24,7 +24,7 @@ abstract class BaseFragment<T : ViewBinding>(
         savedInstanceState: Bundle?
     ): View? {
         if (_binding == null) {
-            _binding = layoutInflater(inflater)
+            _binding = layoutInflater(inflater, container, false)
         }
         return binding.root
     }

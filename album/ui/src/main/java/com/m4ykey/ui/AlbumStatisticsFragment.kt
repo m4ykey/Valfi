@@ -1,6 +1,5 @@
 package com.m4ykey.ui
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -43,7 +42,9 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
 
                 val albumCount = viewModel.getAlbumCount().firstOrNull() ?: 0
                 val tracksCount = viewModel.getTotalTracksCount().firstOrNull() ?: 0
-                startAnimation(albumCount, tracksCount)
+
+                binding.txtAlbumCount.text = albumCount.toString()
+                binding.txtTotalSongsPlayed.text = tracksCount.toString()
 
                 val data = mapOf(ALBUM to album, EP to ep, SINGLE to single, COMPILATION to compilation)
                 val labelListKey = ExtraStore.Key<List<String>>()
@@ -57,23 +58,5 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
                 CartesianValueFormatter { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
             }
         }
-    }
-
-    private fun startAnimation(albumCount : Int, tracksCount : Int) {
-        val animator = ValueAnimator.ofInt(albumCount, tracksCount).apply {
-            duration = 2000
-            addUpdateListener { animation ->
-                val animatedValue = animation.animatedValue as Int
-                binding.txtAlbumCount.let { textView ->
-                    val value = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
-                    textView.text = value
-                }
-                binding.txtTotalSongsPlayed.let { textView ->
-                    val value = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
-                    textView.text = value
-                }
-            }
-        }
-        animator.start()
     }
 }
