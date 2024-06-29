@@ -13,14 +13,12 @@ import com.m4ykey.ui.helpers.OnAlbumClick
 
 class SearchAlbumAdapter(
     private val onAlbumClick : OnAlbumClick
-) : BaseRecyclerView<AlbumItem, SearchAlbumViewHolder>() {
+) : BaseRecyclerView<AlbumItem, SearchAlbumViewHolder>(AlbumCallback()) {
 
     private var lastVisibleItemPosition = -1
 
-    override val asyncListDiffer = AsyncListDiffer(this, AlbumCallback())
-
     override fun onItemBindViewHolder(holder: SearchAlbumViewHolder, position: Int) {
-        val item = asyncListDiffer.currentList[position]
+        val item = currentList[position]
         item?.let {
             holder.bind(it)
             holder.applyAnimation(position, lastVisibleItemPosition)
@@ -31,5 +29,10 @@ class SearchAlbumAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val binding = LayoutAlbumGridBinding.inflate(inflater, parent, false)
         return SearchAlbumViewHolder(binding, onAlbumClick)
+    }
+
+    override fun getItemForPosition(position: Int): Long {
+        val item = getItem(position)
+        return item?.id?.toLong() ?: position.toLong()
     }
 }

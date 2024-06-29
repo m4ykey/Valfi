@@ -12,11 +12,9 @@ import com.m4ykey.ui.databinding.LayoutNewsListBinding
 
 class NewsAdapter(
     private val onNewsClick : (Article) -> Unit
-) : BaseRecyclerView<Article, NewsViewHolder>() {
+) : BaseRecyclerView<Article, NewsViewHolder>(ArticleCallback()) {
 
     private var lastVisibleItemPosition = -1
-
-    override val asyncListDiffer = AsyncListDiffer(this, ArticleCallback())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,10 +23,15 @@ class NewsAdapter(
     }
 
     override fun onItemBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val item = asyncListDiffer.currentList[position]
+        val item = currentList[position]
         item?.let {
             holder.bind(it)
             holder.applyAnimation(position, lastVisibleItemPosition)
         }
+    }
+
+    override fun getItemForPosition(position: Int): Long {
+        val item = getItem(position)
+        return item?.url?.hashCode()?.toLong() ?: position.toLong()
     }
 }

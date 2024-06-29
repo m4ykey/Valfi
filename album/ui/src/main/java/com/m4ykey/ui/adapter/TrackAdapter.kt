@@ -12,9 +12,7 @@ import com.m4ykey.ui.helpers.OnTrackClick
 
 class TrackAdapter(
     private val onTrackClick: OnTrackClick
-) : BaseRecyclerView<TrackItem, TrackListViewHolder>() {
-
-    override val asyncListDiffer = AsyncListDiffer(this, TrackCallback())
+) : BaseRecyclerView<TrackItem, TrackListViewHolder>(TrackCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,7 +21,12 @@ class TrackAdapter(
     }
 
     override fun onItemBindViewHolder(holder: TrackListViewHolder, position: Int) {
-        val item = asyncListDiffer.currentList[position]
+        val item = currentList[position]
         holder.bind(item)
+    }
+
+    override fun getItemForPosition(position: Int): Long {
+        val item = getItem(position)
+        return item?.id?.toLong() ?: position.toLong()
     }
 }

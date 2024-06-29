@@ -13,11 +13,9 @@ import com.m4ykey.ui.helpers.OnAlbumEntityClick
 
 class AlbumAdapter(
     private val onAlbumClick : OnAlbumEntityClick
-) : BaseRecyclerView<AlbumEntity, RecyclerView.ViewHolder>() {
+) : BaseRecyclerView<AlbumEntity, RecyclerView.ViewHolder>(AlbumEntityCallback()) {
 
     var viewType : ViewType = ViewType.GRID
-
-    override val asyncListDiffer = AsyncListDiffer(this, AlbumEntityCallback())
 
     companion object {
         private const val VIEW_TYPE_GRID = 0
@@ -25,7 +23,7 @@ class AlbumAdapter(
     }
 
     override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val album = asyncListDiffer.currentList[position]
+        val album = currentList[position]
         when (holder) {
             is AlbumGridViewHolder -> holder.bind(album)
             is AlbumListViewHolder -> holder.bind(album)
@@ -45,5 +43,10 @@ class AlbumAdapter(
             ViewType.GRID -> VIEW_TYPE_GRID
             ViewType.LIST -> VIEW_TYPE_LIST
         }
+    }
+
+    override fun getItemForPosition(position: Int): Long {
+        val item = getItem(position)
+        return item?.id?.toLong() ?: position.toLong()
     }
 }

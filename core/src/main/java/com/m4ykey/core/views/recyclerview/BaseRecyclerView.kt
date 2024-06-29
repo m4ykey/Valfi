@@ -1,17 +1,14 @@
 package com.m4ykey.core.views.recyclerview
 
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
+abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
+    diffCallback : DiffUtil.ItemCallback<Item>
+) : ListAdapter<Item, VH>(diffCallback) {
 
-    abstract val asyncListDiffer : AsyncListDiffer<Item>
-
-    override fun getItemCount(): Int = asyncListDiffer.currentList.size
-
-    fun submitList(items : List<Item>) {
-        asyncListDiffer.submitList(items)
-    }
+    override fun getItemCount(): Int = currentList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         onItemBindViewHolder(holder, position)
@@ -23,5 +20,11 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder> : RecyclerVi
         super.onDetachedFromRecyclerView(recyclerView)
         submitList(emptyList())
     }
+
+    override fun getItemId(position: Int): Long {
+        return getItemForPosition(position)
+    }
+
+    abstract fun getItemForPosition(position: Int) : Long
 
 }

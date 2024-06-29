@@ -13,11 +13,9 @@ import com.m4ykey.ui.helpers.OnAlbumClick
 
 class NewReleaseAdapter(
     private val onAlbumClick : OnAlbumClick
-) : BaseRecyclerView<AlbumItem, NewReleaseViewHolder>() {
+) : BaseRecyclerView<AlbumItem, NewReleaseViewHolder>(AlbumCallback()) {
 
     private var lastVisibleItemPosition = -1
-
-    override val asyncListDiffer = AsyncListDiffer(this, AlbumCallback())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewReleaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,10 +24,15 @@ class NewReleaseAdapter(
     }
 
     override fun onItemBindViewHolder(holder: NewReleaseViewHolder, position: Int) {
-        val item = asyncListDiffer.currentList[position]
+        val item = currentList[position]
         item?.let {
             holder.bind(it)
             holder.applyAnimation(position, lastVisibleItemPosition)
         }
+    }
+
+    override fun getItemForPosition(position: Int): Long {
+        val item = getItem(position)
+        return item?.id?.toLong() ?: position.toLong()
     }
 }
