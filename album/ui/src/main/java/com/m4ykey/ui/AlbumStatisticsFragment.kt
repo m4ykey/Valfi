@@ -64,8 +64,14 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
             duration = 2000
             addUpdateListener { animation ->
                 val animatedValue = animation.animatedValue as Int
-                binding.txtAlbumCount.text = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
-                binding.txtTotalSongsPlayed.text = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
+                binding.txtAlbumCount.let { textView ->
+                    val value = if (animatedValue <= albumCount) animatedValue.toString() else albumCount.toString()
+                    textView.text = value
+                }
+                binding.txtTotalSongsPlayed.let { textView ->
+                    val value = if (animatedValue <= tracksCount) animatedValue.toString() else tracksCount.toString()
+                    textView.text = value
+                }
             }
         }
         animator.start()
