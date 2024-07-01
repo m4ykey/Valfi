@@ -28,6 +28,7 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -63,7 +64,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         handleRecyclerViewButton()
 
         lifecycleScope.launch {
-            viewModel.albums.collect { searchAdapter.submitList(it) }
+            viewModel.albums.collectLatest { searchAdapter.submitList(it) }
         }
 
         lifecycleScope.launch {

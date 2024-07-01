@@ -1,7 +1,6 @@
 package com.m4ykey.ui.adapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.core.views.sorting.ViewType
@@ -22,7 +21,7 @@ class AlbumAdapter(
         private const val VIEW_TYPE_LIST = 1
     }
 
-    override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, item: AlbumEntity, position: Int) {
         val album = currentList[position]
         when (holder) {
             is AlbumGridViewHolder -> holder.bind(album)

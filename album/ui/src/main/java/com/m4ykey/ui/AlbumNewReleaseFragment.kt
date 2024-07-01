@@ -18,6 +18,7 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.NewReleaseAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,12 +35,14 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 
         handleRecyclerViewButton()
 
-        lifecycleScope.launch {
-            viewModel.getNewReleases()
+        if (viewModel.newRelease.value.isEmpty()) {
+            lifecycleScope.launch {
+                viewModel.getNewReleases()
+            }
         }
 
         lifecycleScope.launch {
-            viewModel.newRelease.collect { albumAdapter.submitList(it) }
+            viewModel.newRelease.collectLatest { albumAdapter.submitList(it) }
         }
 
         lifecycleScope.launch {

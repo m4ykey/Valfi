@@ -36,6 +36,8 @@ import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -84,17 +86,18 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.detail.collect { item ->
+            viewModel.detail.collectLatest { item ->
                 item?.let { displayAlbumDetail(it) }
             }
         }
 
         lifecycleScope.launch {
-            viewModel.tracks.collect { trackAdapter.submitList(it) }
+            delay(500L)
+            viewModel.tracks.collectLatest { trackAdapter.submitList(it) }
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect {
+            viewModel.isLoading.collectLatest {
                 binding.layoutLoading.isVisible = it
                 binding.nestedScrollView.isVisible = !it
             }

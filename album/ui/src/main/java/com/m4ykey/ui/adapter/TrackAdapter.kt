@@ -2,7 +2,6 @@ package com.m4ykey.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.adapter.callback.TrackCallback
@@ -20,8 +19,7 @@ class TrackAdapter(
         return TrackListViewHolder(binding, onTrackClick)
     }
 
-    override fun onItemBindViewHolder(holder: TrackListViewHolder, position: Int) {
-        val item = currentList[position]
+    override fun onItemBindViewHolder(holder: TrackListViewHolder, item : TrackItem, position: Int) {
         holder.bind(item)
     }
 
