@@ -49,10 +49,6 @@ dependencies {
         testImplementation(junit)
         androidTestImplementation(extJunit)
         androidTestImplementation(espresso)
-        androidTestImplementation(androidXRoomTesting)
-        androidTestImplementation(coroutinesTest)
-        androidTestImplementation(androidxTestCore)
-        androidTestImplementation(androidxArchCoreTesting)
 
         implementation(coroutines)
 

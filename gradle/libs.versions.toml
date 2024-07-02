@@ -2,7 +2,7 @@
 application = "8.5.0"
 navigation = "2.7.7"
 retrofit = "2.11.0"
-lifecycle = "2.8.2"
+lifecycle = "2.8.3"
 hilt = "2.51.1"
 okhttp = "4.12.0"
 room = "2.6.1"
@@ -15,14 +15,9 @@ firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlyt
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.2" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.1" }
 
-androidxArchCoreTesting = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
-androidxTestCore = { group = "androidx.test", name = "core", version = "1.6.1" }
-coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
-androidXRoomTesting = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
-truth = { group = "com.google.truth", name = "truth", version = "1.4.2" }
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "3.0-alpha-8" }
 
 androidxNavigationFragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
