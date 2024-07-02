@@ -1,6 +1,5 @@
 package com.m4ykey.data.remote.interceptor
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,15 +14,15 @@ import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 class SpotifyTokenProvider @Inject constructor(
-    private val api : AuthApi,
-    private val dataStore : DataStore<Preferences>,
-    private val context : Context
+    private val api: AuthApi,
+    private val dataStore: DataStore<Preferences>
 ) : TokenProvider {
 
     private val accessTokenKey = stringPreferencesKey("access_token")
     private val expireKey = longPreferencesKey("expire_token")
 
     override suspend fun getAccessToken(): String {
+
         try {
             val dataStoreData = dataStore.data.firstOrNull() ?: return ""
             val cachedToken = dataStoreData[accessTokenKey]
@@ -33,10 +32,9 @@ class SpotifyTokenProvider @Inject constructor(
                 return cachedToken
             } else {
                 val newAccessToken = fetchAccessToken(
-                    api = api,
-                    clientSecret = SPOTIFY_CLIENT_SECRET,
                     clientId = SPOTIFY_CLIENT_ID,
-                    context = context
+                    clientSecret = SPOTIFY_CLIENT_SECRET,
+                    api = api
                 )
 
                 val newExpireTime = System.currentTimeMillis() + 3600 * 1000

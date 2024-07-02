@@ -1,7 +1,5 @@
 package com.m4ykey.ui
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -14,9 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.m4ykey.core.network.ErrorState
-import com.m4ykey.core.network.NetworkMonitor
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -33,6 +29,7 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
+import com.m4ykey.ui.helpers.animateColorTransition
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,15 +45,10 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private val args by navArgs<AlbumDetailFragmentArgs>()
     private val viewModel by viewModels<AlbumViewModel>()
     private val trackAdapter by lazy { createTrackAdapter() }
-    private val networkStateMonitor: NetworkMonitor by lazy { NetworkMonitor(requireContext()) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        networkStateMonitor.startMonitoring()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         bottomNavigationVisibility?.hideBottomNavigation()
 
@@ -65,14 +57,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         binding.toolbarLoading.setNavigationOnClickListener { findNavController().navigateUp() }
 
         lifecycleScope.launch {
-            networkStateMonitor.isInternetAvailable.collect {
-                if (it) {
-                    observeViewModel()
-                    viewModel.getAlbumDetails(args.albumId)
-                } else {
-                    viewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
-                }
-            }
+            observeViewModel()
         }
     }
 
@@ -85,10 +70,14 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun observeViewModel() {
+        viewModel.getAlbumDetails(args.albumId)
+
         lifecycleScope.launch {
-            viewModel.detail.collectLatest { item ->
-                item?.let { displayAlbumDetail(it) }
-            }
+            viewModel.detail.collectLatest { item -> item?.let { displayAlbumDetail(it) } }
+        }
+
+        lifecycleScope.launch {
+            viewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
         }
 
         lifecycleScope.launch {
@@ -363,25 +352,5 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 else R.drawable.ic_listen_later_border
             )
         }
-    }
-
-    private fun animateColorTransition(
-        startColor: Int,
-        endColor: Int,
-        vararg buttons: MaterialButton
-    ) {
-        val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), startColor, endColor)
-        colorAnimator.duration = 2200
-
-        colorAnimator.addUpdateListener { animator ->
-            val animatedValue = animator.animatedValue as Int
-            buttons.forEach { it.setBackgroundColor(animatedValue) }
-        }
-        colorAnimator.start()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        networkStateMonitor.stopMonitoring()
     }
 }
