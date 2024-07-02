@@ -294,7 +294,11 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                     findNavController().navigate(action)
                     drawerLayout.close()
                 },
-                Pair(R.id.imgSettings) {  },
+                Pair(R.id.imgSettings) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToSettingsFragment()
+                    findNavController().navigate(action)
+                    drawerLayout.close()
+                },
                 Pair(R.id.imgListenLater) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
                     findNavController().navigate(action)
