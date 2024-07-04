@@ -1,20 +1,13 @@
 package com.m4ykey.ui
 
 import android.os.Bundle
-import android.view.View
-import com.m4ykey.core.views.BaseFragment
-import com.m4ykey.ui.databinding.FragmentSettingsBinding
+import androidx.preference.PreferenceFragmentCompat
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
-    FragmentSettingsBinding::inflate
-) {
+class SettingsFragment : PreferenceFragmentCompat() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        bottomNavigationVisibility?.hideBottomNavigation()
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
-
 }
