@@ -1,5 +1,6 @@
 package com.m4ykey.data.remote.interceptor
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,34 +16,38 @@ import javax.inject.Inject
 
 class SpotifyTokenProvider @Inject constructor(
     private val api: AuthApi,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val context : Context
 ) : TokenProvider {
 
     private val accessTokenKey = stringPreferencesKey("access_token")
     private val expireKey = longPreferencesKey("expire_token")
 
-    override suspend fun getAccessToken(): String {
-
-        try {
+    override suspend fun getAccessToken(): String? {
+        return try {
             val dataStoreData = dataStore.data.firstOrNull() ?: return ""
             val cachedToken = dataStoreData[accessTokenKey]
             val expireTime = dataStoreData[expireKey] ?: 0L
 
             if (!cachedToken.isNullOrBlank() && System.currentTimeMillis() < expireTime) {
-                return cachedToken
+                cachedToken
             } else {
-                val newAccessToken = fetchAccessToken(
-                    clientId = SPOTIFY_CLIENT_ID,
-                    clientSecret = SPOTIFY_CLIENT_SECRET,
-                    api = api
-                )
+                if (isInternetAvailable(context)) {
+                    val newAccessToken = fetchAccessToken(
+                        clientId = SPOTIFY_CLIENT_ID,
+                        clientSecret = SPOTIFY_CLIENT_SECRET,
+                        api = api
+                    )
 
-                val newExpireTime = System.currentTimeMillis() + 3600 * 1000
-                saveAccessToken(newAccessToken, newExpireTime)
-                return newAccessToken
+                    val newExpireTime = System.currentTimeMillis() + 3600 * 1000
+                    saveAccessToken(newAccessToken, newExpireTime)
+                    newAccessToken
+                } else {
+                    ""
+                }
             }
         } catch (e : Exception) {
-            throw RuntimeException("Error fetching access token", e)
+            ""
         }
     }
 

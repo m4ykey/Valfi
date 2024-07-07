@@ -1,7 +1,7 @@
 package com.m4ykey.data.remote.interceptor.token
 
 interface TokenProvider {
-    suspend fun getAccessToken() : String
+    suspend fun getAccessToken() : String?
 }
 
 interface TokenHeaderProvider {
