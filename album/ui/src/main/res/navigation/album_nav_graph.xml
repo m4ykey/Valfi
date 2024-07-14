@@ -38,13 +38,6 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumHomeFragment_to_albumNewReleaseFragment"
             app:destination="@id/albumNewReleaseFragment" />
-        <action
-            app:exitAnim="@anim/slide_out_to_left"
-            app:enterAnim="@anim/slide_in_from_right"
-            app:popExitAnim="@anim/slide_out_to_right"
-            app:popEnterAnim="@anim/slide_in_from_left"
-            android:id="@+id/action_albumHomeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         tools:layout="@layout/fragment_album_search"
@@ -115,8 +108,4 @@
         tools:layout="@layout/fragment_album_cover" >
         <argument android:name="imgUrl" />
     </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.m4ykey.ui.SettingsFragment"
-        android:label="SettingsFragment" />
 </navigation>

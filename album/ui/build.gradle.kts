@@ -41,7 +41,6 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":album:data"))
-    implementation(project(":settings:ui"))
 
     libs.apply {
         implementation(androidxCore)
