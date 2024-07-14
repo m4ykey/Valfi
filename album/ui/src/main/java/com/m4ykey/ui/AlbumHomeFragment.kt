@@ -52,7 +52,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private var isSingleSelected = false
     private var isCompilationSelected = false
     @Inject
-    lateinit var dataManager: AlbumPreferences
+    lateinit var albumPreferences: AlbumPreferences
     private var selectedSortType : SortType = SortType.LATEST
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,10 +136,10 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 isListViewChanged = !isListViewChanged
                 lifecycleScope.launch {
                     if (isListViewChanged) {
-                        dataManager.saveSelectedViewType(requireContext(), ViewType.LIST)
+                        albumPreferences.saveSelectedViewType(requireContext(), ViewType.LIST)
                         chipList.setChipIconResource(R.drawable.ic_grid)
                     } else {
-                        dataManager.deleteSelectedViewType(requireContext())
+                        albumPreferences.deleteSelectedViewType(requireContext())
                         chipList.setChipIconResource(R.drawable.ic_list)
                     }
                     setRecyclerViewLayout(isListViewChanged)
@@ -184,12 +184,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         if (isSelected) {
             lifecycleScope.launch {
                 viewModel.getAlbumType(albumType)
-                dataManager.saveSelectedAlbumType(requireContext(), albumType)
+                albumPreferences.saveSelectedAlbumType(requireContext(), albumType)
             }
         } else {
             lifecycleScope.launch {
                 viewModel.getSavedAlbums()
-                dataManager.deleteSelectedAlbumType(requireContext())
+                albumPreferences.deleteSelectedAlbumType(requireContext())
             }
         }
     }
@@ -239,9 +239,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private fun saveSelectedSortType(sortType: SortType) {
         lifecycleScope.launch {
             if (sortType == SortType.LATEST) {
-                dataManager.deleteSelectedSortType(requireContext())
+                albumPreferences.deleteSelectedSortType(requireContext())
             } else {
-                dataManager.saveSelectedSortType(requireContext(), sortType)
+                albumPreferences.saveSelectedSortType(requireContext(), sortType)
             }
         }
     }
@@ -290,9 +290,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             val drawerButtons = listOf(
                 Pair(R.id.imgSettings) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToSettingsFragment()
-                    findNavController().navigate(action)
-                    drawerLayout.close()
+
                 },
                 Pair(R.id.imgListenLater) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
@@ -397,7 +395,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun readSelectedSortType() {
         lifecycleScope.launch {
-            val savedSortType = dataManager.getSelectedSortType(requireContext())
+            val savedSortType = albumPreferences.getSelectedSortType(requireContext())
             if (savedSortType != null) {
                 selectedSortType = savedSortType
                 updateListWithSortType(savedSortType)
@@ -407,7 +405,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun readSelectedViewType() {
         lifecycleScope.launch {
-            val selectedViewType = dataManager.getSelectedViewType(requireContext())
+            val selectedViewType = albumPreferences.getSelectedViewType(requireContext())
 
             if (selectedViewType != null) {
                 albumAdapter.viewType = selectedViewType
@@ -429,7 +427,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun readSelectedAlbumType() {
         lifecycleScope.launch {
-            val selectedAlbum = dataManager.getSelectedAlbumType(requireContext())
+            val selectedAlbum = albumPreferences.getSelectedAlbumType(requireContext())
             when (selectedAlbum) {
                 ALBUM -> {
                     isAlbumSelected = true

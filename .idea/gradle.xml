@@ -17,8 +17,6 @@
             <option value="$PROJECT_DIR$/news" />
             <option value="$PROJECT_DIR$/news/data" />
             <option value="$PROJECT_DIR$/news/ui" />
-            <option value="$PROJECT_DIR$/settings" />
-            <option value="$PROJECT_DIR$/settings/ui" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
