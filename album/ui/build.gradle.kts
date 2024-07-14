@@ -62,9 +62,6 @@ dependencies {
         ksp(hiltCompiler)
         implementation(hiltAndroid)
 
-        implementation(vicoViews)
-        implementation(vicoCore)
-
         implementation(coroutines)
 
     }

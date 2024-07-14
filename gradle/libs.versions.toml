@@ -6,10 +6,8 @@ lifecycle = "2.8.3"
 hilt = "2.51.1"
 okhttp = "4.12.0"
 room = "2.6.1"
-vico = "1.15.0"
 libraries = "11.2.2"
 coroutines = "1.9.0-RC"
-preference = "1.2.1"
 
 [libraries]
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.3" }
@@ -53,13 +51,9 @@ hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", ve
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
-vicoViews = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
-vicoCore = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
-
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "5.0.0-rc01" }
 
 aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries", version.ref = "libraries" }
-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
