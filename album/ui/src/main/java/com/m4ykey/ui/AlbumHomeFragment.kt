@@ -228,7 +228,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                     0 -> SortType.LATEST
                     1 -> SortType.OLDEST
                     2 -> SortType.ALPHABETICAL
-                    else -> throw IllegalArgumentException("Invalid sort index")
+                    else -> throw IllegalArgumentException(getString(com.m4ykey.core.R.string.invalid_sort_index))
                 }
                 updateListWithSortType(listType)
                 saveSelectedSortType(listType)
@@ -289,11 +289,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             }
 
             val drawerButtons = listOf(
-                Pair(R.id.imgStatistics) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumStatisticsFragment()
-                    findNavController().navigate(action)
-                    drawerLayout.close()
-                },
                 Pair(R.id.imgSettings) {
                     val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToSettingsFragment()
                     findNavController().navigate(action)

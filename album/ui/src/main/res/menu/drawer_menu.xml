@@ -15,12 +15,6 @@
         android:title="@string/new_releases"/>
 
     <item
-        android:id="@+id/imgStatistics"
-        android:icon="@drawable/ic_statistics"
-        android:title="@string/statistics"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/imgSettings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"

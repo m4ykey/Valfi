@@ -23,12 +23,6 @@ android {
         }
     }
 
-    buildTypes.all {
-        buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"${apiKeys.getProperty("SPOTIFY_CLIENT_ID")}\"")
-        buildConfigField("String", "SPOTIFY_CLIENT_SECRET", "\"${apiKeys.getProperty("SPOTIFY_CLIENT_SECRET")}\"")
-        buildConfigField("String", "NEWS_API_KEY", "\"${apiKeys.getProperty("NEWS_API_KEY")}\"")
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -36,6 +30,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        all {
+            buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"${apiKeys.getProperty("SPOTIFY_CLIENT_ID")}\"")
+            buildConfigField("String", "SPOTIFY_CLIENT_SECRET", "\"${apiKeys.getProperty("SPOTIFY_CLIENT_SECRET")}\"")
+            buildConfigField("String", "NEWS_API_KEY", "\"${apiKeys.getProperty("NEWS_API_KEY")}\"")
         }
     }
     compileOptions {

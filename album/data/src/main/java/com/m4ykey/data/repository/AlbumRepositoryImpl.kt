@@ -74,10 +74,7 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun deleteListenLaterState(albumId: String) = dao.deleteListenLaterState(albumId)
     override suspend fun getRandomAlbum(): AlbumEntity? = dao.getRandomAlbum()
 
-    override fun getAlbumCount(): Flow<Int> = dao.getAlbumCount()
-    override fun getTotalTracksCount(): Flow<Int> = dao.getTotalTracksCount()
     override fun getListenLaterCount(): Flow<Int> = dao.getListenLaterCount()
-    override fun getAlbumTypeCount(albumType: String): Flow<Int> = dao.getAlbumTypeCount(albumType)
 
     override suspend fun getSavedAlbums(): List<AlbumEntity> = dao.getSavedAlbums()
     override suspend fun getListenLaterAlbums(): List<AlbumEntity> = dao.getListenLaterAlbums()

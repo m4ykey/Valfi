@@ -36,7 +36,7 @@
     <string name="you_don_t_have_any_albums">Nie masz żadnych albumów</string>
     <string name="here_are_the_albums_to_listen_to_in_future">Tutaj znajdują się albumy do odsłuchania w przyszłości</string>
     <string name="favorite_albums">Ulubione albumy</string>
-    <string name="total_number_of_tracks">Łączna ilość utworów</string>
+    <string name="total_tracks">Liczba utworów</string>
     <string name="nothing_found">Nic nie znaleziono</string>
     <string name="speech_not_recognition">Rozpoznawanie mowy jest niedostępne</string>
     <string name="enter_album_name">Wprowadź nazwę albumu</string>

@@ -34,9 +34,6 @@ interface AlbumRepository {
     suspend fun getRandomAlbum() : AlbumEntity?
 
     fun getListenLaterCount() : Flow<Int>
-    fun getAlbumTypeCount(albumType : String) : Flow<Int>
-    fun getAlbumCount() : Flow<Int>
-    fun getTotalTracksCount() : Flow<Int>
 
     suspend fun searchAlbumByName(searchQuery : String) : List<AlbumEntity>
     suspend fun searchAlbumsListenLater(searchQuery: String) : List<AlbumEntity>

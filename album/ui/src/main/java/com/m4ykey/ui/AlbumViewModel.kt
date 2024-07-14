@@ -189,13 +189,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun getAlbumCount() : Flow<Int> = repository.getAlbumCount()
-
-    fun getTotalTracksCount() : Flow<Int> = repository.getTotalTracksCount()
-
     fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
-
-    fun getAlbumTypeCount(albumType : String) : Flow<Int> =repository.getAlbumTypeCount(albumType)
 
     suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
 

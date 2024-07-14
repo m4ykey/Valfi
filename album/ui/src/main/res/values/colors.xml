@@ -4,7 +4,4 @@
     <color name="searchBox">#33000000</color>
     <color name="red">#ad1726</color>
     <color name="cardViewStats">#E0E0E0</color>
-
-    <color name="navigationIconColor">@color/black</color>
-
 </resources>

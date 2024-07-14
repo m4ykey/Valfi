@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.aboutLibrariesPlugin)
 }
 
 android {
@@ -55,5 +56,5 @@ dependencies {
     implementation(libs.androidxNavigationFragment)
     implementation(libs.androidxNavigationUI)
 
-    implementation(libs.androidxPreference)
+    implementation(libs.aboutLibraries)
 }

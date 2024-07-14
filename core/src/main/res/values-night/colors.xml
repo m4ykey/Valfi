@@ -4,4 +4,5 @@
     <color name="background">#121212</color>
     <color name="textColor">@color/white</color>
     <color name="textColor2">#BDBDBD</color>
+    <color name="navigationIconColor">@color/white</color>
 </resources>

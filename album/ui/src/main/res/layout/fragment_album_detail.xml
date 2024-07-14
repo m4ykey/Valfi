@@ -47,19 +47,25 @@
                 app:layout_constraintTop_toBottomOf="@id/appBar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_gravity="center"
-                android:layout_width="280dp"
-                android:layout_height="280dp"
-                app:cardCornerRadius="10dp"
-                app:elevation="0dp">
+                android:layout_width="350dp"
+                android:layout_height="350dp">
 
-                <ImageView
-                    android:id="@+id/imgAlbum"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    tools:background="@drawable/album_error"
-                    android:contentDescription="@string/album_cover" />
+                <androidx.cardview.widget.CardView
+                    android:layout_gravity="center"
+                    android:layout_width="280dp"
+                    android:layout_height="280dp"
+                    app:cardCornerRadius="10dp"
+                    app:elevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/imgAlbum"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:background="@drawable/album_error"
+                        android:contentDescription="@string/album_cover" />
+
+                </androidx.cardview.widget.CardView>
 
             </androidx.cardview.widget.CardView>
 
