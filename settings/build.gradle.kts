@@ -1,13 +1,10 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.safeargs)
 }
 
 android {
-    namespace = "com.m4ykey.ui"
+    namespace = "com.m4ykey.settings"
     compileSdk = 34
 
     defaultConfig {
@@ -41,28 +38,11 @@ android {
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":news:data"))
 
-    libs.apply {
-        implementation(androidxCore)
-        implementation(androidxAppCompat)
-        implementation(androidxConstraintLayout)
-        implementation(androidxBrowser)
-        implementation(androidxNavigationFragment)
-        implementation(androidxNavigationUI)
-        implementation(androidxLifecycleRuntime)
-        implementation(androidxLifecycleViewmodel)
-        implementation(androidxRecyclerView)
-
-        implementation(androidMaterial)
-
-        testImplementation(junit)
-
-        androidTestImplementation(extJunit)
-        androidTestImplementation(espresso)
-
-        ksp(hiltCompiler)
-        implementation(hiltAndroid)
-
-    }
+    implementation(libs.androidxCore)
+    implementation(libs.androidxAppCompat)
+    implementation(libs.androidMaterial)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.extJunit)
+    androidTestImplementation(libs.espresso)
 }

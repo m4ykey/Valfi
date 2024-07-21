@@ -40,6 +40,7 @@ androidMaterial = { group = "com.google.android.material", name = "material", ve
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
+moshiCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version = "1.15.1" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 
@@ -56,7 +57,7 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version = "5.0.0-
 aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries", version.ref = "libraries" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "application" }
+androidApplication = { id = "com.android.application", version = "8.5.1" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.0" }
 ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.22" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }

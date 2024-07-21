@@ -16,7 +16,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMoshiAdapter(): Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+    fun provideMoshiAdapter(): Moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
+        .build()
 
     @Provides
     @Singleton

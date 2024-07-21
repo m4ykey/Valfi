@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
@@ -10,7 +13,7 @@ plugins {
 
 val versionMajor = 0
 val versionMinor = 7
-val versionPatch = 1
+val versionPatch = 2
 
 android {
     namespace = "com.m4ykey.valfi2"
@@ -26,13 +29,32 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        val keyStorePropertiesFile = rootProject.file("keystore.properties")
+        val keyStoreProperties = Properties()
+        keyStoreProperties.load(FileInputStream(keyStorePropertiesFile))
+
+        create("release") {
+            keyAlias = keyStoreProperties["keyAlias"] as String
+            keyPassword = keyStoreProperties["keyPassword"] as String
+            storePassword = keyStoreProperties["storePassword"] as String
+            storeFile = file(keyStoreProperties["storeFile"] as String)
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
+            applicationIdSuffix = ""
+            versionNameSuffix = "-debug"
             isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -54,6 +76,7 @@ dependencies {
     implementation(project(":news:ui"))
     implementation(project(":album:data"))
     implementation(project(":news:data"))
+    implementation(project(":settings"))
 
     libs.apply {
 

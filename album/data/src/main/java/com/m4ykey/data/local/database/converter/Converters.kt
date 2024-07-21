@@ -9,10 +9,16 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class Converters {
 
-    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-    val type = Types.newParameterizedType(List::class.java, ArtistEntity::class.java)
-    val adapter = moshi.adapter<List<ArtistEntity>>(type).lenient()
-    val singleAdapter = moshi.adapter(ArtistEntity::class.java).lenient()
+    private val moshi by lazy {
+        Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    }
+    private val type = Types.newParameterizedType(List::class.java, ArtistEntity::class.java)
+    private val adapter by lazy {
+        moshi.adapter<List<ArtistEntity>>(type).lenient()
+    }
+    private val singleAdapter by lazy {
+        moshi.adapter(ArtistEntity::class.java).lenient()
+    }
 
     @TypeConverter
     fun fromArtistEntityList(artists : List<ArtistEntity>) : String {
@@ -24,8 +30,7 @@ class Converters {
         return try {
             adapter.fromJson(artistsJson) ?: emptyList()
         } catch (e: JsonDataException) {
-            val singleArtist = singleAdapter.fromJson(artistsJson)
-            if (singleArtist != null) listOf(singleArtist) else emptyList()
+            singleAdapter.fromJson(artistsJson)?.let { listOf(it) } ?: emptyList()
         }
     }
 

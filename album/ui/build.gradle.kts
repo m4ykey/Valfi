@@ -18,7 +18,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -40,6 +40,7 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":settings"))
     implementation(project(":album:data"))
 
     libs.apply {
