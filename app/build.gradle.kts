@@ -46,7 +46,7 @@ android {
         debug {
             applicationIdSuffix = ""
             versionNameSuffix = "-debug"
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         release {
@@ -63,9 +63,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-    }
-    buildFeatures {
-        viewBinding = true
     }
 }
 
