@@ -15,6 +15,9 @@ import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.ui.adapter.ColorAdapter
 import com.m4ykey.ui.colors.ColorList
+import com.m4ykey.ui.colors.extractColorsFromBitmap
+import com.m4ykey.ui.colors.intToHex
+import com.m4ykey.ui.colors.loadImageWithColors
 import com.m4ykey.ui.databinding.FragmentAlbumCoverBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +36,7 @@ class AlbumCoverFragment : BaseFragment<FragmentAlbumCoverBinding>(
 
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-            loadImageWithColors(imgAlbum, args.imgUrl) { bitmap ->
+            loadImageWithColors(imgAlbum, args.imgUrl, requireContext()) { bitmap ->
                 val colors = extractColorsFromBitmap(bitmap)
                 colorAdapter.submitList(colors.map { ColorList(color = it) })
             }
@@ -50,29 +53,4 @@ class AlbumCoverFragment : BaseFragment<FragmentAlbumCoverBinding>(
             }
         )
     }
-
-    private fun loadImageWithColors(
-        imageView: ImageView,
-        url : String,
-        callback : (Bitmap) -> Unit
-    ) {
-        Glide.with(requireContext())
-            .asBitmap()
-            .load(url)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    imageView.setImageBitmap(resource)
-                    callback(resource)
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
-    }
-
-    private fun extractColorsFromBitmap(bitmap: Bitmap) : List<Int> {
-        val palette = Palette.from(bitmap).generate()
-        return palette.swatches.map { it.rgb }
-    }
-
-    private fun intToHex(color : Int) : String = String.format("#%06X", 0xFFFFFF and color)
-
 }
