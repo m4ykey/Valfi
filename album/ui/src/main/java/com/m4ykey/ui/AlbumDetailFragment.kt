@@ -49,12 +49,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         bottomNavigationVisibility?.hideBottomNavigation()
 
         setupRecyclerView()
-        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.toolbarLoading.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.apply {
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+            toolbarLoading.setNavigationOnClickListener { findNavController().navigateUp() }
+        }
 
         lifecycleScope.launch {
             observeViewModel()
@@ -73,7 +74,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         viewModel.getAlbumDetails(args.albumId)
 
         lifecycleScope.launch {
-            viewModel.detail.collectLatest { item -> item?.let { displayAlbumDetail(it) } }
+            viewModel.detail.collect { item -> item?.let { displayAlbumDetail(it) } }
         }
 
         lifecycleScope.launch {
@@ -86,7 +87,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collectLatest {
+            viewModel.isLoading.collect {
                 binding.layoutLoading.isVisible = it
                 binding.nestedScrollView.isVisible = !it
             }
@@ -224,11 +225,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private fun displayAlbumDetail(item: AlbumDetail) {
         binding.apply {
             val albumType = when {
-                item.totalTracks in 2..6 && item.albumType.equals(
-                    "Single",
-                    ignoreCase = true
-                ) -> "EP"
-
+                item.totalTracks in 2..6 && item.albumType.equals("Single", ignoreCase = true) -> "EP"
                 else -> item.albumType.replaceFirstChar { it.uppercase() }
             }
             val formatAirDate = formatAirDate(item.releaseDate)

@@ -73,10 +73,11 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
     }
 
     private fun handleRecyclerViewButton() {
-        binding.recyclerViewNewRelease.addOnScrollListener(scrollListener(binding.btnToTop))
-
-        binding.btnToTop.setOnClickListener {
-            binding.recyclerViewNewRelease.smoothScrollToPosition(0)
+        binding.apply {
+            recyclerViewNewRelease.addOnScrollListener(scrollListener(btnToTop))
+                btnToTop.setOnClickListener {
+                recyclerViewNewRelease.smoothScrollToPosition(0)
+            }
         }
     }
 

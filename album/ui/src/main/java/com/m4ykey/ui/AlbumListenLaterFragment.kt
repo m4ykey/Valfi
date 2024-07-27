@@ -49,18 +49,18 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 albumPaging.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
                         albumAdapter.submitList(emptyList())
-                        binding.linearLayoutEmptyList.isVisible = true
-                        binding.linearLayoutEmptySearch.isVisible = false
+                        linearLayoutEmptyList.isVisible = true
+                        linearLayoutEmptySearch.isVisible = false
                     } else {
-                        binding.linearLayoutEmptyList.isVisible = false
-                        if (binding.etSearch.text.isNullOrEmpty()) {
+                        linearLayoutEmptyList.isVisible = false
+                        if (etSearch.text.isNullOrEmpty()) {
                             albumAdapter.submitList(albums)
-                            binding.linearLayoutEmptySearch.isVisible = false
+                            linearLayoutEmptySearch.isVisible = false
                         }
                     }
                 }
 
-                binding.etSearch.doOnTextChanged { text, _, _, _ ->
+                etSearch.doOnTextChanged { text, _, _, _ ->
                     if (text.isNullOrEmpty()) {
                         lifecycleScope.launch { getListenLaterAlbums() }
                     } else {
@@ -71,11 +71,11 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 searchResult.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
                         albumAdapter.submitList(emptyList())
-                        binding.linearLayoutEmptySearch.isVisible = true
-                        binding.linearLayoutEmptyList.isVisible = false
+                        linearLayoutEmptySearch.isVisible = true
+                        linearLayoutEmptyList.isVisible = false
                     } else {
                         albumAdapter.submitList(albums)
-                        binding.linearLayoutEmptySearch.isVisible = false
+                        linearLayoutEmptySearch.isVisible = false
                     }
                 }
 
@@ -104,10 +104,11 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun handleRecyclerViewButton() {
-        binding.recyclerViewListenLater.addOnScrollListener(scrollListener(binding.btnToTop))
-
-        binding.btnToTop.setOnClickListener {
-            binding.recyclerViewListenLater.smoothScrollToPosition(0)
+        binding.apply {
+            recyclerViewListenLater.addOnScrollListener(scrollListener(btnToTop))
+            btnToTop.setOnClickListener {
+                recyclerViewListenLater.smoothScrollToPosition(0)
+            }
         }
     }
 
@@ -164,12 +165,10 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun setupRecyclerView() {
-        binding.apply {
-            recyclerViewListenLater.apply {
-                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-                layoutManager = setupGridLayoutManager(requireContext(), 110f)
-                adapter = albumAdapter
-            }
+        binding.recyclerViewListenLater.apply {
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+            layoutManager = setupGridLayoutManager(requireContext(), 110f)
+            adapter = albumAdapter
         }
     }
 

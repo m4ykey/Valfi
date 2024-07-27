@@ -114,10 +114,11 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun handleRecyclerViewButton() {
-        binding.rvAlbums.addOnScrollListener(scrollListener(binding.btnToTop))
-
-        binding.btnToTop.setOnClickListener {
-            binding.rvAlbums.smoothScrollToPosition(0)
+        binding.apply {
+            rvAlbums.addOnScrollListener(scrollListener(btnToTop))
+            btnToTop.setOnClickListener {
+                rvAlbums.smoothScrollToPosition(0)
+            }
         }
     }
 
@@ -409,21 +410,23 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         lifecycleScope.launch {
             val selectedViewType = albumPreferences.getSelectedViewType(requireContext())
 
-            if (selectedViewType != null) {
-                albumAdapter.viewType = selectedViewType
-                binding.chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
-                isListViewChanged = selectedViewType == ViewType.LIST
-            } else {
-                val defaultViewType = ViewType.GRID
-                albumAdapter.viewType = defaultViewType
-                binding.chipList.setChipIconResource(R.drawable.ic_list)
-            }
+            binding.apply {
+                if (selectedViewType != null) {
+                    albumAdapter.viewType = selectedViewType
+                    chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
+                    isListViewChanged = selectedViewType == ViewType.LIST
+                } else {
+                    val defaultViewType = ViewType.GRID
+                    albumAdapter.viewType = defaultViewType
+                    chipList.setChipIconResource(R.drawable.ic_list)
+                }
 
-            val layoutManager = when (albumAdapter.viewType) {
-                ViewType.LIST -> LinearLayoutManager(requireContext())
-                ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
+                val layoutManager = when (albumAdapter.viewType) {
+                    ViewType.LIST -> LinearLayoutManager(requireContext())
+                    ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
+                }
+                rvAlbums.layoutManager = layoutManager
             }
-            binding.rvAlbums.layoutManager = layoutManager
         }
     }
 

@@ -95,52 +95,59 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     }
 
     private fun handleRecyclerViewButton() {
-        binding.rvSearchAlbums.addOnScrollListener(scrollListener(binding.btnToTop))
-
-        binding.btnToTop.setOnClickListener {
-            binding.rvSearchAlbums.smoothScrollToPosition(0)
+        binding.apply {
+            rvSearchAlbums.addOnScrollListener(scrollListener(btnToTop))
+            btnToTop.setOnClickListener {
+                rvSearchAlbums.smoothScrollToPosition(0)
+            }
         }
     }
 
     private fun resetSearchWidth() {
-        val params = binding.etSearch.layoutParams
-        params.width = originalWidth
-        binding.etSearch.layoutParams = params
+        binding.apply {
+            val params = etSearch.layoutParams
+            params.width = originalWidth
+            etSearch.layoutParams = params
+        }
     }
 
     private fun searchAlbums() {
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> {
-                    val searchQuery = binding.etSearch.text?.toString()
-                    if (searchQuery?.isNotEmpty() == true) {
-                        viewModel.resetSearch()
-                        lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
-                    } else {
-                        showToast(requireContext(), getString(R.string.empty_search))
+        binding.apply {
+            etSearch.setOnEditorActionListener { _, actionId, _ ->
+                when (actionId) {
+                    EditorInfo.IME_ACTION_SEARCH -> {
+                        val searchQuery = etSearch.text?.toString()
+                        if (searchQuery?.isNotEmpty() == true) {
+                            viewModel.resetSearch()
+                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                        } else {
+                            showToast(requireContext(), getString(R.string.empty_search))
+                        }
                     }
                 }
+                actionId == EditorInfo.IME_ACTION_SEARCH
             }
-            actionId == EditorInfo.IME_ACTION_SEARCH
         }
     }
 
     private fun setupRecyclerView() {
-        binding.rvSearchAlbums.apply {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-            adapter = searchAdapter
-            layoutManager = setupGridLayoutManager(requireContext(), 110f)
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (!recyclerView.canScrollVertically(1)) {
-                        val searchQuery = binding.etSearch.text.toString()
-                        if (!viewModel.isPaginationEnded && !viewModel.isLoading.value && searchQuery.isNotEmpty()) {
-                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+        binding.apply {
+            rvSearchAlbums.apply {
+                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+                adapter = searchAdapter
+                layoutManager = setupGridLayoutManager(requireContext(), 110f)
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (!recyclerView.canScrollVertically(1)) {
+                            val searchQuery = etSearch.text.toString()
+                            if (!viewModel.isPaginationEnded && !viewModel.isLoading.value && searchQuery.isNotEmpty()) {
+                                lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
         }
     }
 
