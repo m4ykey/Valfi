@@ -11,7 +11,3 @@ plugins {
     alias(libs.plugins.aboutLibrariesPlugin) apply false
     alias(libs.plugins.performance) apply false
 }
-
-tasks.register("clean", Delete::class) {
-    delete(project.buildDir)
-}

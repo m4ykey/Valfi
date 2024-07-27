@@ -46,10 +46,6 @@ dependencies {
         implementation(okhttp)
         implementation(okhttpLoggingInterceptor)
 
-        testImplementation(junit)
-        androidTestImplementation(extJunit)
-        androidTestImplementation(espresso)
-
         implementation(coroutines)
 
         implementation(hiltAndroid)
