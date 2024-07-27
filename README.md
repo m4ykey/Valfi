@@ -1,12 +1,6 @@
 Valfi is an app that allows you to search and save your favorite albums, discover new releases, and stay updated on the latest music news.
 
-## Screenshots
-| Home | Search | Detail | News |
-|:-:|:-:|:-:|:-:|
-
-
 ## Helpful dependencies
-- [Vico](https://github.com/patrykandpatrick/vico) - Generating charts
 - [Firebase](https://firebase.google.com/) - Basic analytics and application monitoring itself
 - [Coil](https://coil-kt.github.io/coil/) - Loading images
 - [Moshi](https://github.com/square/moshi) - JSON serialization/deserialization library
@@ -21,6 +15,15 @@ Valfi is an app that allows you to search and save your favorite albums, discove
 SPOTIFY_CLIENT_ID = "YOUR_SPOTIFY_CLIENT_ID"
 SPOTIFY_CLIENT_SECRET = "YOUR_SPOTIFY_CLIENT_SECRET"
 NEWS_API_KEY = "YOUR_NEWS_API_KEY"
+```
+
+1. Create `keystore.properties` file and import it to `/app`
+2. Add your `keyAlias`, `keyPassword`, `storePassword` and `storeFile` properties.
+```
+keyAlias=XYZ
+keyPassword=XYZ
+storePassword=XYZ
+storeFile=File XYZ
 ```
 
 ## Music news providers
