@@ -11,9 +11,10 @@ class CustomTokenProvider @Inject constructor(
         val accessToken = tokenHeaderProvider.getAuthorizationToken() ?: throw RuntimeException("Failed to get access token")
 
         val newRequest = chain.request().newBuilder()
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", accessToken)
+            .header("Content-Type", "application/json")
+            .header("Authorization", accessToken)
             .build()
+
         return chain.proceed(newRequest)
     }
 }
