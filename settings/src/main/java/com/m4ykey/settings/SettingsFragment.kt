@@ -11,6 +11,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bottomNavigationVisibility?.hideBottomNavigation()
     }
 
 }

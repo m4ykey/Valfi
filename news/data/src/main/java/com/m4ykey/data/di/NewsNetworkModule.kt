@@ -17,5 +17,4 @@ object NewsNetworkModule {
     @Provides
     @Singleton
     fun provideNewsApi(moshi: Moshi) : NewsApi = createApi(Constants.NEWS_BASE_URL, moshi)
-
 }

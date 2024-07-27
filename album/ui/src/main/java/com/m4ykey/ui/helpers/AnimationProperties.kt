@@ -20,7 +20,7 @@ fun animateColorTransition(
     vararg buttons: MaterialButton
 ) {
     val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), startColor, endColor)
-    colorAnimator.duration = 2200
+    colorAnimator.duration = 2000
 
     colorAnimator.addUpdateListener { animator ->
         val animatedValue = animator.animatedValue as Int

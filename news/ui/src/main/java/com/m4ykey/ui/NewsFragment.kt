@@ -2,8 +2,6 @@ package com.m4ykey.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
@@ -17,7 +15,7 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.domain.model.Article
+import com.m4ykey.data.domain.NewsSort
 import com.m4ykey.ui.adapter.NewsAdapter
 import com.m4ykey.ui.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint

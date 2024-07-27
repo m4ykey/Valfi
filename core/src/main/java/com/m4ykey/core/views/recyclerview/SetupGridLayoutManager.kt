@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.WindowMetrics
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 
 fun setupGridLayoutManager(

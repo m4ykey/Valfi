@@ -17,7 +17,7 @@ import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
 import com.m4ykey.core.views.loadImage
-import com.m4ykey.core.views.utils.copyName
+import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.core.views.utils.formatAirDate
 import com.m4ykey.core.views.utils.getColorFromImage
 import com.m4ykey.core.views.utils.showToast
@@ -143,7 +143,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
                 txtAlbumName.apply {
                     text = name
-                    setOnClickListener { copyName(name, requireContext()) }
+                    setOnClickListener { copyText(name, requireContext(), getString(com.m4ykey.core.R.string.copied_to_clipboard)) }
                 }
                 txtArtist.text = getArtistList()
                 txtInfo.text = getString(
@@ -237,7 +237,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             txtAlbumName.apply {
                 text = item.name
-                setOnClickListener { copyName(item.name, requireContext()) }
+                setOnClickListener { copyText(item.name, requireContext(), getString(com.m4ykey.core.R.string.copied_to_clipboard)) }
             }
             txtArtist.text = item.getArtistList()
             txtInfo.text = albumInfo

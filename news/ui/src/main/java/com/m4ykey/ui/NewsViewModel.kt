@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.ErrorState
+import com.m4ykey.data.domain.NewsSort
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.data.domain.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

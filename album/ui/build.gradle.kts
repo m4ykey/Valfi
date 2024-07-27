@@ -65,5 +65,7 @@ dependencies {
 
         implementation(coroutines)
 
+        implementation(glide)
+
     }
 }

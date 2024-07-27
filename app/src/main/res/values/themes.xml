@@ -1,7 +1,8 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Valfi2" parent="Theme.Material3.DayNight.NoActionBar">
-
+        <item name="android:itemTextAppearance">@style/MenuColor</item>
+        <item name="android:itemBackground">@color/background</item>
     </style>
 
     <style name="Theme.Valfi2" parent="Base.Theme.Valfi2" />
@@ -9,5 +10,4 @@
     <style name="BottomNavigationCustom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/bottomNavigationItemIndicatorSelected</item>
     </style>
-
 </resources>
