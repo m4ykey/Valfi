@@ -28,6 +28,7 @@ import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
+import com.m4ykey.ui.colors.ColorViewModel
 import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.helpers.animateColorTransition
 import com.m4ykey.ui.helpers.getArtistList
@@ -44,6 +45,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private val args by navArgs<AlbumDetailFragmentArgs>()
     private val viewModel by viewModels<AlbumViewModel>()
+    private val colorViewModel by viewModels<ColorViewModel>()
     private val trackAdapter by lazy { createTrackAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,14 +126,17 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 }
 
                 loadImage(imgAlbum, images, requireContext())
-                getColorFromImage(
-                    images,
-                    context = requireContext(),
-                    onColorReady = { color ->
+                if (colorViewModel.selectedColor.value == null) {
+                    getColorFromImage(images, context = requireContext()) { color ->
+                        colorViewModel.setColor(color)
+                        animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+                    }
+                } else {
+                    colorViewModel.selectedColor.value?.let { color ->
                         btnAlbum.setBackgroundColor(color)
                         btnArtist.setBackgroundColor(color)
                     }
-                )
+                }
 
                 cardView.setOnClickListener {
                     val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(images)
@@ -252,11 +257,16 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             loadImage(imgAlbum, item.getLargestImageUrl().toString(), requireContext())
 
-            getColorFromImage(
-                item.getLargestImageUrl().toString(),
-                context = requireContext()
-            ) { color ->
-                animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+            if (colorViewModel.selectedColor.value == null) {
+                getColorFromImage(item.getLargestImageUrl().toString(), context = requireContext()) { color ->
+                    colorViewModel.setColor(color)
+                    animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+                }
+            } else {
+                colorViewModel.selectedColor.value?.let { color ->
+                    btnAlbum.setBackgroundColor(color)
+                    btnArtist.setBackgroundColor(color)
+                }
             }
 
             buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
