@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.ErrorState
-import com.m4ykey.data.domain.NewsSort
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.data.domain.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,25 +26,10 @@ class NewsViewModel @Inject constructor(
     private val _isError = MutableStateFlow<ErrorState>(ErrorState.NoError)
     val isError : StateFlow<ErrorState> get() = _isError
 
-    private val _currentSort = MutableStateFlow(NewsSort.PUBLISHED_AT)
-    val currentSort : StateFlow<NewsSort> get() = _currentSort
-
     private var page = 1
     var isPaginationEnded = false
 
-    init {
-        viewModelScope.launch {
-            _currentSort.collect {
-                getMusicNews(clearList = true)
-            }
-        }
-    }
-
-    fun setCurrentSort(sort: NewsSort) {
-        _currentSort.value = sort
-    }
-
-    suspend fun getMusicNews(clearList : Boolean) = viewModelScope.launch {
+    suspend fun getMusicNews(clearList : Boolean, sortBy : String) = viewModelScope.launch {
         if (_isLoading.value || isPaginationEnded) return@launch
 
         if (clearList) {
@@ -57,7 +41,7 @@ class NewsViewModel @Inject constructor(
         _isLoading.value = true
         _isError.value = ErrorState.NoError
         try {
-            repository.getMusicNews(page = page, pageSize = PAGE_SIZE, sortBy = _currentSort.value.name)
+            repository.getMusicNews(page = page, pageSize = PAGE_SIZE, sortBy = sortBy)
                 .collect { articles ->
                     if (articles.isNotEmpty()) {
                         _news.value += articles

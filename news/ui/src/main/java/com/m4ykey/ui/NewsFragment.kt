@@ -15,7 +15,6 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.domain.NewsSort
 import com.m4ykey.ui.adapter.NewsAdapter
 import com.m4ykey.ui.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,37 +27,26 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 
     private val viewModel by viewModels<NewsViewModel>()
     private val newsAdapter by lazy { createNewsAdapter() }
+    private var sortBy : String = "publishedAt"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bottomNavigationVisibility?.showBottomNavigation()
 
+        fetchNews(clearList = true)
         setupRecyclerView()
         setupToolbar()
         handleRecyclerViewButton()
-
-        lifecycleScope.launch {
-            if (viewModel.news.value.isEmpty()) {
-                viewModel.getMusicNews(clearList = true)
-            }
-        }
 
         lifecycleScope.launch {
             viewModel.news.collect { newsAdapter.submitList(it) }
         }
 
         lifecycleScope.launch {
-            viewModel.currentSort.collect {
-                viewModel.setCurrentSort(it)
-            }
-        }
-
-        lifecycleScope.launch {
             viewModel.isError.collect { errorState ->
-                when (errorState) {
-                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
-                    else -> {}
+                if (errorState is ErrorState.Error) {
+                    showToast(requireContext(), errorState.message.toString())
                 }
             }
         }
@@ -66,6 +54,14 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
         lifecycleScope.launch {
             viewModel.isLoading.collect {
                 binding.progressbar.isVisible = it
+            }
+        }
+    }
+
+    private fun fetchNews(clearList : Boolean) {
+        lifecycleScope.launch {
+            if (viewModel.news.value.isEmpty() || clearList) {
+                viewModel.getMusicNews(clearList = clearList, sortBy = sortBy)
             }
         }
     }
@@ -91,12 +87,14 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
         binding.apply {
             val buttons = listOf(
                 Pair(R.id.publishedAt) {
+                    sortBy = "publishedAt"
                     txtTitle.text = getString(R.string.latest_news)
-                    viewModel.setCurrentSort(NewsSort.PUBLISHED_AT)
+                    fetchNews(true)
                 },
                 Pair(R.id.popularity) {
+                    sortBy = "popularity"
                     txtTitle.text = getString(R.string.popular_news)
-                    viewModel.setCurrentSort(NewsSort.POPULARITY)
+                    fetchNews(true)
                 }
             )
             for ((itemId, action) in buttons) {
@@ -117,7 +115,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
                         if (!viewModel.isPaginationEnded && !viewModel.isLoading.value) {
-                            lifecycleScope.launch { viewModel.getMusicNews(clearList = false) }
+                            lifecycleScope.launch { viewModel.getMusicNews(clearList = false, sortBy = sortBy) }
                         }
                     }
                 }
