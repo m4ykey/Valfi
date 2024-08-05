@@ -1,16 +1,9 @@
 package com.m4ykey.ui
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.palette.graphics.Palette
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.ui.adapter.ColorAdapter

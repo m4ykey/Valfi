@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">Ustawienia</string>
+    <string name="connect_your_spotify_account">Połącz swoje konto Spotify</string>
+    <string name="let_our_app_and_spotify_work_together_to_bring_you_fresh_and_exciting_music_discoveries_every_day">Pozwól naszej aplikacji na dostęp do Twojego konta Spotify, aby codziennie dostarczać Ci nowych i ekscytujących odkryć muzycznych.</string>
+    <string name="connect">Połącz</string>
+    <string name="theme">Motyw</string>
+    <string name="light">Jasny</string>
+    <string name="dark">Ciemny</string>
+    <string name="compatible_with_phone_settings">Zgodny z motywem telefonu</string>
+    <string name="language">Język</string>
+    <string name="english">Angielski</string>
+    <string name="polish">Polski</string>
 </resources>

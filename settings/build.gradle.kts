@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.aboutLibrariesPlugin)
 }
 
 android {
@@ -38,11 +41,25 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":album:data"))
 
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)
     implementation(libs.androidMaterial)
+    implementation(libs.androidxNavigationUI)
+    implementation(libs.androidxNavigationFragment)
+    implementation(libs.androidxLifecycleViewmodel)
+    implementation(libs.androidxLifecycleRuntime)
+
+    implementation(libs.mpAndroidChart)
+
+    implementation(libs.aboutLibraries)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)
+
+    ksp(libs.hiltCompiler)
+    implementation(libs.hiltAndroid)
 }
