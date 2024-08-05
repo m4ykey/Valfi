@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidxNavigationFragment)
     implementation(libs.androidxLifecycleViewmodel)
     implementation(libs.androidxLifecycleRuntime)
+    implementation(libs.androidxDatastore)
 
     implementation(libs.mpAndroidChart)
 

@@ -11,4 +11,5 @@
     <string name="language">Język</string>
     <string name="english">Angielski</string>
     <string name="polish">Polski</string>
+    <string name="set_theme">Ustaw motyw</string>
 </resources>

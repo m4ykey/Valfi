@@ -113,7 +113,7 @@
             <LinearLayout
                 android:id="@+id/linearLayoutTheme"
                 android:gravity="center_vertical"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/materialCardView"
@@ -135,6 +135,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:textSize="16sp"
                         android:textColor="@color/textColor"
                         android:fontFamily="@font/outfit_medium"
                         android:text="@string/theme"
@@ -142,6 +143,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        android:id="@+id/txtTheme"
                         android:layout_marginTop="3dp"
                         android:textColor="@color/textColor2"
                         android:fontFamily="@font/outfit_regular"
@@ -156,7 +158,7 @@
             <LinearLayout
                 android:id="@+id/linearLayoutLanguage"
                 android:gravity="center_vertical"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/linearLayoutTheme"
@@ -178,6 +180,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:textSize="16sp"
                         android:textColor="@color/textColor"
                         android:fontFamily="@font/outfit_medium"
                         android:text="@string/language"

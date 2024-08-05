@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="SettingsTextStyle">
+    <style name="ThemeMaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="android:background">@color/background</item>
         <item name="android:textColor">@color/textColor</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/outfit_medium</item>
-        <item name="android:drawablePadding">10dp</item>
-        <item name="android:drawableTint">@color/textColor2</item>
+        <item name="android:textColorSecondary">@color/textColor2</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.AlertDialog" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
     </style>
 </resources>
