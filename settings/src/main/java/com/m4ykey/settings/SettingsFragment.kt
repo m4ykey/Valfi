@@ -1,5 +1,6 @@
 package com.m4ykey.settings
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BaseFragment
+import com.m4ykey.core.views.openUrlBrowser
 import com.m4ykey.settings.databinding.FragmentSettingsBinding
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
@@ -15,6 +17,7 @@ import com.m4ykey.settings.theme.setDarkTheme
 import com.m4ykey.settings.theme.setLightTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,6 +26,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 ) {
 
     private var selectedThemeIndex : Int = ThemeOptions.Default.index
+    private var selectedLanguageIndex : Int = 0
 
     @Inject
     lateinit var themePreferences: ThemePreferences
@@ -35,9 +39,41 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         binding.apply {
             toolbar.setOnClickListener { findNavController().navigateUp() }
             linearLayoutTheme.setOnClickListener { showThemeDialog() }
-            linearLayoutLanguage.setOnClickListener {  }
+            linearLayoutLanguage.setOnClickListener { showLanguageDialog() }
+
+            imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
+            imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }
         }
     }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf(
+            getString(R.string.english),
+            getString(R.string.polish)
+        )
+        val languageCodes = arrayOf("en", "pl")
+
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeMaterialAlertDialog)
+            .setTitle(R.string.select_language)
+            .setSingleChoiceItems(languages, -1) { dialog, which ->
+                val selectedLanguageCodes = languageCodes[which]
+                applyLanguage(requireContext(), selectedLanguageCodes)
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun applyLanguage(context : Context, languageCode : String) : Context {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = context.resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+
+        return context.createConfigurationContext(config)
+    }
+
 
     private fun showThemeDialog() {
         val themes = arrayOf(

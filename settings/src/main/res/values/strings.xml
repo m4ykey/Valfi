@@ -12,4 +12,6 @@
     <string name="english">English</string>
     <string name="polish">Polish</string>
     <string name="set_theme">Set theme</string>
+    <string name="select_language">Select language</string>
+    <string name="data_is_provided_by_the_services_spotify_and_newsapi">Data is provided by Spotify and NewsApi</string>
 </resources>

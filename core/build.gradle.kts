@@ -52,6 +52,7 @@ dependencies {
         implementation(androidxPalette)
         implementation(androidxDatastore)
         implementation(androidxRecyclerView)
+        implementation(androidxBrowser)
 
         implementation(androidMaterial)
 

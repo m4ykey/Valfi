@@ -1,9 +1,7 @@
 package com.m4ykey.ui
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
+import com.m4ykey.core.views.openUrlBrowser
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
@@ -67,19 +66,17 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
     }
 
     private fun handleRecyclerViewButton() {
-        binding.recyclerViewNews.addOnScrollListener(scrollListener(binding.btnToTop))
-
-        binding.btnToTop.setOnClickListener {
-            binding.recyclerViewNews.smoothScrollToPosition(0)
+        binding.apply {
+            recyclerViewNews.addOnScrollListener(scrollListener(btnToTop))
+            btnToTop.setOnClickListener {
+                recyclerViewNews.smoothScrollToPosition(0)
+            }
         }
     }
 
     private fun createNewsAdapter() : NewsAdapter {
         return NewsAdapter(
-            onNewsClick = { article ->
-                val customTabsIntent = CustomTabsIntent.Builder().build()
-                customTabsIntent.launchUrl(requireContext(), Uri.parse(article.url))
-            }
+            onNewsClick = { article -> openUrlBrowser(requireContext(), article.url) }
         )
     }
 
@@ -115,7 +112,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
                         if (!viewModel.isPaginationEnded && !viewModel.isLoading.value) {
-                            lifecycleScope.launch { viewModel.getMusicNews(clearList = false, sortBy = sortBy) }
+                            lifecycleScope.launch { fetchNews(false) }
                         }
                     }
                 }
