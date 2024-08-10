@@ -1,5 +1,6 @@
 package com.m4ykey.settings
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +22,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     FragmentSettingsBinding::inflate
 ) {
 
-    private var selectedThemeIndex : Int = ThemeOptions.DEFAULT.index
+    private var selectedThemeIndex : Int = ThemeOptions.Default.index
 
     @Inject
     lateinit var themePreferences: ThemePreferences
@@ -59,7 +60,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 
     private fun saveSelectedThemeOptions(themeOption : ThemeOptions) {
         lifecycleScope.launch {
-            if (themeOption == ThemeOptions.DEFAULT) {
+            if (themeOption == ThemeOptions.Default) {
                 themePreferences.deleteThemeOptions(requireContext())
             } else {
                 themePreferences.saveThemeOptions(requireContext(), themeOption)
@@ -71,17 +72,17 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         binding.apply {
             lifecycleScope.launch {
                 when (theme) {
-                    ThemeOptions.LIGHT -> setLightTheme(
+                    ThemeOptions.Light -> setLightTheme(
                         context = requireContext(),
                         imageView = imgThemeIcon,
                         textView = txtTheme
                     )
-                    ThemeOptions.DARK -> setDarkTheme(
+                    ThemeOptions.Dark -> setDarkTheme(
                         context = requireContext(),
                         imageView = imgThemeIcon,
                         textView = txtTheme
                     )
-                    ThemeOptions.DEFAULT -> setCompatibleWithPhoneSettings(
+                    ThemeOptions.Default -> setCompatibleWithPhoneSettings(
                         context = requireContext(),
                         imageView = imgThemeIcon,
                         textView = txtTheme
@@ -90,5 +91,39 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                 selectedThemeIndex = theme.index
             }
         }
+    }
+
+    private fun readSelectedOptions() {
+        binding.apply {
+            lifecycleScope.launch {
+                val getSelectedOptions = themePreferences.getSelectedThemeOptions(requireContext())
+                when (getSelectedOptions) {
+                    ThemeOptions.Dark -> {
+                        txtTheme.text = getString(R.string.dark)
+                        imgThemeIcon.setImageResource(R.drawable.ic_moon)
+                    }
+                    ThemeOptions.Light -> {
+                        txtTheme.text = getString(R.string.light)
+                        imgThemeIcon.setImageResource(R.drawable.ic_sun)
+                    }
+                    else -> {
+                        val nightModeFlags = requireContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                        val isNightMode = when (nightModeFlags) {
+                            Configuration.UI_MODE_NIGHT_YES -> true
+                            Configuration.UI_MODE_NIGHT_NO -> false
+                            else -> false
+                        }
+
+                        if (isNightMode) imgThemeIcon.setImageResource(R.drawable.ic_moon) else imgThemeIcon.setImageResource(R.drawable.ic_sun)
+                        txtTheme.text = getString(R.string.compatible_with_phone_settings)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        readSelectedOptions()
     }
 }
