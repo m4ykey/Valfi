@@ -97,6 +97,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         binding.apply {
             lifecycleScope.launch {
                 val getSelectedOptions = themePreferences.getSelectedThemeOptions(requireContext())
+                selectedThemeIndex = getSelectedOptions.index
                 when (getSelectedOptions) {
                     ThemeOptions.Dark -> {
                         txtTheme.text = getString(R.string.dark)
