@@ -112,7 +112,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
                         if (!viewModel.isPaginationEnded && !viewModel.isLoading.value) {
-                            lifecycleScope.launch { fetchNews(false) }
+                            lifecycleScope.launch { viewModel.getMusicNews(false, sortBy) }
                         }
                     }
                 }
