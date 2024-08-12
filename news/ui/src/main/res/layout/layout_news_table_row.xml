@@ -25,6 +25,7 @@
         android:textColor="@color/textColor"
         android:layout_marginTop="5dp"
         android:id="@+id/txtTitle"
+        android:ellipsize="end"
         android:textSize="18sp"
         android:fontFamily="@font/inter_medium"
         android:maxLines="3"
