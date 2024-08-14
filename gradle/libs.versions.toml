@@ -42,8 +42,6 @@ converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", v
 moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
 moshiCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version = "1.15.1" }
 
-timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
-
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }

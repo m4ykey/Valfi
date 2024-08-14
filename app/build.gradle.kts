@@ -13,7 +13,7 @@ plugins {
 
 val versionMajor = 0
 val versionMinor = 7
-val versionPatch = 3
+val versionPatch = 4
 
 android {
     namespace = "com.m4ykey.valfi2"
@@ -91,8 +91,6 @@ dependencies {
 
         implementation(hiltAndroid)
         ksp(hiltCompiler)
-
-        implementation(timber)
 
         implementation(firebaseCrashlytics)
         implementation(firebasePerformance)

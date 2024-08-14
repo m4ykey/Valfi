@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.network.ErrorState
@@ -27,6 +28,8 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
     private val viewModel by viewModels<NewsViewModel>()
     private val newsAdapter by lazy { createNewsAdapter() }
     private var sortBy : String = "publishedAt"
+    private var selectedListType : ListType = ListType.TABLE
+    private var isListViewChanged = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,6 +57,14 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
             viewModel.isLoading.collect {
                 binding.progressbar.isVisible = it
             }
+        }
+    }
+
+    private fun setRecyclerViewLayout(isListView : Boolean) {
+        val listType = if (isListView) ListType.LIST else ListType.TABLE
+        binding.recyclerViewNews.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            newsAdapter.listType = listType
         }
     }
 
@@ -99,6 +110,16 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                     action.invoke()
                     true
                 }
+            }
+            toolbar.menu.findItem(R.id.viewType).setOnMenuItemClickListener {
+                isListViewChanged = !isListViewChanged
+                if (isListViewChanged) {
+                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
+                } else {
+                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
+                }
+                setRecyclerViewLayout(isListViewChanged)
+                true
             }
         }
     }

@@ -1,21 +1,35 @@
 package com.m4ykey.ui.adapter.viewholder
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.m4ykey.core.views.formatDate
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.ui.R
-import com.m4ykey.ui.databinding.LayoutNewsListBinding
+import com.m4ykey.ui.databinding.LayoutNewsTableRowBinding
 import com.m4ykey.ui.logos.logos
 
-class NewsViewHolder(
-    binding: LayoutNewsListBinding,
+class NewsTableViewHolder(
+    binding : LayoutNewsTableRowBinding,
     private val onNewsClick : (Article) -> Unit
-) : BaseViewHolder<Article, LayoutNewsListBinding>(binding) {
+) : BaseViewHolder<Article, LayoutNewsTableRowBinding>(binding) {
 
-    override fun bind(item : Article) {
+    companion object {
+        fun create(
+            parent : ViewGroup,
+            onNewsClick: (Article) -> Unit
+        ) : NewsTableViewHolder {
+            return NewsTableViewHolder(
+                binding = LayoutNewsTableRowBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                onNewsClick = onNewsClick
+            )
+        }
+    }
+
+    override fun bind(item: Article) {
         with(binding) {
-            layoutArticle.setOnClickListener { onNewsClick(item) }
+            linearLayoutArticle.setOnClickListener { onNewsClick(item) }
 
             val formatDate = formatDate(
                 item.publishedAt,
