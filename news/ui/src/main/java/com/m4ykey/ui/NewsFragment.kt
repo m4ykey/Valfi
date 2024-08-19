@@ -15,10 +15,13 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
+import com.m4ykey.data.preferences.ListType
+import com.m4ykey.data.preferences.NewsPreferences
 import com.m4ykey.ui.adapter.NewsAdapter
 import com.m4ykey.ui.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NewsFragment : BaseFragment<FragmentNewsBinding>(
@@ -28,8 +31,9 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
     private val viewModel by viewModels<NewsViewModel>()
     private val newsAdapter by lazy { createNewsAdapter() }
     private var sortBy : String = "publishedAt"
-    private var selectedListType : ListType = ListType.TABLE
     private var isListViewChanged = false
+    @Inject
+    lateinit var newsPreferences: NewsPreferences
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,7 +71,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
             ?.findFirstVisibleItemPosition()
 
         binding.recyclerViewNews.apply {
-            layoutManager = LinearLayoutManager(requireContext())
             newsAdapter.listType = listType
 
             currentScrollPosition?.let { position ->
@@ -121,12 +124,16 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
             }
             toolbar.menu.findItem(R.id.viewType).setOnMenuItemClickListener {
                 isListViewChanged = !isListViewChanged
-                if (isListViewChanged) {
-                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
-                } else {
-                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
+                lifecycleScope.launch {
+                    if (isListViewChanged) {
+                        newsPreferences.saveSelectedListType(requireContext(), ListType.LIST)
+                        toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
+                    } else {
+                        newsPreferences.deleteSelectedListType(requireContext())
+                        toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
+                    }
+                    setRecyclerViewLayout(isListViewChanged)
                 }
-                setRecyclerViewLayout(isListViewChanged)
                 true
             }
         }
@@ -147,5 +154,27 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                 }
             })
         }
+    }
+
+    private fun readSelectedListType() {
+        lifecycleScope.launch {
+            val selectedListType = newsPreferences.getSelectedListType(requireContext())
+
+            binding.apply {
+                if (selectedListType != null) {
+                    newsAdapter.listType = selectedListType
+                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
+                    isListViewChanged = selectedListType == ListType.LIST
+                } else {
+                    newsAdapter.listType = ListType.TABLE
+                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        readSelectedListType()
     }
 }

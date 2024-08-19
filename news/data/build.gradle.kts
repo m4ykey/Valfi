@@ -50,5 +50,7 @@ dependencies {
         implementation(hiltAndroid)
         ksp(hiltCompiler)
 
+        implementation(androidxDatastore)
+
     }
 }

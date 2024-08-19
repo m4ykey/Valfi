@@ -416,8 +416,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                     chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
                     isListViewChanged = selectedViewType == ViewType.LIST
                 } else {
-                    val defaultViewType = ViewType.GRID
-                    albumAdapter.viewType = defaultViewType
+                    albumAdapter.viewType = ViewType.GRID
                     chipList.setChipIconResource(R.drawable.ic_list)
                 }
 

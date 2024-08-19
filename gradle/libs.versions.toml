@@ -59,7 +59,7 @@ mpAndroidChart = { group = "com.github.PhilJay", name = "MPAndroidChart", versio
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.0" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.22" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.10-1.0.24" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }

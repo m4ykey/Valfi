@@ -1,4 +1,4 @@
-package com.m4ykey.ui
+package com.m4ykey.data.preferences
 
 enum class ListType {
     LIST,
