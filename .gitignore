@@ -18,3 +18,4 @@ google-services.json
 key.jks
 app/release
 .kotlin/sessions
+/.idea/other.xml

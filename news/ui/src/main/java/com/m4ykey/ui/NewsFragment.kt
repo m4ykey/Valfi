@@ -62,9 +62,17 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 
     private fun setRecyclerViewLayout(isListView : Boolean) {
         val listType = if (isListView) ListType.LIST else ListType.TABLE
+
+        val currentScrollPosition = (binding.recyclerViewNews.layoutManager as? LinearLayoutManager)
+            ?.findFirstVisibleItemPosition()
+
         binding.recyclerViewNews.apply {
             layoutManager = LinearLayoutManager(requireContext())
             newsAdapter.listType = listType
+
+            currentScrollPosition?.let { position ->
+                layoutManager?.scrollToPosition(position)
+            }
         }
     }
 
