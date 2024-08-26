@@ -6,12 +6,12 @@ lifecycle = "2.8.4"
 hilt = "2.52"
 okhttp = "4.12.0"
 room = "2.6.1"
-libraries = "11.2.2"
+libraries = "11.2.3"
 coroutines = "1.9.0-RC.2"
 
 [libraries]
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.0.3" }
-firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.0.2" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.1.0" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.1" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
