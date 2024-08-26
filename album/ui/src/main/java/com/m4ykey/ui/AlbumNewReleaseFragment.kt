@@ -85,7 +85,12 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         binding.recyclerViewNewRelease.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
             adapter = albumAdapter
-            layoutManager = setupGridLayoutManager(requireContext(), 110f)
+            val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
+            layoutManager = if (isTablet) {
+                setupGridLayoutManager(requireContext(), 150f)
+            } else {
+                setupGridLayoutManager(requireContext(), 110f)
+            }
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

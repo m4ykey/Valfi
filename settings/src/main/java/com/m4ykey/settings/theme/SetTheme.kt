@@ -23,7 +23,7 @@ fun setCompatibleWithPhoneSettings(
             imageView.setImageResource(R.drawable.ic_sun)
         }
         else -> {
-            textView.text = context.getString(R.string.compatible_with_phone_settings)
+            textView.text = context.getString(R.string.compatible_with_device_settings)
         }
     }
     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)

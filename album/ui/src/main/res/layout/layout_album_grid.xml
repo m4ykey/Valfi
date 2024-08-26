@@ -5,7 +5,7 @@
     android:id="@+id/layoutAlbum"
     android:orientation="vertical"
     android:layout_marginBottom="10dp"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/grid_card_view_size"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -19,8 +19,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewImage"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="@dimen/grid_card_view_size"
+            android:layout_height="@dimen/grid_card_view_size"
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
         <TextView
             android:fontFamily="@font/inter_medium"
             android:id="@+id/txtAlbum"
-            android:layout_width="110dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/txtArtist"
-            android:layout_width="110dp"
+            android:layout_width="match_parent"
             android:fontFamily="@font/outfit_regular"
             android:layout_height="wrap_content"
             android:ellipsize="end"

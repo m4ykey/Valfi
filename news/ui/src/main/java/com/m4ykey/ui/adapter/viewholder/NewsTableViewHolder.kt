@@ -29,7 +29,7 @@ class NewsTableViewHolder(
 
     override fun bind(item: Article) {
         with(binding) {
-            linearLayoutArticle.setOnClickListener { onNewsClick(item) }
+            constraintLayoutArticle.setOnClickListener { onNewsClick(item) }
 
             val formatDate = formatDate(
                 item.publishedAt,

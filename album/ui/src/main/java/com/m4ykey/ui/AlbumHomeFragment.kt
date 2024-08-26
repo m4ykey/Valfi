@@ -201,7 +201,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             layoutManager = if (isListView) {
                 LinearLayoutManager(requireContext())
             } else {
-                setupGridLayoutManager(requireContext(), 110f)
+                val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
+                if (isTablet) {
+                    setupGridLayoutManager(requireContext(), 150f)
+                } else {
+                    setupGridLayoutManager(requireContext(), 110f)
+                }
             }
             albumAdapter.viewType = viewType
         }
@@ -214,7 +219,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())
             } else {
-                setupGridLayoutManager(requireContext(), 110f)
+                val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
+                if (isTablet) {
+                    setupGridLayoutManager(requireContext(), 150f)
+                } else {
+                    setupGridLayoutManager(requireContext(), 110f)
+                }
             }
             adapter = albumAdapter
         }

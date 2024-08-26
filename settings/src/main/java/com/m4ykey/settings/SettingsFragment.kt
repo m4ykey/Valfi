@@ -79,7 +79,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         val themes = arrayOf(
             getString(R.string.light),
             getString(R.string.dark),
-            getString(R.string.compatible_with_phone_settings)
+            getString(R.string.compatible_with_device_settings)
         )
 
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeMaterialAlertDialog)
@@ -152,7 +152,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                         }
 
                         if (isNightMode) imgThemeIcon.setImageResource(R.drawable.ic_moon) else imgThemeIcon.setImageResource(R.drawable.ic_sun)
-                        txtTheme.text = getString(R.string.compatible_with_phone_settings)
+                        txtTheme.text = getString(R.string.compatible_with_device_settings)
                     }
                 }
             }

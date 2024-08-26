@@ -7,7 +7,7 @@
     <string name="theme">Motyw</string>
     <string name="light">Jasny</string>
     <string name="dark">Ciemny</string>
-    <string name="compatible_with_phone_settings">Zgodny z motywem telefonu</string>
+    <string name="compatible_with_device_settings">Zgodny z motywem urządzenia</string>
     <string name="language">Język</string>
     <string name="english">Angielski</string>
     <string name="polish">Polski</string>
