@@ -167,7 +167,12 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun setupRecyclerView() {
         binding.recyclerViewListenLater.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-            layoutManager = setupGridLayoutManager(requireContext(), 110f)
+            val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
+            layoutManager = if (isTablet) {
+                setupGridLayoutManager(requireContext(), 150f)
+            } else {
+                setupGridLayoutManager(requireContext(), 110f)
+            }
             adapter = albumAdapter
         }
     }
