@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
@@ -224,6 +225,21 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     }
                 }
             })
+
+            lifecycleScope.launch {
+                viewModel.totalTracksDuration.collect { totalDuration ->
+                    val hours = (totalDuration / 1000) / 3600
+                    val minutes = ((totalDuration / 1000) % 3600) / 60
+                    val seconds = (totalDuration / 1000) % 60
+
+                    val formattedDuration = when {
+                        hours > 0 -> String.format(Locale.getDefault(), "%d:%02d", hours, minutes)
+                        minutes > 0 -> String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
+                        else -> String.format(Locale.getDefault(), "%d sec", seconds)
+                    }
+                    binding.txtTotalDuration.text = formattedDuration
+                }
+            }
         }
     }
 

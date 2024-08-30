@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -55,6 +56,9 @@ class AlbumViewModel @Inject constructor(
     private val _isError = MutableStateFlow<ErrorState>(ErrorState.NoError)
     val isError : StateFlow<ErrorState> get() = _isError
 
+    private var _totalTrackDurationMs = MutableStateFlow(0L)
+    val totalTracksDuration : StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
+
     private var offset = 0
     var isPaginationEnded = false
 
@@ -82,6 +86,10 @@ class AlbumViewModel @Inject constructor(
                         val currentList = _tracks.value.toMutableList()
                         currentList.addAll(tracks)
                         _tracks.value = currentList
+
+                        val totalDuration = tracks.sumOf { it.durationMs.toLong() }
+                        _totalTrackDurationMs.value += totalDuration
+
                         offset += PAGE_SIZE
                         if (tracks.size < PAGE_SIZE) isPaginationEnded = true
                     } else {

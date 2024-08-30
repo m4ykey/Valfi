@@ -176,6 +176,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayoutRecyclerView"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -204,6 +205,18 @@
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
+
+            <TextView
+                android:layout_margin="10dp"
+                android:fontFamily="@font/inter_medium"
+                android:textSize="16sp"
+                android:textColor="@color/textColor2"
+                android:id="@+id/txtTotalDuration"
+                tools:text="2h 34min"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutRecyclerView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
