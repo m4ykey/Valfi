@@ -1,5 +1,6 @@
 package com.m4ykey.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,6 +27,7 @@ import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.preferences.AlbumPreferences
+import com.m4ykey.settings.SettingsActivity
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.animationPropertiesY
@@ -301,8 +303,8 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             val drawerButtons = listOf(
                 Pair(R.id.imgSettings) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToSettingsFragment()
-                    findNavController().navigate(action)
+                    val intent = Intent(requireContext(), SettingsActivity::class.java)
+                    startActivity(intent)
                     drawerLayout.close()
                 },
                 Pair(R.id.imgListenLater) {

@@ -26,7 +26,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 ) {
 
     private var selectedThemeIndex : Int = ThemeOptions.Default.index
-    private var selectedLanguageIndex : Int = 0
+    //private var selectedLanguageIndex : Int = 0
 
     @Inject
     lateinit var themePreferences: ThemePreferences
@@ -34,12 +34,14 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.hideBottomNavigation()
-
         binding.apply {
-            toolbar.setOnClickListener { findNavController().navigateUp() }
+            toolbar.setOnClickListener { activity?.finish() }
             linearLayoutTheme.setOnClickListener { showThemeDialog() }
             linearLayoutLanguage.setOnClickListener { showLanguageDialog() }
+            linearLayoutLibraries.setOnClickListener {
+                val action = SettingsFragmentDirections.actionSettingsFragmentToOpenSourceLibraryFragment()
+                findNavController().navigate(action)
+            }
 
             imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
             imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }

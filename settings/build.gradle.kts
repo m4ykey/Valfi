@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.aboutLibrariesPlugin)
+    alias(libs.plugins.safeargs)
 }
 
 android {
@@ -55,6 +56,8 @@ dependencies {
     implementation(libs.mpAndroidChart)
 
     implementation(libs.aboutLibraries)
+    implementation(libs.activity)
+    implementation(libs.androidxConstraintLayout)
 
     testImplementation(libs.junit)
 

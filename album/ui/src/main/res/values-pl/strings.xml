@@ -40,4 +40,5 @@
     <string name="nothing_found">Nic nie znaleziono</string>
     <string name="speech_not_recognition">Rozpoznawanie mowy jest niedostępne</string>
     <string name="enter_album_name">Wprowadź nazwę albumu</string>
+    <string name="informations">Informations</string>
 </resources>

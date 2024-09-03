@@ -43,6 +43,7 @@
     <string name="empty_string" translatable="false" />
     <string name="speech_not_recognition">Speech recognition is not available</string>
     <string name="enter_album_name">Enter album name</string>
+    <string name="informations">Informations</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>
