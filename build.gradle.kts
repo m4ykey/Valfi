@@ -8,6 +8,5 @@ plugins {
     alias(libs.plugins.safeargs) apply false
     alias(libs.plugins.gms) apply false
     alias(libs.plugins.crashlytics) apply false
-    alias(libs.plugins.aboutLibrariesPlugin) apply false
     alias(libs.plugins.performance) apply false
 }

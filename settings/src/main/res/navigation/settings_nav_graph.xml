@@ -9,14 +9,5 @@
         tools:layout="@layout/fragment_settings"
         android:id="@+id/settingsFragment"
         android:name="com.m4ykey.settings.SettingsFragment"
-        android:label="SettingsFragment">
-        <action
-            android:id="@+id/action_settingsFragment_to_openSourceLibraryFragment"
-            app:destination="@id/openSourceLibraryFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/openSourceLibraryFragment"
-        android:name="com.m4ykey.settings.OpenSourceLibraryFragment"
-        android:label="fragment_open_source_library"
-        tools:layout="@layout/fragment_open_source_library" />
+        android:label="SettingsFragment"/>
 </navigation>
