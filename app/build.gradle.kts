@@ -11,9 +11,9 @@ plugins {
     alias(libs.plugins.performance)
 }
 
-val versionMajor = 0
-val versionMinor = 7
-val versionPatch = 5
+val versionMajor = 1
+val versionMinor = 0
+val versionPatch = 0
 
 android {
     namespace = "com.m4ykey.valfi2"
