@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="EditTextTheme" parent="android:Theme.Material">
         <item name="android:colorAccent">@color/buttonColor</item>
     </style>

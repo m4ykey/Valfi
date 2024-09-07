@@ -12,10 +12,8 @@ class ColorViewHolder(
 
     override fun bind(item: ColorList) {
         with(binding) {
-            colorLayout.apply {
-                setOnClickListener { onColorClick(item) }
-                setBackgroundColor(item.color)
-            }
+            colorLayout.setOnClickListener { onColorClick(item) }
+            viewColor.setBackgroundColor(item.color)
         }
     }
 }

@@ -5,4 +5,13 @@
     app:cardElevation="0dp"
     android:layout_height="50dp"
     android:layout_margin="10dp"
-    android:id="@+id/colorLayout"/>
+    app:cardCornerRadius="100dp"
+    android:id="@+id/colorLayout">
+
+    <View
+        android:id="@+id/viewColor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"/>
+
+</androidx.cardview.widget.CardView>

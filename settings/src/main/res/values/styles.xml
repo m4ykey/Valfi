@@ -6,10 +6,16 @@
         <item name="android:background">@color/background</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textColorSecondary">@color/textColor2</item>
+        <item name="radioButtonStyle">@style/CustomRadioButton</item>
     </style>
 
     <style name="ShapeAppearance.Material3.AlertDialog" parent="ShapeAppearance.Material3.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10dp</item>
     </style>
+    
+    <style name="CustomRadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:buttonTint">@color/textColor</item>
+    </style>
+    
 </resources>
