@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AttentionDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/positiveButtonStyle</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="android:background">@color/background</item>
+        <item name="titleTextColor">@color/textColor</item>
+        <item name="fontFamily">@font/outfit_medium</item>
+    </style>
+</resources>

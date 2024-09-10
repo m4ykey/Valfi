@@ -2,5 +2,7 @@
     <string name="app_name">Valfi</string>
     <string name="album" translatable="false">Album</string>
     <string name="news">News</string>
-    <string name="no_internet_connection">No internet connection</string>
+    <string name="attention">Attention!</string>
+    <string name="attention_message">This app is designed exclusively for saving music albums. It does not support music playback.</string>
+    <string name="close">Close</string>
 </resources>

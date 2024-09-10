@@ -84,6 +84,7 @@ dependencies {
         implementation(androidxCore)
         implementation(androidxNavigationUI)
         implementation(androidxNavigationFragment)
+        implementation(androidxDatastore)
 
         testImplementation(junit)
         androidTestImplementation(extJunit)

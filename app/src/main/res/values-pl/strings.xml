@@ -2,5 +2,7 @@
 <resources>
     <string name="app_name">Valfi</string>
     <string name="news">Wiadomości</string>
-    <string name="no_internet_connection">Brak połączenia z internetem</string>
+    <string name="attention">Uwaga!</string>
+    <string name="attention_message">Ta aplikacja służy tylko do zapisywania swoich ulubionych albumów muzycznych. Nie obsługuje ona odtwarzania muzyki.</string>
+    <string name="close">Zamknij</string>
 </resources>
