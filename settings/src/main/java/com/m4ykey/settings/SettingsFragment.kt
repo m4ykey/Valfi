@@ -36,6 +36,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 
             imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
             imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }
+            linearLayoutGithub.setOnClickListener { openUrlBrowser(requireContext(), "https://github.com/m4ykey/Valfi-2") }
         }
     }
 

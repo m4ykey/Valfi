@@ -41,4 +41,6 @@
     <string name="speech_not_recognition">Rozpoznawanie mowy jest niedostępne</string>
     <string name="enter_album_name">Wprowadź nazwę albumu</string>
     <string name="informations">Informations</string>
+    <string name="hour">godz.</string>
+    <string name="sec">sek.</string>
 </resources>

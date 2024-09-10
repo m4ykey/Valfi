@@ -44,6 +44,8 @@
     <string name="speech_not_recognition">Speech recognition is not available</string>
     <string name="enter_album_name">Enter album name</string>
     <string name="informations">Informations</string>
+    <string name="hour">h</string>
+    <string name="sec">sec.</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>

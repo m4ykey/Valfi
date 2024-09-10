@@ -227,15 +227,16 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             })
 
             lifecycleScope.launch {
+                delay(500L)
                 viewModel.totalTracksDuration.collect { totalDuration ->
                     val hours = (totalDuration / 1000) / 3600
                     val minutes = ((totalDuration / 1000) % 3600) / 60
                     val seconds = (totalDuration / 1000) % 60
 
                     val formattedDuration = when {
-                        hours > 0 -> String.format(Locale.getDefault(), "%d:%02d", hours, minutes)
-                        minutes > 0 -> String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
-                        else -> String.format(Locale.getDefault(), "%d sec", seconds)
+                        hours > 0 -> String.format(Locale.getDefault(), "%d ${getString(R.string.hour)} %d min", hours, minutes)
+                        minutes > 0 -> String.format(Locale.getDefault(), "%d min %d ${getString(R.string.sec)}", minutes, seconds)
+                        else -> String.format(Locale.getDefault(), "%d ${getString(R.string.sec)}", seconds)
                     }
                     binding.txtTotalDuration.text = formattedDuration
                 }

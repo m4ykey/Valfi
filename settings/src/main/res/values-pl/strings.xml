@@ -14,4 +14,6 @@
     <string name="set_theme">Ustaw motyw</string>
     <string name="select_language">Ustaw język</string>
     <string name="data_is_provided_by_the_services_spotify_and_newsapi">Dane są dostarczane przez Spotify oraz NewsApi</string>
+    <string name="open_source">Kod Źródłowy</string>
+    <string name="visit_the_project_on_github">Odwiedź projekt na Githubie</string>
 </resources>
