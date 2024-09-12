@@ -1,7 +1,9 @@
 package com.m4ykey.ui
 
+import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -10,7 +12,9 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import android.view.inputmethod.EditorInfo
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -47,9 +51,12 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             if (!matches.isNullOrEmpty()) {
                 val spokenText = matches[0]
                 binding.etSearch.setText(spokenText)
+                lifecycleScope.launch { viewModel.searchAlbums(spokenText) }
             }
         }
     }
+
+    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
 
     private var originalWidth : Int = 0
 
@@ -83,6 +90,31 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         binding.etSearch.post {
             originalWidth = binding.etSearch.width
         }
+
+        requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted : Boolean ->
+            if (isGranted) {
+                recordAudio()
+            } else {
+                showToast(requireContext(), getString(R.string.permission_not_granted))
+            }
+        }
+    }
+
+    private fun requestPermission() {
+        if (isRecordAudioPermissionGranted()) {
+            recordAudio()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+
+    private fun isRecordAudioPermissionGranted() : Boolean {
+        return ActivityCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun createSearchAdapter() : SearchAlbumAdapter {
@@ -163,7 +195,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 val isSearchEmpty = text.isNullOrBlank()
                 handleClearButtonVisibility(isSearchEmpty)
             }
-            imgMicrophone.setOnClickListener { recordAudio() }
+            imgMicrophone.setOnClickListener { requestPermission() }
 
             imgClear.setOnClickListener {
                 etSearch.setText(getString(R.string.empty_string))
