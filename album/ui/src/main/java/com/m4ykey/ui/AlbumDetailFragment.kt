@@ -238,7 +238,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                         minutes > 0 -> String.format(Locale.getDefault(), "%d min %d ${getString(R.string.sec)}", minutes, seconds)
                         else -> String.format(Locale.getDefault(), "%d ${getString(R.string.sec)}", seconds)
                     }
-                    binding.txtTotalDuration.text = formattedDuration
+                    binding.txtTotalDuration.text = getString(R.string.duration, formattedDuration)
                 }
             }
         }

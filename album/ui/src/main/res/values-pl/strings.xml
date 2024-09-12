@@ -44,4 +44,5 @@
     <string name="hour">godz.</string>
     <string name="sec">sek.</string>
     <string name="permission_not_granted">Nie przyznano uprawnień</string>
+    <string name="duration">"Czas trwania: %1$s"</string>
 </resources>

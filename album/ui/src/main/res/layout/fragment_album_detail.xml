@@ -197,26 +197,26 @@
                     android:layout_height="wrap_content"/>
 
                 <ProgressBar
+                    android:layout_gravity="center"
                     android:visibility="gone"
                     tools:visibility="visible"
+                    style="@style/progressBarStyle"
                     android:indeterminateTint="@color/progressBar"
                     android:id="@+id/progressBarTracks"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor2"
+                    android:id="@+id/txtTotalDuration"
+                    tools:text="2h 34min"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
-
-            <TextView
-                android:layout_margin="10dp"
-                android:fontFamily="@font/inter_medium"
-                android:textSize="16sp"
-                android:textColor="@color/textColor2"
-                android:id="@+id/txtTotalDuration"
-                tools:text="2h 34min"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutRecyclerView"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
