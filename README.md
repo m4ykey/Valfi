@@ -26,6 +26,12 @@ storePassword=XYZ
 storeFile=File XYZ
 ```
 
+## TODO
+- [ ] Addition of an option to connect the app to your Spotify account 
+- [ ] Option to import and export data to file
+- [ ] Adding notifications
+- [ ] Integration with additional data sources for interesting music propositions
+
 ## Music news providers
 - [RollingStone](https://www.rollingstone.com/)
 - [Billboard](https://www.billboard.com/)
