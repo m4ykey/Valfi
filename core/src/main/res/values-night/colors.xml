@@ -5,4 +5,5 @@
     <color name="textColor">@color/white</color>
     <color name="textColor2">#BDBDBD</color>
     <color name="navigationIconColor">@color/white</color>
+    <color name="alertBackground">#2B2B2B</color>
 </resources>

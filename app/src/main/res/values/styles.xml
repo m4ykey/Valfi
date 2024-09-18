@@ -4,7 +4,7 @@
         <item name="buttonBarPositiveButtonStyle">@style/positiveButtonStyle</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
         <item name="shapeAppearanceOverlay">@null</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/alertBackground</item>
         <item name="titleTextColor">@color/textColor</item>
         <item name="fontFamily">@font/outfit_medium</item>
     </style>

@@ -9,5 +9,6 @@
     <color name="background">@color/white</color>
     <color name="textColor2">#424242</color>
     <color name="navigationIconColor">@color/black</color>
+    <color name="alertBackground">#ECECEC</color>
 
 </resources>

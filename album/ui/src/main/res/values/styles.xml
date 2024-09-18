@@ -33,7 +33,7 @@
         <item name="buttonBarNegativeButtonStyle">@style/negativeButtonStyle</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
         <item name="shapeAppearanceOverlay">@null</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/alertBackground</item>
     </style>
 
     <style name="positiveButtonStyle" parent="Widget.Material3.Button.TextButton">
@@ -54,7 +54,7 @@
     <style name="SortMaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
         <item name="shapeAppearanceOverlay">@null</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/alertBackground</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textColorSecondary">@color/textColor2</item>
     </style>
