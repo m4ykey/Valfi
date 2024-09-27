@@ -48,10 +48,6 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         lifecycleScope.launch {
             viewModel.newRelease.collectLatest { releases ->
                 albumAdapter.submitList(releases)
-
-                if (releases.isNotEmpty()) {
-                    scheduleNotificationWorker()
-                }
             }
         }
 
@@ -112,13 +108,5 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
                 }
             })
         }
-    }
-
-    private fun scheduleNotificationWorker() {
-        val notificationRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(5, TimeUnit.SECONDS)
-            .build()
-
-        WorkManager.getInstance(requireContext()).enqueue(notificationRequest)
     }
 }
