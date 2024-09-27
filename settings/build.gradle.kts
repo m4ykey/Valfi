@@ -52,9 +52,7 @@ dependencies {
     implementation(libs.androidxLifecycleRuntime)
     implementation(libs.androidxDatastore)
 
-    implementation(libs.mpAndroidChart)
-
-    implementation(libs.activity)
+    implementation(libs.androidxActivity)
     implementation(libs.androidxConstraintLayout)
 
     testImplementation(libs.junit)

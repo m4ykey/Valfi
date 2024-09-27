@@ -33,7 +33,7 @@
                     android:textColor="@color/textColor"
                     android:textSize="20sp"
                     android:fontFamily="@font/inter_medium"
-                    android:text="@string/new_releases"
+                    android:text="@string/discover_new_releases"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

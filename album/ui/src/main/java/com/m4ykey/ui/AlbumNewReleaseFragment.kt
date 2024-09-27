@@ -7,6 +7,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
@@ -15,11 +17,13 @@ import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
+import com.m4ykey.data.worker.NotificationWorker
 import com.m4ykey.ui.adapter.NewReleaseAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
@@ -42,7 +46,13 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.newRelease.collectLatest { albumAdapter.submitList(it) }
+            viewModel.newRelease.collectLatest { releases ->
+                albumAdapter.submitList(releases)
+
+                if (releases.isNotEmpty()) {
+                    scheduleNotificationWorker()
+                }
+            }
         }
 
         lifecycleScope.launch {
@@ -102,5 +112,13 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
                 }
             })
         }
+    }
+
+    private fun scheduleNotificationWorker() {
+        val notificationRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setInitialDelay(5, TimeUnit.SECONDS)
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(notificationRequest)
     }
 }
