@@ -1,4 +1,4 @@
-package com.m4ykey.data.remote.interceptor
+package com.m4ykey.core.network.interceptor
 
 import android.content.Context
 import android.net.ConnectivityManager

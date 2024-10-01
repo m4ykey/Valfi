@@ -4,7 +4,7 @@ import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.data.remote.api.TrackApi
-import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
+import com.m4ykey.core.network.interceptor.SpotifyTokenProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -1,6 +1,6 @@
-package com.m4ykey.data.remote.interceptor.token
+package com.m4ykey.core.network.interceptor.token
 
-import com.m4ykey.data.remote.api.AuthApi
+import com.m4ykey.core.network.api.AuthApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -11,7 +11,10 @@ suspend fun fetchAccessToken(clientId: String, clientSecret: String, api: AuthAp
 
     return try {
         withContext(Dispatchers.IO) {
-            val response = api.getAccessToken(token = token)
+            val response = api.getAccessToken(
+                token = token,
+                grantType = "client_credentials"
+            )
             response.access_token ?: throw RuntimeException("Failed to fetch access token")
         }
     } catch (e: IOException) {

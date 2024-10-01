@@ -1,4 +1,4 @@
-package com.m4ykey.data.remote.interceptor.token
+package com.m4ykey.core.network.interceptor.token
 
 import android.util.Base64
 

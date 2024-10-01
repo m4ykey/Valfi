@@ -12,7 +12,7 @@ import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.mapper.toAlbumItem
 import com.m4ykey.data.remote.api.AlbumApi
-import com.m4ykey.data.remote.interceptor.SpotifyTokenProvider
+import com.m4ykey.core.network.interceptor.SpotifyTokenProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

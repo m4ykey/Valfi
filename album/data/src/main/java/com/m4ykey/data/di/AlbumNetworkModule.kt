@@ -2,10 +2,9 @@ package com.m4ykey.data.di
 
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.createApi
+import com.m4ykey.core.network.interceptor.token.CustomTokenProvider
 import com.m4ykey.data.remote.api.AlbumApi
-import com.m4ykey.data.remote.api.AuthApi
 import com.m4ykey.data.remote.api.TrackApi
-import com.m4ykey.data.remote.interceptor.token.CustomTokenProvider
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -20,10 +19,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AlbumNetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideAuthApi(moshi: Moshi): AuthApi = createApi(Constants.SPOTIFY_AUTH_URL, moshi)
 
     @Provides
     @Singleton

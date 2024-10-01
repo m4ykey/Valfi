@@ -1,4 +1,4 @@
-package com.m4ykey.data.remote.model.auth
+package com.m4ykey.core.network.interceptor.token.auth
 
 import androidx.annotation.Keep
 

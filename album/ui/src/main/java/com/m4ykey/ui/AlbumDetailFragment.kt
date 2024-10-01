@@ -287,7 +287,14 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
-            buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
+            //buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
+            btnArtist.setOnClickListener {
+                if (item.artists.size > 1) {
+
+                } else {
+
+                }
+            }
 
             val artistsEntity = item.artists.map { artist ->
                 ArtistEntity(

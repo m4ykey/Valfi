@@ -1,4 +1,4 @@
-package com.m4ykey.data.remote.interceptor
+package com.m4ykey.core.network.interceptor
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -8,9 +8,9 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.m4ykey.core.BuildConfig.SPOTIFY_CLIENT_ID
 import com.m4ykey.core.BuildConfig.SPOTIFY_CLIENT_SECRET
-import com.m4ykey.data.remote.api.AuthApi
-import com.m4ykey.data.remote.interceptor.token.TokenProvider
-import com.m4ykey.data.remote.interceptor.token.fetchAccessToken
+import com.m4ykey.core.network.api.AuthApi
+import com.m4ykey.core.network.interceptor.token.TokenProvider
+import com.m4ykey.core.network.interceptor.token.fetchAccessToken
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 

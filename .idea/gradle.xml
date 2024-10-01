@@ -13,6 +13,9 @@
             <option value="$PROJECT_DIR$/album/data" />
             <option value="$PROJECT_DIR$/album/ui" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/artist" />
+            <option value="$PROJECT_DIR$/artist/data" />
+            <option value="$PROJECT_DIR$/artist/ui" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/news" />
             <option value="$PROJECT_DIR$/news/data" />
