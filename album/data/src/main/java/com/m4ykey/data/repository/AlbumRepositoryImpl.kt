@@ -51,7 +51,7 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun getAlbumById(id: String): Flow<AlbumDetail> = flow {
         val result = safeApiCall {
             api.getAlbumById(
-                token = "Bearer ${tokenProvider.getAccessToken()}",
+                token = token,
                 id = id
             ).toAlbumDetail()
         }
