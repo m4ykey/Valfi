@@ -1,4 +1,4 @@
-package com.m4ykey.core.network.interceptor.token.auth
+package com.m4ykey.authentication.api.model
 
 import androidx.annotation.Keep
 

@@ -2,7 +2,7 @@ package com.m4ykey.data.di
 
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.createApi
-import com.m4ykey.core.network.interceptor.token.CustomTokenProvider
+import com.m4ykey.authentication.interceptor.token.CustomTokenProvider
 import com.m4ykey.data.remote.api.AlbumApi
 import com.m4ykey.data.remote.api.TrackApi
 import com.squareup.moshi.Moshi

@@ -41,5 +41,6 @@ storeFile=File XYZ
 - [Stereogum](https://www.stereogum.com/)
 - [The FADER](https://www.thefader.com/)
 
-## Icons
-The icons used in the application are from the website [svgrepo.com](https://www.svgrepo.com/) and [Google Icons](https://fonts.google.com/icons)
+## Resources
+The icons used in the application are from the website [svgrepo.com](https://www.svgrepo.com/) and [Google Icons](https://fonts.google.com/icons),
+animations are from the site [LottieFiles](https://lottiefiles.com/)

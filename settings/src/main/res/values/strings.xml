@@ -16,4 +16,6 @@
     <string name="data_is_provided_by_the_services_spotify_and_newsapi">Data is provided by Spotify and NewsApi</string>
     <string name="open_source">Open Source</string>
     <string name="visit_the_project_on_github">Visit the project on Github</string>
+    <string name="data_usage">Data Usage</string>
+    <string name="manage_your_data_in_the_app">Manage your data in the app</string>
 </resources>

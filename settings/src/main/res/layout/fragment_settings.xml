@@ -216,7 +216,58 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayoutBackup"
+                android:gravity="center_vertical"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/linearLayoutGithub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    app:tint="@color/navigationIconColor"
+                    android:id="@+id/imgBackupIcon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_data"/>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:textSize="16sp"
+                        android:textColor="@color/textColor"
+                        android:fontFamily="@font/outfit_medium"
+                        android:text="@string/data_usage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/textColor2"
+                        android:fontFamily="@font/outfit_regular"
+                        android:text="@string/manage_your_data_in_the_app"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    app:tint="@color/navigationIconColor"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_arrow_right"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutBackup"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

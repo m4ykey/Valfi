@@ -1,9 +1,6 @@
 package com.m4ykey.core.di
 
 import android.util.Log
-import com.m4ykey.core.Constants
-import com.m4ykey.core.network.api.AuthApi
-import com.m4ykey.core.network.createApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -32,9 +29,5 @@ object NetworkModule {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         return interceptor
     }
-
-    @Provides
-    @Singleton
-    fun provideAuthApi(moshi: Moshi): AuthApi = createApi(Constants.SPOTIFY_AUTH_URL, moshi)
 
 }

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.m4ykey.data"
+    namespace = "com.m4ykey.authentication"
     compileSdk = 34
 
     defaultConfig {
@@ -37,26 +37,22 @@ android {
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":authentication"))
 
-    libs.apply {
+    implementation(libs.okhttp)
+    implementation(libs.okhttpLoggingInterceptor)
 
-        implementation(retrofit)
-        implementation(converterMoshi)
-        implementation(moshiKotlin)
-        implementation(okhttp)
-        implementation(okhttpLoggingInterceptor)
+    implementation(libs.retrofit)
 
-        implementation(coroutines)
+    implementation(libs.androidxDatastore)
 
-        implementation(hiltAndroid)
-        ksp(hiltCompiler)
+    implementation(libs.moshiKotlin)
 
-        implementation(androidxRoomRuntime)
-        implementation(androidxRoomKtx)
-        ksp(androidxRoomCompiler)
-        implementation(androidXWorkManager)
-        implementation(androidxDatastore)
+    implementation(libs.coroutines)
 
-    }
+    implementation(libs.hiltAndroid)
+    ksp(libs.hiltCompiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.extJunit)
+    androidTestImplementation(libs.espresso)
 }

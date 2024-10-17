@@ -1,6 +1,6 @@
-package com.m4ykey.core.network.interceptor.token
+package com.m4ykey.authentication.interceptor.token
 
-import com.m4ykey.core.network.api.AuthApi
+import com.m4ykey.authentication.api.AuthApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

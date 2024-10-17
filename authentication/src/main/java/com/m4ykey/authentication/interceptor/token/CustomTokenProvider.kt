@@ -1,4 +1,4 @@
-package com.m4ykey.core.network.interceptor.token
+package com.m4ykey.authentication.interceptor.token
 
 import okhttp3.Interceptor
 import okhttp3.Response

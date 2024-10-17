@@ -1,6 +1,6 @@
 package com.m4ykey.data.repository
 
-import com.m4ykey.core.network.interceptor.SpotifyTokenProvider
+import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.core.network.safeApiCall
 import com.m4ykey.data.domain.model.Artist
 import com.m4ykey.data.domain.repository.ArtistRepository
@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 
 class ArtistRepositoryImpl(
     private val api : ArtistApi,
-    private val tokenProvider : SpotifyTokenProvider
+    private val tokenProvider : com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 ) : ArtistRepository {
 
     private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }
