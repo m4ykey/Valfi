@@ -91,6 +91,8 @@ dependencies {
         androidTestImplementation(extJunit)
         androidTestImplementation(espresso)
 
+        debugImplementation(leakcanary)
+
         implementation(hiltAndroid)
         ksp(hiltCompiler)
 

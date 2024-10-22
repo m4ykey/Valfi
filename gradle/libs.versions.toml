@@ -1,5 +1,5 @@
 [versions]
-application = "8.6.1"
+application = "8.7.1"
 navigation = "2.8.3"
 retrofit = "2.11.0"
 lifecycle = "2.8.6"
@@ -9,9 +9,9 @@ room = "2.6.1"
 coroutines = "1.9.0-RC.2"
 
 [libraries]
-firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.2.0" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.2.1" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.1.2" }
-firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.1" }
+firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.2" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }

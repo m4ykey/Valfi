@@ -48,6 +48,7 @@
     <string name="sec">sec.</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="duration">"Duration: %1$s"</string>
+    <string name="rating">Rating</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>

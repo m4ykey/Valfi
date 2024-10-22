@@ -1,6 +1,7 @@
 package com.m4ykey.valfi2
 
 import android.app.Application
+import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -13,40 +14,31 @@ import java.util.concurrent.TimeUnit
 class BaseApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        scheduleWeeklyNotification(applicationContext)
+    }
+}
 
-        scheduleNotificationWorker()
+private fun scheduleWeeklyNotification(context : Context) {
+    val calendar = Calendar.getInstance().apply {
+        set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
+        set(Calendar.HOUR_OF_DAY, 12)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
     }
 
-    private fun scheduleNotificationWorker() {
-        val initialDelay = calculateInitialDelayToFriday()
-
-        val notificationRequest = PeriodicWorkRequestBuilder<NotificationWorker>(7, TimeUnit.DAYS)
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .build()
-
-        WorkManager.getInstance(applicationContext)
-            .enqueueUniquePeriodicWork(
-                "NewReleaseWorker",
-                ExistingPeriodicWorkPolicy.KEEP,
-                notificationRequest
-            )
+    if (calendar.timeInMillis < System.currentTimeMillis()) {
+        calendar.add(Calendar.WEEK_OF_YEAR, 1)
     }
 
-    private fun calculateInitialDelayToFriday() : Long {
-        val calendar = Calendar.getInstance()
+    val initialDelay = calendar.timeInMillis - System.currentTimeMillis()
 
-        val daysUntilNextFriday = (Calendar.FRIDAY - calendar.get(Calendar.DAY_OF_WEEK) + 7) % 7
-        calendar.add(Calendar.DAY_OF_YEAR, daysUntilNextFriday)
+    val weeklyWorkRequest = PeriodicWorkRequestBuilder<NotificationWorker>(7, TimeUnit.DAYS)
+        .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        .build()
 
-        calendar.apply {
-            set(Calendar.HOUR_OF_DAY, 12)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-        }
-
-        val now = Calendar.getInstance().timeInMillis
-        val targetTime = calendar.timeInMillis
-
-        return targetTime - now
-    }
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        "weeklyNotification",
+        ExistingPeriodicWorkPolicy.UPDATE,
+        weeklyWorkRequest
+    )
 }
