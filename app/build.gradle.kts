@@ -17,12 +17,12 @@ val versionPatch = 1
 
 android {
     namespace = "com.m4ykey.valfi2"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.m4ykey.valfi2"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100
         versionName = "$versionMajor.$versionMinor.$versionPatch"
 
@@ -85,7 +85,6 @@ dependencies {
         implementation(androidxNavigationUI)
         implementation(androidxNavigationFragment)
         implementation(androidxDatastore)
-        implementation(androidXWorkManager)
 
         testImplementation(junit)
         androidTestImplementation(extJunit)
@@ -98,5 +97,7 @@ dependencies {
 
         implementation(firebaseCrashlytics)
         implementation(firebasePerformance)
+        implementation(firebaseMessaging)
+
     }
 }

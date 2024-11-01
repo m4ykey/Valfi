@@ -1,17 +1,18 @@
 [versions]
-application = "8.7.1"
+application = "8.7.2"
 navigation = "2.8.3"
 retrofit = "2.11.0"
-lifecycle = "2.8.6"
+lifecycle = "2.8.7"
 hilt = "2.52"
 okhttp = "4.12.0"
 room = "2.6.1"
-coroutines = "1.9.0-RC.2"
+coroutines = "1.9.0"
 
 [libraries]
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.2.1" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.1.2" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.2" }
+firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version = "24.0.3" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
@@ -20,9 +21,9 @@ leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = 
 
 androidxNavigationFragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidxNavigationUI = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
-androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
-androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.0-rc01" }
+androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.0" }
 androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
 androidxLifecycleViewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidxLifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -33,7 +34,6 @@ androidxPalette = { group = "androidx.palette", name = "palette", version = "1.0
 androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 androidxRecyclerView = { group = "androidx.recyclerview", name = "recyclerview", version = "1.3.2" }
 androidxPreference = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
-androidXWorkManager = { group = "androidx.work", name = "work-runtime-ktx", version = "2.9.1" }
 androidxActivity = { group = "androidx.activity", name = "activity", version = "1.9.3" }
 
 androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }

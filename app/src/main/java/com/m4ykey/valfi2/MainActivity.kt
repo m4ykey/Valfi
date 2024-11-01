@@ -1,12 +1,8 @@
 package com.m4ykey.valfi2
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -14,9 +10,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
-import com.m4ykey.data.notification.createNotificationChannel
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
+import com.m4ykey.ui.AlbumNewReleaseFragment
 import com.m4ykey.valfi2.preferences.DialogPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,34 +26,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
     @Inject
     lateinit var dialogPreferences: DialogPreferences
 
-    private val REQUEST_CODE_PERMISSIONS = 1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setupNavigation()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                REQUEST_CODE_PERMISSIONS
-            )
+        intent.getStringExtra("openFragment")?.let { fragmentName ->
+            openFragment(fragmentName)
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    private fun openFragment(fragmentName : String) {
+        val fragment = when (fragmentName) {
+            "AlbumNewReleaseFragment" -> AlbumNewReleaseFragment()
+            else -> null
+        }
 
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                createNotificationChannel(this)
-            }
+        fragment?.let {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, it)
+                .addToBackStack(null)
+                .commit()
         }
     }
 

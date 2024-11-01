@@ -54,7 +54,6 @@ dependencies {
         implementation(androidxLifecycleRuntime)
         implementation(androidxLifecycleViewmodel)
         implementation(androidxRecyclerView)
-        implementation(androidXWorkManager)
 
         testImplementation(junit)
 

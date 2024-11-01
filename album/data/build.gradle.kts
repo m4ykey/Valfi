@@ -55,8 +55,6 @@ dependencies {
         implementation(androidxRoomRuntime)
         implementation(androidxRoomKtx)
         ksp(androidxRoomCompiler)
-        implementation(androidXWorkManager)
         implementation(androidxDatastore)
-
     }
 }
