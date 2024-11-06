@@ -13,6 +13,8 @@ import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
 import com.m4ykey.ui.AlbumNewReleaseFragment
+import com.m4ykey.valfi2.Utils.ALBUM_NEW_RELEASE_FRAGMENT
+import com.m4ykey.valfi2.Utils.OPEN_FRAGMENT
 import com.m4ykey.valfi2.preferences.DialogPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,15 +33,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         setContentView(R.layout.activity_main)
 
         setupNavigation()
-
-        intent.getStringExtra("openFragment")?.let { fragmentName ->
-            openFragment(fragmentName)
-        }
     }
 
     private fun openFragment(fragmentName : String) {
         val fragment = when (fragmentName) {
-            "AlbumNewReleaseFragment" -> AlbumNewReleaseFragment()
+            ALBUM_NEW_RELEASE_FRAGMENT -> AlbumNewReleaseFragment()
             else -> null
         }
 
@@ -90,6 +88,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     override fun onStart() {
         super.onStart()
+
+        intent.getStringExtra(OPEN_FRAGMENT)?.let { fragmentName ->
+            openFragment(fragmentName)
+        }
+
         readSelectedThemeOption()
         lifecycleScope.launch {
             val isDialogShown = dialogPreferences.isDialogAlreadyShown(this@MainActivity)

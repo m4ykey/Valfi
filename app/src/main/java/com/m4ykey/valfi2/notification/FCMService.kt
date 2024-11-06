@@ -13,10 +13,11 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.m4ykey.valfi2.MainActivity
+import com.m4ykey.valfi2.Utils.ALBUM_NEW_RELEASE_FRAGMENT
+import com.m4ykey.valfi2.Utils.OPEN_FRAGMENT
+import com.m4ykey.valfi2.Utils.CHANNEL_ID
 
 class FCMService : FirebaseMessagingService() {
-
-    private val channelId = "NEW_RELEASE_CHANNEL"
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -36,7 +37,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     private fun sendNotification(title : String?, body : String?, pendingIntent: PendingIntent) {
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(com.m4ykey.core.R.drawable.logo)
             .setContentTitle(title)
             .setContentText(body)
@@ -47,7 +48,7 @@ class FCMService : FirebaseMessagingService() {
         if (ActivityCompat.checkSelfPermission(
                 this@FCMService,
                 Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             with(NotificationManagerCompat.from(this)) {
                 notify(1, notificationBuilder.build())
@@ -57,9 +58,10 @@ class FCMService : FirebaseMessagingService() {
 
     private fun createPendingIntent() : PendingIntent {
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("openFragment", "AlbumNewReleaseFragment")
+            putExtra(OPEN_FRAGMENT, ALBUM_NEW_RELEASE_FRAGMENT)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
-        return PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE)
+        return PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     private fun getNotificationTitleAndBody(message : RemoteMessage) : Pair<String?, String?> {
@@ -70,7 +72,7 @@ class FCMService : FirebaseMessagingService() {
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            channelId,
+            CHANNEL_ID,
             "New Release",
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply { description = "Channel for new releases" }
