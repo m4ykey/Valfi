@@ -32,18 +32,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-<!--    <TextView-->
-<!--        android:id="@+id/txtNoInternet"-->
-<!--        android:background="@drawable/no_internet_connection"-->
-<!--        android:textColor="@color/noInternetText"-->
-<!--        android:gravity="center"-->
-<!--        android:fontFamily="@font/outfit_medium"-->
-<!--        android:layout_margin="5dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/bottomnavigation"-->
-<!--        android:text="@string/no_internet_connection"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"/>-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>

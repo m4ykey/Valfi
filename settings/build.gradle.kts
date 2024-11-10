@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
@@ -5,6 +7,14 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.safeargs)
 }
+
+val versionProperties = Properties().apply {
+    load(rootProject.file("version.properties").inputStream())
+}
+
+val versionMajor = versionProperties["versionMajor"].toString().toInt()
+val versionMinor = versionProperties["versionMinor"].toString().toInt()
+val versionPatch = versionProperties["versionPatch"].toString().toInt()
 
 android {
     namespace = "com.m4ykey.settings"
@@ -15,6 +25,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "APP_VERSION", "\"$versionMajor.$versionMinor.$versionPatch\"")
     }
 
     buildTypes {
@@ -35,6 +47,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

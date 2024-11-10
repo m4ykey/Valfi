@@ -56,5 +56,9 @@
         <item>@string/oldest</item>
         <item>@string/alphabetical</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello">Hello</string>
+    <string name="good_evening">Good evening</string>
 
 </resources>

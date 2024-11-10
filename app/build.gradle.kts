@@ -11,9 +11,13 @@ plugins {
     alias(libs.plugins.performance)
 }
 
-val versionMajor = 1
-val versionMinor = 0
-val versionPatch = 1
+val versionProperties = Properties().apply {
+    load(rootProject.file("version.properties").inputStream())
+}
+
+val versionMajor = versionProperties["versionMajor"].toString().toInt()
+val versionMinor = versionProperties["versionMinor"].toString().toInt()
+val versionPatch = versionProperties["versionPatch"].toString().toInt()
 
 android {
     namespace = "com.m4ykey.valfi2"

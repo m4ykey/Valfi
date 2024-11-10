@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
+import com.m4ykey.settings.BuildConfig.APP_VERSION
 import com.m4ykey.settings.databinding.FragmentSettingsBinding
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
@@ -37,6 +38,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
             imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }
             linearLayoutGithub.setOnClickListener { openUrlBrowser(requireContext(), "https://github.com/m4ykey/Valfi-2") }
+
+            txtVersion.text = APP_VERSION
         }
     }
 

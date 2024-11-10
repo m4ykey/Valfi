@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -37,6 +38,7 @@ import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
+import java.time.LocalTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -325,6 +327,16 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             }
 
             toolbar.setNavigationOnClickListener { drawerLayout.open() }
+
+            val currentTime = LocalTime.now()
+            val greeting = when {
+                currentTime.isAfter(LocalTime.of(6, 0)) && currentTime.isBefore(LocalTime.of(18,0)) -> getString(R.string.hello)
+                else -> getString(R.string.good_evening)
+            }
+
+            val headerView = navigationView.getHeaderView(0)
+            val headerViewTextView = headerView.findViewById<TextView>(R.id.txtGreeting)
+            headerViewTextView.text = greeting
         }
     }
 

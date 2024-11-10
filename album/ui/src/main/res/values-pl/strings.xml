@@ -47,4 +47,6 @@
     <string name="duration">"Czas trwania: %1$s"</string>
     <string name="rating">Oceń</string>
     <string name="discover_new_releases">Odkryj Nowe Wydania</string>
+    <string name="hello">Dzień dobry</string>
+    <string name="good_evening">Dobry wieczór</string>
 </resources>
