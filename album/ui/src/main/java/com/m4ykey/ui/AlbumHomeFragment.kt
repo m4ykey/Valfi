@@ -47,7 +47,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 ) {
 
     private var isListViewChanged = false
-    private val viewModel by viewModels<AlbumViewModel>()
     private val albumAdapter by lazy { createAlbumAdapter() }
     private var isSearchEditTextVisible = false
     private var isHidingAnimationRunning = false
@@ -58,6 +57,8 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     @Inject
     lateinit var albumPreferences: AlbumPreferences
     private var selectedSortType : SortType = SortType.LATEST
+
+    private val viewModel by viewModels<AlbumViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -6,6 +6,7 @@
 
     <application>
         <activity
+            android:configChanges="orientation|screenSize"
             android:name=".SettingsActivity"
             android:exported="false" />
     </application>
