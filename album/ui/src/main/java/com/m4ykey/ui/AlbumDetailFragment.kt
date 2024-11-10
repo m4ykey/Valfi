@@ -287,12 +287,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
-            //buttonsIntents(button = btnArtist, url = artistUrl ?: "", requireContext())
             btnArtist.setOnClickListener {
                 if (item.artists.size > 1) {
 
                 } else {
-
+                    val artistId = item.artists[0].id
+                    val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToArtistFragment(artistId)
+                    findNavController().navigate(action)
                 }
             }
 

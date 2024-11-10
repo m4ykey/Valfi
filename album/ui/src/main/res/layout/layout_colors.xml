@@ -5,7 +5,7 @@
     app:cardElevation="0dp"
     android:layout_height="50dp"
     android:layout_margin="10dp"
-    app:cardCornerRadius="100dp"
+    app:cardCornerRadius="20dp"
     android:id="@+id/colorLayout">
 
     <View

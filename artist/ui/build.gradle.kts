@@ -37,6 +37,8 @@ dependencies {
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)
     implementation(libs.androidMaterial)
+    implementation(libs.androidxActivity)
+    implementation(libs.androidxConstraintLayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)
