@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 
 class ArtistRepositoryImpl(
     private val api : ArtistApi,
-    private val tokenProvider : com.m4ykey.authentication.interceptor.SpotifyTokenProvider
+    private val tokenProvider : SpotifyTokenProvider
 ) : ArtistRepository {
 
     private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }

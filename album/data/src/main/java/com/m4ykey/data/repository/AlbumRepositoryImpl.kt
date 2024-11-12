@@ -28,6 +28,7 @@ class AlbumRepositoryImpl @Inject constructor(
     private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }
 
     override suspend fun getNewReleases(offset: Int, limit: Int): Flow<List<AlbumItem>> = flow {
+        emit(emptyList())
         try {
             val result = api.getNewReleases(token = token, offset = offset, limit = limit)
             val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
@@ -38,6 +39,7 @@ class AlbumRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<List<AlbumItem>> = flow {
+        emit(emptyList())
         try {
             val result = api.searchAlbums(token = token, query = query, offset = offset, limit = limit)
             val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()

@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.safeargs)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -24,22 +27,42 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
+
+    implementation(project(":core"))
+    implementation(project(":artist:data"))
 
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)
     implementation(libs.androidMaterial)
     implementation(libs.androidxActivity)
     implementation(libs.androidxConstraintLayout)
+    implementation(libs.androidxLifecycleRuntime)
+    implementation(libs.androidxLifecycleViewmodel)
+    implementation(libs.androidxRecyclerView)
+    implementation(libs.androidxNavigationFragment)
+    implementation(libs.androidxNavigationUI)
+
+    implementation(libs.coroutines)
+
+    ksp(libs.hiltCompiler)
+    implementation(libs.hiltAndroid)
+
+    implementation(libs.glide)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)
 }

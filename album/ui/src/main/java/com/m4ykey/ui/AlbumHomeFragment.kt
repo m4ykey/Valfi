@@ -142,10 +142,10 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 isListViewChanged = !isListViewChanged
                 lifecycleScope.launch {
                     if (isListViewChanged) {
-                        albumPreferences.saveSelectedViewType(requireContext(), ViewType.LIST)
+                        albumPreferences.saveSelectedViewType(ViewType.LIST)
                         chipList.setChipIconResource(R.drawable.ic_grid)
                     } else {
-                        albumPreferences.deleteSelectedViewType(requireContext())
+                        albumPreferences.deleteSelectedViewType()
                         chipList.setChipIconResource(R.drawable.ic_list)
                     }
                     setRecyclerViewLayout(isListViewChanged)
@@ -190,12 +190,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         if (isSelected) {
             lifecycleScope.launch {
                 viewModel.getAlbumType(albumType)
-                albumPreferences.saveSelectedAlbumType(requireContext(), albumType)
+                albumPreferences.saveSelectedAlbumType(albumType)
             }
         } else {
             lifecycleScope.launch {
                 viewModel.getSavedAlbums()
-                albumPreferences.deleteSelectedAlbumType(requireContext())
+                albumPreferences.deleteSelectedAlbumType()
             }
         }
     }
@@ -255,9 +255,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private fun saveSelectedSortType(sortType: SortType) {
         lifecycleScope.launch {
             if (sortType == SortType.LATEST) {
-                albumPreferences.deleteSelectedSortType(requireContext())
+                albumPreferences.deleteSelectedSortType()
             } else {
-                albumPreferences.saveSelectedSortType(requireContext(), sortType)
+                albumPreferences.saveSelectedSortType(sortType)
             }
         }
     }
@@ -423,60 +423,62 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun readSelectedSortType() {
         lifecycleScope.launch {
-            val savedSortType = albumPreferences.getSelectedSortType(requireContext())
-            if (savedSortType != null) {
-                selectedSortType = savedSortType
-                updateListWithSortType(savedSortType)
+            albumPreferences.getSelectedSortType().collect { savedSortType ->
+                if (savedSortType != null) {
+                    selectedSortType = savedSortType
+                    updateListWithSortType(savedSortType)
+                }
             }
         }
     }
 
     private fun readSelectedViewType() {
         lifecycleScope.launch {
-            val selectedViewType = albumPreferences.getSelectedViewType(requireContext())
+            albumPreferences.getSelectedViewType().collect { selectedViewType ->
+                binding.apply {
+                    if (selectedViewType != null) {
+                        albumAdapter.viewType = selectedViewType
+                        chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
+                        isListViewChanged = selectedViewType == ViewType.LIST
+                    } else {
+                        albumAdapter.viewType = ViewType.GRID
+                        chipList.setChipIconResource(R.drawable.ic_list)
+                    }
 
-            binding.apply {
-                if (selectedViewType != null) {
-                    albumAdapter.viewType = selectedViewType
-                    chipList.setChipIconResource(if (selectedViewType == ViewType.LIST) R.drawable.ic_grid else R.drawable.ic_list)
-                    isListViewChanged = selectedViewType == ViewType.LIST
-                } else {
-                    albumAdapter.viewType = ViewType.GRID
-                    chipList.setChipIconResource(R.drawable.ic_list)
+                    val layoutManager = when (albumAdapter.viewType) {
+                        ViewType.LIST -> LinearLayoutManager(requireContext())
+                        ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
+                    }
+                    rvAlbums.layoutManager = layoutManager
                 }
-
-                val layoutManager = when (albumAdapter.viewType) {
-                    ViewType.LIST -> LinearLayoutManager(requireContext())
-                    ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
-                }
-                rvAlbums.layoutManager = layoutManager
             }
         }
     }
 
     private fun readSelectedAlbumType() {
         lifecycleScope.launch {
-            val selectedAlbum = albumPreferences.getSelectedAlbumType(requireContext())
-            when (selectedAlbum) {
-                ALBUM -> {
-                    isAlbumSelected = true
-                    viewModel.getAlbumType(ALBUM)
+            albumPreferences.getSelectedAlbumType().collect { selectedAlbum ->
+                when (selectedAlbum) {
+                    ALBUM -> {
+                        isAlbumSelected = true
+                        viewModel.getAlbumType(ALBUM)
+                    }
+                    EP -> {
+                        isEPSelected = true
+                        viewModel.getAlbumType(EP)
+                    }
+                    SINGLE -> {
+                        isSingleSelected = true
+                        viewModel.getAlbumType(SINGLE)
+                    }
+                    COMPILATION -> {
+                        isCompilationSelected = true
+                        viewModel.getAlbumType(COMPILATION)
+                    }
+                    else -> viewModel.getSavedAlbums()
                 }
-                EP -> {
-                    isEPSelected = true
-                    viewModel.getAlbumType(EP)
-                }
-                SINGLE -> {
-                    isSingleSelected = true
-                    viewModel.getAlbumType(SINGLE)
-                }
-                COMPILATION -> {
-                    isCompilationSelected = true
-                    viewModel.getAlbumType(COMPILATION)
-                }
-                else -> viewModel.getSavedAlbums()
+                updateChipSelection()
             }
-            updateChipSelection()
         }
     }
 

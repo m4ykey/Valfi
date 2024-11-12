@@ -13,9 +13,10 @@ import javax.inject.Inject
 
 class TrackRepositoryImpl @Inject constructor(
     private val api : TrackApi,
-    private val token : com.m4ykey.authentication.interceptor.SpotifyTokenProvider
+    private val token : SpotifyTokenProvider
 ) : TrackRepository {
     override suspend fun getAlbumTracks(id : String, offset : Int, limit : Int): Flow<List<TrackItem>> = flow {
+        emit(emptyList())
         try {
             val result = api.getAlbumTracks(
                 token = "Bearer ${token.getAccessToken()}",

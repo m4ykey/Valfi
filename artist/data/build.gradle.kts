@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -35,12 +37,20 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":authentication"))
 
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)
     implementation(libs.androidMaterial)
 
     implementation(libs.retrofit)
+    implementation(libs.converterMoshi)
+    implementation(libs.moshiKotlin)
+    implementation(libs.okhttp)
+    implementation(libs.okhttpLoggingInterceptor)
+
+    ksp(libs.hiltCompiler)
+    implementation(libs.hiltAndroid)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.extJunit)

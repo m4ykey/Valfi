@@ -53,6 +53,8 @@ dependencies {
         implementation(androidxDatastore)
         implementation(androidxRecyclerView)
         implementation(androidxBrowser)
+        implementation(androidxLifecycleRuntime)
+        implementation(androidxLifecycleViewmodel)
 
         implementation(androidMaterial)
 
