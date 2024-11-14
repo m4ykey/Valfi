@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     private fun readSelectedThemeOption() {
         lifecycleScope.launch {
-            val themeOption = themePreferences.getSelectedThemeOptions(this@MainActivity)
+            val themeOption = themePreferences.getSelectedThemeOptions()
             when (themeOption) {
                 ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

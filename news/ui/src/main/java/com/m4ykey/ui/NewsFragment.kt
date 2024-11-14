@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
-import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -50,10 +49,8 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isError.collect { errorState ->
-                if (errorState is ErrorState.Error) {
-                    showToast(requireContext(), errorState.message.toString())
-                }
+            viewModel.error.collect { errorMessage ->
+                errorMessage?.let { showToast(requireContext(), it) }
             }
         }
 
@@ -126,10 +123,10 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
                 isListViewChanged = !isListViewChanged
                 lifecycleScope.launch {
                     if (isListViewChanged) {
-                        newsPreferences.saveSelectedListType(requireContext(), ListType.LIST)
+                        newsPreferences.saveSelectedListType(ListType.LIST)
                         toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
                     } else {
-                        newsPreferences.deleteSelectedListType(requireContext())
+                        newsPreferences.deleteSelectedListType()
                         toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
                     }
                     setRecyclerViewLayout(isListViewChanged)
@@ -158,16 +155,16 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(
 
     private fun readSelectedListType() {
         lifecycleScope.launch {
-            val selectedListType = newsPreferences.getSelectedListType(requireContext())
-
-            binding.apply {
-                if (selectedListType != null) {
-                    newsAdapter.listType = selectedListType
-                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
-                    isListViewChanged = selectedListType == ListType.LIST
-                } else {
-                    newsAdapter.listType = ListType.TABLE
-                    toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
+            newsPreferences.getSelectedListType().collect { selectedListType ->
+                binding.apply {
+                    if (selectedListType != null) {
+                        newsAdapter.listType = selectedListType
+                        toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_table_row)
+                        isListViewChanged = selectedListType == ListType.LIST
+                    } else {
+                        newsAdapter.listType = ListType.TABLE
+                        toolbar.menu.findItem(R.id.viewType).setIcon(R.drawable.ic_list)
+                    }
                 }
             }
         }

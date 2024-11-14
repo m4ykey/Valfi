@@ -65,9 +65,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     private fun saveSelectedThemeOptions(themeOption : ThemeOptions) {
         lifecycleScope.launch {
             if (themeOption == ThemeOptions.Default) {
-                themePreferences.deleteThemeOptions(requireContext())
+                themePreferences.deleteThemeOptions()
             } else {
-                themePreferences.saveThemeOptions(requireContext(), themeOption)
+                themePreferences.saveThemeOptions(themeOption)
             }
         }
     }
@@ -100,27 +100,28 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     private fun readSelectedOptions() {
         binding.apply {
             lifecycleScope.launch {
-                val getSelectedOptions = themePreferences.getSelectedThemeOptions(requireContext())
-                selectedThemeIndex = getSelectedOptions.index
-                when (getSelectedOptions) {
-                    ThemeOptions.Dark -> {
-                        txtTheme.text = getString(R.string.dark)
-                        imgThemeIcon.setImageResource(R.drawable.ic_moon)
-                    }
-                    ThemeOptions.Light -> {
-                        txtTheme.text = getString(R.string.light)
-                        imgThemeIcon.setImageResource(R.drawable.ic_sun)
-                    }
-                    else -> {
-                        val nightModeFlags = requireContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-                        val isNightMode = when (nightModeFlags) {
-                            Configuration.UI_MODE_NIGHT_YES -> true
-                            Configuration.UI_MODE_NIGHT_NO -> false
-                            else -> false
+                themePreferences.getSelectedThemeOptions().collect { selectedOptions ->
+                    selectedThemeIndex = selectedOptions.index
+                    when (selectedOptions) {
+                        ThemeOptions.Dark -> {
+                            txtTheme.text = getString(R.string.dark)
+                            imgThemeIcon.setImageResource(R.drawable.ic_moon)
                         }
+                        ThemeOptions.Light -> {
+                            txtTheme.text = getString(R.string.light)
+                            imgThemeIcon.setImageResource(R.drawable.ic_sun)
+                        }
+                        else -> {
+                            val nightModeFlags = requireContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                            val isNightMode = when (nightModeFlags) {
+                                Configuration.UI_MODE_NIGHT_YES -> true
+                                Configuration.UI_MODE_NIGHT_NO -> false
+                                else -> false
+                            }
 
-                        if (isNightMode) imgThemeIcon.setImageResource(R.drawable.ic_moon) else imgThemeIcon.setImageResource(R.drawable.ic_sun)
-                        txtTheme.text = getString(R.string.compatible_with_device_settings)
+                            if (isNightMode) imgThemeIcon.setImageResource(R.drawable.ic_moon) else imgThemeIcon.setImageResource(R.drawable.ic_sun)
+                            txtTheme.text = getString(R.string.compatible_with_device_settings)
+                        }
                     }
                 }
             }

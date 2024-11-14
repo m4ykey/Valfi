@@ -3,7 +3,7 @@ package com.m4ykey.core.views.recyclerview
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.m4ykey.core.views.animations.applyAnimation
+import com.m4ykey.core.views.recyclerview.animations.applyAnimation
 
 abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     diffCallback : DiffUtil.ItemCallback<Item>

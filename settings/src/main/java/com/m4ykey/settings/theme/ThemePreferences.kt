@@ -7,45 +7,51 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.m4ykey.core.safeDataStoreOperations
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ThemePreferences {
+class ThemePreferences @Inject constructor(@ApplicationContext private val context: Context) {
 
-    private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = "theme_preferences")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "theme_preferences")
 
     companion object {
         private val KEY_SELECTED_THEME = intPreferencesKey("selected_theme")
     }
 
-    suspend fun saveThemeOptions(context: Context, selectedTheme : ThemeOptions) {
-        context.dataStore.edit { preferences ->
-            preferences[KEY_SELECTED_THEME] = selectedTheme.index
+    suspend fun saveThemeOptions(selectedTheme: ThemeOptions) {
+        safeDataStoreOperations {
+            context.dataStore.edit { preferences ->
+                preferences[KEY_SELECTED_THEME] = selectedTheme.index
+            }
         }
     }
 
-    suspend fun deleteThemeOptions(context: Context) {
-        context.dataStore.edit { preferences ->
-            preferences.remove(KEY_SELECTED_THEME)
+    suspend fun deleteThemeOptions() {
+        safeDataStoreOperations {
+            context.dataStore.edit { preferences ->
+                preferences.remove(KEY_SELECTED_THEME)
+            }
         }
     }
 
-    suspend fun getSelectedThemeOptions(context: Context) : ThemeOptions {
-        val preferences = context.dataStore.data
+    fun getSelectedThemeOptions(): Flow<ThemeOptions> {
+        return context.dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
                     emit(emptyPreferences())
                 } else {
                     throw exception
                 }
-            }.first()
-
-        val index = preferences[KEY_SELECTED_THEME] ?: 2
-
-        return ThemeOptions.fromIndex(index)
+            }.map { preferences ->
+                val index = preferences[KEY_SELECTED_THEME] ?: 2
+                ThemeOptions.fromIndex(index)
+            }
     }
-
 }

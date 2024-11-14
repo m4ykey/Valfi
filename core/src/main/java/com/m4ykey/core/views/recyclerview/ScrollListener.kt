@@ -3,8 +3,8 @@ package com.m4ykey.core.views.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.m4ykey.core.views.animations.slideInFromRight
-import com.m4ykey.core.views.animations.slideOutToRight
+import com.m4ykey.core.views.recyclerview.animations.slideInFromRight
+import com.m4ykey.core.views.recyclerview.animations.slideOutToRight
 
 fun scrollListener(button : FloatingActionButton) = object : RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

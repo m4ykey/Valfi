@@ -1,9 +1,8 @@
 package com.m4ykey.ui
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
-import com.m4ykey.core.network.ErrorState
+import com.m4ykey.core.views.BaseViewModel
 import com.m4ykey.data.domain.model.Article
 import com.m4ykey.data.domain.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,21 +14,15 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsViewModel @Inject constructor(
     private val repository: NewsRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private var _news = MutableStateFlow<List<Article>>(emptyList())
     val news : StateFlow<List<Article>> get() = _news
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading : StateFlow<Boolean> get() = _isLoading
-
-    private val _isError = MutableStateFlow<ErrorState>(ErrorState.NoError)
-    val isError : StateFlow<ErrorState> get() = _isError
-
     private var page = 1
     var isPaginationEnded = false
 
-    suspend fun getMusicNews(clearList : Boolean, sortBy : String) = viewModelScope.launch {
+    fun getMusicNews(clearList : Boolean, sortBy : String) = viewModelScope.launch {
         if (_isLoading.value || isPaginationEnded) return@launch
 
         if (clearList) {
@@ -39,7 +32,7 @@ class NewsViewModel @Inject constructor(
         }
 
         _isLoading.value = true
-        _isError.value = ErrorState.NoError
+        _error.value = null
         try {
             repository.getMusicNews(page = page, pageSize = PAGE_SIZE, sortBy = sortBy)
                 .collect { articles ->
@@ -51,7 +44,7 @@ class NewsViewModel @Inject constructor(
                     }
                 }
         } catch (e : Exception) {
-            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+            _error.value = e.message ?: "An unknown error occurred"
         } finally {
             _isLoading.value = false
         }

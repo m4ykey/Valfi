@@ -7,14 +7,17 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.m4ykey.core.safeDataStoreOperations
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NewsPreferences {
+class NewsPreferences @Inject constructor(@ApplicationContext private val context: Context) {
 
     private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = "news_preferences")
 
@@ -22,20 +25,24 @@ class NewsPreferences {
         private val KEY_SELECTED_LIST_TYPE = stringPreferencesKey("selected_view_type")
     }
 
-    suspend fun saveSelectedListType(context: Context, listType: ListType) {
-        context.dataStore.edit { preferences ->
-            preferences[KEY_SELECTED_LIST_TYPE] = listType.name
+    suspend fun saveSelectedListType(listType: ListType) {
+        safeDataStoreOperations {
+            context.dataStore.edit { preferences ->
+                preferences[KEY_SELECTED_LIST_TYPE] = listType.name
+            }
         }
     }
 
-    suspend fun deleteSelectedListType(context: Context) {
-        context.dataStore.edit { preferences ->
-            preferences.remove(KEY_SELECTED_LIST_TYPE)
+    suspend fun deleteSelectedListType() {
+        safeDataStoreOperations {
+            context.dataStore.edit { preferences ->
+                preferences.remove(KEY_SELECTED_LIST_TYPE)
+            }
         }
     }
 
-    suspend fun getSelectedListType(context: Context) : ListType? {
-        val listType = context.dataStore.data
+    fun getSelectedListType() : Flow<ListType?> {
+        return context.dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
                     emit(emptyPreferences())
@@ -43,9 +50,7 @@ class NewsPreferences {
                     throw exception
                 }
             }
-            .map { preferences -> preferences[KEY_SELECTED_LIST_TYPE] }.first()
-
-        return listType?.let { ListType.valueOf(it) }
+            .map { preferences -> preferences[KEY_SELECTED_LIST_TYPE]?.let { ListType.valueOf(it) } }
     }
 
 }

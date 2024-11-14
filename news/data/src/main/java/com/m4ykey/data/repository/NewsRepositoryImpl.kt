@@ -13,6 +13,7 @@ import javax.inject.Inject
 class NewsRepositoryImpl @Inject constructor(private val api : NewsApi) : NewsRepository {
 
     override fun getMusicNews(page: Int, pageSize: Int, sortBy : String): Flow<List<Article>> = flow {
+        emit(emptyList())
         try {
             val result = api.getMusicNews(page = page, pageSize = pageSize, sortBy = sortBy)
             val newsResult = result.articles?.map { it.toArticle() } ?: emptyList()

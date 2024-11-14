@@ -1,4 +1,4 @@
-package com.m4ykey.core.views.animations
+package com.m4ykey.core.views.recyclerview.animations
 
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.RecyclerView

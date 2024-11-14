@@ -2,10 +2,9 @@ package com.m4ykey.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
-import com.m4ykey.core.network.ErrorState
+import com.m4ykey.core.views.BaseViewModel
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -27,7 +26,7 @@ import javax.inject.Inject
 class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepository,
     private val trackRepository: TrackRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private var _search = MutableStateFlow<List<AlbumItem>>(emptyList())
     val albums : StateFlow<List<AlbumItem>> get() = _search
@@ -47,14 +46,11 @@ class AlbumViewModel @Inject constructor(
     private var _searchResult = MutableLiveData<List<AlbumEntity>>()
     val searchResult : LiveData<List<AlbumEntity>> get() = _searchResult
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading : StateFlow<Boolean> get() = _isLoading
-
     private val _isLoadingTracks = MutableStateFlow(false)
     val isLoadingTracks : StateFlow<Boolean> get() = _isLoadingTracks
 
-    private val _isError = MutableStateFlow<ErrorState>(ErrorState.NoError)
-    val isError : StateFlow<ErrorState> get() = _isError
+    //private val _isError = MutableStateFlow<String?>(null)
+    //val isError : StateFlow<String?> get() = _isError
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
     val totalTracksDuration : StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
@@ -74,12 +70,13 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAlbumTracks(id : String) = viewModelScope.launch {
+    fun getAlbumTracks(id : String) = viewModelScope.launch {
         if (_isLoadingTracks.value || isPaginationEnded) return@launch
 
         _isLoadingTracks.value = true
-        _isError.value = ErrorState.NoError
         try {
+            _error.value = null
+
             trackRepository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
                 .collect { tracks ->
                     if (tracks.isNotEmpty()) {
@@ -97,33 +94,35 @@ class AlbumViewModel @Inject constructor(
                     }
                 }
         } catch (e : Exception) {
-            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+            _error.value = e.message ?: "An unknown error occurred"
         } finally {
             _isLoadingTracks.value = false
         }
     }
 
-    private suspend fun getAlbumById(id : String) = viewModelScope.launch {
+    private fun getAlbumById(id : String) = viewModelScope.launch {
         _isLoading.value = true
-        _isError.value = ErrorState.NoError
 
         try {
+            _error.value = null
+
             repository.getAlbumById(id).collect { result ->
                 _detail.value = result
             }
         } catch (e : Exception) {
-            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+            _error.value = e.message ?: "An unknown error occurred"
         } finally {
             _isLoading.value = false
         }
     }
 
-    suspend fun getNewReleases() = viewModelScope.launch {
+    fun getNewReleases() = viewModelScope.launch {
         if (_isLoading.value || isPaginationEnded) return@launch
 
         _isLoading.value = true
-        _isError.value = ErrorState.NoError
         try {
+            _error.value = null
+
             repository.getNewReleases(offset = offset, limit = PAGE_SIZE)
                 .collect { albums ->
                     if (albums.isNotEmpty()) {
@@ -137,18 +136,19 @@ class AlbumViewModel @Inject constructor(
                     }
                 }
         } catch (e : Exception) {
-            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+            _error.value = e.message ?: "An unknown error occurred"
         } finally {
             _isLoading.value = false
         }
     }
 
-    suspend fun searchAlbums(query : String) = viewModelScope.launch {
+    fun searchAlbums(query : String) = viewModelScope.launch {
         if (_isLoading.value || isPaginationEnded) return@launch
 
         _isLoading.value = true
-        _isError.value = ErrorState.NoError
         try {
+            _error.value = null
+
             repository.searchAlbums(query, offset = offset, limit = PAGE_SIZE)
                 .collect { searchResult ->
                     if (searchResult.isNotEmpty()) {
@@ -162,7 +162,7 @@ class AlbumViewModel @Inject constructor(
                     }
                 }
         } catch (e : Exception) {
-            _isError.value = ErrorState.Error(e.message ?: "Unknown error")
+            _error.value = e.message ?: "An unknown error occurred"
         } finally {
             _isLoading.value = false
         }
@@ -171,26 +171,26 @@ class AlbumViewModel @Inject constructor(
     fun resetSearch() {
         offset = 0
         _isLoading.value = false
-        _isError.value = ErrorState.NoError
+        _error.value = null
         isPaginationEnded = false
         _search.value = emptyList()
     }
 
-    suspend fun searchAlbumByName(albumName : String) {
+    fun searchAlbumByName(albumName : String) {
         viewModelScope.launch {
             val result = repository.searchAlbumByName(albumName)
             _searchResult.value = result
         }
     }
 
-    suspend fun searchAlbumsListenLater(albumName : String) {
+    fun searchAlbumsListenLater(albumName : String) {
         viewModelScope.launch {
             val result = repository.searchAlbumsListenLater(albumName)
             _searchResult.value = result
         }
     }
 
-    suspend fun getAlbumType(albumType : String) {
+    fun getAlbumType(albumType : String) {
         viewModelScope.launch {
             val result = repository.getAlbumType(albumType)
             _albumPaging.value = result
@@ -201,28 +201,28 @@ class AlbumViewModel @Inject constructor(
 
     suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
 
-    suspend fun getSavedAlbums() {
+    fun getSavedAlbums() {
         viewModelScope.launch {
             val result = repository.getSavedAlbums()
             _albumPaging.value = result
         }
     }
 
-    suspend fun getSavedAlbumAsc() {
+    fun getSavedAlbumAsc() {
         viewModelScope.launch {
             val result = repository.getSavedAlbumAsc()
             _albumPaging.value = result
         }
     }
 
-    suspend fun getAlbumSortedByName() {
+    fun getAlbumSortedByName() {
         viewModelScope.launch {
             val result = repository.getAlbumSortedByName()
             _albumPaging.value = result
         }
     }
 
-    suspend fun getListenLaterAlbums() {
+    fun getListenLaterAlbums() {
         viewModelScope.launch {
             val result = repository.getListenLaterAlbums()
             _albumPaging.value = result

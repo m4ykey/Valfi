@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -103,14 +102,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isError.collect { errorState ->
-                when (errorState) {
-                    is ErrorState.Error -> showToast(
-                        requireContext(),
-                        errorState.message.toString()
-                    )
-
-                    else -> {}
+            viewModel.error.collect { errorMessage ->
+                errorMessage?.let {
+                    showToast(requireContext(), it)
                 }
             }
         }
@@ -292,8 +286,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
                 } else {
                     val artistId = item.artists[0].id
-                    val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToArtistFragment(artistId)
-                    findNavController().navigate(action)
                 }
             }
 

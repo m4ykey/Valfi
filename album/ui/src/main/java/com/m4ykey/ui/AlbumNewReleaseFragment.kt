@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.Constants
-import com.m4ykey.core.network.ErrorState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -52,10 +51,9 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.isError.collect { errorState ->
-                when (errorState) {
-                    is ErrorState.Error -> showToast(requireContext(), errorState.message.toString())
-                    else -> {}
+            viewModel.error.collect { errorMessage ->
+                errorMessage?.let {
+                    showToast(requireContext(), it)
                 }
             }
         }
