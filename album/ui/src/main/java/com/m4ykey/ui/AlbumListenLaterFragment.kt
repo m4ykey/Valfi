@@ -2,7 +2,6 @@ package com.m4ykey.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -17,9 +16,10 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
-import com.m4ykey.ui.helpers.animationPropertiesY
+import com.m4ykey.ui.helpers.BooleanWrapper
+import com.m4ykey.ui.helpers.hideSearchEditText
+import com.m4ykey.ui.helpers.showSearchEditText
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -30,8 +30,8 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
     private val viewModel by viewModels<AlbumViewModel>()
     private val albumAdapter by lazy { createAlbumAdapter() }
-    private var isSearchEditTextVisible = false
-    private var isHidingAnimationRunning = false
+    private var isSearchEditTextVisible = BooleanWrapper(false)
+    private var isHidingAnimationRunning = BooleanWrapper(false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,11 +86,19 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
             }
 
             imgHide.setOnClickListener {
-                hideSearchEditText()
+                hideSearchEditText(
+                    coroutineScope = lifecycleScope,
+                    isSearchEditTextVisible = isSearchEditTextVisible,
+                    translationYValue = -30f,
+                    isHidingAnimationRunning = isHidingAnimationRunning,
+                    linearLayout = linearLayoutSearch
+                )
                 etSearch.setText(getString(R.string.empty_string))
             }
 
-            chipSearch.setOnClickListener { showSearchEditText() }
+            chipSearch.setOnClickListener {
+                isSearchEditTextVisible = showSearchEditText(isSearchEditTextVisible, linearLayoutSearch, -30f)
+            }
         }
     }
 
@@ -114,38 +122,11 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
     private fun resetSearchState() {
         binding.apply {
-            if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
+            if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible.value) {
                 linearLayoutSearch.isVisible = false
                 etSearch.setText(getString(R.string.empty_string))
             } else {
                 linearLayoutSearch.isVisible = true
-            }
-        }
-    }
-
-    private fun showSearchEditText() {
-        if (!isSearchEditTextVisible) {
-            binding.linearLayoutSearch.apply {
-                translationY = -30f
-                isVisible = true
-                animationPropertiesY(0f, 1f, DecelerateInterpolator())
-            }
-            isSearchEditTextVisible = true
-        }
-    }
-
-    private fun hideSearchEditText() {
-        if (isSearchEditTextVisible && !isHidingAnimationRunning) {
-            isHidingAnimationRunning = true
-            binding.linearLayoutSearch.apply {
-                translationY = 0f
-                animationPropertiesY(-30f, 0f, DecelerateInterpolator())
-            }
-            lifecycleScope.launch {
-                delay(400)
-                binding.linearLayoutSearch.isVisible = false
-                isSearchEditTextVisible = false
-                isHidingAnimationRunning = false
             }
         }
     }

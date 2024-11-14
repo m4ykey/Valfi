@@ -31,6 +31,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <ImageView
+            android:layout_margin="30dp"
             android:contentDescription="@string/album_cover"
             android:id="@+id/imgAlbum"
             tools:background="@drawable/album_error"

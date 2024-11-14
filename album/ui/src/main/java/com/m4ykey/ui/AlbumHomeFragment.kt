@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -31,9 +30,10 @@ import com.m4ykey.data.preferences.AlbumPreferences
 import com.m4ykey.settings.SettingsActivity
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
-import com.m4ykey.ui.helpers.animationPropertiesY
+import com.m4ykey.ui.helpers.BooleanWrapper
+import com.m4ykey.ui.helpers.hideSearchEditText
+import com.m4ykey.ui.helpers.showSearchEditText
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -48,8 +48,8 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private var isListViewChanged = false
     private val albumAdapter by lazy { createAlbumAdapter() }
-    private var isSearchEditTextVisible = false
-    private var isHidingAnimationRunning = false
+    private var isSearchEditTextVisible = BooleanWrapper(false)
+    private var isHidingAnimationRunning = BooleanWrapper(false)
     private var isAlbumSelected = false
     private var isEPSelected = false
     private var isSingleSelected = false
@@ -104,7 +104,13 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             }
         }
         binding.imgHide.setOnClickListener {
-            hideSearchEditText()
+            hideSearchEditText(
+                coroutineScope = lifecycleScope,
+                linearLayout = binding.linearLayoutSearch,
+                isSearchEditTextVisible = isSearchEditTextVisible,
+                isHidingAnimationRunning = isHidingAnimationRunning,
+                translationYValue = -100f
+            )
             binding.etSearch.setText(getString(R.string.empty_string))
         }
     }
@@ -153,7 +159,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             }
 
             chipSortBy.setOnClickListener { sortTypeDialog() }
-            chipSearch.setOnClickListener { showSearchEditText() }
+            chipSearch.setOnClickListener {
+                isSearchEditTextVisible = showSearchEditText(isSearchEditTextVisible, linearLayoutSearch, -100f)
+            }
 
             val chipClickListener : View.OnClickListener = View.OnClickListener { view ->
                 when (view.id) {
@@ -383,36 +391,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         return regex.find(url)?.groupValues?.getOrNull(1)
     }
 
-    private fun showSearchEditText() {
-        if (!isSearchEditTextVisible) {
-            binding.linearLayoutSearch.apply {
-                translationY = -100f
-                isVisible = true
-                animationPropertiesY(0f, 1f, DecelerateInterpolator())
-            }
-            isSearchEditTextVisible = true
-        }
-    }
-
-    private fun hideSearchEditText() {
-        if (isSearchEditTextVisible && !isHidingAnimationRunning) {
-            isHidingAnimationRunning = true
-            binding.linearLayoutSearch.apply {
-                translationY = 0f
-                animationPropertiesY(-100f, 0f, DecelerateInterpolator())
-            }
-            lifecycleScope.launch {
-                delay(400)
-                binding.linearLayoutSearch.isVisible = false
-                isSearchEditTextVisible = false
-                isHidingAnimationRunning = false
-            }
-        }
-    }
-
     private fun resetSearchState() {
         binding.apply {
-            if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible) {
+            if (etSearch.text.isNullOrBlank() && !isSearchEditTextVisible.value) {
                 linearLayoutSearch.isVisible = false
                 etSearch.setText(getString(R.string.empty_string))
             } else {
