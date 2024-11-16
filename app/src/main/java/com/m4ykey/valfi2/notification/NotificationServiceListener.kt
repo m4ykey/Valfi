@@ -1,6 +1,6 @@
 package com.m4ykey.valfi2.notification
 
-import android.content.pm.ApplicationInfo
+import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -19,30 +19,24 @@ class NotificationServiceListener : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
         val extras = sbn?.notification?.extras
-        val keys = extras?.keySet()
+        val packageName = sbn?.packageName
 
-        val title = extras?.getCharSequence("android.title", "")?.toString()
-        val artist = extras?.getCharSequence("android.text", "")?.toString()
-        val applicationInfo = extras?.getParcelable("android.appInfo") as ApplicationInfo?
-        val appInfo = applicationInfo?.packageName
+        if (packageName?.let { isMusicApp(it) } == true) {
+            val title = extras?.getCharSequence(Notification.EXTRA_TITLE, "")?.toString()
+            val artist = extras?.getCharSequence(Notification.EXTRA_TEXT, "")?.toString()
 
-        val songInfo = listOfNotNull(title, artist, appInfo).joinToString(" - ")
-
-        if (artist != null) {
-            MusicNotificationState.updateArtist(artist)
-        }
-        if (title != null) {
-            MusicNotificationState.updateTitle(title)
-        }
-
-        if (keys != null) {
-            for (key in keys) {
-                val value = extras.get(key)
-                Log.d(TAG, "Key: $key, Value: $value")
+            if (artist != null) {
+                MusicNotificationState.updateArtist(artist)
             }
-
-            Log.d(TAG, "Received notification: $songInfo")
+            if (title != null) {
+                MusicNotificationState.updateTitle(title)
+            }
         }
     }
 
+    private fun isMusicApp(packageName : String) : Boolean {
+        return packageName in listOf(
+            "com.spotify.music"
+        )
+    }
 }
