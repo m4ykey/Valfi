@@ -25,10 +25,10 @@ class NotificationServiceListener : NotificationListenerService() {
             val title = extras?.getCharSequence(Notification.EXTRA_TITLE, "")?.toString()
             val artist = extras?.getCharSequence(Notification.EXTRA_TEXT, "")?.toString()
 
-            if (artist != null) {
+            if (!artist.isNullOrEmpty()) {
                 MusicNotificationState.updateArtist(artist)
             }
-            if (title != null) {
+            if (!title.isNullOrEmpty()) {
                 MusicNotificationState.updateTitle(title)
             }
         }

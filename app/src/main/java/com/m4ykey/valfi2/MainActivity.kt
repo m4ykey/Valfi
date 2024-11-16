@@ -25,6 +25,7 @@ import com.m4ykey.valfi2.notification.StartServiceReceiver
 import com.m4ykey.valfi2.notification.checkNotificationListenerPermission
 import com.m4ykey.valfi2.preferences.DialogPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,10 +57,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     private fun displayCurrentlyPlayingSong() {
         lifecycleScope.launch {
-            MusicNotificationState.artist.collect { artist ->
-                MusicNotificationState.title.collect { title ->
-                    updateCurrentlyPlayingSong(title, artist)
-                }
+            combine(MusicNotificationState.artist, MusicNotificationState.title) { artist, title ->
+                updateCurrentlyPlayingSong(artist = artist, title = title)
+            }.collect {
+
             }
         }
 
