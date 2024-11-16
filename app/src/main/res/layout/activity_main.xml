@@ -32,4 +32,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <include layout="@layout/layout_currently_playing"
+        app:layout_constraintBottom_toTopOf="@id/bottomnavigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutCurrentlyPlaying"/>
+
+    <ImageView
+        android:id="@+id/imgArrowUp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomnavigation"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_up"
+        app:tint="@color/textColor" />
+
+    <include
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomnavigation"
+        android:id="@+id/layoutGetNotificationPermission"
+        layout="@layout/layout_get_notification_permission"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

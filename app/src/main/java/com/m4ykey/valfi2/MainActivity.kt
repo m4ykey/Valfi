@@ -1,6 +1,8 @@
 package com.m4ykey.valfi2
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -14,7 +16,13 @@ import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
 import com.m4ykey.ui.AlbumNewReleaseFragment
 import com.m4ykey.valfi2.Utils.ALBUM_NEW_RELEASE_FRAGMENT
+import com.m4ykey.valfi2.Utils.CUSTOM_START_SERVICE_ACTION
 import com.m4ykey.valfi2.Utils.OPEN_FRAGMENT
+import com.m4ykey.valfi2.databinding.ActivityMainBinding
+import com.m4ykey.valfi2.notification.MusicNotificationState
+import com.m4ykey.valfi2.notification.MusicNotificationViewModel
+import com.m4ykey.valfi2.notification.StartServiceReceiver
+import com.m4ykey.valfi2.notification.checkNotificationListenerPermission
 import com.m4ykey.valfi2.preferences.DialogPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,11 +36,60 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
     @Inject
     lateinit var dialogPreferences: DialogPreferences
 
+    private lateinit var binding : ActivityMainBinding
+
+    private val viewModel by viewModels<MusicNotificationViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupNavigation()
+
+        val intent = Intent(this, StartServiceReceiver::class.java)
+        intent.action = CUSTOM_START_SERVICE_ACTION
+        sendBroadcast(intent)
+
+        displayCurrentlyPlayingSong()
+    }
+
+    private fun displayCurrentlyPlayingSong() {
+        lifecycleScope.launch {
+            MusicNotificationState.artist.collect { artist ->
+                MusicNotificationState.title.collect { title ->
+                    updateCurrentlyPlayingSong(title, artist)
+                }
+            }
+        }
+
+        viewModel.isNotificationAccessGranted.observe(this) { isNotificationGranted ->
+            if (isNotificationGranted == true) {
+                binding.layoutGetNotificationPermission.root.isVisible = false
+            } else {
+                binding.layoutGetNotificationPermission.root.isVisible = true
+                binding.layoutGetNotificationPermission.btnPermission.setOnClickListener {
+                    checkNotificationListenerPermission(this)
+                }
+            }
+        }
+    }
+
+    private fun updateCurrentlyPlayingSong(title : String?, artist : String?) {
+        if (title.isNullOrBlank() && artist.isNullOrBlank()) {
+            binding.apply {
+                layoutCurrentlyPlaying.root.isVisible = false
+                imgArrowUp.isVisible = false
+            }
+        } else {
+            binding.layoutCurrentlyPlaying.apply {
+                root.isVisible = true
+                txtTitle.text = title
+                txtArtist.text = artist
+            }
+            binding.imgArrowUp.isVisible = true
+
+        }
     }
 
     private fun openFragment(fragmentName : String) {
@@ -66,11 +123,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     private fun readSelectedThemeOption() {
         lifecycleScope.launch {
-            val themeOption = themePreferences.getSelectedThemeOptions()
-            when (themeOption) {
-                ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                ThemeOptions.Default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            themePreferences.getSelectedThemeOptions().collect { themeOptions ->
+                when (themeOptions) {
+                    ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    ThemeOptions.Default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                }
             }
         }
     }

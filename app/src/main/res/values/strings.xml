@@ -5,4 +5,5 @@
     <string name="attention">Attention!</string>
     <string name="attention_message">This app is designed exclusively for saving music albums. It does not support music playback.</string>
     <string name="close">Close</string>
+    <string name="service_name" translatable="false">Notification Listener</string>
 </resources>
