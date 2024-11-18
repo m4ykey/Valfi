@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.onEach
 
 open class BaseViewModel : ViewModel() {
 
-    protected val _isLoading = MutableStateFlow(false)
+    val _isLoading = MutableStateFlow(false)
     val isLoading : StateFlow<Boolean> get() = _isLoading
 
-    protected val _error = MutableStateFlow<String?>(null)
+    val _error = MutableStateFlow<String?>(null)
     val error : StateFlow<String?> get() = _error
 
     protected fun <T> runFlow (

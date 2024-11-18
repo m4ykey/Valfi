@@ -1,6 +1,6 @@
 [versions]
 application = "8.7.2"
-navigation = "2.8.3"
+navigation = "2.8.4"
 retrofit = "2.11.0"
 lifecycle = "2.8.7"
 hilt = "2.52"
@@ -12,7 +12,7 @@ coroutines = "1.9.0"
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.2.1" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.1.2" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.2" }
-firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version = "24.0.3" }
+firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version = "24.1.0" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 extJunit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }

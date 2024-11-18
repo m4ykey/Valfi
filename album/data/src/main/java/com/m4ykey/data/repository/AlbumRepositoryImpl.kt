@@ -1,5 +1,6 @@
 package com.m4ykey.data.repository
 
+import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.core.network.safeApiCall
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
@@ -21,14 +22,13 @@ import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
     private val api: AlbumApi,
-    private val tokenProvider: com.m4ykey.authentication.interceptor.SpotifyTokenProvider,
+    private val tokenProvider: SpotifyTokenProvider,
     private val dao : AlbumDao
 ) : AlbumRepository {
 
     private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }
 
     override suspend fun getNewReleases(offset: Int, limit: Int): Flow<List<AlbumItem>> = flow {
-        emit(emptyList())
         try {
             val result = api.getNewReleases(token = token, offset = offset, limit = limit)
             val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
@@ -39,7 +39,6 @@ class AlbumRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<List<AlbumItem>> = flow {
-        emit(emptyList())
         try {
             val result = api.searchAlbums(token = token, query = query, offset = offset, limit = limit)
             val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
