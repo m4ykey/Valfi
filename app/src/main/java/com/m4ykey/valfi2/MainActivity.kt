@@ -2,6 +2,7 @@ package com.m4ykey.valfi2
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -56,6 +57,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
             combine(MusicNotificationState.artist, MusicNotificationState.title) { artist, title ->
                 updateCurrentlyPlayingSong(artist = artist, title = title)
             }.collect {  }
+        }
+
+        binding.apply {
+            layoutCurrentlyPlaying.imgArrowDown.setOnClickListener {
+                layoutCurrentlyPlaying.root.isVisible = false
+                imgArrowUp.visibility = View.VISIBLE
+            }
+
+            imgArrowUp.setOnClickListener {
+                layoutCurrentlyPlaying.root.isVisible = true
+                imgArrowUp.visibility = View.GONE
+            }
         }
     }
 
