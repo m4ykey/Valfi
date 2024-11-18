@@ -9,11 +9,11 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-fun openNotificationAccessSettings(context: Context) {
+private fun openNotificationAccessSettings(context: Context) {
     context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
 }
 
-fun isNotificationListenerEnabled(context: Context) : Boolean {
+private fun isNotificationListenerEnabled(context: Context) : Boolean {
     val flat = Settings.Secure.getString(
         context.contentResolver,
         "enabled_notification_listeners"

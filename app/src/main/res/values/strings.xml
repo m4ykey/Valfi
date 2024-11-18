@@ -6,4 +6,8 @@
     <string name="attention_message">This app is designed exclusively for saving music albums. It does not support music playback.</string>
     <string name="close">Close</string>
     <string name="service_name" translatable="false">Notification Listener</string>
+    <string name="grant_access">Grant access</string>
+    <string name="allow_access_to_music_listening">Do you want to allow access to display what music you are currently listening to?</string>
+    <string name="dont_access_grant">Don\'t grant access</string>
+    <string name="app_need_to_notification_display_music">The app needs access to notifications to display the currently playing music.</string>
 </resources>

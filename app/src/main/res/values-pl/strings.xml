@@ -5,4 +5,8 @@
     <string name="attention">Uwaga!</string>
     <string name="attention_message">Ta aplikacja służy tylko do zapisywania swoich ulubionych albumów muzycznych. Nie obsługuje ona odtwarzania muzyki.</string>
     <string name="close">Zamknij</string>
+    <string name="grant_access">Udziel dostępu</string>
+    <string name="allow_access_to_music_listening">Czy chcesz zezwolić na dostęp do wyświetlania jakiej muzyki aktualnie słuchasz?</string>
+    <string name="dont_access_grant">Nie udzielaj dostępu</string>
+    <string name="app_need_to_notification_display_music">Aplikacja potrzebuje dostępu do powiadomień, aby wyświetlać aktualnie odtwarzaną muzykę.</string>
 </resources>

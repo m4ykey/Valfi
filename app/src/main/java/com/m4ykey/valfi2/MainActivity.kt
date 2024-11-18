@@ -2,7 +2,6 @@ package com.m4ykey.valfi2
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -20,7 +19,6 @@ import com.m4ykey.valfi2.Utils.CUSTOM_START_SERVICE_ACTION
 import com.m4ykey.valfi2.Utils.OPEN_FRAGMENT
 import com.m4ykey.valfi2.databinding.ActivityMainBinding
 import com.m4ykey.valfi2.notification.MusicNotificationState
-import com.m4ykey.valfi2.notification.MusicNotificationViewModel
 import com.m4ykey.valfi2.notification.StartServiceReceiver
 import com.m4ykey.valfi2.notification.checkNotificationListenerPermission
 import com.m4ykey.valfi2.preferences.DialogPreferences
@@ -38,8 +36,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
     lateinit var dialogPreferences: DialogPreferences
 
     private lateinit var binding : ActivityMainBinding
-
-    private val viewModel by viewModels<MusicNotificationViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,21 +55,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         lifecycleScope.launch {
             combine(MusicNotificationState.artist, MusicNotificationState.title) { artist, title ->
                 updateCurrentlyPlayingSong(artist = artist, title = title)
-            }.collect {
-
-            }
+            }.collect {  }
         }
+    }
 
-        viewModel.isNotificationAccessGranted.observe(this) { isNotificationGranted ->
-            if (isNotificationGranted == true) {
-                binding.layoutGetNotificationPermission.root.isVisible = false
-            } else {
-                binding.layoutGetNotificationPermission.root.isVisible = true
-                binding.layoutGetNotificationPermission.btnPermission.setOnClickListener {
-                    checkNotificationListenerPermission(this)
-                }
+    private fun displayGrantAccessMaterialDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.grant_access)
+            .setMessage(R.string.app_need_to_notification_display_music)
+            .setPositiveButton(R.string.grant_access) { _, _ ->
+                checkNotificationListenerPermission(this@MainActivity)
             }
-        }
+            .setNegativeButton(R.string.dont_access_grant) { dialog, _ -> dialog.dismiss() }
+            .setCancelable(false)
+            .show()
+        lifecycleScope.launch { dialogPreferences.setIsPermissionGranted() }
     }
 
     private fun updateCurrentlyPlayingSong(title : String?, artist : String?) {
@@ -142,7 +138,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
             .setPositiveButton(R.string.close) { dialog, _ -> dialog.dismiss() }
             .setView(customView)
             .show()
-        lifecycleScope.launch { dialogPreferences.setIsDialogShow(this@MainActivity) }
+        lifecycleScope.launch { dialogPreferences.setIsDialogShow() }
+    }
+
+    private fun readDialogPreferences() {
+        lifecycleScope.launch {
+            if (!dialogPreferences.isDialogAlreadyShown()) {
+                showInitialMaterialAlertDialog()
+            }
+        }
+
+        lifecycleScope.launch {
+            if (!dialogPreferences.isPermissionGranted()) {
+                displayGrantAccessMaterialDialog()
+            }
+        }
     }
 
     override fun onStart() {
@@ -153,11 +163,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         }
 
         readSelectedThemeOption()
-        lifecycleScope.launch {
-            val isDialogShown = dialogPreferences.isDialogAlreadyShown(this@MainActivity)
-            if (!isDialogShown) {
-                showInitialMaterialAlertDialog()
-            }
-        }
+        readDialogPreferences()
     }
 }
