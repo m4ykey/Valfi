@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.ui.adapter.ColorAdapter
@@ -34,7 +35,10 @@ class AlbumCoverFragment : BaseFragment<FragmentAlbumCoverBinding>(
                 colorAdapter.submitList(colors.map { ColorList(color = it) })
             }
 
-            recyclerViewColors.adapter = colorAdapter
+            recyclerViewColors.apply {
+                adapter = colorAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+            }
         }
     }
 

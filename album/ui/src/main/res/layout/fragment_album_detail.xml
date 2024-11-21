@@ -34,7 +34,6 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.appbar.MaterialToolbar
-                    app:menu="@menu/star_rating_menu"
                     android:id="@+id/toolbar"
                     app:navigationIconTint="@color/navigationIconColor"
                     android:layout_width="match_parent"

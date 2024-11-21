@@ -49,9 +49,6 @@ class AlbumViewModel @Inject constructor(
     private val _isLoadingTracks = MutableStateFlow(false)
     val isLoadingTracks : StateFlow<Boolean> get() = _isLoadingTracks
 
-    //private val _isError = MutableStateFlow<String?>(null)
-    //val isError : StateFlow<String?> get() = _isError
-
     private var _totalTrackDurationMs = MutableStateFlow(0L)
     val totalTracksDuration : StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
 
