@@ -1,22 +1,14 @@
 package com.m4ykey.ui.helpers
 
+import com.m4ykey.core.views.getArtistsList
+import com.m4ykey.core.views.getLargestImageFromUrl
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.local.model.AlbumEntity
 
-fun <T, I> getLargestImageUrl(
-    item : T,
-    getImageList : (T) -> List<I>,
-    getHeight : (I) -> Int,
-    getWidth : (I) -> Int,
-    getUrl : (I) -> String
-) : String? {
-    return getImageList(item).maxByOrNull { getHeight(it) * getWidth(it) }?.let(getUrl)
-}
-
 fun AlbumItem.getLargestImageUrl() : String? {
-    return getLargestImageUrl(
+    return getLargestImageFromUrl(
         this,
         { it.images },
         { it.height },
@@ -26,7 +18,7 @@ fun AlbumItem.getLargestImageUrl() : String? {
 }
 
 fun AlbumDetail.getLargestImageUrl() : String? {
-    return getLargestImageUrl(
+    return getLargestImageFromUrl(
         this,
         { it.images },
         { it.height },
@@ -35,16 +27,8 @@ fun AlbumDetail.getLargestImageUrl() : String? {
     )
 }
 
-fun <T, A> getArtistList(
-    item : T,
-    getArtistList : (T) -> List<A>,
-    getArtistName : (A) -> String
-) : String {
-    return getArtistList(item).joinToString(", ") { getArtistName(it) }
-}
-
 fun AlbumItem.getArtistList() : String {
-    return getArtistList(
+    return getArtistsList(
         this,
         { it.artists },
         { it.name }
@@ -52,7 +36,7 @@ fun AlbumItem.getArtistList() : String {
 }
 
 fun AlbumEntity.getArtistList() : String {
-    return getArtistList(
+    return getArtistsList(
         this,
         { it.artists },
         { it.name }
@@ -60,7 +44,7 @@ fun AlbumEntity.getArtistList() : String {
 }
 
 fun TrackItem.getArtistList() : String {
-    return getArtistList(
+    return getArtistsList(
         this,
         { it.artists },
         { it.name }
@@ -68,7 +52,7 @@ fun TrackItem.getArtistList() : String {
 }
 
 fun AlbumDetail.getArtistList() : String {
-    return getArtistList(
+    return getArtistsList(
         this,
         { it.artists },
         { it.name }

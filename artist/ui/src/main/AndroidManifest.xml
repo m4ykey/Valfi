@@ -3,8 +3,8 @@
 
     <application>
         <activity
-            android:name=".ArtistActivity"
-            android:exported="false" />
+            android:name="com.m4ykey.ui.ArtistActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

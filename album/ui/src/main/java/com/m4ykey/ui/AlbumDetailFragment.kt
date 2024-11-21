@@ -283,10 +283,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
             btnArtist.setOnClickListener {
-                if (item.artists.size > 1) {
-
-                } else {
-                    val artistId = item.artists[0].id
+                val artistId = item.artists[0].id
+                artistId.let {
+                    val intent = Intent(requireContext(), ArtistActivity::class.java)
+                    intent.putExtra("artistId", it)
+                    startActivity(intent)
                 }
             }
 
