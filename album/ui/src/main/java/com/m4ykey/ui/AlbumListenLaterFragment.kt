@@ -7,6 +7,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.m4ykey.album.ui.R
+import com.m4ykey.album.ui.databinding.FragmentAlbumListenLaterBinding
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -15,7 +17,6 @@ import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.AlbumAdapter
-import com.m4ykey.ui.databinding.FragmentAlbumListenLaterBinding
 import com.m4ykey.ui.helpers.BooleanWrapper
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText

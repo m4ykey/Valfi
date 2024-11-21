@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.m4ykey.ui"
+    namespace = "com.m4ykey.artist.ui"
     compileSdk = 34
 
     defaultConfig {

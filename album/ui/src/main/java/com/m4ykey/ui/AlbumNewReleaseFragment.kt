@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.m4ykey.album.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.core.Constants
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -15,7 +16,6 @@ import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.NewReleaseAdapter
-import com.m4ykey.ui.databinding.FragmentAlbumNewReleaseBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

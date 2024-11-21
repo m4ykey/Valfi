@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.m4ykey.album.ui.R
+import com.m4ykey.album.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.core.Constants.ALBUM
 import com.m4ykey.core.Constants.COMPILATION
 import com.m4ykey.core.Constants.EP
@@ -29,7 +31,6 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.preferences.AlbumPreferences
 import com.m4ykey.settings.SettingsActivity
 import com.m4ykey.ui.adapter.AlbumAdapter
-import com.m4ykey.ui.databinding.FragmentAlbumHomeBinding
 import com.m4ykey.ui.helpers.BooleanWrapper
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText

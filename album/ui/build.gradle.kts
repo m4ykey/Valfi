@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.m4ykey.ui"
+    namespace = "com.m4ykey.album.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":settings"))
     implementation(project(":album:data"))
-    //implementation(project(":artist:ui"))
+    implementation(project(":artist:ui"))
 
     libs.apply {
         implementation(androidxCore)

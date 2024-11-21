@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class ArtistRepositoryImpl(
+class ArtistRepositoryImpl @Inject constructor(
     private val api : ArtistApi,
     private val tokenProvider : SpotifyTokenProvider
 ) : ArtistRepository {

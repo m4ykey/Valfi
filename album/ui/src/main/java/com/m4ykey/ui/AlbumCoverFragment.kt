@@ -5,6 +5,7 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.m4ykey.album.ui.databinding.FragmentAlbumCoverBinding
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.ui.adapter.ColorAdapter
@@ -12,7 +13,6 @@ import com.m4ykey.ui.colors.ColorList
 import com.m4ykey.ui.colors.extractColorsFromBitmap
 import com.m4ykey.ui.colors.intToHex
 import com.m4ykey.ui.colors.loadImageWithColors
-import com.m4ykey.ui.databinding.FragmentAlbumCoverBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

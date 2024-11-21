@@ -1,9 +1,9 @@
 package com.m4ykey.ui.adapter.viewholder
 
+import com.m4ykey.album.ui.databinding.LayoutAlbumGridBinding
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 import com.m4ykey.ui.helpers.OnAlbumClick
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl

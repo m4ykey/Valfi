@@ -2,11 +2,11 @@ package com.m4ykey.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.m4ykey.album.ui.databinding.LayoutAlbumGridBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.ui.adapter.callback.AlbumCallback
 import com.m4ykey.ui.adapter.viewholder.NewReleaseViewHolder
-import com.m4ykey.ui.databinding.LayoutAlbumGridBinding
 import com.m4ykey.ui.helpers.OnAlbumClick
 
 class NewReleaseAdapter(

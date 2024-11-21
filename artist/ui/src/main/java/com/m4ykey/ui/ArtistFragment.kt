@@ -3,8 +3,8 @@ package com.m4ykey.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.m4ykey.artist.ui.databinding.FragmentArtistBinding
 import com.m4ykey.core.views.BaseFragment
-import com.m4ykey.ui.databinding.FragmentArtistBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

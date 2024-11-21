@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.m4ykey.album.ui.R
+import com.m4ykey.album.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -28,7 +30,6 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.colors.ColorViewModel
-import com.m4ykey.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.ui.helpers.animateColorTransition
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl

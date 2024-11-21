@@ -1,8 +1,8 @@
 package com.m4ykey.ui.adapter.viewholder
 
+import com.m4ykey.album.ui.databinding.LayoutColorsBinding
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.ui.colors.ColorList
-import com.m4ykey.ui.databinding.LayoutColorsBinding
 import com.m4ykey.ui.helpers.OnColorClick
 
 class ColorViewHolder(

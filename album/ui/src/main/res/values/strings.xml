@@ -43,22 +43,20 @@
     <string name="empty_string" translatable="false" />
     <string name="speech_not_recognition">Speech recognition is not available</string>
     <string name="enter_album_name">Enter album name</string>
-    <string name="informations">Informations</string>
+    <string name="informations">Information\'s</string>
     <string name="hour">h</string>
     <string name="sec">sec.</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="duration">"Duration: %1$s"</string>
     <string name="rating">Rating</string>
     <string name="discover_new_releases">Discover New Releases</string>
+    <string name="hello">Hello</string>
+    <string name="good_evening">Good evening</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>
         <item>@string/oldest</item>
         <item>@string/alphabetical</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hello">Hello</string>
-    <string name="good_evening">Good evening</string>
 
 </resources>

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.m4ykey.data"
+    namespace = "com.m4ykey.artist.data"
     compileSdk = 34
 
     defaultConfig {
