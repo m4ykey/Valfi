@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.m4ykey.artist.ui.R
 import com.m4ykey.artist.ui.databinding.FragmentArtistBinding
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.loadImage
@@ -11,6 +12,7 @@ import com.m4ykey.data.domain.model.Artist
 import com.m4ykey.ui.helpers.getLargestImageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 
 @AndroidEntryPoint
 class ArtistFragment : BaseFragment<FragmentArtistBinding>(
@@ -44,6 +46,8 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
 
         observeViewModels()
 
+        binding.toolbar.setNavigationOnClickListener { activity?.finish() }
+
     }
 
     private fun observeViewModels() {
@@ -56,7 +60,11 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
 
     private fun displayArtist(item : Artist) {
         binding.apply {
+            val formattedFollowers = NumberFormat.getInstance().format(item.followers.total)
+
             loadImage(imgArtist, item.getLargestImageUrl().toString(), requireContext())
+            txtArtistName.text = item.name
+            txtFollowers.text = getString(R.string.followers_count, formattedFollowers, getString(R.string.followers))
         }
     }
 }

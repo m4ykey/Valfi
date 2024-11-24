@@ -1,2 +1,5 @@
 <resources>
+    <string name="follow">Follow</string>
+    <string name="followers_count" translatable="false">%1$s %2$s</string>
+    <string name="followers">followers</string>
 </resources>
