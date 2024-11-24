@@ -1,5 +1,7 @@
 package com.m4ykey.core.views
 
+import android.view.View
+
 fun <T, I> getLargestImageFromUrl(
     item : T,
     getImageList : (T) -> List<I>,
@@ -16,4 +18,11 @@ fun <T, A> getArtistsList(
     getArtistName : (A) -> String
 ) : String {
     return getArtistList(item).joinToString(", ") { getArtistName(it) }
+}
+
+fun View.hide() {
+    visibility = View.GONE
+}
+fun View.show() {
+    visibility = View.VISIBLE
 }

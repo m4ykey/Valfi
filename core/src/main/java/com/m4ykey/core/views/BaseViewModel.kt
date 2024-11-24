@@ -18,6 +18,8 @@ open class BaseViewModel : ViewModel() {
     val _error = MutableStateFlow<String?>(null)
     val error : StateFlow<String?> get() = _error
 
+    var isPaginationEnded = false
+
     protected fun <T> runFlow (
         flow : Flow<T>,
         resultState : MutableStateFlow<T?>

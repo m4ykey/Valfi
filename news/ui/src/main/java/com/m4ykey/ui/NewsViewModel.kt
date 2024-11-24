@@ -20,33 +20,34 @@ class NewsViewModel @Inject constructor(
     val news : StateFlow<List<Article>> get() = _news
 
     private var page = 1
-    var isPaginationEnded = false
 
-    fun getMusicNews(clearList : Boolean, sortBy : String) = viewModelScope.launch {
-        if (_isLoading.value || isPaginationEnded) return@launch
+    fun getMusicNews(clearList : Boolean, sortBy : String) {
+        if (_isLoading.value || isPaginationEnded) return
 
-        if (clearList) {
-            _news.value = emptyList()
-            page = 1
-            isPaginationEnded = false
-        }
+        viewModelScope.launch {
+            if (clearList) {
+                _news.value = emptyList()
+                page = 1
+                isPaginationEnded = false
+            }
 
-        _isLoading.value = true
-        _error.value = null
-        try {
-            repository.getMusicNews(page = page, pageSize = PAGE_SIZE, sortBy = sortBy)
-                .collect { articles ->
-                    if (articles.isNotEmpty()) {
-                        _news.value += articles
-                        page++
-                    } else {
+            _isLoading.value = true
+            _error.value = null
+
+            try {
+                repository.getMusicNews(page = page, pageSize = PAGE_SIZE, sortBy = sortBy).collect { news ->
+                    if (news.isEmpty()) {
                         isPaginationEnded = true
+                    } else {
+                        _news.value += news
+                        page++
                     }
                 }
-        } catch (e : Exception) {
-            _error.value = e.message ?: "An unknown error occurred"
-        } finally {
-            _isLoading.value = false
+            } catch (e : Exception) {
+                _error.value = e.message ?: "An unknown error occurred"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }

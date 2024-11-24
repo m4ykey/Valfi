@@ -29,33 +29,35 @@ class AlbumViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private var _search = MutableStateFlow<List<AlbumItem>>(emptyList())
-    val albums : StateFlow<List<AlbumItem>> get() = _search
+    val search: StateFlow<List<AlbumItem>> get() = _search
 
     private var _newRelease = MutableStateFlow<List<AlbumItem>>(emptyList())
-    val newRelease : StateFlow<List<AlbumItem>> get() = _newRelease
+    val newRelease: StateFlow<List<AlbumItem>> get() = _newRelease
 
     private var _detail = MutableStateFlow<AlbumDetail?>(null)
-    val detail : StateFlow<AlbumDetail?> get() = _detail
+    val detail: StateFlow<AlbumDetail?> get() = _detail
 
     private var _tracks = MutableStateFlow<List<TrackItem>>(emptyList())
-    val tracks : StateFlow<List<TrackItem>> get() = _tracks
+    val tracks: StateFlow<List<TrackItem>> get() = _tracks
 
     private var _albumPaging = MutableLiveData<List<AlbumEntity>>()
-    val albumPaging : LiveData<List<AlbumEntity>> get() = _albumPaging
+    val albumPaging: LiveData<List<AlbumEntity>> get() = _albumPaging
 
     private var _searchResult = MutableLiveData<List<AlbumEntity>>()
-    val searchResult : LiveData<List<AlbumEntity>> get() = _searchResult
+    val searchResult: LiveData<List<AlbumEntity>> get() = _searchResult
 
     private val _isLoadingTracks = MutableStateFlow(false)
-    val isLoadingTracks : StateFlow<Boolean> get() = _isLoadingTracks
+    val isLoadingTracks: StateFlow<Boolean> get() = _isLoadingTracks
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
-    val totalTracksDuration : StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
+    val totalTracksDuration: StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
+
+    private var _hasSearched = MutableStateFlow(false)
+    val hasSearched: StateFlow<Boolean> = _hasSearched
 
     private var offset = 0
-    var isPaginationEnded = false
 
-    fun getAlbumDetails(id : String) {
+    fun getAlbumDetails(id: String) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -67,37 +69,36 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun getAlbumTracks(id : String) = viewModelScope.launch {
-        if (_isLoadingTracks.value || isPaginationEnded) return@launch
+    fun getAlbumTracks(id: String) {
+        if (_isLoadingTracks.value || isPaginationEnded) return
 
-        _isLoadingTracks.value = true
-        try {
+        viewModelScope.launch {
+            _isLoadingTracks.value = true
             _error.value = null
 
-            trackRepository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
-                .collect { tracks ->
-                    if (tracks.isNotEmpty()) {
-                        val currentList = _tracks.value.toMutableList()
-                        currentList.addAll(tracks)
-                        _tracks.value = currentList
+            try {
+                trackRepository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
+                    .collect { tracks ->
+                        if (tracks.isEmpty()) {
+                            isPaginationEnded = true
+                        } else {
+                            _tracks.value += tracks
+                            offset += PAGE_SIZE
+                            isPaginationEnded = tracks.size < PAGE_SIZE
 
-                        val totalDuration = tracks.sumOf { it.durationMs.toLong() }
-                        _totalTrackDurationMs.value += totalDuration
-
-                        offset += PAGE_SIZE
-                        if (tracks.size < PAGE_SIZE) isPaginationEnded = true
-                    } else {
-                        isPaginationEnded = true
+                            val totalDuration = tracks.sumOf { it.durationMs.toLong() }
+                            _totalTrackDurationMs.value += totalDuration
+                        }
                     }
-                }
-        } catch (e : Exception) {
-            _error.value = e.message ?: "An unknown error occurred"
-        } finally {
-            _isLoadingTracks.value = false
+            } catch (e: Exception) {
+                _error.value = e.message ?: "An unknown error occurred"
+            } finally {
+                _isLoadingTracks.value = false
+            }
         }
     }
 
-    private fun getAlbumById(id : String) = viewModelScope.launch {
+    private fun getAlbumById(id: String) = viewModelScope.launch {
         _isLoading.value = true
 
         try {
@@ -106,62 +107,61 @@ class AlbumViewModel @Inject constructor(
             repository.getAlbumById(id).collect { result ->
                 _detail.value = result
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             _error.value = e.message ?: "An unknown error occurred"
         } finally {
             _isLoading.value = false
         }
     }
 
-    fun getNewReleases() = viewModelScope.launch {
-        if (_isLoading.value || isPaginationEnded) return@launch
+    fun getNewReleases() {
+        if (_isLoading.value || isPaginationEnded) return
 
-        _isLoading.value = true
-        try {
+        viewModelScope.launch {
+            _isLoading.value = true
             _error.value = null
 
-            repository.getNewReleases(offset = offset, limit = PAGE_SIZE)
-                .collect { albums ->
-                    if (albums.isNotEmpty()) {
-                        val currentList = _newRelease.value.toMutableList()
-                        currentList.addAll(albums)
-                        _newRelease.value = currentList
-                        offset += PAGE_SIZE
-                        if (albums.size < PAGE_SIZE) isPaginationEnded = true
-                    } else {
+            try {
+                repository.getNewReleases(offset, PAGE_SIZE).collect { albums ->
+                    if (albums.isEmpty()) {
                         isPaginationEnded = true
+                    } else {
+                        _newRelease.value += albums
+                        offset += PAGE_SIZE
+                        isPaginationEnded = albums.size < PAGE_SIZE
                     }
                 }
-        } catch (e : Exception) {
-            _error.value = e.message ?: "An unknown error occurred"
-        } finally {
-            _isLoading.value = false
+            } catch (e: Exception) {
+                _error.value = e.message ?: "An unknown error occurred"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
-    fun searchAlbums(query : String) = viewModelScope.launch {
-        if (_isLoading.value || isPaginationEnded) return@launch
+    fun searchAlbums(query: String) {
+        if (_isLoading.value || isPaginationEnded) return
 
-        _isLoading.value = true
-        try {
+        viewModelScope.launch {
+            _isLoading.value = true
             _error.value = null
 
-            repository.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
-                .collect { searchResult ->
-                    if (searchResult.isNotEmpty()) {
-                        val currentList = _search.value.toMutableList()
-                        currentList.addAll(searchResult)
-                        _search.value = currentList
-                        offset += PAGE_SIZE
-                        if (searchResult.size < PAGE_SIZE) isPaginationEnded = true
-                    } else {
-                        isPaginationEnded = true
+            try {
+                repository.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
+                    .collect { albums ->
+                        if (albums.isEmpty()) {
+                            isPaginationEnded = true
+                        } else {
+                            _search.value += albums
+                            offset += PAGE_SIZE
+                            isPaginationEnded = albums.size < PAGE_SIZE
+                        }
                     }
-                }
-        } catch (e : Exception) {
-            _error.value = e.message ?: "An unknown error occurred"
-        } finally {
-            _isLoading.value = false
+            } catch (e: Exception) {
+                _error.value = e.message ?: "An unknown error occurred"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -171,78 +171,77 @@ class AlbumViewModel @Inject constructor(
         _error.value = null
         isPaginationEnded = false
         _search.value = emptyList()
+        _hasSearched.value = false
     }
 
-    fun searchAlbumByName(albumName : String) {
+    fun searchAlbumByName(albumName: String) {
         viewModelScope.launch {
-            val result = repository.searchAlbumByName(albumName)
-            _searchResult.value = result
+            _searchResult.value = repository.searchAlbumByName(albumName)
         }
     }
 
-    fun searchAlbumsListenLater(albumName : String) {
+    fun searchAlbumsListenLater(albumName: String) {
         viewModelScope.launch {
-            val result = repository.searchAlbumsListenLater(albumName)
-            _searchResult.value = result
+            _searchResult.value = repository.searchAlbumsListenLater(albumName)
         }
     }
 
-    fun getAlbumType(albumType : String) {
+    fun getAlbumType(albumType: String) {
         viewModelScope.launch {
-            val result = repository.getAlbumType(albumType)
-            _albumPaging.value = result
+            _albumPaging.value = repository.getAlbumType(albumType)
         }
     }
 
-    fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
+    fun getListenLaterCount(): Flow<Int> = repository.getListenLaterCount()
 
-    suspend fun getRandomAlbum() : AlbumEntity? = repository.getRandomAlbum()
+    suspend fun getRandomAlbum(): AlbumEntity? = repository.getRandomAlbum()
 
     fun getSavedAlbums() {
         viewModelScope.launch {
-            val result = repository.getSavedAlbums()
-            _albumPaging.value = result
+            _albumPaging.value = repository.getSavedAlbums()
         }
     }
 
     fun getSavedAlbumAsc() {
         viewModelScope.launch {
-            val result = repository.getSavedAlbumAsc()
-            _albumPaging.value = result
+            _albumPaging.value = repository.getSavedAlbumAsc()
         }
     }
 
     fun getAlbumSortedByName() {
         viewModelScope.launch {
-            val result = repository.getAlbumSortedByName()
-            _albumPaging.value = result
+            _albumPaging.value = repository.getAlbumSortedByName()
         }
     }
 
     fun getListenLaterAlbums() {
         viewModelScope.launch {
-            val result = repository.getListenLaterAlbums()
-            _albumPaging.value = result
+            _albumPaging.value = repository.getListenLaterAlbums()
         }
     }
 
-    suspend fun insertAlbum(album : AlbumEntity) = repository.insertAlbum(album)
+    suspend fun insertAlbum(album: AlbumEntity) = repository.insertAlbum(album)
 
-    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = repository.insertSavedAlbum(isAlbumSaved)
+    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) =
+        repository.insertSavedAlbum(isAlbumSaved)
 
-    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) = repository.insertListenLaterAlbum(isListenLaterSaved)
+    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) =
+        repository.insertListenLaterAlbum(isListenLaterSaved)
 
-    suspend fun getAlbum(albumId : String) : AlbumEntity? = repository.getAlbum(albumId)
+    suspend fun getAlbum(albumId: String): AlbumEntity? = repository.getAlbum(albumId)
 
-    suspend fun getSavedAlbumState(albumId : String) : IsAlbumSaved? = repository.getSavedAlbumState(albumId)
+    suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? =
+        repository.getSavedAlbumState(albumId)
 
-    suspend fun getListenLaterState(albumId: String) : IsListenLaterSaved? = repository.getListenLaterState(albumId)
+    suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? =
+        repository.getListenLaterState(albumId)
 
-    suspend fun getAlbumWithStates(albumId : String) : AlbumWithStates? = repository.getAlbumWithStates(albumId)
+    suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? =
+        repository.getAlbumWithStates(albumId)
 
     suspend fun deleteAlbum(albumId: String) = repository.deleteAlbum(albumId)
 
-    suspend fun deleteSavedAlbumState(albumId : String) = repository.deleteSavedAlbumState(albumId)
+    suspend fun deleteSavedAlbumState(albumId: String) = repository.deleteSavedAlbumState(albumId)
 
     suspend fun deleteListenLaterState(albumId: String) = repository.deleteListenLaterState(albumId)
 }

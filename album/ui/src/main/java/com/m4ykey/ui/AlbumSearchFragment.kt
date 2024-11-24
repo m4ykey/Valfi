@@ -25,10 +25,12 @@ import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.views.BaseFragment
+import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
+import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,17 +72,35 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         handleRecyclerViewButton()
 
         lifecycleScope.launch {
-            viewModel.albums.collect { searchAdapter.submitList(it) }
+            viewModel.hasSearched.collect { hasSearched ->
+                if (hasSearched) {
+                    viewModel.search.collect { albums ->
+                        if (albums.isEmpty()) {
+                            binding.layoutNothingFound.root.show()
+                            binding.rvSearchAlbums.hide()
+                        } else {
+                            searchAdapter.submitList(albums)
+                            binding.layoutNothingFound.root.hide()
+                            binding.rvSearchAlbums.show()
+                        }
+                    }
+                } else {
+                    binding.layoutNothingFound.root.hide()
+                    binding.rvSearchAlbums.hide()
+                }
+            }
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect { binding.progressBar.isVisible = it }
+            viewModel.isLoading.collect { loading ->
+                binding.progressBar.isVisible = loading
+            }
         }
 
         lifecycleScope.launch {
             viewModel.error.collect { errorMessage ->
-                errorMessage?.let {
-                    showToast(requireContext(), it)
+                errorMessage?.let { error ->
+                    showToast(requireContext(), error)
                 }
             }
         }
@@ -253,7 +273,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     private fun hideClearButtonWithAnimation() {
         binding.imgClear.apply {
             animationProperties(width.toFloat(), 0f, AccelerateInterpolator())
-            visibility = View.GONE
+            hide()
         }
         resetSearchWidth()
     }
