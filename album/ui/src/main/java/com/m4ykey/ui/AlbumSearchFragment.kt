@@ -32,7 +32,6 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -71,7 +70,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         handleRecyclerViewButton()
 
         lifecycleScope.launch {
-            viewModel.albums.collectLatest { searchAdapter.submitList(it) }
+            viewModel.albums.collect { searchAdapter.submitList(it) }
         }
 
         lifecycleScope.launch {
@@ -148,11 +147,13 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
                         val searchQuery = etSearch.text?.toString()
-                        if (searchQuery?.isNotEmpty() == true) {
-                            viewModel.resetSearch()
-                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
-                        } else {
+                        if (searchQuery?.isEmpty() == true) {
                             showToast(requireContext(), getString(R.string.empty_search))
+                        } else if (searchQuery?.length!! < 4) {
+                            showToast(requireContext(), getString(R.string.query_to_short))
+                        } else {
+                            viewModel.resetSearch()
+                            viewModel.searchAlbums(searchQuery)
                         }
                     }
                 }

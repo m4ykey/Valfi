@@ -146,7 +146,7 @@ class AlbumViewModel @Inject constructor(
         try {
             _error.value = null
 
-            repository.searchAlbums(query, offset = offset, limit = PAGE_SIZE)
+            repository.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
                 .collect { searchResult ->
                     if (searchResult.isNotEmpty()) {
                         val currentList = _search.value.toMutableList()

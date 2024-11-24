@@ -43,6 +43,7 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         observeViewModels()
+
     }
 
     private fun observeViewModels() {

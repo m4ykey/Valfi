@@ -13,7 +13,7 @@ interface AlbumApi {
     suspend fun searchAlbums(
         @Header("Authorization") token : String,
         @Query("q") query : String,
-        @Query("type") type : String = "album",
+        @Query("type") type : String = "album,artist",
         @Query("limit") limit : Int,
         @Query("offset") offset : Int
     ) : AlbumListDto

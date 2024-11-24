@@ -59,8 +59,8 @@ lottie = { group = "com.airbnb.android", name = "lottie", version = "6.5.2" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.20" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.25" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.21" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.28" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }

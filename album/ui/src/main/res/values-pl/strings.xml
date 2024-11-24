@@ -24,7 +24,7 @@
     <string name="listen_later">Odsłuchaj później</string>
     <string name="album_count">Ilość albumów: %1$d</string>
     <string name="random_album">Losuj album</string>
-    <string name="empty_search">Wprowadź co najmniej 1 znak</string>
+    <string name="empty_search">Wprowadź co najmniej 4 znaki</string>
     <string name="first_add_something_to_list">Najpierw musisz dodać coś do listy</string>
     <string name="new_releases">Nowe wydania</string>
     <string name="album_info">%1$s • %2$s • %3$d %4$s</string>
@@ -49,4 +49,5 @@
     <string name="discover_new_releases">Odkryj Nowe Wydania</string>
     <string name="hello">Dzień dobry</string>
     <string name="good_evening">Dobry wieczór</string>
+    <string name="query_to_short">Wyszukiwanie jest zbyt krótkie</string>
 </resources>

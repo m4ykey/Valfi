@@ -26,7 +26,7 @@
     <string name="listen_later">Listen Later</string>
     <string name="album_count">Album Count: %1$d</string>
     <string name="random_album">Random album</string>
-    <string name="empty_search">Must enter at least 1 character</string>
+    <string name="empty_search">Must enter at least 4 character</string>
     <string name="first_add_something_to_list">First you have to add something to the list</string>
     <string name="new_releases">New releases</string>
     <string name="album_info">%1$s • %2$s • %3$d %4$s</string>
@@ -52,6 +52,7 @@
     <string name="discover_new_releases">Discover New Releases</string>
     <string name="hello">Hello</string>
     <string name="good_evening">Good evening</string>
+    <string name="query_to_short">Query to short</string>
 
     <string-array name="sort_options">
         <item>@string/latest</item>
