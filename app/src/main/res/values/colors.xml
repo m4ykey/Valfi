@@ -8,7 +8,30 @@
     <color name="bottomNavigationItemColorSelected">#171717</color>
     <color name="bottomNavigationItemColorUnSelected">#303030</color>
 
+    <color name="gray">#737373</color>
+
     <color name="noInternetBackground">@color/black</color>
     <color name="noInternetText">@color/white</color>
+
+    <color name="spotify_background">#1DB954</color>
+    <color name="spotify_stroke_color">#191414</color>
+
+    <color name="apple_music_background">#FA2A55</color>
+    <color name="apple_music_stroke_color">@color/white</color>
+
+    <color name="tidal_background">#00FFFF</color>
+    <color name="tidal_stroke_color">@color/black</color>
+
+    <color name="yt_music_background">#FF0000</color>
+    <color name="yt_music_stroke_color">@color/black</color>
+
+    <color name="deezer_background">#0061F2</color>
+    <color name="deezer_stroke_color">@color/white</color>
+
+    <color name="soundcloud_background">#FF7700</color>
+    <color name="soundcloud_stroke_color">@color/white</color>
+
+    <color name="pandora_background">#3A60A4</color>
+    <color name="pandora_stroke_color">#8A91C8</color>
 
 </resources>

@@ -16,10 +16,18 @@ import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
 import com.m4ykey.ui.AlbumNewReleaseFragment
 import com.m4ykey.valfi2.Utils.ALBUM_NEW_RELEASE_FRAGMENT
+import com.m4ykey.valfi2.Utils.APPLE_MUSIC_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.CUSTOM_START_SERVICE_ACTION
+import com.m4ykey.valfi2.Utils.DEEZER_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.OPEN_FRAGMENT
+import com.m4ykey.valfi2.Utils.PANDORA_PACKAGE_NAME
+import com.m4ykey.valfi2.Utils.SOUNDCLOUD_PACKAGE_NAME
+import com.m4ykey.valfi2.Utils.SPOTIFY_PACKAGE_NAME
+import com.m4ykey.valfi2.Utils.TIDAL_PACKAGE_NAME
+import com.m4ykey.valfi2.Utils.YOUTUBE_MUSIC_PACKAGE_NAME
 import com.m4ykey.valfi2.databinding.ActivityMainBinding
 import com.m4ykey.valfi2.notification.MusicNotificationState
+import com.m4ykey.valfi2.notification.NotificationServiceListener
 import com.m4ykey.valfi2.notification.StartServiceReceiver
 import com.m4ykey.valfi2.notification.checkNotificationListenerPermission
 import com.m4ykey.valfi2.preferences.DialogPreferences
@@ -52,10 +60,24 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         displayCurrentlyPlayingSong()
     }
 
+    private fun getCurrentMusicPackage() : String? {
+        return NotificationServiceListener.currentMusicAppPackage
+    }
+
     private fun displayCurrentlyPlayingSong() {
         lifecycleScope.launch {
-            combine(MusicNotificationState.artist, MusicNotificationState.title) { artist, title ->
-                updateCurrentlyPlayingSong(artist = artist, title = title)
+            combine(
+                MusicNotificationState.artist,
+                MusicNotificationState.title,
+                MusicNotificationState.backgroundColor,
+                MusicNotificationState.strokeColor
+            ) { artist, title, background, stroke ->
+                updateCurrentlyPlayingSong(
+                    artist = artist,
+                    title = title,
+                    backgroundColor = background,
+                    strokeColor = stroke
+                )
             }.collect {  }
         }
 
@@ -85,7 +107,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         lifecycleScope.launch { dialogPreferences.setIsPermissionGranted() }
     }
 
-    private fun updateCurrentlyPlayingSong(title : String?, artist : String?) {
+    private fun updateCurrentlyPlayingSong(
+        title : String?,
+        artist : String?,
+        backgroundColor : Int?,
+        strokeColor : Int?
+    ) {
         if (title.isNullOrBlank() && artist.isNullOrBlank()) {
             binding.apply {
                 layoutCurrentlyPlaying.root.isVisible = false
@@ -96,6 +123,42 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
                 root.isVisible = true
                 txtTitle.text = title
                 txtArtist.text = artist
+
+                val currentAppPackageName = getCurrentMusicPackage()
+                when (currentAppPackageName) {
+                    SPOTIFY_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.spotify_background))
+                        root.strokeColor = getColor(R.color.spotify_stroke_color)
+                    }
+                    APPLE_MUSIC_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.apple_music_background))
+                        root.strokeColor = getColor(R.color.apple_music_stroke_color)
+                    }
+                    TIDAL_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.tidal_background))
+                        root.strokeColor = getColor(R.color.tidal_stroke_color)
+                    }
+                    YOUTUBE_MUSIC_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.yt_music_background))
+                        root.strokeColor = getColor(R.color.yt_music_stroke_color)
+                    }
+                    DEEZER_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.deezer_background))
+                        root.strokeColor = getColor(R.color.deezer_stroke_color)
+                    }
+                    SOUNDCLOUD_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.soundcloud_background))
+                        root.strokeColor = getColor(R.color.soundcloud_stroke_color)
+                    }
+                    PANDORA_PACKAGE_NAME -> {
+                        root.setCardBackgroundColor(getColor(R.color.pandora_background))
+                        root.strokeColor = getColor(R.color.pandora_stroke_color)
+                    }
+                    else -> {
+                        root.setCardBackgroundColor(backgroundColor ?: getColor(R.color.gray))
+                        root.strokeColor = getColor(strokeColor ?: getColor(R.color.white))
+                    }
+                }
             }
             binding.imgArrowUp.isVisible = true
 
