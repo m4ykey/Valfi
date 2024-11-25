@@ -22,14 +22,16 @@ class NotificationServiceListener : NotificationListenerService() {
         val packageName = sbn?.packageName
 
         if (packageName?.let { isMusicApp(it) } == true) {
+            val category = sbn.notification.category
             val title = extras?.getCharSequence(Notification.EXTRA_TITLE, "")?.toString()
             val artist = extras?.getCharSequence(Notification.EXTRA_TEXT, "")?.toString()
 
-            if (!artist.isNullOrEmpty()) {
-                MusicNotificationState.updateArtist(artist)
-            }
-            if (!title.isNullOrEmpty()) {
+            if (category == Notification.CATEGORY_TRANSPORT
+                && !artist.isNullOrEmpty() && !title.isNullOrEmpty()) {
                 MusicNotificationState.updateTitle(title)
+                MusicNotificationState.updateArtist(artist)
+            } else {
+                Log.i(TAG, "Notification does not contain music data.")
             }
         }
     }
