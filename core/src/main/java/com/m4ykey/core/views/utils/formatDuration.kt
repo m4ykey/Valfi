@@ -1,4 +1,4 @@
-package com.m4ykey.ui.helpers
+package com.m4ykey.core.views.utils
 
 import java.util.Locale
 

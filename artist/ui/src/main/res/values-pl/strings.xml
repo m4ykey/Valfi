@@ -2,4 +2,5 @@
 <resources>
     <string name="follow">Obserwuj</string>
     <string name="followers">Obserwujących</string>
+    <string name="top_tracks">Popularne Utwory</string>
 </resources>

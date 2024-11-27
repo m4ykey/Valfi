@@ -4,10 +4,14 @@ import com.m4ykey.data.domain.model.Artist
 import com.m4ykey.data.domain.model.ExternalUrls
 import com.m4ykey.data.domain.model.Followers
 import com.m4ykey.data.domain.model.Image
+import com.m4ykey.data.domain.model.top_tracks.Album
+import com.m4ykey.data.domain.model.top_tracks.Track
 import com.m4ykey.data.remote.model.ArtistDto
 import com.m4ykey.data.remote.model.ExternalUrlsDto
 import com.m4ykey.data.remote.model.FollowersDto
 import com.m4ykey.data.remote.model.ImageDto
+import com.m4ykey.data.remote.model.top_tracks.AlbumDto
+import com.m4ykey.data.remote.model.top_tracks.TrackDto
 
 fun ImageDto.toImage() : Image =
     Image(
@@ -33,4 +37,18 @@ fun ArtistDto.toArtist() : Artist =
         followers = followers?.toFollowers() ?: Followers(0),
         images = images?.map { it!!.toImage() }!!,
         genres = genres ?: emptyList()
+    )
+
+fun TrackDto.toTrack() : Track =
+    Track(
+        explicit = explicit ?: false,
+        durationMs = duration_ms ?: 0,
+        album = album?.toAlbum() ?: Album(emptyList(), ""),
+        name = name ?: ""
+    )
+
+fun AlbumDto.toAlbum() : Album =
+    Album(
+        id = id ?: "",
+        images = images?.map { it.toImage() }!!
     )

@@ -5,7 +5,7 @@ import com.m4ykey.album.ui.databinding.LayoutTracksBinding
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.helpers.OnTrackClick
-import com.m4ykey.ui.helpers.formatDuration
+import com.m4ykey.core.views.utils.formatDuration
 import com.m4ykey.ui.helpers.getArtistList
 
 class TrackListViewHolder(
