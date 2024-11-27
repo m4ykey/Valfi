@@ -17,7 +17,6 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.NewReleaseAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -41,7 +40,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         }
 
         lifecycleScope.launch {
-            viewModel.newRelease.collectLatest { releases ->
+            viewModel.newRelease.collect { releases ->
                 albumAdapter.submitList(releases)
             }
         }

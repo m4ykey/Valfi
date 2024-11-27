@@ -52,9 +52,6 @@ class AlbumViewModel @Inject constructor(
     private var _totalTrackDurationMs = MutableStateFlow(0L)
     val totalTracksDuration: StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
 
-    private var _hasSearched = MutableStateFlow(false)
-    val hasSearched: StateFlow<Boolean> = _hasSearched
-
     private var offset = 0
 
     fun getAlbumDetails(id: String) {
@@ -171,7 +168,6 @@ class AlbumViewModel @Inject constructor(
         _error.value = null
         isPaginationEnded = false
         _search.value = emptyList()
-        _hasSearched.value = false
     }
 
     fun searchAlbumByName(albumName: String) {

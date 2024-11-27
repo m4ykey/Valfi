@@ -30,7 +30,6 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
-import com.m4ykey.core.views.show
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,22 +71,8 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         handleRecyclerViewButton()
 
         lifecycleScope.launch {
-            viewModel.hasSearched.collect { hasSearched ->
-                if (hasSearched) {
-                    viewModel.search.collect { albums ->
-                        if (albums.isEmpty()) {
-                            binding.layoutNothingFound.root.show()
-                            binding.rvSearchAlbums.hide()
-                        } else {
-                            searchAdapter.submitList(albums)
-                            binding.layoutNothingFound.root.hide()
-                            binding.rvSearchAlbums.show()
-                        }
-                    }
-                } else {
-                    binding.layoutNothingFound.root.hide()
-                    binding.rvSearchAlbums.hide()
-                }
+            viewModel.search.collect { albums ->
+                searchAdapter.submitList(albums)
             }
         }
 
@@ -167,13 +152,11 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
                         val searchQuery = etSearch.text?.toString()
-                        if (searchQuery?.isEmpty() == true) {
-                            showToast(requireContext(), getString(R.string.empty_search))
-                        } else if (searchQuery?.length!! < 4) {
-                            showToast(requireContext(), getString(R.string.query_to_short))
-                        } else {
+                        if (searchQuery?.isNotEmpty() == true) {
                             viewModel.resetSearch()
-                            viewModel.searchAlbums(searchQuery)
+                            lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                        } else {
+                            showToast(requireContext(), getString(R.string.empty_search))
                         }
                     }
                 }

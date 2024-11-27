@@ -1,5 +1,6 @@
 package com.m4ykey.data.di
 
+import android.util.Log
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.createApi
 import com.m4ykey.authentication.interceptor.token.CustomTokenProvider
@@ -32,16 +33,23 @@ object AlbumNetworkModule {
     @Singleton
     @Named("album")
     fun provideSpotifyInterceptor(
-        interceptor: CustomTokenProvider,
-        loggingInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .addInterceptor { chain ->
-            interceptor.intercept(chain)
+        interceptor: CustomTokenProvider
+    ): OkHttpClient {
+        val logging = HttpLoggingInterceptor { message ->
+            Log.i("AlbumInterceptor", message)
+        }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
         }
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .build()
+
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .addInterceptor { chain ->
+                interceptor.intercept(chain)
+            }
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
 
 }
