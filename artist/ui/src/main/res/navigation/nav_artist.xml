@@ -9,5 +9,16 @@
         tools:layout="@layout/fragment_artist"
         android:id="@+id/artistFragment"
         android:name="com.m4ykey.ui.ArtistFragment"
-        android:label="ArtistFragment" />
+        android:label="ArtistFragment" >
+        <action
+            android:id="@+id/action_artistFragment_to_artistAlbumFragment"
+            app:destination="@id/artistAlbumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistAlbumFragment"
+        android:name="com.m4ykey.ui.ArtistAlbumFragment"
+        android:label="fragment_artist_album"
+        tools:layout="@layout/fragment_artist_album" >
+        <argument android:name="artistId" />
+    </fragment>
 </navigation>

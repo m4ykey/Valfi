@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.m4ykey.artist.ui.R
 import com.m4ykey.artist.ui.databinding.FragmentArtistBinding
 import com.m4ykey.core.Constants
@@ -12,6 +14,7 @@ import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.data.domain.model.Artist
+import com.m4ykey.ui.adapter.ArtistAlbumAdapter
 import com.m4ykey.ui.adapter.TopTrackAdapter
 import com.m4ykey.ui.helpers.getLargestImageUrl
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +44,7 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
     private val viewModel by viewModels<ArtistViewModel>()
 
     private val topTrackAdapter by lazy { createTopTrackAdapter() }
+    private val artistAlbumAdapter by lazy { createArtistAlbumAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,15 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
         setupRecyclerView()
 
         binding.toolbar.setNavigationOnClickListener { activity?.finish() }
+
+        binding.linearLayoutAlbums.setOnClickListener {
+            val action = artistId?.let { id ->
+                ArtistFragmentDirections.actionArtistFragmentToArtistAlbumFragment(id)
+            }
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
 
     }
 
@@ -69,16 +82,32 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
                 topTrackAdapter.submitList(tracks)
             }
         }
+
+        lifecycleScope.launch {
+            viewModel.albums.collect { albums ->
+                artistAlbumAdapter.submitList(albums)
+            }
+        }
     }
 
     private fun createTopTrackAdapter() : TopTrackAdapter {
         return TopTrackAdapter()
     }
 
+    private fun createArtistAlbumAdapter() : ArtistAlbumAdapter {
+        return ArtistAlbumAdapter()
+    }
+
     private fun setupRecyclerView() {
         binding.recyclerViewTopTracks.apply {
             adapter = topTrackAdapter
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
+        }
+
+        binding.recyclerViewAlbums.apply {
+            adapter = artistAlbumAdapter
+            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 

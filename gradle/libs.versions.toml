@@ -57,6 +57,8 @@ jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
 
 lottie = { group = "com.airbnb.android", name = "lottie", version = "6.5.2" }
 
+shimmer = { group = "com.facebook.shimmer", name = "shimmer", version = "0.5.0" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.21" }

@@ -70,7 +70,7 @@
 
             <TextView
                 android:fontFamily="@font/outfit_regular"
-                android:textColor="#C0C0C0"
+                android:textColor="#C6C6C6"
                 android:id="@+id/txtFollowers"
                 tools:text="757098 Followers"
                 android:layout_width="wrap_content"
@@ -92,30 +92,68 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
-            android:padding="10dp"
-            android:id="@+id/txtTopTracks"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/outfit_medium"
-            android:text="@string/top_tracks"
+        <LinearLayout
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/imgArtist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/textColor"
-            android:textSize="20sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:scrollbars="none"
-            android:id="@+id/recyclerViewTopTracks"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtTopTracks"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/layout_top_tracks"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/txtTopTracks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/outfit_medium"
+                android:text="@string/top_tracks"
+                android:textColor="@color/textColor"
+                android:textSize="20sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:id="@+id/recyclerViewTopTracks"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/layout_top_tracks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutAlbums"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/txtAlbums"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/outfit_medium"
+                    android:text="@string/albums"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    app:tint="#1E88E5"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAlbums"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                tools:listitem="@layout/layout_artist_album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

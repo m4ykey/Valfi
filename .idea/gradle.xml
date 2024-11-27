@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/artist/ui" />
             <option value="$PROJECT_DIR$/authentication" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/navigation" />
             <option value="$PROJECT_DIR$/news" />
             <option value="$PROJECT_DIR$/news/data" />
             <option value="$PROJECT_DIR$/news/ui" />
