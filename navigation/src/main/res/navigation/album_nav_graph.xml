@@ -108,4 +108,30 @@
         tools:layout="@layout/fragment_album_cover" >
         <argument android:name="imgUrl" />
     </fragment>
+    <fragment
+        android:id="@+id/artistAlbumFragment"
+        android:name="com.m4ykey.ui.ArtistAlbumFragment"
+        android:label="fragment_artist_album"
+        tools:layout="@layout/fragment_artist_album" >
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_artistAlbumFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.m4ykey.ui.ArtistFragment"
+        android:label="fragment_artist"
+        tools:layout="@layout/fragment_artist" >
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_artistFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
 </navigation>

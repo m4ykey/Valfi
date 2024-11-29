@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.safeargs)
 }
 
 android {
@@ -24,20 +25,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
 
-    implementation(libs.androidxCore)
-    implementation(libs.androidxAppCompat)
-    implementation(libs.androidMaterial)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.extJunit)
-    androidTestImplementation(libs.espresso)
+    implementation(libs.androidxNavigationUI)
+    implementation(libs.androidxNavigationFragment)
+
 }

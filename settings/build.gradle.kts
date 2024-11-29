@@ -55,6 +55,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":album:data"))
+    implementation(project(":navigation"))
 
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)

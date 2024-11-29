@@ -42,6 +42,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":artist:data"))
+    implementation(project(":navigation"))
 
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)
