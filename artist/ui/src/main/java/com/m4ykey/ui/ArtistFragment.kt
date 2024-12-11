@@ -61,7 +61,7 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
 
         binding.linearLayoutAlbums.setOnClickListener {
             val action = artistId?.let { id ->
-                ArtistFragmentDirections.actionArtistFragmentToArtistAlbumFragment(id)
+
             }
             if (action != null) {
                 findNavController().navigate(action)
@@ -107,7 +107,7 @@ class ArtistFragment : BaseFragment<FragmentArtistBinding>(
         binding.recyclerViewAlbums.apply {
             adapter = artistAlbumAdapter
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 

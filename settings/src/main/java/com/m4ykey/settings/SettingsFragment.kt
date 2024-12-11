@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
@@ -34,6 +35,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         binding.apply {
             toolbar.setOnClickListener { activity?.finish() }
             linearLayoutTheme.setOnClickListener { showThemeDialog() }
+            linearLayoutData.setOnClickListener {
+                val action = SettingsFragmentDirections.actionSettingsFragmentToDataFragment()
+                findNavController().navigate(action)
+            }
 
             imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
             imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }

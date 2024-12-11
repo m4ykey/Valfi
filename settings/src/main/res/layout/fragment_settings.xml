@@ -216,7 +216,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutBackup"
+                android:id="@+id/linearLayoutData"
                 android:gravity="center_vertical"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +267,7 @@
             </LinearLayout>
 
             <LinearLayout
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutBackup"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutData"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -9,5 +9,19 @@
         tools:layout="@layout/fragment_settings"
         android:id="@+id/settingsFragment"
         android:name="com.m4ykey.settings.SettingsFragment"
-        android:label="SettingsFragment"/>
+        android:label="SettingsFragment">
+        <action
+            app:exitAnim="@anim/slide_out_to_left"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            android:id="@+id/action_settingsFragment_to_dataFragment"
+            app:destination="@id/dataFragment" />
+    </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_data"
+        android:id="@+id/dataFragment"
+        android:name="com.m4ykey.settings.DataFragment"
+        android:label="DataFragment"/>
 </navigation>

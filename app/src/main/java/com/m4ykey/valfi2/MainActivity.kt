@@ -2,7 +2,6 @@ package com.m4ykey.valfi2
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -12,6 +11,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.hide
+import com.m4ykey.core.views.show
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
 import com.m4ykey.ui.AlbumNewReleaseFragment
@@ -84,12 +85,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         binding.apply {
             layoutCurrentlyPlaying.imgArrowDown.setOnClickListener {
                 layoutCurrentlyPlaying.root.isVisible = false
-                imgArrowUp.visibility = View.VISIBLE
+                imgArrowUp.show()
             }
 
             imgArrowUp.setOnClickListener {
                 layoutCurrentlyPlaying.root.isVisible = true
-                imgArrowUp.visibility = View.GONE
+                imgArrowUp.hide()
             }
         }
     }

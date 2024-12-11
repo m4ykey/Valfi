@@ -44,7 +44,7 @@ class ArtistViewModel @Inject constructor(
                 artistRepository.getArtistAlbums(
                     id = id,
                     offset = offset,
-                    limit = 10,
+                    limit = 5,
                     includeGroups = ""
                 ).collect { albums ->
                     _albums.value = albums
