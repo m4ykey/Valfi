@@ -251,6 +251,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             )
             val albumUrl = item.externalUrls.spotify
             val artistUrl = item.artists[0].externalUrls.spotify
+            val copyrights = item.copyrights.joinToString(separator = "\n") { it.text }
 
             txtAlbumName.apply {
                 text = item.name
@@ -266,6 +267,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     )
                 findNavController().navigate(action)
             }
+
+            txtCopyrights.text = copyrights
 
             loadImage(imgAlbum, item.getLargestImageUrl().toString(), requireContext())
 

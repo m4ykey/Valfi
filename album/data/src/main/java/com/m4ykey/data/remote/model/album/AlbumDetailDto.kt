@@ -12,5 +12,6 @@ data class AlbumDetailDto(
     val label: String?,
     val name: String?,
     val release_date: String?,
-    val total_tracks: Int?
+    val total_tracks: Int?,
+    val copyrights : List<CopyrightsDto>?
 )
