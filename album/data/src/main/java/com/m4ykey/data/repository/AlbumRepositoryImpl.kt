@@ -1,6 +1,7 @@
 package com.m4ykey.data.repository
 
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
+import com.m4ykey.authentication.interceptor.getToken
 import com.m4ykey.core.network.safeApiCall
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
@@ -17,7 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class AlbumRepositoryImpl @Inject constructor(
@@ -26,11 +26,9 @@ class AlbumRepositoryImpl @Inject constructor(
     private val dao : AlbumDao
 ) : AlbumRepository {
 
-    private val token = runBlocking { "Bearer ${tokenProvider.getAccessToken()}" }
-
     override suspend fun getNewReleases(offset: Int, limit: Int): Flow<List<AlbumItem>> = flow {
         try {
-            val result = api.getNewReleases(token = token, offset = offset, limit = limit)
+            val result = api.getNewReleases(token = getToken(tokenProvider), offset = offset, limit = limit)
             val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
             emit(albumResult)
         } catch (e : Exception) {
@@ -40,7 +38,7 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<List<AlbumItem>> = flow {
         try {
-            val result = api.searchAlbums(token = token, query = query, offset = offset, limit = limit)
+            val result = api.searchAlbums(token = getToken(tokenProvider), query = query, offset = offset, limit = limit)
             val albumResult = result.albums.items?.map { it.toAlbumItem() } ?: emptyList()
             emit(albumResult)
         } catch (e: Exception) {
@@ -51,7 +49,7 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun getAlbumById(id: String): Flow<AlbumDetail> = flow {
         val result = safeApiCall {
             api.getAlbumById(
-                token = token,
+                token = getToken(tokenProvider),
                 id = id
             ).toAlbumDetail()
         }

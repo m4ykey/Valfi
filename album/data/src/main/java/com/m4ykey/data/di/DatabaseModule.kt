@@ -23,6 +23,6 @@ object DatabaseModule {
             context.applicationContext,
             AlbumDatabase::class.java,
             "album_database"
-        ).fallbackToDestructiveMigration().build()
+        ).build()
     }
 }

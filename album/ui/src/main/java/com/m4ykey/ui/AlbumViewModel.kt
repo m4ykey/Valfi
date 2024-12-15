@@ -18,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,7 +49,7 @@ class AlbumViewModel @Inject constructor(
     val isLoadingTracks: StateFlow<Boolean> get() = _isLoadingTracks
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
-    val totalTracksDuration: StateFlow<Long> = _totalTrackDurationMs.asStateFlow()
+    val totalTracksDuration: StateFlow<Long> = _totalTrackDurationMs
 
     private var offset = 0
 

@@ -61,8 +61,8 @@ shimmer = { group = "com.facebook.shimmer", name = "shimmer", version = "0.5.0" 
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.21" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.28" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.1.0" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }

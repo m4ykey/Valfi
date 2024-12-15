@@ -6,13 +6,11 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
-suspend fun fetchAccessToken(clientId: String, clientSecret: String, api: AuthApi) : String {
-    val token = generateToken(clientId, clientSecret)
-
+suspend fun fetchAccessToken(api: AuthApi) : String {
     return try {
         withContext(Dispatchers.IO) {
             val response = api.getAccessToken(
-                token = token,
+                token = generateToken(),
                 grantType = "client_credentials"
             )
             response.access_token ?: throw RuntimeException("Failed to fetch access token")
