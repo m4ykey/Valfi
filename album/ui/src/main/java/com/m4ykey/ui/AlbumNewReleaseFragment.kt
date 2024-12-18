@@ -13,9 +13,9 @@ import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
-import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.NewReleaseAdapter
+import com.m4ykey.ui.helpers.createGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -84,12 +84,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         binding.recyclerViewNewRelease.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
             adapter = albumAdapter
-            val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
-            layoutManager = if (isTablet) {
-                setupGridLayoutManager(requireContext(), 150f)
-            } else {
-                setupGridLayoutManager(requireContext(), 110f)
-            }
+            layoutManager = createGridLayoutManager(requireContext())
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

@@ -24,7 +24,6 @@ import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
-import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
@@ -33,6 +32,7 @@ import com.m4ykey.data.preferences.AlbumPreferences
 import com.m4ykey.settings.SettingsActivity
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.helpers.BooleanWrapper
+import com.m4ykey.ui.helpers.createGridLayoutManager
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -236,12 +236,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             layoutManager = if (isListView) {
                 LinearLayoutManager(requireContext())
             } else {
-                val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
-                if (isTablet) {
-                    setupGridLayoutManager(requireContext(), 150f)
-                } else {
-                    setupGridLayoutManager(requireContext(), 110f)
-                }
+                createGridLayoutManager(requireContext())
             }
             albumAdapter.viewType = viewType
         }
@@ -254,12 +249,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())
             } else {
-                val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
-                if (isTablet) {
-                    setupGridLayoutManager(requireContext(), 150f)
-                } else {
-                    setupGridLayoutManager(requireContext(), 110f)
-                }
+                createGridLayoutManager(requireContext())
             }
             adapter = albumAdapter
         }
@@ -450,7 +440,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
                     val layoutManager = when (albumAdapter.viewType) {
                         ViewType.LIST -> LinearLayoutManager(requireContext())
-                        ViewType.GRID -> setupGridLayoutManager(requireContext(), 110f)
+                        ViewType.GRID -> createGridLayoutManager(requireContext())
                     }
                     rvAlbums.layoutManager = layoutManager
                 }

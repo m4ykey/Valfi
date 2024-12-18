@@ -14,10 +14,10 @@ import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
-import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.helpers.BooleanWrapper
+import com.m4ykey.ui.helpers.createGridLayoutManager
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -149,12 +149,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun setupRecyclerView() {
         binding.recyclerViewListenLater.apply {
             addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
-            val isTablet = context.resources.configuration.smallestScreenWidthDp >= 600
-            layoutManager = if (isTablet) {
-                setupGridLayoutManager(requireContext(), 150f)
-            } else {
-                setupGridLayoutManager(requireContext(), 110f)
-            }
+            layoutManager = createGridLayoutManager(requireContext())
             adapter = albumAdapter
         }
     }
