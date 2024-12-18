@@ -94,12 +94,27 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 }
             }
             searchResult.observe(viewLifecycleOwner) { albums ->
-                if (albums.isEmpty()) {
+                val filteredAlbums = if (
+                    !isAlbumSelected && !isEPSelected && !isCompilationSelected && !isSingleSelected
+                ) {
+                    albums
+                } else {
+                    albums.filter { album ->
+                        when {
+                            isAlbumSelected && album.albumType == ALBUM -> true
+                            isEPSelected && album.albumType == EP -> true
+                            isCompilationSelected && album.albumType == COMPILATION -> true
+                            isSingleSelected && album.albumType == SINGLE -> true
+                            else -> false
+                        }
+                    }
+                }
+                if (filteredAlbums.isEmpty()) {
                     albumAdapter.submitList(emptyList())
                     binding.linearLayoutEmptySearch.isVisible = true
                     binding.linearLayoutEmptyList.isVisible = false
                 } else {
-                    albumAdapter.submitList(albums)
+                    albumAdapter.submitList(filteredAlbums)
                     binding.linearLayoutEmptySearch.isVisible = false
                 }
             }
