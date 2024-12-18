@@ -28,6 +28,7 @@ import com.m4ykey.core.views.recyclerview.setupGridLayoutManager
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.preferences.AlbumPreferences
 import com.m4ykey.settings.SettingsActivity
 import com.m4ykey.ui.adapter.AlbumAdapter
@@ -74,14 +75,15 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         viewModel.apply {
             lifecycleScope.launch { getSavedAlbums() }
             albumPaging.observe(viewLifecycleOwner) { albums ->
-                if (albums.isEmpty()) {
+                val filteredAlbums = filterAlbums(albums)
+                if (filteredAlbums.isEmpty()) {
                     albumAdapter.submitList(emptyList())
                     binding.linearLayoutEmptyList.isVisible = true
                     binding.linearLayoutEmptySearch.isVisible = false
                 } else {
                     binding.linearLayoutEmptyList.isVisible = false
                     if (binding.etSearch.text.isNullOrEmpty()) {
-                        albumAdapter.submitList(albums)
+                        albumAdapter.submitList(filteredAlbums)
                         binding.linearLayoutEmptySearch.isVisible = false
                     }
                 }
@@ -94,21 +96,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 }
             }
             searchResult.observe(viewLifecycleOwner) { albums ->
-                val filteredAlbums = if (
-                    !isAlbumSelected && !isEPSelected && !isCompilationSelected && !isSingleSelected
-                ) {
-                    albums
-                } else {
-                    albums.filter { album ->
-                        when {
-                            isAlbumSelected && album.albumType == ALBUM -> true
-                            isEPSelected && album.albumType == EP -> true
-                            isCompilationSelected && album.albumType == COMPILATION -> true
-                            isSingleSelected && album.albumType == SINGLE -> true
-                            else -> false
-                        }
-                    }
-                }
+                val filteredAlbums = filterAlbums(albums)
                 if (filteredAlbums.isEmpty()) {
                     albumAdapter.submitList(emptyList())
                     binding.linearLayoutEmptySearch.isVisible = true
@@ -128,6 +116,24 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 translationYValue = -100f
             )
             binding.etSearch.setText(getString(R.string.empty_string))
+        }
+    }
+
+    private fun filterAlbums(albums : List<AlbumEntity>) : List<AlbumEntity> {
+        return if (
+            !isAlbumSelected && !isEPSelected && !isCompilationSelected && !isSingleSelected
+        ) {
+            albums
+        } else {
+            albums.filter { album ->
+                when {
+                    isAlbumSelected && album.albumType == ALBUM -> true
+                    isEPSelected && album.albumType == EP -> true
+                    isCompilationSelected && album.albumType == COMPILATION -> true
+                    isSingleSelected && album.albumType == SINGLE -> true
+                    else -> false
+                }
+            }
         }
     }
 
