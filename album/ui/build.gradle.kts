@@ -54,7 +54,6 @@ dependencies {
         implementation(androidxNavigationUI)
         implementation(androidxLifecycleRuntime)
         implementation(androidxLifecycleViewmodel)
-        implementation(androidxRecyclerView)
 
         testImplementation(junit)
 

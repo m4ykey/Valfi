@@ -51,7 +51,6 @@ dependencies {
         implementation(androidxCore)
         implementation(androidxPalette)
         implementation(androidxDatastore)
-        implementation(androidxRecyclerView)
         implementation(androidxBrowser)
         implementation(androidxLifecycleRuntime)
         implementation(androidxLifecycleViewmodel)

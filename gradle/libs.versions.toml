@@ -32,7 +32,6 @@ androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "r
 androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidxPalette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
 androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
-androidxRecyclerView = { group = "androidx.recyclerview", name = "recyclerview", version = "1.3.2" }
 androidxPreference = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
 androidxActivity = { group = "androidx.activity", name = "activity", version = "1.9.3" }
 
