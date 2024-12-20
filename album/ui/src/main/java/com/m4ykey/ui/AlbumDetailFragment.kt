@@ -251,7 +251,10 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             )
             val albumUrl = item.externalUrls.spotify
             val artistUrl = item.artists[0].externalUrls.spotify
-            val copyrights = item.copyrights.joinToString(separator = "\n") { it.text }
+            val copyrights = item.copyrights
+                .map { it.text }
+                .distinct()
+                .joinToString(separator = "\n")
 
             txtAlbumName.apply {
                 text = item.name
