@@ -1,9 +1,0 @@
-<resources>
-    <string name="follow">Follow</string>
-    <string name="followers_count" translatable="false">%1$s %2$s</string>
-    <string name="followers">followers</string>
-    <string name="top_tracks">Top Tracks</string>
-    <string name="albums">Albums</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-</resources>

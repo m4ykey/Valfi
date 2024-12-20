@@ -288,14 +288,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             buttonsIntents(button = btnAlbum, url = albumUrl ?: "", requireContext())
-            btnArtist.setOnClickListener {
-                val artistId = item.artists[0].id
-                artistId.let {
-                    val intent = Intent(requireContext(), ArtistActivity::class.java)
-                    intent.putExtra("artistId", it)
-                    startActivity(intent)
-                }
-            }
+            buttonsIntents(button = btnArtist, url = item.artists[0].externalUrls.toString(), requireContext())
 
             val artistsEntity = item.artists.map { artist ->
                 ArtistEntity(
