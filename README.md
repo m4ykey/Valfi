@@ -29,7 +29,7 @@ storeFile=Dir:\\XYZ\\XYZ
 ```
 
 ## TODO
-- [ x ]  Implement dark and light mode
+- [x]  Implement dark and light mode
 - [ ] Option to import and export data to file
 - [ ] Integration with additional data sources for interesting music propositions
 - [ ] Add playlist creation and management features
