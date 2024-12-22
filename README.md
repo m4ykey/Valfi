@@ -1,6 +1,6 @@
-Valfi 🎧 is a **music discovery** and **album management** app 📱 that allows users to search 🔍 for their favorite albums, save them for easy access 💾, discover new releases 🎶, 
-and stay updated with the latest music news 📰 from top sources 🌍.  
-The app integrates with **Spotify** 🎵 to enhance music recommendations 🎧 and news feed, providing a comprehensive music experience 🎤.
+Valfi 🎧 is a **music discovery** and **album management** app 📱 that allows users to search for their favorite albums, save them for easy access, discover new releases,
+and stay updated with the latest music news 📰 from top sources.  
+The app integrates with **Spotify** 🎵 to enhance music recommendations and news feed, providing a comprehensive music experience.
 
 ## Screenshots
 |  ![1](screenshots/album_home.jpg)  |       ![2](screenshots/news.jpg)        |
