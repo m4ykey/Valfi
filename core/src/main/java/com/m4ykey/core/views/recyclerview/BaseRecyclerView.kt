@@ -14,11 +14,11 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     override fun getItemCount(): Int = currentList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val item = getItem(holder.bindingAdapterPosition)
+        val item = getItem(holder.adapterPosition)
         item?.let {
             onItemBindViewHolder(holder, it, position)
             holder.applyAnimation(position, lastVisibleItemPosition)
-            lastVisibleItemPosition = holder.bindingAdapterPosition
+            lastVisibleItemPosition = holder.adapterPosition
         }
     }
 

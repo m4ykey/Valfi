@@ -1,10 +1,12 @@
-Valfi is an app that allows you to search and save your favorite albums, discover new releases, and stay updated on the latest music news.
+Valfi 🎧 is a **music discovery** and **album management** app 📱 that allows users to search 🔍 for their favorite albums, save them for easy access 💾, discover new releases 🎶, 
+and stay updated with the latest music news 📰 from top sources 🌍.  
+The app integrates with **Spotify** 🎵 to enhance music recommendations 🎧 and news feed, providing a comprehensive music experience 🎤.
 
-## Helpful dependencies
-- [Firebase](https://firebase.google.com/) - Basic analytics and application monitoring itself
-- [Coil](https://coil-kt.github.io/coil/) - Loading images
-- [Moshi](https://github.com/square/moshi) - JSON serialization/deserialization library
-- [Retrofit](https://github.com/square/retrofit) - HTTP client to communicate with the API.
+## Screenshots
+|  ![1](screenshots/album_home.jpg)  |       ![2](screenshots/news.jpg)        |
+|:----------------------------------:|:---------------------------------------:|
+| ![3](screenshots/album_search.jpg) |   ![4](screenshots/album_detail.jpg)    |
+| ![5](screenshots/album_cover.jpg)  | ![6](screenshots/album_new_release.jpg) |
 
 ## Project Setup
 1. Clone repository and open project in the latest version of Android Studio.
@@ -23,14 +25,17 @@ NEWS_API_KEY = "YOUR_NEWS_API_KEY"
 keyAlias=XYZ
 keyPassword=XYZ
 storePassword=XYZ
-storeFile=File XYZ
+storeFile=Dir:\\XYZ\\XYZ
 ```
 
 ## TODO
-- [ ] Addition of an option to connect the app to your Spotify account 
+- [ X ]  Implement dark and light mode
 - [ ] Option to import and export data to file
-- [ ] Adding notifications
 - [ ] Integration with additional data sources for interesting music propositions
+- [ ] Add playlist creation and management features
+- [ ] Add album rating system
+- [ ] Implement home screen widgets for quick access to favorite albums
+- [ ] Add an option to randomly get an album 
 
 ## Music news providers
 - [RollingStone](https://www.rollingstone.com/)
@@ -42,5 +47,4 @@ storeFile=File XYZ
 - [The FADER](https://www.thefader.com/)
 
 ## Resources
-The icons used in the application are from the website [svgrepo.com](https://www.svgrepo.com/) and [Google Icons](https://fonts.google.com/icons),
-animations are from the site [LottieFiles](https://lottiefiles.com/)
+The icons used in the application are from the website [svgrepo.com](https://www.svgrepo.com/) and [Google Icons](https://fonts.google.com/icons)
