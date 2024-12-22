@@ -25,11 +25,7 @@ class NewsViewModel @Inject constructor(
         if (_isLoading.value || isPaginationEnded) return
 
         viewModelScope.launch {
-            if (clearList) {
-                _news.value = emptyList()
-                page = 1
-                isPaginationEnded = false
-            }
+            isClearList(clearList)
 
             _isLoading.value = true
             _error.value = null
@@ -48,6 +44,14 @@ class NewsViewModel @Inject constructor(
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    private fun isClearList(clearList: Boolean) {
+        if (clearList) {
+            _news.value = emptyList()
+            page = 1
+            isPaginationEnded = false
         }
     }
 }

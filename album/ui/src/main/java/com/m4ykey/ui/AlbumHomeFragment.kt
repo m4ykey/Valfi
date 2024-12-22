@@ -35,6 +35,7 @@ import com.m4ykey.ui.helpers.BooleanWrapper
 import com.m4ykey.ui.helpers.createGridLayoutManager
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText
+import com.m4ykey.ui.viewmodels.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
@@ -74,7 +75,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
         viewModel.apply {
             lifecycleScope.launch { getSavedAlbums() }
-            albumPaging.observe(viewLifecycleOwner) { albums ->
+            albumEntity.observe(viewLifecycleOwner) { albums ->
                 val filteredAlbums = filterAlbums(albums)
                 if (filteredAlbums.isEmpty()) {
                     albumAdapter.submitList(emptyList())

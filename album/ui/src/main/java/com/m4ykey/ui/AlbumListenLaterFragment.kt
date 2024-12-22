@@ -20,6 +20,7 @@ import com.m4ykey.ui.helpers.BooleanWrapper
 import com.m4ykey.ui.helpers.createGridLayoutManager
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText
+import com.m4ykey.ui.viewmodels.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -47,7 +48,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         binding.apply {
             viewModel.apply {
                 lifecycleScope.launch { getListenLaterAlbums() }
-                albumPaging.observe(viewLifecycleOwner) { albums ->
+                albumEntity.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
                         albumAdapter.submitList(emptyList())
                         linearLayoutEmptyList.isVisible = true

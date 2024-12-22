@@ -42,7 +42,6 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":news:data"))
-    implementation(project(":navigation"))
 
     libs.apply {
         implementation(androidxCore)

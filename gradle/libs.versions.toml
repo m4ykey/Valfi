@@ -3,10 +3,11 @@ application = "8.7.3"
 navigation = "2.8.5"
 retrofit = "2.11.0"
 lifecycle = "2.8.7"
-hilt = "2.53.1"
+hilt = "2.54"
 okhttp = "4.12.0"
 room = "2.6.1"
-coroutines = "1.9.0"
+coroutines = "1.10.1"
+moshi = "1.15.2"
 
 [libraries]
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.3.0" }
@@ -39,8 +40,8 @@ androidMaterial = { group = "com.google.android.material", name = "material", ve
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.15.1" }
-moshiCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version = "1.15.1" }
+moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+moshiCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
@@ -51,12 +52,6 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "5.0.0-rc01" }
-
-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
-
-lottie = { group = "com.airbnb.android", name = "lottie", version = "6.5.2" }
-
-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version = "0.5.0" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }

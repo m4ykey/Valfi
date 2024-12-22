@@ -31,7 +31,9 @@ import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
+import com.m4ykey.ui.helpers.PaginationType
 import com.m4ykey.ui.helpers.createGridLayoutManager
+import com.m4ykey.ui.viewmodels.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -176,8 +178,8 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                         super.onScrolled(recyclerView, dx, dy)
                         if (!recyclerView.canScrollVertically(1)) {
                             val searchQuery = etSearch.text.toString()
-                            if (!viewModel.isPaginationEnded && !viewModel.isLoading.value && searchQuery.isNotEmpty()) {
-                                lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
+                            if (searchQuery.isNotEmpty()) {
+                                viewModel.loadNewDataIfNeeded(PaginationType.SEARCH, query = searchQuery)
                             }
                         }
                     }

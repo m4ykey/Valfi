@@ -29,13 +29,14 @@ import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.adapter.TrackAdapter
-import com.m4ykey.ui.colors.ColorViewModel
 import com.m4ykey.ui.helpers.animateColorTransition
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl
+import com.m4ykey.ui.viewmodels.AlbumViewModel
+import com.m4ykey.ui.viewmodels.ColorViewModel
+import com.m4ykey.ui.viewmodels.TrackViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -45,8 +46,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 ) {
 
     private val args by navArgs<AlbumDetailFragmentArgs>()
-    private val viewModel by viewModels<AlbumViewModel>()
+    private val albumViewModel by viewModels<AlbumViewModel>()
     private val colorViewModel by viewModels<ColorViewModel>()
+    private val trackViewModel by viewModels<TrackViewModel>()
     private val trackAdapter by lazy { createTrackAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,36 +76,36 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun observeViewModel() {
-        viewModel.getAlbumDetails(args.albumId)
+        albumViewModel.getAlbumDetails(args.albumId)
+        trackViewModel.getAlbumTracks(args.albumId)
 
         lifecycleScope.launch {
-            viewModel.detail.collect { item -> item?.let { displayAlbumDetail(it) } }
+            albumViewModel.detail.collect { item -> item?.let { displayAlbumDetail(it) } }
         }
 
         lifecycleScope.launch {
-            viewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
+            albumViewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
         }
 
         lifecycleScope.launch {
-            delay(500L)
-            viewModel.tracks.collectLatest { trackAdapter.submitList(it) }
+            trackViewModel.tracks.collect { trackAdapter.submitList(it) }
         }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect {
+            albumViewModel.isLoading.collect {
                 binding.layoutLoading.isVisible = it
                 binding.nestedScrollView.isVisible = !it
             }
         }
 
         lifecycleScope.launch {
-            viewModel.isLoadingTracks.collect {
+            trackViewModel.isLoading.collect {
                 binding.progressBarTracks.isVisible = it
             }
         }
 
         lifecycleScope.launch {
-            viewModel.error.collect { errorMessage ->
+            albumViewModel.error.collect { errorMessage ->
                 errorMessage?.let {
                     showToast(requireContext(), it)
                 }
@@ -115,7 +117,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         binding.apply {
             with(album) {
                 lifecycleScope.launch {
-                    val albumWithStates = viewModel.getAlbumWithStates(id)
+                    val albumWithStates = albumViewModel.getAlbumWithStates(id)
                     if (albumWithStates != null) {
                         updateIcons(albumWithStates)
                     }
@@ -157,24 +159,24 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
                 imgSave.setOnClickListener {
                     lifecycleScope.launch {
-                        val isAlbumSaved = viewModel.getSavedAlbumState(id)
-                        val isListenLaterSaved = viewModel.getListenLaterState(id)
+                        val isAlbumSaved = albumViewModel.getSavedAlbumState(id)
+                        val isListenLaterSaved = albumViewModel.getListenLaterState(id)
                         if (isListenLaterSaved?.isListenLaterSaved == true) {
-                            viewModel.deleteListenLaterState(id)
+                            albumViewModel.deleteListenLaterState(id)
                             if (isAlbumSaved == null) {
-                                viewModel.deleteAlbum(id)
+                                albumViewModel.deleteAlbum(id)
                             }
                             imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
                         }
                         if (isAlbumSaved != null) {
-                            viewModel.deleteSavedAlbumState(id)
+                            albumViewModel.deleteSavedAlbumState(id)
                             if (isListenLaterSaved == null) {
-                                viewModel.deleteAlbum(id)
+                                albumViewModel.deleteAlbum(id)
                             }
                             imgSave.buttonAnimation(R.drawable.ic_favorite_border)
                         } else {
-                            viewModel.insertAlbum(album)
-                            viewModel.insertSavedAlbum(IsAlbumSaved(id, true))
+                            albumViewModel.insertAlbum(album)
+                            albumViewModel.insertSavedAlbum(IsAlbumSaved(id, true))
                             imgSave.buttonAnimation(R.drawable.ic_favorite)
                         }
                     }
@@ -182,17 +184,17 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
                 imgListenLater.setOnClickListener {
                     lifecycleScope.launch {
-                        val isListenLaterSaved = viewModel.getListenLaterState(id)
+                        val isListenLaterSaved = albumViewModel.getListenLaterState(id)
                         if (isListenLaterSaved != null) {
-                            viewModel.deleteListenLaterState(id)
-                            val isAlbumSaved = viewModel.getSavedAlbumState(id)
+                            albumViewModel.deleteListenLaterState(id)
+                            val isAlbumSaved = albumViewModel.getSavedAlbumState(id)
                             if (isAlbumSaved == null) {
-                                viewModel.deleteAlbum(id)
+                                albumViewModel.deleteAlbum(id)
                             }
                             imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
                         } else {
-                            viewModel.insertAlbum(album)
-                            viewModel.insertListenLaterAlbum(IsListenLaterSaved(id, true))
+                            albumViewModel.insertAlbum(album)
+                            albumViewModel.insertListenLaterAlbum(IsListenLaterSaved(id, true))
                             imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
                         }
                     }
@@ -214,8 +216,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     val totalItemCount = layoutManager.itemCount
 
                     if (lastVisibleItemPosition == totalItemCount - 1) {
-                        if (!viewModel.isPaginationEnded && !viewModel.isLoadingTracks.value) {
-                            lifecycleScope.launch { viewModel.getAlbumTracks(args.albumId) }
+                        if (!trackViewModel.isPaginationEnded && !trackViewModel.isLoading.value) {
+                            lifecycleScope.launch { trackViewModel.getAlbumTracks(args.albumId) }
                         }
                     }
                 }
@@ -223,7 +225,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             lifecycleScope.launch {
                 delay(500L)
-                viewModel.totalTracksDuration.collect { totalDuration ->
+                trackViewModel.totalTracksDuration.collect { totalDuration ->
                     val hours = (totalDuration / 1000) / 3600
                     val minutes = ((totalDuration / 1000) % 3600) / 60
                     val seconds = (totalDuration / 1000) % 60
@@ -311,7 +313,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             )
 
             lifecycleScope.launch {
-                val albumWithStates = viewModel.getAlbumWithStates(item.id)
+                val albumWithStates = albumViewModel.getAlbumWithStates(item.id)
                 if (albumWithStates != null) {
                     updateIcons(albumWithStates)
                 }
@@ -319,24 +321,24 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             imgSave.setOnClickListener {
                 lifecycleScope.launch {
-                    val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
-                    val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                    val isAlbumSaved = albumViewModel.getSavedAlbumState(item.id)
+                    val isListenLaterSaved = albumViewModel.getListenLaterState(item.id)
                     if (isListenLaterSaved?.isListenLaterSaved == true) {
-                        viewModel.deleteListenLaterState(item.id)
+                        albumViewModel.deleteListenLaterState(item.id)
                         if (isAlbumSaved == null) {
-                            viewModel.deleteAlbum(item.id)
+                            albumViewModel.deleteAlbum(item.id)
                         }
                         imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
                     }
                     if (isAlbumSaved != null) {
-                        viewModel.deleteSavedAlbumState(item.id)
+                        albumViewModel.deleteSavedAlbumState(item.id)
                         if (isListenLaterSaved == null) {
-                            viewModel.deleteAlbum(item.id)
+                            albumViewModel.deleteAlbum(item.id)
                         }
                         imgSave.buttonAnimation(R.drawable.ic_favorite_border)
                     } else {
-                        viewModel.insertAlbum(album)
-                        viewModel.insertSavedAlbum(IsAlbumSaved(item.id, true))
+                        albumViewModel.insertAlbum(album)
+                        albumViewModel.insertSavedAlbum(IsAlbumSaved(item.id, true))
                         imgSave.buttonAnimation(R.drawable.ic_favorite)
                     }
                 }
@@ -344,17 +346,17 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             imgListenLater.setOnClickListener {
                 lifecycleScope.launch {
-                    val isListenLaterSaved = viewModel.getListenLaterState(item.id)
+                    val isListenLaterSaved = albumViewModel.getListenLaterState(item.id)
                     if (isListenLaterSaved != null) {
-                        viewModel.deleteListenLaterState(item.id)
-                        val isAlbumSaved = viewModel.getSavedAlbumState(item.id)
+                        albumViewModel.deleteListenLaterState(item.id)
+                        val isAlbumSaved = albumViewModel.getSavedAlbumState(item.id)
                         if (isAlbumSaved == null) {
-                            viewModel.deleteAlbum(item.id)
+                            albumViewModel.deleteAlbum(item.id)
                         }
                         imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
                     } else {
-                        viewModel.insertAlbum(album)
-                        viewModel.insertListenLaterAlbum(IsListenLaterSaved(item.id, true))
+                        albumViewModel.insertAlbum(album)
+                        albumViewModel.insertListenLaterAlbum(IsListenLaterSaved(item.id, true))
                         imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
                     }
                 }
