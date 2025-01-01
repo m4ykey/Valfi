@@ -9,15 +9,6 @@
         tools:layout="@layout/fragment_settings"
         android:id="@+id/settingsFragment"
         android:name="com.m4ykey.settings.SettingsFragment"
-        android:label="SettingsFragment">
-        <action
-            android:id="@+id/action_settingsFragment_to_dataFragment"
-            app:destination="@id/dataFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/dataFragment"
-        android:name="com.m4ykey.settings.data.DataFragment"
-        android:label="fragment_data"
-        tools:layout="@layout/fragment_data" />
+        android:label="SettingsFragment"/>
 
 </navigation>

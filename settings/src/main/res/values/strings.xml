@@ -16,8 +16,8 @@
     <string name="data_is_provided_by_the_services_spotify_and_newsapi">Data is provided by Spotify and NewsApi</string>
     <string name="open_source">Open Source</string>
     <string name="visit_the_project_on_github">Visit the project on Github</string>
-    <string name="data_usage">Data Usage</string>
-    <string name="manage_your_data_in_the_app">Manage your data in the app</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save_your_data">Save your data</string>
+    <string name="save_your_data_to_a_json_file">Save your data to a JSON file</string>
+    <string name="restore_your_data">Restore your data</string>
+    <string name="restore_your_data_from_a_json_file">Restore your data from a JSON file</string>
 </resources>

@@ -16,6 +16,9 @@
     <string name="data_is_provided_by_the_services_spotify_and_newsapi">Dane są dostarczane przez Spotify oraz NewsApi</string>
     <string name="open_source">Kod Źródłowy</string>
     <string name="visit_the_project_on_github">Odwiedź projekt na Githubie</string>
-    <string name="data_usage">Wykorzystywanie danych</string>
-    <string name="manage_your_data_in_the_app">Zarządzaj swoimi danymi w aplikacji</string>
+    <string name="save_your_data">Zapisz swoje dane</string>
+    <string name="save_your_data_to_a_json_file">Zapisz swoje dane do pliku JSON</string>
+    <string name="restore_your_data">Przywróć swoje dane</string>
+    <string name="restore_your_data_from_a_json_file">Przywróć swoje dane z pliku JSON</string>
+
 </resources>

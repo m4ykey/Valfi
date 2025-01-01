@@ -1,10 +1,10 @@
 package com.m4ykey.settings
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
@@ -35,10 +35,14 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         binding.apply {
             toolbar.setOnClickListener { activity?.finish() }
             linearLayoutTheme.setOnClickListener { showThemeDialog() }
-            linearLayoutData.setOnClickListener {
-                val action = SettingsFragmentDirections.actionSettingsFragmentToDataFragment()
-                findNavController().navigate(action)
+            linearLayoutSaveData.setOnClickListener {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "*/*"
+                }
+                startActivity(intent)
             }
+            linearLayoutReadData.setOnClickListener {  }
 
             imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
             imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }
