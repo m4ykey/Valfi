@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -13,6 +14,8 @@ import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.settings.BuildConfig.APP_VERSION
 import com.m4ykey.settings.databinding.FragmentSettingsBinding
 import com.m4ykey.settings.file.generateJsonData
+import com.m4ykey.settings.file.insertAlbumData
+import com.m4ykey.settings.file.readJsonData
 import com.m4ykey.settings.file.saveJsonToFile
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
@@ -44,6 +47,17 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
         }
     }
 
+    private val getReadContent = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri : Uri? ->
+        uri?.let {
+            lifecycleScope.launch {
+                val albumsData = readJsonData(requireContext(), it)
+                albumsData?.let { data ->
+                    insertAlbumData(albumDao, data)
+                }
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -53,7 +67,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             linearLayoutSaveData.setOnClickListener {
                 getContent.launch("albums.json")
             }
-            linearLayoutReadData.setOnClickListener {  }
+            linearLayoutReadData.setOnClickListener {
+                getReadContent.launch(arrayOf("application/json"))
+            }
 
             imgNewsApiLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://newsapi.org/") }
             imgSpotifyLogo.setOnClickListener { openUrlBrowser(requireContext(), "https://developer.spotify.com/") }

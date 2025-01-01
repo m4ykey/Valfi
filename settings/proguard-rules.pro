@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepattributes Signature
+-keep class com.m4ykey.settings.file.AlbumsData { *; }
+-keep class com.google.gson.reflect.TypeToken { *; }
