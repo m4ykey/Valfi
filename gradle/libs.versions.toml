@@ -53,6 +53,8 @@ okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-int
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "5.0.0-rc01" }
 
+gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.1.0" }

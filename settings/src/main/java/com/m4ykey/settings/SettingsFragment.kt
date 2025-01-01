@@ -1,15 +1,19 @@
 package com.m4ykey.settings
 
-import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
+import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.settings.BuildConfig.APP_VERSION
 import com.m4ykey.settings.databinding.FragmentSettingsBinding
+import com.m4ykey.settings.file.generateJsonData
+import com.m4ykey.settings.file.saveJsonToFile
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
 import com.m4ykey.settings.theme.setCompatibleWithPhoneSettings
@@ -29,6 +33,17 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     @Inject
     lateinit var themePreferences: ThemePreferences
 
+    @Inject
+    lateinit var albumDao: AlbumDao
+
+    private val getContent = registerForActivityResult(CreateDocument("application/json")) { uri : Uri? ->
+        uri?.let {
+            lifecycleScope.launch {
+                saveJsonToFile(requireActivity(), it, generateJsonData(albumDao))
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -36,11 +51,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             toolbar.setOnClickListener { activity?.finish() }
             linearLayoutTheme.setOnClickListener { showThemeDialog() }
             linearLayoutSaveData.setOnClickListener {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "*/*"
-                }
-                startActivity(intent)
+                getContent.launch("albums.json")
             }
             linearLayoutReadData.setOnClickListener {  }
 

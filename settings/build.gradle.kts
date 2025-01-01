@@ -73,6 +73,8 @@ dependencies {
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)
 
+    implementation(libs.gson)
+
     ksp(libs.hiltCompiler)
     implementation(libs.hiltAndroid)
 }
