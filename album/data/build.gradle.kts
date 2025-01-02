@@ -52,6 +52,8 @@ dependencies {
         implementation(hiltAndroid)
         ksp(hiltCompiler)
 
+        implementation(jsoup)
+
         implementation(androidxRoomRuntime)
         implementation(androidxRoomKtx)
         ksp(androidxRoomCompiler)

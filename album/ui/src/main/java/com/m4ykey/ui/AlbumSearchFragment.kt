@@ -33,7 +33,7 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.adapter.SearchAlbumAdapter
 import com.m4ykey.ui.helpers.PaginationType
 import com.m4ykey.ui.helpers.createGridLayoutManager
-import com.m4ykey.ui.viewmodels.AlbumViewModel
+import com.m4ykey.ui.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale

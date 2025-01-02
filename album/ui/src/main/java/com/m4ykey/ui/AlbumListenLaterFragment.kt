@@ -20,7 +20,7 @@ import com.m4ykey.ui.helpers.BooleanWrapper
 import com.m4ykey.ui.helpers.createGridLayoutManager
 import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText
-import com.m4ykey.ui.viewmodels.AlbumViewModel
+import com.m4ykey.ui.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch

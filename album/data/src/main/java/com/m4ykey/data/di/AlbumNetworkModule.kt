@@ -1,10 +1,12 @@
 package com.m4ykey.data.di
 
 import android.util.Log
-import com.m4ykey.core.Constants
-import com.m4ykey.core.network.createApi
 import com.m4ykey.authentication.interceptor.token.CustomTokenProvider
+import com.m4ykey.core.Constants
+import com.m4ykey.core.Constants.LYRICS_BASE_URL
+import com.m4ykey.core.network.createApi
 import com.m4ykey.data.remote.api.AlbumApi
+import com.m4ykey.data.remote.api.LyricsApi
 import com.m4ykey.data.remote.api.TrackApi
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -20,6 +22,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AlbumNetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideLyricsApi(moshi: Moshi) : LyricsApi = createApi(LYRICS_BASE_URL, moshi)
 
     @Provides
     @Singleton

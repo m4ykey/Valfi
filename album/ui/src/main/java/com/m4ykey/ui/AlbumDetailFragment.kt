@@ -1,8 +1,6 @@
 package com.m4ykey.ui
 
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -32,9 +30,9 @@ import com.m4ykey.ui.adapter.TrackAdapter
 import com.m4ykey.ui.helpers.animateColorTransition
 import com.m4ykey.ui.helpers.getArtistList
 import com.m4ykey.ui.helpers.getLargestImageUrl
-import com.m4ykey.ui.viewmodels.AlbumViewModel
-import com.m4ykey.ui.viewmodels.ColorViewModel
-import com.m4ykey.ui.viewmodels.TrackViewModel
+import com.m4ykey.ui.viewmodel.AlbumViewModel
+import com.m4ykey.ui.viewmodel.ColorViewModel
+import com.m4ykey.ui.viewmodel.TrackViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,7 +68,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private fun createTrackAdapter(): TrackAdapter {
         return TrackAdapter(
             onTrackClick = { track ->
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(track.externalUrls.spotify)))
+                val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToLyricsFragment(
+                    song = track.name,
+                    artist = track.getArtistList()
+                )
+                findNavController().navigate(action)
             }
         )
     }

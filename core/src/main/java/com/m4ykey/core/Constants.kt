@@ -7,6 +7,7 @@ object Constants {
 
     const val SPOTIFY_AUTH_URL = "https://accounts.spotify.com/"
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/v1/"
+    const val LYRICS_BASE_URL = "https://www.tekstowo.pl/"
 
     const val NEWS_BASE_URL = "https://newsapi.org/"
 

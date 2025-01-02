@@ -1,4 +1,4 @@
-package com.m4ykey.ui.viewmodels
+package com.m4ykey.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

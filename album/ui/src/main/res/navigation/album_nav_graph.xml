@@ -67,6 +67,9 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumDetailFragment_to_albumCoverFragment"
             app:destination="@id/albumCoverFragment" />
+        <action
+            android:id="@+id/action_albumDetailFragment_to_lyricsFragment"
+            app:destination="@id/lyricsFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumListenLaterFragment"
@@ -107,5 +110,17 @@
         android:label="fragment_album_cover"
         tools:layout="@layout/fragment_album_cover" >
         <argument android:name="imgUrl" />
+    </fragment>
+    <fragment
+        android:id="@+id/lyricsFragment"
+        android:name="com.m4ykey.ui.LyricsFragment"
+        android:label="fragment_lyrics"
+        tools:layout="@layout/fragment_lyrics" >
+        <argument
+            android:name="artist"
+            app:argType="string" />
+        <argument
+            android:name="song"
+            app:argType="string" />
     </fragment>
 </navigation>

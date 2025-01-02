@@ -1,4 +1,4 @@
-package com.m4ykey.ui.viewmodels
+package com.m4ykey.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
