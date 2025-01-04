@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.m4ykey.album.data"
+    namespace = "com.lyrics.data"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -37,24 +37,16 @@ android {
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":authentication"))
 
-    libs.apply {
+    implementation(libs.retrofit)
+    implementation(libs.converterMoshi)
+    implementation(libs.moshiKotlin)
+    implementation(libs.okhttp)
+    implementation(libs.okhttpLoggingInterceptor)
 
-        implementation(retrofit)
-        implementation(converterMoshi)
-        implementation(moshiKotlin)
-        implementation(okhttp)
-        implementation(okhttpLoggingInterceptor)
+    implementation(libs.coroutines)
 
-        implementation(coroutines)
+    implementation(libs.hiltAndroid)
+    ksp(libs.hiltCompiler)
 
-        implementation(hiltAndroid)
-        ksp(hiltCompiler)
-
-        implementation(androidxRoomRuntime)
-        implementation(androidxRoomKtx)
-        ksp(androidxRoomCompiler)
-        implementation(androidxDatastore)
-    }
 }

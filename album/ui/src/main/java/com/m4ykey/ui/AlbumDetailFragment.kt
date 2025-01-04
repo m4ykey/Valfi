@@ -1,5 +1,6 @@
 package com.m4ykey.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lyrics.ui.LyricsActivity
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.core.views.BaseFragment
@@ -68,11 +70,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private fun createTrackAdapter(): TrackAdapter {
         return TrackAdapter(
             onTrackClick = { track ->
-                val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToLyricsFragment(
-                    song = track.name,
-                    artist = track.getArtistList()
-                )
-                findNavController().navigate(action)
+                val trackName = track.name
+                val artistName = track.getArtistList()
+
+                val intent = Intent(requireContext(), LyricsActivity::class.java)
+                intent.putExtra("trackName", trackName)
+                intent.putExtra("artistName", artistName)
+                startActivity(intent)
             }
         )
     }

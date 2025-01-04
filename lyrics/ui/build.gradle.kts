@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.m4ykey.album.data"
+    namespace = "com.lyrics.ui"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -32,29 +32,32 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":authentication"))
 
-    libs.apply {
+    implementation(libs.androidxCore)
+    implementation(libs.androidxAppCompat)
+    implementation(libs.androidMaterial)
+    implementation(libs.androidxActivity)
+    implementation(libs.androidxConstraintLayout)
+    implementation(libs.androidxNavigationFragment)
+    implementation(libs.androidxNavigationUI)
+    implementation(libs.androidxLifecycleRuntime)
+    implementation(libs.androidxLifecycleViewmodel)
 
-        implementation(retrofit)
-        implementation(converterMoshi)
-        implementation(moshiKotlin)
-        implementation(okhttp)
-        implementation(okhttpLoggingInterceptor)
 
-        implementation(coroutines)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.extJunit)
+    androidTestImplementation(libs.espresso)
 
-        implementation(hiltAndroid)
-        ksp(hiltCompiler)
+    ksp(libs.hiltCompiler)
+    implementation(libs.hiltAndroid)
 
-        implementation(androidxRoomRuntime)
-        implementation(androidxRoomKtx)
-        ksp(androidxRoomCompiler)
-        implementation(androidxDatastore)
-    }
+    implementation(libs.coroutines)
 }
