@@ -82,7 +82,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun observeViewModel() {
-        albumViewModel.getAlbumDetails(args.albumId)
+        albumViewModel.getAlbumById(args.albumId)
         trackViewModel.getAlbumTracks(args.albumId)
 
         lifecycleScope.launch {

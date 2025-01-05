@@ -15,12 +15,9 @@ import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.show
 import com.m4ykey.settings.theme.ThemeOptions
 import com.m4ykey.settings.theme.ThemePreferences
-import com.m4ykey.ui.AlbumNewReleaseFragment
-import com.m4ykey.valfi2.Utils.ALBUM_NEW_RELEASE_FRAGMENT
 import com.m4ykey.valfi2.Utils.APPLE_MUSIC_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.CUSTOM_START_SERVICE_ACTION
 import com.m4ykey.valfi2.Utils.DEEZER_PACKAGE_NAME
-import com.m4ykey.valfi2.Utils.OPEN_FRAGMENT
 import com.m4ykey.valfi2.Utils.PANDORA_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.SOUNDCLOUD_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.SPOTIFY_PACKAGE_NAME
@@ -166,20 +163,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         }
     }
 
-    private fun openFragment(fragmentName : String) {
-        val fragment = when (fragmentName) {
-            ALBUM_NEW_RELEASE_FRAGMENT -> AlbumNewReleaseFragment()
-            else -> null
-        }
-
-        fragment?.let {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment, it)
-                .addToBackStack(null)
-                .commit()
-        }
-    }
-
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
@@ -234,11 +217,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     override fun onStart() {
         super.onStart()
-
-        intent.getStringExtra(OPEN_FRAGMENT)?.let { fragmentName ->
-            openFragment(fragmentName)
-        }
-
         readSelectedThemeOption()
         readDialogPreferences()
     }

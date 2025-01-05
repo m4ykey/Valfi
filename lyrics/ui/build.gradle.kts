@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.safeargs)
 }
 
 android {
@@ -40,6 +41,7 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":lyrics:data"))
 
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)

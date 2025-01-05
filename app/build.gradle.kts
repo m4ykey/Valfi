@@ -82,6 +82,8 @@ dependencies {
     implementation(project(":album:data"))
     implementation(project(":news:data"))
     implementation(project(":settings"))
+    implementation(project(":lyrics:ui"))
+    implementation(project(":lyrics:data"))
 
     libs.apply {
 

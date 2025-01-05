@@ -1,16 +1,10 @@
 package com.lyrics.data.domain.repository
 
-import com.lyrics.data.domain.model.Lyrics
-import com.lyrics.data.remote.model.LyricsDto
+import com.lyrics.data.domain.model.LyricsItem
 import kotlinx.coroutines.flow.Flow
 
 interface LyricsRepository {
 
-    suspend fun searchLyrics(
-        query : String,
-        trackName : String,
-        artistName : String,
-        albumName : String
-    ) : Flow<Lyrics>
+    suspend fun searchLyrics(trackName : String, artistName : String) : Flow<LyricsItem>
 
 }

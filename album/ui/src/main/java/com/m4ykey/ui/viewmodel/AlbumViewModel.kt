@@ -14,6 +14,7 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.helpers.PaginationType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,18 +52,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun getAlbumDetails(id: String) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                getAlbumById(id)
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
-
-    private fun getAlbumById(id: String) = viewModelScope.launch {
+    fun getAlbumById(id: String) = viewModelScope.launch {
         _isLoading.value = true
 
         try {
@@ -138,20 +128,23 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun searchAlbumByName(albumName: String) {
-        viewModelScope.launch {
-            _searchResult.value = repository.searchAlbumByName(albumName)
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.searchAlbumByName(albumName)
+            _searchResult.postValue(albums)
         }
     }
 
     fun searchAlbumsListenLater(albumName: String) {
-        viewModelScope.launch {
-            _searchResult.value = repository.searchAlbumsListenLater(albumName)
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.searchAlbumsListenLater(albumName)
+            _searchResult.postValue(albums)
         }
     }
 
     fun getAlbumType(albumType: String) {
-        viewModelScope.launch {
-            _albumEntity.value = repository.getAlbumType(albumType)
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getAlbumType(albumType)
+            _albumEntity.postValue(albums)
         }
     }
 
@@ -160,26 +153,30 @@ class AlbumViewModel @Inject constructor(
     suspend fun getRandomAlbum(): AlbumEntity? = repository.getRandomAlbum()
 
     fun getSavedAlbums() {
-        viewModelScope.launch {
-            _albumEntity.value = repository.getSavedAlbums()
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getSavedAlbums()
+            _albumEntity.postValue(albums)
         }
     }
 
     fun getSavedAlbumAsc() {
-        viewModelScope.launch {
-            _albumEntity.value = repository.getSavedAlbumAsc()
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getSavedAlbumAsc()
+            _albumEntity.postValue(albums)
         }
     }
 
     fun getAlbumSortedByName() {
-        viewModelScope.launch {
-            _albumEntity.value = repository.getAlbumSortedByName()
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getAlbumSortedByName()
+            _albumEntity.postValue(albums)
         }
     }
 
     fun getListenLaterAlbums() {
-        viewModelScope.launch {
-            _albumEntity.value = repository.getListenLaterAlbums()
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getListenLaterAlbums()
+            _albumEntity.postValue(albums)
         }
     }
 
