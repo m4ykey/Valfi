@@ -57,9 +57,9 @@
                     android:id="@+id/imgAlbum"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/album_cover"
                     android:scaleType="centerCrop"
-                    tools:background="@drawable/album_error"
-                    android:contentDescription="@string/album_cover" />
+                    tools:background="@drawable/album_error" />
 
             </androidx.cardview.widget.CardView>
 

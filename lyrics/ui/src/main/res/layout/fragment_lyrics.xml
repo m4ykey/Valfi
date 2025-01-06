@@ -2,12 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
-    android:background="@color/background"
+    android:id="@+id/constraintLayout"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,12 +17,16 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="@color/navigationIconColor"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
+        android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/appBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,10 +34,77 @@
         android:layout_width="0dp"
         android:layout_height="0dp">
 
-        <TextView
-            android:id="@+id/txtLyrics"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/imgAlbumCover"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/txtTrack"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                tools:text="Szum"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/outfit_medium"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/txtArtist"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/outfit_regular"
+                tools:text="Kaska Sochacka"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgCopyLyrics"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/imgOpenTrack"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_spotify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:gravity="center"
+                tools:text="Lashing out the action, returning the reaction\nWeak are ripped and torn away\nHypnotizing power, crushing all that cower\nBattery is here to stay\n\nSmashing through the boundaries, lunacy has found me\nCannot stop the battery\nPounding out aggression, turns into obsession\nCannot kill the battery\nCannot kill the family, battery is found in me\nBattery, battery\n\nCrushing all deceivers, mashing non-believers\nNever-ending potency\nHungry violence-seeker, feeding off the weaker\nBreeding on insanity\n\nSmashing through the boundaries, lunacy has found me\nCannot stop the battery\nPounding out aggression, turns into obsession\nCannot kill the battery\nCannot kill the family, battery is found in me\nBattery, battery\n\nCircle of destruction, hammer comes crushing\nPowerhouse of energy\nWhipping up a fury, dominating flurry\nWe create the battery\n\nSmashing through the boundaries, lunacy has found me\nCannot stop the battery\nPounding out aggression, turns into obsession\nCannot kill the battery\nCannot kill the family, battery is found in me\nBattery, battery\nBattery, battery"
+                android:fontFamily="@font/inter_medium"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:id="@+id/txtLyrics"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </ScrollView>
 

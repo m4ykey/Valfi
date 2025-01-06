@@ -18,9 +18,10 @@ class LyricsActivity : AppCompatActivity(), BottomNavigationVisibility {
 
         val artistName = intent.getStringExtra("artistName")
         val trackName = intent.getStringExtra("trackName")
+        val trackId = intent.getStringExtra("trackId")
 
         if (savedInstanceState == null) {
-            val fragment = LyricsFragment.newInstance(artistName, trackName)
+            val fragment = LyricsFragment.newInstance(artistName, trackName, trackId)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit()

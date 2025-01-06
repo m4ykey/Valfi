@@ -37,6 +37,7 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":authentication"))
 
     implementation(libs.retrofit)
     implementation(libs.converterMoshi)

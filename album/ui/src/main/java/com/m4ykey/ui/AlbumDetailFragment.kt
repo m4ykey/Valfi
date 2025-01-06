@@ -72,10 +72,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             onTrackClick = { track ->
                 val trackName = track.name
                 val artistName = track.getArtistList()
+                val trackId = track.id
 
-                val intent = Intent(requireContext(), LyricsActivity::class.java)
-                intent.putExtra("trackName", trackName)
-                intent.putExtra("artistName", artistName)
+                val intent = Intent(requireContext(), LyricsActivity::class.java).apply {
+                    putExtra("trackName", trackName)
+                    putExtra("artistName", artistName)
+                    putExtra("trackId", trackId)
+                }
                 startActivity(intent)
             }
         )
