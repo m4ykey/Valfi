@@ -20,5 +20,6 @@
     <string name="save_your_data_to_a_json_file">Zapisz swoje dane do pliku JSON</string>
     <string name="restore_your_data">Przywróć swoje dane</string>
     <string name="restore_your_data_from_a_json_file">Przywróć swoje dane z pliku JSON</string>
+    <string name="lyrics_are_provided_by_lrclib">Teksty piosenek dostarcza LRCLIB</string>
 
 </resources>

@@ -293,6 +293,24 @@
 
                 <TextView
                     android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/textColor2"
+                    android:fontFamily="@font/inter_medium"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lyrics_are_provided_by_lrclib"/>
+
+                <ImageView
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/imgLRCLIB"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/lrclib_logo"/>
+
+                <TextView
+                    android:layout_marginTop="10dp"
                     android:textSize="11sp"
                     android:fontFamily="@font/outfit_regular"
                     android:textColor="@color/textColor2"
