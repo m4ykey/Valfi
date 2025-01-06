@@ -8,6 +8,7 @@ import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -30,9 +31,10 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
                     convertMapToAlbumEntity(it)
                 } ?: emptyList()
 
-                val albumData = AlbumsData(savedAlbums, listenLaterAlbums)
+                val savedAlbumsFlow = flow { emit(savedAlbums) }
+                val listenLaterAlbumsFlow = flow { emit(listenLaterAlbums) }
 
-                return@withContext albumData
+                return@withContext AlbumsData(savedAlbumsFlow, listenLaterAlbumsFlow)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -44,14 +46,18 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
 suspend fun insertAlbumData(albumDao: AlbumDao, albumsData: AlbumsData) {
     withContext(Dispatchers.IO) {
         try {
-            albumsData.savedAlbums.forEach { album ->
-                albumDao.insertAlbum(album)
-                albumDao.insertSavedAlbum(IsAlbumSaved(album.id, true))
+            albumsData.savedAlbums.collect { savedAlbums ->
+                savedAlbums.forEach { album ->
+                    albumDao.insertAlbum(album)
+                    albumDao.insertSavedAlbum(IsAlbumSaved(album.id, true))
+                }
             }
 
-            albumsData.listenLaterAlbums.forEach { album ->
-                albumDao.insertAlbum(album)
-                albumDao.insertListenLaterAlbum(IsListenLaterSaved(album.id, true))
+            albumsData.listenLaterAlbums.collect { listenLater ->
+                listenLater.forEach { album ->
+                    albumDao.insertAlbum(album)
+                    albumDao.insertListenLaterAlbum(IsListenLaterSaved(album.id, true))
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -16,7 +16,7 @@ suspend fun saveJsonToFile(context: Context, uri : Uri, jsonData : String) {
     }
 }
 
-suspend fun generateJsonData(albumDao: AlbumDao) : String {
+fun generateJsonData(albumDao: AlbumDao) : String {
     val savedAlbums = albumDao.getSavedAlbums()
     val listenLaterAlbums = albumDao.getListenLaterAlbums()
 

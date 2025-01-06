@@ -3,6 +3,7 @@ package com.m4ykey.data.di
 import android.content.Context
 import androidx.room.Room
 import com.m4ykey.data.local.database.AlbumDatabase
+import com.m4ykey.data.local.database.SearchResultDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +26,17 @@ object DatabaseModule {
             "album_database"
         ).build()
     }
+
+    @Provides
+    @Singleton
+    fun provideSearchResultDatabase(
+        @ApplicationContext context: Context
+    ) : SearchResultDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            SearchResultDatabase::class.java,
+            "search_result_database"
+        ).build()
+    }
+
 }

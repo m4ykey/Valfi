@@ -74,11 +74,11 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getListenLaterCount(): Flow<Int> = dao.getListenLaterCount()
 
-    override suspend fun getSavedAlbums(): List<AlbumEntity> = dao.getSavedAlbums()
-    override suspend fun getListenLaterAlbums(): List<AlbumEntity> = dao.getListenLaterAlbums()
-    override suspend fun getAlbumType(albumType: String): List<AlbumEntity> = dao.getAlbumType(albumType)
-    override suspend fun searchAlbumByName(searchQuery: String): List<AlbumEntity> = dao.searchAlbumsByName(searchQuery)
-    override suspend fun searchAlbumsListenLater(searchQuery: String): List<AlbumEntity> = dao.searchAlbumsListenLater(searchQuery)
-    override suspend fun getAlbumSortedByName(): List<AlbumEntity> = dao.getAlbumSortedByName()
-    override suspend fun getSavedAlbumAsc(): List<AlbumEntity> = dao.getSavedAlbumAsc()
+    override suspend fun getSavedAlbums(): Flow<List<AlbumEntity>> = dao.getSavedAlbums()
+    override suspend fun getListenLaterAlbums(): Flow<List<AlbumEntity>> = dao.getListenLaterAlbums()
+    override suspend fun getAlbumType(albumType: String): Flow<List<AlbumEntity>> = dao.getAlbumType(albumType)
+    override suspend fun searchAlbumByName(searchQuery: String): Flow<List<AlbumEntity>> = dao.searchAlbumsByName(searchQuery)
+    override suspend fun searchAlbumsListenLater(searchQuery: String): Flow<List<AlbumEntity>> = dao.searchAlbumsListenLater(searchQuery)
+    override suspend fun getAlbumSortedByName(): Flow<List<AlbumEntity>> = dao.getAlbumSortedByName()
+    override suspend fun getSavedAlbumAsc(): Flow<List<AlbumEntity>> = dao.getSavedAlbumAsc()
 }

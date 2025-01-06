@@ -130,21 +130,27 @@ class AlbumViewModel @Inject constructor(
     fun searchAlbumByName(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumByName(albumName)
-            _searchResult.postValue(albums)
+            albums.collect { result ->
+                _searchResult.postValue(result)
+            }
         }
     }
 
     fun searchAlbumsListenLater(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumsListenLater(albumName)
-            _searchResult.postValue(albums)
+            albums.collect { result ->
+                _searchResult.postValue(result)
+            }
         }
     }
 
     fun getAlbumType(albumType: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumType(albumType)
-            _albumEntity.postValue(albums)
+            albums.collect { result ->
+                _albumEntity.postValue(result)
+            }
         }
     }
 
@@ -155,28 +161,36 @@ class AlbumViewModel @Inject constructor(
     fun getSavedAlbums() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getSavedAlbums()
-            _albumEntity.postValue(albums)
+            albums.collect { result ->
+                _albumEntity.postValue(result)
+            }
         }
     }
 
     fun getSavedAlbumAsc() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getSavedAlbumAsc()
-            _albumEntity.postValue(albums)
+            albums.collect { result ->
+                _albumEntity.postValue(result)
+            }
         }
     }
 
     fun getAlbumSortedByName() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumSortedByName()
-            _albumEntity.postValue(albums)
+            albums.collect { result ->
+                _albumEntity.postValue(result)
+            }
         }
     }
 
     fun getListenLaterAlbums() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getListenLaterAlbums()
-            _albumEntity.postValue(albums)
+            albums.collect { result ->
+                _albumEntity.postValue(result)
+            }
         }
     }
 

@@ -25,17 +25,17 @@ interface AlbumRepository {
     suspend fun deleteSavedAlbumState(albumId : String)
     suspend fun deleteListenLaterState(albumId: String)
 
-    suspend fun getSavedAlbums() : List<AlbumEntity>
-    suspend fun getListenLaterAlbums() : List<AlbumEntity>
-    suspend fun getAlbumType(albumType : String) : List<AlbumEntity>
-    suspend fun getAlbumSortedByName() : List<AlbumEntity>
-    suspend fun getSavedAlbumAsc() : List<AlbumEntity>
+    suspend fun getSavedAlbums() : Flow<List<AlbumEntity>>
+    suspend fun getListenLaterAlbums() : Flow<List<AlbumEntity>>
+    suspend fun getAlbumType(albumType : String) : Flow<List<AlbumEntity>>
+    suspend fun getAlbumSortedByName() : Flow<List<AlbumEntity>>
+    suspend fun getSavedAlbumAsc() : Flow<List<AlbumEntity>>
 
     suspend fun getRandomAlbum() : AlbumEntity?
 
     fun getListenLaterCount() : Flow<Int>
 
-    suspend fun searchAlbumByName(searchQuery : String) : List<AlbumEntity>
-    suspend fun searchAlbumsListenLater(searchQuery: String) : List<AlbumEntity>
+    suspend fun searchAlbumByName(searchQuery : String) : Flow<List<AlbumEntity>>
+    suspend fun searchAlbumsListenLater(searchQuery: String) : Flow<List<AlbumEntity>>
 
 }

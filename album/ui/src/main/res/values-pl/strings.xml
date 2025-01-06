@@ -50,4 +50,5 @@
     <string name="hello">Dzień dobry</string>
     <string name="good_evening">Dobry wieczór</string>
     <string name="query_to_short">Wyszukiwanie jest zbyt krótkie</string>
+    <string name="clear_recent_searches">Wyczyść ostatnio wyszukiwane</string>
 </resources>
