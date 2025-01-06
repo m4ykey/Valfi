@@ -12,6 +12,16 @@
         <item name="android:text">E</item>
     </style>
 
+    <style name="AlbumType">
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:background">@drawable/drawable_album_type</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <style name="CustomChipStyle" parent="Widget.Material3.Chip.Filter">
         <item name="chipSurfaceColor">@android:color/transparent</item>
         <item name="chipBackgroundColor">@android:color/transparent</item>

@@ -65,4 +65,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txtLabel"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/outfit_regular"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="5dp"
+        tools:text="A"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/AlbumType"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
