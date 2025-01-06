@@ -53,8 +53,6 @@ okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-int
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "5.0.0-rc01" }
 
-jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.3" }
-
 gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 
 [plugins]
