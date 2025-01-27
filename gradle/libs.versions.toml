@@ -1,18 +1,18 @@
 [versions]
-application = "8.7.3"
+application = "8.8.0"
 navigation = "2.8.5"
 retrofit = "2.11.0"
 lifecycle = "2.8.7"
-hilt = "2.54"
+hilt = "2.55"
 okhttp = "4.12.0"
 room = "2.6.1"
 coroutines = "1.10.1"
 moshi = "1.15.2"
 
 [libraries]
-firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.3.0" }
-firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.1.2" }
-firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.3" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.4.0" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.2.0" }
+firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.4" }
 firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version = "24.1.0" }
 
 junit = { group = "junit", name = "junit", version = "4.13.2" }
@@ -25,7 +25,7 @@ androidxNavigationUI = { group = "androidx.navigation", name = "navigation-ui-kt
 androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
 androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.0" }
-androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
+androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.2" }
 androidxLifecycleViewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidxLifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -34,7 +34,7 @@ androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.
 androidxPalette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
 androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 androidxPreference = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
-androidxActivity = { group = "androidx.activity", name = "activity", version = "1.9.3" }
+androidxActivity = { group = "androidx.activity", name = "activity", version = "1.10.0" }
 
 androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 
