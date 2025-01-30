@@ -10,3 +10,7 @@ plugins {
     alias(libs.plugins.crashlytics) apply false
     alias(libs.plugins.performance) apply false
 }
+
+extra["compileSdkVersion"] = 35
+extra["targetSdkVersion"] = 35
+extra["minSdkVersion"] = 26

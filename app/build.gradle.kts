@@ -21,12 +21,12 @@ val versionPatch = versionProperties["versionPatch"].toString().toInt()
 
 android {
     namespace = "com.m4ykey.valfi2"
-    compileSdk = 35
+    compileSdk = rootProject.extra["compileSdkVersion"] as Int
 
     defaultConfig {
         applicationId = "com.m4ykey.valfi2"
-        minSdk = 26
-        targetSdk = 35
+        minSdk = rootProject.extra["minSdkVersion"] as Int
+        targetSdk = rootProject.extra["targetSdkVersion"] as Int
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100
         versionName = "$versionMajor.$versionMinor.$versionPatch"
 
