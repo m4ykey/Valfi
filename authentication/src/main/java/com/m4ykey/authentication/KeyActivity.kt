@@ -58,6 +58,9 @@ class KeyActivity : AppCompatActivity() {
 
         binding.btnDelete.setOnClickListener {
             lifecycleScope.launch {
+                binding.etClientSecret.setText("")
+                binding.etClientId.setText("")
+
                 repository.deleteKeys()
             }
         }
