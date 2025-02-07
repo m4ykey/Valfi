@@ -2,6 +2,7 @@
 <resources>
     <style name="AttentionDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="buttonBarPositiveButtonStyle">@style/positiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/positiveButtonStyle</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.AlertDialog</item>
         <item name="shapeAppearanceOverlay">@null</item>
         <item name="android:background">@color/alertBackground</item>

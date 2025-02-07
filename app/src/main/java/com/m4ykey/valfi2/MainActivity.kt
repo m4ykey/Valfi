@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
     }
 
     private fun displayGrantAccessMaterialDialog() {
-        MaterialAlertDialogBuilder(this)
+        MaterialAlertDialogBuilder(this, R.style.AttentionDialog)
             .setTitle(R.string.grant_access)
             .setMessage(R.string.app_need_to_notification_display_music)
             .setPositiveButton(R.string.grant_access) { _, _ ->
