@@ -1,6 +1,8 @@
 package com.lyrics.ui
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -17,6 +19,7 @@ import com.m4ykey.core.views.utils.getColorFromImage
 import com.m4ykey.core.views.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.math.pow
 
 @AndroidEntryPoint
 class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
@@ -104,13 +107,49 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
                 context = requireContext()
             ) { color ->
                 constraintLayout.setBackgroundColor(color)
+                val luminance = calculateLuminance(color)
+                if (luminance > 0.5) {
+                    txtTrack.setTextColor(Color.BLACK)
+                    txtArtist.setTextColor(Color.BLACK)
+                    imgCopyLyrics.imageTintList = ColorStateList.valueOf(Color.BLACK)
+                    imgOpenTrack.imageTintList = ColorStateList.valueOf(Color.BLACK)
+                    txtLyrics.setTextColor(Color.BLACK)
+                    txtNotFoundLyrics.setTextColor(Color.BLACK)
+                    toolbar.setNavigationIconTint(Color.BLACK)
+                } else {
+                    txtTrack.setTextColor(Color.WHITE)
+                    txtArtist.setTextColor(Color.WHITE)
+                    imgCopyLyrics.imageTintList = ColorStateList.valueOf(Color.WHITE)
+                    imgOpenTrack.imageTintList = ColorStateList.valueOf(Color.WHITE)
+                    txtLyrics.setTextColor(Color.WHITE)
+                    txtNotFoundLyrics.setTextColor(Color.WHITE)
+                    toolbar.setNavigationIconTint(Color.WHITE)
+                }
             }
         }
     }
 
+    private fun calculateLuminance(color : Int) : Double {
+        val red = Color.red(color) / 255.0
+        val green = Color.green(color) / 255.0
+        val blue = Color.blue(color) / 255.0
+
+        val rL = if (red <= 0.03928) red / 12.92 else ((red + 0.055) / 1.055).pow(2.4)
+        val gL = if (green <= 0.03928) green / 12.92 else ((green + 0.055) / 1.055).pow(2.4)
+        val bL = if (blue <= 0.03928) blue / 12.92 else ((blue + 0.055) / 1.055).pow(2.4)
+
+        return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL
+    }
+
     private fun displayLyrics(item : LyricsItem) {
         binding.apply {
-            txtLyrics.text = item.plainLyrics
+            if (item.plainLyrics.isEmpty()) {
+                linearLayoutEmptyLyrics.isVisible = true
+                txtLyrics.isVisible = false
+            } else {
+                txtLyrics.text = item.plainLyrics
+                linearLayoutEmptyLyrics.isVisible = false
+            }
             imgCopyLyrics.setOnClickListener {
                 copyText(
                     context = requireContext(),

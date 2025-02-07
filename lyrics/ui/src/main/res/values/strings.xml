@@ -1,1 +1,11 @@
-<resources></resources>
+<resources>
+    <string name="lyrics_not_found1">The song lyrics got lost in the chords!</string>
+    <string name="lyrics_not_found2">Sorry, we can\'t find the lyrics. Maybe they\'re hiding behind the notes?</string>
+    <string name="lyrics_not_found3">Lyrics search failed. How about we try again?</string>
+    <string name="lyrics_not_found4">Somewhere between the verses, the lyrics got lost…</string>
+    <string name="lyrics_not_found5">Lyrics not found! Maybe the music is enough?</string>
+    <string name="lyrics_not_found6">Searching for lyrics… Unfortunately, they\'ve vanished in the sound!</string>
+    <string name="lyrics_not_found7">Oops! The lyrics are hiding. Let\'s try searching somewhere else.</string>
+    <string name="lyrics_not_found8">We’re looking, we’re looking, but no lyrics. Maybe they\'ll come with the next chorus!</string>
+
+</resources>

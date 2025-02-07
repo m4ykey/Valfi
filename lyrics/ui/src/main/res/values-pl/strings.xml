@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lyrics_not_found1">Tekst utworu zaginął w akordach!</string>
+    <string name="lyrics_not_found2">Niestety, nie możemy znaleźć tekstu. Może schował się za nutami?</string>
+    <string name="lyrics_not_found3">Wyszukiwanie tekstu zakończone niepowodzeniem. Może spróbujemy jeszcze raz?</string>
+    <string name="lyrics_not_found4">Gdzieś między wersami tekstu zgubił się tekst…</string>
+    <string name="lyrics_not_found5">Tekst nie odnaleziony! Może muzyka wystarczy?</string>
+    <string name="lyrics_not_found6">Wyszukiwanie tekstu… Niestety, zaginął w dźwiękach!</string>
+    <string name="lyrics_not_found7">Ups! Tekst się schował. Spróbujmy poszukać gdzie indziej.</string>
+    <string name="lyrics_not_found8">Szukamy, szukamy, ale tekstu brak. Może przyjdzie z kolejnym refrenem!</string>
+</resources>

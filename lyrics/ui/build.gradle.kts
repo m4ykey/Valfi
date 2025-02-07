@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidxLifecycleRuntime)
     implementation(libs.androidxLifecycleViewmodel)
 
+    implementation(libs.lottie)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.extJunit)
