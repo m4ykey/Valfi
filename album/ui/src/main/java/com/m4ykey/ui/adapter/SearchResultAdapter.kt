@@ -22,7 +22,7 @@ class SearchResultAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        val item = getItem(position)
+        val item = differ.currentList.getOrNull(position)
         return item?.id?.toLong() ?: position.toLong()
     }
 

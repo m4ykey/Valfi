@@ -1,20 +1,29 @@
 package com.m4ykey.core.views.recyclerview
 
+import androidx.recyclerview.widget.AdapterListUpdateCallback
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.core.views.recyclerview.animations.applyAnimation
 
 abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     diffCallback : DiffUtil.ItemCallback<Item>
-) : ListAdapter<Item, VH>(diffCallback) {
+) : RecyclerView.Adapter<VH>() {
 
+    val differ : AsyncListDiffer<Item> by lazy {
+        AsyncListDiffer(AdapterListUpdateCallback(this), AsyncDifferConfig.Builder(diffCallback).build())
+    }
     private var lastVisibleItemPosition = -1
 
-    override fun getItemCount(): Int = currentList.size
+    fun submitList(list : List<Item>) {
+        differ.submitList(list)
+    }
+
+    override fun getItemCount(): Int = differ.currentList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val item = getItem(holder.adapterPosition)
+        val item = differ.currentList[position]
         item?.let {
             onItemBindViewHolder(holder, it, position)
             holder.applyAnimation(position, lastVisibleItemPosition)
@@ -23,11 +32,6 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     }
 
     abstract fun onItemBindViewHolder(holder: VH, item : Item, position: Int)
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        submitList(emptyList())
-    }
 
     override fun getItemId(position: Int): Long {
         return getItemForPosition(position)

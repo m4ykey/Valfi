@@ -22,7 +22,7 @@ class AlbumAdapter(
     }
 
     override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, item: AlbumEntity, position: Int) {
-        val album = currentList[position]
+        val album = differ.currentList[position]
         when (holder) {
             is AlbumGridViewHolder -> holder.bind(album)
             is AlbumListViewHolder -> holder.bind(album)
@@ -45,7 +45,7 @@ class AlbumAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        val item = getItem(position)
+        val item = differ.currentList.getOrNull(position)
         return item?.id?.toLong() ?: position.toLong()
     }
 }

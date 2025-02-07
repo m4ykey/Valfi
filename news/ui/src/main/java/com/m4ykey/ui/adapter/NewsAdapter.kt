@@ -29,7 +29,7 @@ class NewsAdapter(
     }
 
     override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, item: Article, position: Int) {
-        val news = currentList[position]
+        val news = differ.currentList[position]
         when (holder) {
             is NewsTableViewHolder -> holder.bind(news)
             is NewsListViewHolder -> holder.bind(news)
@@ -37,7 +37,7 @@ class NewsAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        val item = getItem(position)
+        val item = differ.currentList.getOrNull(position)
         return item?.url?.hashCode()?.toLong() ?: position.toLong()
     }
 
