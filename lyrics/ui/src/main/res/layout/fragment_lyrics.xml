@@ -39,12 +39,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:id="@+id/imgAlbumCover"
+            <androidx.cardview.widget.CardView
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"/>
+                app:cardCornerRadius="10dp"
+                android:layout_width="170dp"
+                android:layout_height="170dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imgAlbumCover"
+                    android:scaleType="centerCrop"/>
+
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_marginTop="5dp"
