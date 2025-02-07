@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="light">Light mode</string>
+    <string name="compatible_with_device_settings">Compatible with the device theme</string>
+    <string name="dark">Dark mode</string>
+</resources>

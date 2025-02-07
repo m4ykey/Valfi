@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings">Settings</string>
+    <string name="connect_your_spotify_account">Connect your Spotify account</string>
+    <string name="let_our_app_and_spotify_work_together_to_bring_you_fresh_and_exciting_music_discoveries_every_day">Let our app and Spotify work together to bring you fresh and exciting music discoveries every day.</string>
+    <string name="connect">Connect</string>
+    <string name="theme">Theme</string>
+    <string name="light">Light mode</string>
+    <string name="dark">Dark mode</string>
+    <string name="compatible_with_device_settings">Compatible with the device theme</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="polish">Polish</string>
+    <string name="set_theme">Set theme</string>
+    <string name="select_language">Select language</string>
+    <string name="data_is_provided_by_the_services_spotify">Data is provided by Spotify</string>
+    <string name="open_source">Open Source</string>
+    <string name="visit_the_project_on_github">Visit the project on Github</string>
+    <string name="save_your_data">Save your data</string>
+    <string name="save_your_data_to_a_json_file">Save your data to a JSON file</string>
+    <string name="restore_your_data">Restore your data</string>
+    <string name="restore_your_data_from_a_json_file">Restore your data from a JSON file</string>
+    <string name="lyrics_are_provided_by_lrclib">Lyrics are provided by LRCLIB</string>
+    <string name="add_your_keys">Add your keys</string>
+    <string name="add_your_keys_to_use_the_app">Add your keys to use the app</string>
+</resources>

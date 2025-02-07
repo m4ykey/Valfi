@@ -29,7 +29,6 @@ import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.preferences.AlbumPreferences
-import com.m4ykey.settings.SettingsActivity
 import com.m4ykey.ui.adapter.AlbumAdapter
 import com.m4ykey.ui.helpers.BooleanWrapper
 import com.m4ykey.ui.helpers.createGridLayoutManager
@@ -327,7 +326,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             val drawerButtons = listOf(
                 Pair(R.id.imgSettings) {
-                    val intent = Intent(requireContext(), SettingsActivity::class.java)
+                    val intent = Intent(requireContext(), com.m4ykey.settings.ui.SettingsActivity::class.java)
                     startActivity(intent)
                     drawerLayout.close()
                 },

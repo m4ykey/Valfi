@@ -48,12 +48,12 @@ interface AlbumDao {
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
             "album_saved_table.isAlbumSaved = 1 ORDER BY save_time DESC")
-    fun getSavedAlbums() : Flow<List<AlbumEntity>>
+    suspend fun getSavedAlbums() : List<AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
             "album_table.id = listen_later_table.albumId WHERE " +
             "listen_later_table.isListenLaterSaved = 1 ORDER BY name ASC")
-    fun getListenLaterAlbums() : Flow<List<AlbumEntity>>
+    suspend fun getListenLaterAlbums() : List<AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
             "album_table.id = listen_later_table.albumId WHERE " +
@@ -66,29 +66,29 @@ interface AlbumDao {
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
             "album_saved_table.isAlbumSaved = 1 AND album_table.album_type = :albumType")
-    fun getAlbumType(albumType : String) : Flow<List<AlbumEntity>>
+    suspend fun getAlbumType(albumType : String) : List<AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
             "album_saved_table.isAlbumSaved = 1 AND album_table.name " +
             "LIKE '%' || :searchQuery || '%'")
-    fun searchAlbumsByName(searchQuery : String) : Flow<List<AlbumEntity>>
+    suspend fun searchAlbumsByName(searchQuery : String) : List<AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN listen_later_table ON " +
             "album_table.id = listen_later_table.albumId WHERE " +
             "listen_later_table.isListenLaterSaved = 1 AND album_table.name " +
             "LIKE '%' || :searchQuery || '%'")
-    fun searchAlbumsListenLater(searchQuery: String) : Flow<List<AlbumEntity>>
+    suspend fun searchAlbumsListenLater(searchQuery: String) : List<AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
             "album_saved_table.isAlbumSaved = 1 ORDER BY name")
-    fun getAlbumSortedByName() : Flow<List<AlbumEntity>>
+    suspend fun getAlbumSortedByName() : List<AlbumEntity>
 
     @Query("SELECT * FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +
             "album_saved_table.isAlbumSaved = 1 ORDER BY save_time ASC")
-    fun getSavedAlbumAsc() : Flow<List<AlbumEntity>>
+    suspend fun getSavedAlbumAsc() : List<AlbumEntity>
 
     @Query("SELECT COUNT(*) FROM album_table INNER JOIN album_saved_table ON " +
             "album_table.id = album_saved_table.albumId WHERE " +

@@ -7,14 +7,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.show
-import com.m4ykey.settings.theme.ThemeOptions
-import com.m4ykey.settings.theme.ThemePreferences
+import com.m4ykey.settings.data.theme.ThemePreferences
 import com.m4ykey.valfi2.Utils.APPLE_MUSIC_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.CUSTOM_START_SERVICE_ACTION
 import com.m4ykey.valfi2.Utils.DEEZER_PACKAGE_NAME
@@ -167,24 +164,24 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        findViewById<BottomNavigationView>(R.id.bottomnavigation)?.setupWithNavController(navController)
+        //findViewById<BottomNavigationView>(R.id.bottomnavigation)?.setupWithNavController(navController)
     }
 
     override fun showBottomNavigation() {
-        findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = true
+        //findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = true
     }
 
     override fun hideBottomNavigation() {
-        findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = false
+        //findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = false
     }
 
     private fun readSelectedThemeOption() {
         lifecycleScope.launch {
             themePreferences.getSelectedThemeOptions().collect { themeOptions ->
                 when (themeOptions) {
-                    ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    ThemeOptions.Default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    com.m4ykey.settings.data.theme.ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    com.m4ykey.settings.data.theme.ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    com.m4ykey.settings.data.theme.ThemeOptions.Default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 }
             }
         }

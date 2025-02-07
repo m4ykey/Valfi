@@ -40,7 +40,7 @@ android {
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":settings"))
+    implementation(project(":settings:ui"))
     implementation(project(":album:data"))
     implementation(project(":lyrics:ui"))
 

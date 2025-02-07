@@ -63,5 +63,5 @@ androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 gms = { id = "com.google.gms.google-services", version = "4.4.2" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.3" }
 performance = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }

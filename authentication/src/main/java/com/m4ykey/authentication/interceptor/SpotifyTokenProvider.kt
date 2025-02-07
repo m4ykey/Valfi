@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.m4ykey.authentication.api.AuthApi
+import com.m4ykey.authentication.data.repository.KeyRepository
 import com.m4ykey.authentication.interceptor.token.TokenProvider
 import com.m4ykey.authentication.interceptor.token.fetchAccessToken
 import kotlinx.coroutines.flow.firstOrNull
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class SpotifyTokenProvider @Inject constructor(
     private val api: AuthApi,
     private val dataStore: DataStore<Preferences>,
-    private val context : Context
+    private val context : Context,
+    private val repository: KeyRepository
 ) : TokenProvider {
 
     private val accessTokenKey = stringPreferencesKey("access_token")
@@ -31,7 +33,12 @@ class SpotifyTokenProvider @Inject constructor(
                 cachedToken
             } else {
                 if (isInternetAvailable(context)) {
-                    val newAccessToken = fetchAccessToken(api = api)
+                    val keyEntity = repository.getKeys().firstOrNull()
+                    val newAccessToken = fetchAccessToken(
+                        api = api,
+                        clientId = keyEntity?.clientId ?: return "",
+                        clientSecret = keyEntity.clientSecret ?: return ""
+                    )
 
                     val newExpireTime = System.currentTimeMillis() + 3600 * 1000
                     saveAccessToken(newAccessToken, newExpireTime)

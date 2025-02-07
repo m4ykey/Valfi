@@ -1,7 +1,6 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Valfi2" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:itemTextAppearance">@style/MenuColor</item>
         <item name="android:itemBackground">@color/background</item>
     </style>
 

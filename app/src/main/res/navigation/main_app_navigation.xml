@@ -5,6 +5,5 @@
     app:startDestination="@id/album_nav_graph">
 
     <include app:graph="@navigation/album_nav_graph"/>
-    <include app:graph="@navigation/news_nav_graph" />
 
 </navigation>

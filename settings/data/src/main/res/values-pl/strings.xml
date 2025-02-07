@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="light">Jasny</string>
+    <string name="dark">Ciemny</string>
+    <string name="compatible_with_device_settings">Zgodny z motywem urządzenia</string>
+</resources>

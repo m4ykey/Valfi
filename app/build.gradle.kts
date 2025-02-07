@@ -78,10 +78,9 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":album:ui"))
-    implementation(project(":news:ui"))
     implementation(project(":album:data"))
-    implementation(project(":news:data"))
-    implementation(project(":settings"))
+    implementation(project(":settings:ui"))
+    implementation(project(":settings:data"))
     implementation(project(":lyrics:ui"))
     implementation(project(":lyrics:data"))
 
@@ -99,7 +98,7 @@ dependencies {
         androidTestImplementation(extJunit)
         androidTestImplementation(espresso)
 
-        debugImplementation(leakcanary)
+        //debugImplementation(leakcanary)
 
         implementation(hiltAndroid)
         ksp(hiltCompiler)

@@ -41,7 +41,6 @@ android {
 dependencies {
 
     implementation(project(":core"))
-    implementation(project(":news:data"))
 
     libs.apply {
         implementation(androidxCore)
