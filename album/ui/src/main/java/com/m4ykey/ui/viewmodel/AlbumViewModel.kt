@@ -9,15 +9,17 @@ import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.AlbumWithDetails
+import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.helpers.PaginationType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,20 +28,50 @@ class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepository
 ) : BaseViewModel() {
 
-    private var _search = MutableStateFlow<List<AlbumItem>>(emptyList())
+    private val _search = MutableStateFlow<List<AlbumItem>>(emptyList())
     val search: StateFlow<List<AlbumItem>> get() = _search
 
-    private var _newRelease = MutableStateFlow<List<AlbumItem>>(emptyList())
+    private val _newRelease = MutableStateFlow<List<AlbumItem>>(emptyList())
     val newRelease: StateFlow<List<AlbumItem>> get() = _newRelease
 
-    private var _detail = MutableStateFlow<AlbumDetail?>(null)
+    private val _detail = MutableStateFlow<AlbumDetail?>(null)
     val detail: StateFlow<AlbumDetail?> get() = _detail
 
-    private var _albumEntity = MutableLiveData<List<AlbumEntity>>()
+    private val _albumEntity = MutableLiveData<List<AlbumEntity>>()
     val albumEntity: LiveData<List<AlbumEntity>> get() = _albumEntity
 
-    private var _searchResult = MutableLiveData<List<AlbumEntity>>()
+    private val _searchResult = MutableLiveData<List<AlbumEntity>>()
     val searchResult: LiveData<List<AlbumEntity>> get() = _searchResult
+
+    private val _albumCount = MutableStateFlow(0)
+    val albumCount : StateFlow<Int> = _albumCount
+
+    private val _totalTracksCount = MutableStateFlow(0)
+    val totalTracksCount : StateFlow<Int> = _totalTracksCount
+
+    private val _listenLaterCount = MutableStateFlow(0)
+    val listenLaterCount : StateFlow<Int> = _listenLaterCount
+
+    private val _randomAlbum = MutableStateFlow<AlbumEntity?>(null)
+    val randomAlbum : StateFlow<AlbumEntity?> = _randomAlbum
+
+    private val _decadeResult = MutableStateFlow<DecadeResult?>(null)
+    val decadeResult : StateFlow<DecadeResult?> = _decadeResult
+
+    private val _albumType = MutableStateFlow(0)
+    val albumType : StateFlow<Int> = _albumType
+
+    private val _epType = MutableStateFlow(0)
+    val epType : StateFlow<Int> = _epType
+
+    private val _singleType = MutableStateFlow(0)
+    val singleType : StateFlow<Int> = _singleType
+
+    private val _compilationType = MutableStateFlow(0)
+    val compilationType : StateFlow<Int> = _compilationType
+
+    private val _albumWithMostTracks = MutableStateFlow<AlbumWithDetails?>(null)
+    val albumWithMostTracks : StateFlow<AlbumWithDetails?> = _albumWithMostTracks
 
     private var offset = 0
 
@@ -148,9 +180,65 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun getListenLaterCount(): Flow<Int> = repository.getListenLaterCount()
+    fun getAlbumWithMostTracks() {
+        viewModelScope.launch {
+            repository.getAlbumWithMostTracks().collect { album ->
+                _albumWithMostTracks.value = album
+            }
+        }
+    }
 
-    suspend fun getRandomAlbum(): AlbumEntity? = repository.getRandomAlbum()
+    fun getMostPopularDecade() {
+        viewModelScope.launch {
+            repository.getMostPopularDecade().collect { decade ->
+                _decadeResult.value = decade
+            }
+        }
+    }
+
+    fun getListenLaterCount() {
+        viewModelScope.launch {
+            repository.getListenLaterCount().collect { count ->
+                _listenLaterCount.value = count
+            }
+        }
+    }
+
+    fun getRandomAlbum() {
+        viewModelScope.launch {
+            repository.getRandomAlbum().collect { random ->
+                _randomAlbum.value = random
+            }
+        }
+    }
+
+    fun getAlbumCount() {
+        viewModelScope.launch {
+            repository.getAlbumCount().collect { count ->
+                _albumCount.value = count
+            }
+        }
+    }
+
+    fun getTotalTracksCount()  {
+        viewModelScope.launch {
+            repository.getTotalTracksCount().collect { count ->
+                _totalTracksCount.value = count
+            }
+        }
+    }
+
+    fun getAlbumTypeCount(albumType: String) {
+        viewModelScope.launch {
+            val count = repository.getAlbumCountByType(albumType).firstOrNull() ?: 0
+            when (albumType) {
+                "Album" -> _albumType.value = count
+                "Compilation" -> _compilationType.value = count
+                "Single" -> _singleType.value = count
+                "EP" -> _epType.value = count
+            }
+        }
+    }
 
     fun getSavedAlbums() {
         viewModelScope.launch(Dispatchers.IO) {

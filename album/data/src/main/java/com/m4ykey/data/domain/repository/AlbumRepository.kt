@@ -3,6 +3,8 @@ package com.m4ykey.data.domain.repository
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.AlbumWithDetails
+import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
@@ -31,11 +33,17 @@ interface AlbumRepository {
     suspend fun getAlbumSortedByName() : List<AlbumEntity>
     suspend fun getSavedAlbumAsc() : List<AlbumEntity>
 
-    suspend fun getRandomAlbum() : AlbumEntity?
+    fun getRandomAlbum() : Flow<AlbumEntity?>
 
     fun getListenLaterCount() : Flow<Int>
 
     suspend fun searchAlbumByName(searchQuery : String) : List<AlbumEntity>
     suspend fun searchAlbumsListenLater(searchQuery: String) : List<AlbumEntity>
+
+    fun getAlbumCount() : Flow<Int>
+    fun getTotalTracksCount() : Flow<Int>
+    fun getMostPopularDecade() : Flow<DecadeResult>
+    fun getAlbumCountByType(albumType: String) : Flow<Int>
+    fun getAlbumWithMostTracks() : Flow<AlbumWithDetails>
 
 }

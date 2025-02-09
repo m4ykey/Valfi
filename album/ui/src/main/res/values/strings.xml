@@ -59,8 +59,11 @@
         <item>@string/oldest</item>
         <item>@string/alphabetical</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="clear_recent_searches">Clear recent searches</string>
+    <string name="number_of_albums">Number of albums</string>
+    <string name="saved_albums_according_to_type">Saved albums according to type</string>
+    <string name="total_number_of_tracks">Total number of tracks</string>
+    <string name="most_popular_decade">Most popular decade</string>
+    <string name="the_album_with_the_most_songs">The album with the most songs</string>
 
 </resources>

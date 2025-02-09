@@ -315,6 +315,10 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 },
                 Pair(R.id.imgLink) {
                     showInsertAlbumLinkDialog()
+                },
+                Pair(R.id.imgStatistics) {
+                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumStatisticsFragment()
+                    findNavController().navigate(action)
                 }
             )
             for ((itemId, action) in buttons) {

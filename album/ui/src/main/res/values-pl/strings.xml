@@ -51,4 +51,9 @@
     <string name="good_evening">Dobry wieczór</string>
     <string name="query_to_short">Wyszukiwanie jest zbyt krótkie</string>
     <string name="clear_recent_searches">Wyczyść ostatnio wyszukiwane</string>
+    <string name="number_of_albums">Ilość albumów</string>
+    <string name="saved_albums_according_to_type">Zapisane albumy w zależności od typu</string>
+    <string name="total_number_of_tracks">Łączna ilość utworów</string>
+    <string name="most_popular_decade">Najpopularniejsza dekada</string>
+    <string name="the_album_with_the_most_songs">Album z największą ilością utworów</string>
 </resources>

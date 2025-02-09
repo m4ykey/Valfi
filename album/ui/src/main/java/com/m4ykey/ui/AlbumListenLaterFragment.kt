@@ -22,7 +22,6 @@ import com.m4ykey.ui.helpers.hideSearchEditText
 import com.m4ykey.ui.helpers.showSearchEditText
 import com.m4ykey.ui.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -47,7 +46,9 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
         binding.apply {
             viewModel.apply {
+                lifecycleScope.launch { getListenLaterCount() }
                 lifecycleScope.launch { getListenLaterAlbums() }
+                lifecycleScope.launch { getRandomAlbum() }
                 albumEntity.observe(viewLifecycleOwner) { albums ->
                     if (albums.isEmpty()) {
                         albumAdapter.submitList(emptyList())
@@ -82,8 +83,9 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 }
 
                 lifecycleScope.launch {
-                    val albumCount = getListenLaterCount().firstOrNull() ?: 0
-                    txtAlbumCount.text = getString(R.string.album_count, albumCount)
+                    listenLaterCount.collect { count ->
+                        txtAlbumCount.text = getString(R.string.album_count, count)
+                    }
                 }
             }
 
@@ -136,12 +138,13 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun getRandomAlbum() {
         binding.btnListenLater.setOnClickListener {
             lifecycleScope.launch {
-                val randomAlbum = viewModel.getRandomAlbum()
-                if (randomAlbum != null) {
-                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
-                    findNavController().navigate(action)
-                } else {
-                    showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
+                viewModel.randomAlbum.collect { randomAlbum ->
+                    if (randomAlbum != null) {
+                        val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
+                        findNavController().navigate(action)
+                    } else {
+                        showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
+                    }
                 }
             }
         }

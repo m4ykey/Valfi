@@ -14,4 +14,10 @@
         android:title="@string/enter_album_url"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/imgStatistics"
+        android:title="@string/statistics"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_graph"
+        app:iconTint="@color/navigationIconColor"/>
+
 </menu>

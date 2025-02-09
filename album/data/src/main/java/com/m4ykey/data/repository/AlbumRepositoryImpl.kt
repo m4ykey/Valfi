@@ -8,6 +8,8 @@ import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.model.AlbumEntity
+import com.m4ykey.data.local.model.AlbumWithDetails
+import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
@@ -70,7 +72,7 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun deleteAlbum(albumId: String) = dao.deleteAlbum(albumId)
     override suspend fun deleteSavedAlbumState(albumId: String) = dao.deleteSavedAlbumState(albumId)
     override suspend fun deleteListenLaterState(albumId: String) = dao.deleteListenLaterState(albumId)
-    override suspend fun getRandomAlbum(): AlbumEntity? = dao.getRandomAlbum()
+    override fun getRandomAlbum(): Flow<AlbumEntity?> = dao.getRandomAlbum()
 
     override fun getListenLaterCount(): Flow<Int> = dao.getListenLaterCount()
 
@@ -81,4 +83,10 @@ class AlbumRepositoryImpl @Inject constructor(
     override suspend fun searchAlbumsListenLater(searchQuery: String): List<AlbumEntity> = dao.searchAlbumsListenLater(searchQuery)
     override suspend fun getAlbumSortedByName(): List<AlbumEntity> = dao.getAlbumSortedByName()
     override suspend fun getSavedAlbumAsc(): List<AlbumEntity> = dao.getSavedAlbumAsc()
+
+    override fun getAlbumCount(): Flow<Int> = dao.getAlbumCount()
+    override fun getTotalTracksCount(): Flow<Int> = dao.getTotalTracksCount()
+    override fun getMostPopularDecade(): Flow<DecadeResult> = dao.getMostPopularDecade()
+    override fun getAlbumCountByType(albumType: String): Flow<Int> = dao.getAlbumCountByType(albumType)
+    override fun getAlbumWithMostTracks(): Flow<AlbumWithDetails> = dao.getAlbumWithMostTracks()
 }
