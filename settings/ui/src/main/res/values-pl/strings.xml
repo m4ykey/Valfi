@@ -25,5 +25,7 @@
     <string name="add_your_keys_to_use_the_app">Dodaj swoje klucze, aby móc korzystać z aplikacji</string>
     <string name="contact">Kontakt</string>
     <string name="did_you_find_an_error_or_have_a_question_click_to_send_me_a_message">Znalazłeś błąd lub masz pytanie? Kliknij aby wysłać do mnie wiadomość</string>
+    <string name="no_email_app">Nie masz zainstalowanej aplikacji do wysyłania maili.</string>
+    <string name="error_occurred">Wystąpił błąd. Spróbuj ponownie.</string>
 
 </resources>

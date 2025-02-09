@@ -25,4 +25,6 @@
     <string name="add_your_keys_to_use_the_app">Add your keys to use the app</string>
     <string name="contact">Contact</string>
     <string name="did_you_find_an_error_or_have_a_question_click_to_send_me_a_message">Did you find an error or have a question? Click to send me a message</string>
+    <string name="no_email_app">You don\'t have an email app installed.</string>
+    <string name="error_occurred">An error has occurred. Try again.</string>
 </resources>

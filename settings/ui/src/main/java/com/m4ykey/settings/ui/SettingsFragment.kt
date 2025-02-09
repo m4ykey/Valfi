@@ -1,5 +1,6 @@
 package com.m4ykey.settings.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -12,6 +13,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.authentication.KeyActivity
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
+import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.settings.data.file.generateJsonData
 import com.m4ykey.settings.data.file.insertAlbumData
@@ -81,12 +83,18 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                 startActivity(intent)
             }
             linearLayoutEmail.setOnClickListener {
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto:")
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf("valficontact@gmail.com"))
-                    putExtra(Intent.EXTRA_SUBJECT, "Version: $APP_VERSION")
+                try {
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("mailto:")
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf("valficontact@gmail.com"))
+                        putExtra(Intent.EXTRA_SUBJECT, "Version: $APP_VERSION")
+                    }
+                    startActivity(intent)
+                } catch (e : ActivityNotFoundException) {
+                    showToast(requireContext(), getString(R.string.no_email_app))
+                } catch (e : Exception) {
+                    showToast(requireContext(), getString(R.string.error_occurred))
                 }
-                startActivity(intent)
             }
 
             txtVersion.text = APP_VERSION
