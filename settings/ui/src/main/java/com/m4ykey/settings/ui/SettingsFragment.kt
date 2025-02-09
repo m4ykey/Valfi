@@ -80,6 +80,14 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                 val intent = Intent(requireContext(), KeyActivity::class.java)
                 startActivity(intent)
             }
+            linearLayoutEmail.setOnClickListener {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:")
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("valficontact@gmail.com"))
+                    putExtra(Intent.EXTRA_SUBJECT, "Version: $APP_VERSION")
+                }
+                startActivity(intent)
+            }
 
             txtVersion.text = APP_VERSION
         }

@@ -23,5 +23,7 @@
     <string name="lyrics_are_provided_by_lrclib">Teksty piosenek dostarcza LRCLIB</string>
     <string name="add_your_keys">Dodaj swoje klucze</string>
     <string name="add_your_keys_to_use_the_app">Dodaj swoje klucze, aby móc korzystać z aplikacji</string>
+    <string name="contact">Kontakt</string>
+    <string name="did_you_find_an_error_or_have_a_question_click_to_send_me_a_message">Znalazłeś błąd lub masz pytanie? Kliknij aby wysłać do mnie wiadomość</string>
 
 </resources>
