@@ -25,7 +25,7 @@ fun ExternalUrlsDto.toExternalUrls() : ExternalUrls = ExternalUrls(spotify = spo
 fun ArtistDto.toArtist() : Artist =
     Artist(
         name = name ?: "",
-        externalUrls = external_urls?.toExternalUrls() ?: ExternalUrls(),
+        externalUrls = external_urls?.toExternalUrls() ?: ExternalUrls(spotify = ""),
         id = id ?: ""
 )
 
@@ -42,7 +42,7 @@ fun AlbumDetailDto.toAlbumDetail() : AlbumDetail =
     AlbumDetail(
         albumType = album_type ?: "",
         artists = artists?.map { it.toArtist() }!!,
-        externalUrls = external_urls?.toExternalUrls() ?: ExternalUrls(),
+        externalUrls = external_urls?.toExternalUrls() ?: ExternalUrls(spotify = ""),
         id = id ?: "",
         images = images?.map { it.toImage() }!!,
         name = name ?: "",

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center|start"
+    android:layout_marginBottom="5dp"
+    android:id="@+id/linearLayoutArtistList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="70dp"
+        app:cardCornerRadius="100dp"
+        android:layout_height="70dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:id="@+id/imgArtist"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_marginStart="10dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/inter_medium"
+        android:textColor="@color/textColor"
+        tools:text="Kendrick Lamar"
+        android:id="@+id/txtArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

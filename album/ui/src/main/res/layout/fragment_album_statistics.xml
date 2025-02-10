@@ -6,7 +6,7 @@
     android:scrollbars="none"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/Theme.Material3.DayNight.NoActionBar"
-    tools:context="com.m4ykey.ui.AlbumStatisticsFragment">
+    tools:context="com.m4ykey.ui.album.AlbumStatisticsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

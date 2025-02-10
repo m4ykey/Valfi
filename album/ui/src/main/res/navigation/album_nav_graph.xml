@@ -8,7 +8,7 @@
     <fragment
         tools:layout="@layout/fragment_album_home"
         android:id="@+id/albumHomeFragment"
-        android:name="com.m4ykey.ui.AlbumHomeFragment"
+        android:name="com.m4ykey.ui.album.AlbumHomeFragment"
         android:label="AlbumHomeFragment" >
         <action
             app:exitAnim="@anim/slide_out_to_left"
@@ -49,7 +49,7 @@
     <fragment
         tools:layout="@layout/fragment_album_search"
         android:id="@+id/albumSearchFragment"
-        android:name="com.m4ykey.ui.AlbumSearchFragment"
+        android:name="com.m4ykey.ui.album.AlbumSearchFragment"
         android:label="AlbumSearchFragment" >
         <action
             app:exitAnim="@anim/slide_out_to_left"
@@ -62,7 +62,7 @@
     <fragment
         tools:layout="@layout/fragment_album_detail"
         android:id="@+id/albumDetailFragment"
-        android:name="com.m4ykey.ui.AlbumDetailFragment"
+        android:name="com.m4ykey.ui.album.AlbumDetailFragment"
         android:label="AlbumDetailFragment" >
         <argument
             android:name="albumId"
@@ -74,10 +74,13 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumDetailFragment_to_albumCoverFragment"
             app:destination="@id/albumCoverFragment" />
+        <action
+            android:id="@+id/action_albumDetailFragment_to_albumArtistListBottomSheet"
+            app:destination="@id/albumArtistListBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/albumListenLaterFragment"
-        android:name="com.m4ykey.ui.AlbumListenLaterFragment"
+        android:name="com.m4ykey.ui.album.AlbumListenLaterFragment"
         android:label="fragment_album_listen_later"
         tools:layout="@layout/fragment_album_listen_later" >
         <action
@@ -97,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumNewReleaseFragment"
-        android:name="com.m4ykey.ui.AlbumNewReleaseFragment"
+        android:name="com.m4ykey.ui.album.AlbumNewReleaseFragment"
         android:label="fragment_album_new_release"
         tools:layout="@layout/fragment_album_new_release" >
         <action
@@ -110,14 +113,18 @@
     </fragment>
     <fragment
         android:id="@+id/albumCoverFragment"
-        android:name="com.m4ykey.ui.AlbumCoverFragment"
+        android:name="com.m4ykey.ui.album.AlbumCoverFragment"
         android:label="fragment_album_cover"
         tools:layout="@layout/fragment_album_cover" >
         <argument android:name="imgUrl" />
     </fragment>
     <fragment
         android:id="@+id/albumStatisticsFragment"
-        android:name="com.m4ykey.ui.AlbumStatisticsFragment"
+        android:name="com.m4ykey.ui.album.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics" />
+    <dialog
+        android:id="@+id/albumArtistListBottomSheet"
+        android:name="com.m4ykey.ui.artist.AlbumArtistListBottomSheet"
+        android:label="AlbumArtistListBottomSheet" />
 </navigation>
