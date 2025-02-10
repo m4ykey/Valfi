@@ -23,7 +23,6 @@ fun setupGridLayoutManager(
 }
 
 fun getScreenWidth(context: Context): Int {
-    val metrics = context.resources.displayMetrics
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val windowMetrics: WindowMetrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
         val insets = windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
