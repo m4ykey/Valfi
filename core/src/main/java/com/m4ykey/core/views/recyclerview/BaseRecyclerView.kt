@@ -17,7 +17,9 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     private var lastVisibleItemPosition = -1
 
     fun submitList(list : List<Item>) {
-        differ.submitList(list)
+        if (differ.currentList != list) {
+            differ.submitList(list)
+        }
     }
 
     override fun getItemCount(): Int = differ.currentList.size
@@ -38,5 +40,10 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     }
 
     abstract fun getItemForPosition(position: Int) : Long
+
+    override fun onViewRecycled(holder: VH) {
+        super.onViewRecycled(holder)
+        holder.itemView.setPadding(0,0,0,0)
+    }
 
 }

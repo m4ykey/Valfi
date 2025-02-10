@@ -152,7 +152,9 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
     private fun setupRecyclerView() {
         binding.recyclerViewListenLater.apply {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+            if (itemDecorationCount == 0) {
+                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+            }
             layoutManager = createGridLayoutManager(requireContext())
             adapter = albumAdapter
         }

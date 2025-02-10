@@ -12,31 +12,27 @@ import androidx.recyclerview.widget.GridLayoutManager
 fun setupGridLayoutManager(
     context: Context,
     elementWidthDp: Float
-) : GridLayoutManager {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val windowMetrics : WindowMetrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
-        val insets = windowMetrics.windowInsets
-            .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
-        val screenWidth = windowMetrics.bounds.width() - insets.left - insets.right
+): GridLayoutManager {
+    val screenWidth = getScreenWidth(context)
+    val metrics = context.resources.displayMetrics
+    val elementWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elementWidthDp, metrics)
 
-        val metrics = context.resources.displayMetrics
-        val elementWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elementWidthDp, metrics)
+    val spanCount = (screenWidth / elementWidthPx).toInt().coerceAtLeast(1)
 
-        val spanCount = (screenWidth / elementWidthPx).toInt().coerceAtLeast(1)
+    return GridLayoutManager(context, spanCount)
+}
 
-        return GridLayoutManager(context, spanCount)
+fun getScreenWidth(context: Context): Int {
+    val metrics = context.resources.displayMetrics
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val windowMetrics: WindowMetrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
+        val insets = windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+        windowMetrics.bounds.width() - insets.left - insets.right
     } else {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = windowManager.defaultDisplay
         val displayMetrics = DisplayMetrics()
-        display.getMetrics(displayMetrics)
-        val screenWidth = displayMetrics.widthPixels
-
-        val metrics = context.resources.displayMetrics
-        val elementWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elementWidthDp, metrics)
-
-        val spanCount = (screenWidth / elementWidthPx).toInt().coerceAtLeast(1)
-
-        return GridLayoutManager(context, spanCount)
+        @Suppress("DEPRECATION")
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        displayMetrics.widthPixels
     }
 }

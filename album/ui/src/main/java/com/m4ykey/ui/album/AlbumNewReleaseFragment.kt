@@ -84,7 +84,9 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 
     private fun setupRecyclerView() {
         binding.recyclerViewNewRelease.apply {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
+            if (itemDecorationCount == 0) {
+                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
+            }
             adapter = albumAdapter
             layoutManager = createGridLayoutManager(requireContext())
             addOnScrollListener(object : RecyclerView.OnScrollListener() {

@@ -244,7 +244,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun setupRecyclerView() {
         binding.rvAlbums.apply {
-            addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+            if (itemDecorationCount == 0) {
+                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+            }
 
             layoutManager = if (albumAdapter.viewType == ViewType.LIST) {
                 LinearLayoutManager(requireContext())

@@ -208,12 +208,16 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     private fun setupRecyclerView() {
         binding.apply {
             recyclerViewSearchResult.apply {
-                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+                if (itemDecorationCount == 0) {
+                    addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+                }
                 adapter = searchResultAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
             rvSearchAlbums.apply {
-                addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+                if (itemDecorationCount == 0) {
+                    addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
+                }
                 adapter = searchAdapter
                 layoutManager = createGridLayoutManager(requireContext())
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
