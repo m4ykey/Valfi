@@ -19,4 +19,7 @@ interface SearchResultDao {
     @Query("SELECT * FROM search_result_table ORDER BY id DESC")
     fun getSearchResult() : Flow<List<SearchResult>>
 
+    @Query("SELECT EXISTS(SELECT 1 FROM search_result_table WHERE name = :name)")
+    suspend fun exists(name : String) : Boolean
+
 }

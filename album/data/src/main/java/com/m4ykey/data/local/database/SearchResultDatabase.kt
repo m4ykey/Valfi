@@ -6,7 +6,7 @@ import com.m4ykey.data.local.dao.SearchResultDao
 import com.m4ykey.data.local.model.SearchResult
 
 @Database(
-    version = 1,
+    version = 2,
     exportSchema = false,
     entities = [SearchResult::class]
 )

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.database.SearchResultDatabase
+import com.m4ykey.data.local.database.migration.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,7 +37,7 @@ object DatabaseModule {
             context.applicationContext,
             SearchResultDatabase::class.java,
             "search_result_database"
-        ).build()
+        ).addMigrations(MIGRATION_1_2).build()
     }
 
 }

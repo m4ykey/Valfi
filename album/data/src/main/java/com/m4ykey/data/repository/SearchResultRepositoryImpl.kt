@@ -11,7 +11,9 @@ class SearchResultRepositoryImpl @Inject constructor(
 ) : SearchResultRepository {
 
     override suspend fun insertSearchResult(searchResult: SearchResult) {
-        return dao.insertSearchResult(searchResult)
+        if (!dao.exists(searchResult.name)) {
+            dao.insertSearchResult(searchResult)
+        }
     }
 
     override suspend fun deleteSearchResults() {
