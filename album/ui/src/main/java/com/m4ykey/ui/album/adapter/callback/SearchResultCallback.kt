@@ -9,6 +9,6 @@ class SearchResultCallback : DiffUtil.ItemCallback<SearchResult>() {
     }
 
     override fun areContentsTheSame(oldItem: SearchResult, newItem: SearchResult): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id && oldItem.name == newItem.name
     }
 }

@@ -1,10 +1,9 @@
 package com.m4ykey.ui.album.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
-import com.m4ykey.core.views.BaseViewModel
+import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.repository.AlbumRepository
@@ -14,7 +13,6 @@ import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
-import com.m4ykey.ui.album.helpers.PaginationType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,22 +24,22 @@ import javax.inject.Inject
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
     private val repository: AlbumRepository
-) : BaseViewModel() {
+) : ViewModel() {
 
-    private val _search = MutableStateFlow<List<AlbumItem>>(emptyList())
-    val search: StateFlow<List<AlbumItem>> get() = _search
+    private val _search = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
+    val search: StateFlow<UiState<List<AlbumItem>>> = _search
 
-    private val _newRelease = MutableStateFlow<List<AlbumItem>>(emptyList())
-    val newRelease: StateFlow<List<AlbumItem>> get() = _newRelease
+    private val _newRelease = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
+    val newRelease: StateFlow<UiState<List<AlbumItem>>> = _newRelease
 
-    private val _detail = MutableStateFlow<AlbumDetail?>(null)
-    val detail: StateFlow<AlbumDetail?> get() = _detail
+    private val _detail = MutableStateFlow<UiState<AlbumDetail?>>(UiState.Success(null))
+    val detail: StateFlow<UiState<AlbumDetail?>> = _detail
 
-    private val _albumEntity = MutableLiveData<List<AlbumEntity>>()
-    val albumEntity: LiveData<List<AlbumEntity>> get() = _albumEntity
+    private val _albumEntity = MutableStateFlow<List<AlbumEntity>>(emptyList())
+    val albumEntity: StateFlow<List<AlbumEntity>> = _albumEntity
 
-    private val _searchResult = MutableLiveData<List<AlbumEntity>>()
-    val searchResult: LiveData<List<AlbumEntity>> get() = _searchResult
+    private val _searchResult = MutableStateFlow<List<AlbumEntity>>(emptyList())
+    val searchResult: StateFlow<List<AlbumEntity>> = _searchResult
 
     private val _albumCount = MutableStateFlow(0)
     val albumCount : StateFlow<Int> = _albumCount
@@ -74,63 +72,49 @@ class AlbumViewModel @Inject constructor(
     val albumWithMostTracks : StateFlow<AlbumWithDetails?> = _albumWithMostTracks
 
     private var offset = 0
-
-    fun loadNewDataIfNeeded(paginationType : PaginationType, query : String? = null) {
-        if (!isPaginationEnded && !isLoading.value) {
-            when (paginationType) {
-                PaginationType.NEW_RELEASE -> getNewReleases()
-                PaginationType.SEARCH -> searchAlbums(query ?: "")
-            }
-        }
-    }
+    private var isPaginationEnded = false
 
     fun getAlbumById(id: String) = viewModelScope.launch {
-        _isLoading.value = true
+        _detail.value = UiState.Loading
 
         try {
-            _error.value = null
-
             repository.getAlbumById(id).collect { result ->
-                _detail.value = result
+                _detail.value = UiState.Success(result)
             }
         } catch (e: Exception) {
-            _error.value = e.message ?: "An unknown error occurred"
-        } finally {
-            _isLoading.value = false
+            _detail.value = UiState.Error(e)
         }
     }
 
     fun getNewReleases() {
-        if (_isLoading.value || isPaginationEnded) return
+        if (_newRelease.value is UiState.Loading || isPaginationEnded) return
 
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
+            _newRelease.value = UiState.Loading
 
             try {
                 repository.getNewReleases(offset, PAGE_SIZE).collect { albums ->
                     if (albums.isEmpty()) {
                         isPaginationEnded = true
                     } else {
-                        _newRelease.value += albums
+                        val currentList = (_newRelease.value as? UiState.Success)?.data ?: emptyList()
+                        val updatedList = currentList + albums
+                        _newRelease.value = UiState.Success(updatedList)
                         offset += PAGE_SIZE
                         isPaginationEnded = albums.size < PAGE_SIZE
                     }
                 }
             } catch (e: Exception) {
-                _error.value = e.message ?: "An unknown error occurred"
-            } finally {
-                _isLoading.value = false
+                _newRelease.value = UiState.Error(e)
             }
         }
     }
 
     fun searchAlbums(query: String) {
-        if (_isLoading.value || isPaginationEnded) return
+        if (_search.value is UiState.Loading || isPaginationEnded) return
 
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
+            _search.value = UiState.Loading
 
             try {
                 repository.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
@@ -138,45 +122,43 @@ class AlbumViewModel @Inject constructor(
                         if (albums.isEmpty()) {
                             isPaginationEnded = true
                         } else {
-                            _search.value += albums
+                            val currentList = (_search.value as? UiState.Success)?.data ?: emptyList()
+                            val updatedList = currentList + albums
+                            _search.value = UiState.Success(updatedList)
                             offset += PAGE_SIZE
                             isPaginationEnded = albums.size < PAGE_SIZE
                         }
                     }
             } catch (e: Exception) {
-                _error.value = e.message ?: "An unknown error occurred"
-            } finally {
-                _isLoading.value = false
+                _search.value = UiState.Error(e)
             }
         }
     }
 
     fun resetSearch() {
         offset = 0
-        _isLoading.value = false
-        _error.value = null
         isPaginationEnded = false
-        _search.value = emptyList()
+        _search.value = UiState.Success(emptyList())
     }
 
     fun searchAlbumByName(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumByName(albumName)
-            _searchResult.postValue(albums)
+            _searchResult.value = albums
         }
     }
 
     fun searchAlbumsListenLater(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumsListenLater(albumName)
-            _searchResult.postValue(albums)
+            _searchResult.value = albums
         }
     }
 
     fun getAlbumType(albumType: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumType(albumType)
-            _albumEntity.postValue(albums)
+            _albumEntity.value = albums
         }
     }
 
@@ -243,28 +225,28 @@ class AlbumViewModel @Inject constructor(
     fun getSavedAlbums() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getSavedAlbums()
-            _albumEntity.postValue(albums)
+            _albumEntity.value = albums
         }
     }
 
     fun getSavedAlbumAsc() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getSavedAlbumAsc()
-            _albumEntity.postValue(albums)
+            _albumEntity.value = albums
         }
     }
 
     fun getAlbumSortedByName() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumSortedByName()
-            _albumEntity.postValue(albums)
+            _albumEntity.value = albums
         }
     }
 
     fun getListenLaterAlbums() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getListenLaterAlbums()
-            _albumEntity.postValue(albums)
+            _albumEntity.value = albums
         }
     }
 

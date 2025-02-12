@@ -73,16 +73,33 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         handleRecyclerViewButton()
 
         viewModel.apply {
-            lifecycleScope.launch { getSavedAlbums() }
-            albumEntity.observe(viewLifecycleOwner) { albums ->
-                val filteredAlbums = filterAlbums(albums)
-                if (filteredAlbums.isEmpty()) {
-                    albumAdapter.submitList(emptyList())
-                    binding.linearLayoutEmptyList.isVisible = true
-                    binding.linearLayoutEmptySearch.isVisible = false
-                } else {
-                    binding.linearLayoutEmptyList.isVisible = false
-                    if (binding.etSearch.text.isNullOrEmpty()) {
+            lifecycleScope.launch {
+                getSavedAlbums()
+            }
+            lifecycleScope.launch {
+                albumEntity.collect { albums ->
+                    val filteredAlbums = filterAlbums(albums)
+                    if (filteredAlbums.isEmpty()) {
+                        albumAdapter.submitList(emptyList())
+                        binding.linearLayoutEmptyList.isVisible = true
+                        binding.linearLayoutEmptySearch.isVisible = false
+                    } else {
+                        binding.linearLayoutEmptyList.isVisible = false
+                        if (binding.etSearch.text.isNullOrEmpty()) {
+                            albumAdapter.submitList(filteredAlbums)
+                            binding.linearLayoutEmptySearch.isVisible = false
+                        }
+                    }
+                }
+            }
+            lifecycleScope.launch {
+                searchResult.collect { albums ->
+                    val filteredAlbums = filterAlbums(albums)
+                    if (filteredAlbums.isEmpty()) {
+                        albumAdapter.submitList(emptyList())
+                        binding.linearLayoutEmptySearch.isVisible = true
+                        binding.linearLayoutEmptyList.isVisible = false
+                    } else {
                         albumAdapter.submitList(filteredAlbums)
                         binding.linearLayoutEmptySearch.isVisible = false
                     }
@@ -93,17 +110,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                     lifecycleScope.launch { getSavedAlbums() }
                 } else {
                     lifecycleScope.launch { searchAlbumByName(text.toString()) }
-                }
-            }
-            searchResult.observe(viewLifecycleOwner) { albums ->
-                val filteredAlbums = filterAlbums(albums)
-                if (filteredAlbums.isEmpty()) {
-                    albumAdapter.submitList(emptyList())
-                    binding.linearLayoutEmptySearch.isVisible = true
-                    binding.linearLayoutEmptyList.isVisible = false
-                } else {
-                    albumAdapter.submitList(filteredAlbums)
-                    binding.linearLayoutEmptySearch.isVisible = false
                 }
             }
         }

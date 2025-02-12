@@ -5,6 +5,7 @@ import com.m4ykey.authentication.interceptor.token.CustomTokenProvider
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.createApi
 import com.m4ykey.data.remote.api.AlbumApi
+import com.m4ykey.data.remote.api.ArtistApi
 import com.m4ykey.data.remote.api.TrackApi
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -28,6 +29,10 @@ object AlbumNetworkModule {
     @Provides
     @Singleton
     fun provideTrackApi(moshi: Moshi): TrackApi = createApi(Constants.SPOTIFY_BASE_URL, moshi)
+
+    @Provides
+    @Singleton
+    fun provideArtistApi(moshi: Moshi) : ArtistApi = createApi(Constants.SPOTIFY_BASE_URL, moshi)
 
     @Provides
     @Singleton

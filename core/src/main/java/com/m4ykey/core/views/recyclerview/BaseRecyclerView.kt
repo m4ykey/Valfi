@@ -16,8 +16,10 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     }
     private var lastVisibleItemPosition = -1
 
-    fun submitList(list : List<Item>) {
-        if (differ.currentList != list) {
+    fun submitList(list : List<Item>, isAppend : Boolean = false) {
+        if (isAppend) {
+            differ.submitList(differ.currentList + list)
+        } else {
             differ.submitList(list)
         }
     }
@@ -40,10 +42,5 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     }
 
     abstract fun getItemForPosition(position: Int) : Long
-
-    override fun onViewRecycled(holder: VH) {
-        super.onViewRecycled(holder)
-        holder.itemView.setPadding(0,0,0,0)
-    }
 
 }

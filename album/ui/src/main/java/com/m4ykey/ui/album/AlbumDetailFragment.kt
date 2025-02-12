@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -12,9 +13,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lyrics.ui.LyricsActivity
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumDetailBinding
+import com.m4ykey.core.network.UiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -36,6 +39,8 @@ import com.m4ykey.ui.album.helpers.getLargestImageUrl
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import com.m4ykey.ui.album.viewmodel.ColorViewModel
 import com.m4ykey.ui.album.viewmodel.TrackViewModel
+import com.m4ykey.ui.artist.ArtistViewModel
+import com.m4ykey.ui.artist.adapter.ArtistAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,7 +55,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private val albumViewModel by viewModels<AlbumViewModel>()
     private val colorViewModel by viewModels<ColorViewModel>()
     private val trackViewModel by viewModels<TrackViewModel>()
+    private val artistViewModel by viewModels<ArtistViewModel>()
     private val trackAdapter by lazy { createTrackAdapter() }
+    private val artistAdapter by lazy { createArtistAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,12 +67,19 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         setupRecyclerView()
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-            toolbarLoading.setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
         lifecycleScope.launch {
             observeViewModel()
         }
+    }
+
+    private fun createArtistAdapter() : ArtistAdapter {
+        return ArtistAdapter(
+            onArtistClick = {
+
+            }
+        )
     }
 
     private fun createTrackAdapter(): TrackAdapter {
@@ -90,7 +104,22 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         trackViewModel.getAlbumTracks(args.albumId)
 
         lifecycleScope.launch {
-            albumViewModel.detail.collect { item -> item?.let { displayAlbumDetail(it) } }
+            albumViewModel.detail.collect { uiState ->
+                when (uiState) {
+                    is UiState.Error -> {
+                        binding.progressbar.isVisible = false
+                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
+                    }
+                    is UiState.Loading -> {
+                        binding.progressbar.isVisible = true
+                        binding.nestedScrollView.isVisible = false
+                    }
+                    is UiState.Success -> {
+                        binding.progressbar.isVisible = false
+                        uiState.data?.let { displayAlbumDetail(it) }
+                    }
+                }
+            }
         }
 
         lifecycleScope.launch {
@@ -102,20 +131,25 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
 
         lifecycleScope.launch {
-            albumViewModel.isLoading.collect {
-                binding.layoutLoading.isVisible = it
-                binding.nestedScrollView.isVisible = !it
-            }
-        }
-
-        lifecycleScope.launch {
             trackViewModel.isLoading.collect {
                 binding.progressBarTracks.isVisible = it
             }
         }
 
         lifecycleScope.launch {
-            albumViewModel.error.collect { errorMessage ->
+            artistViewModel.artists.collect { artists ->
+                artistAdapter.submitList(artists)
+            }
+        }
+
+        lifecycleScope.launch {
+            artistViewModel.isLoading.collect { isLoading ->
+
+            }
+        }
+
+        lifecycleScope.launch {
+            artistViewModel.error.collect { errorMessage ->
                 errorMessage?.let {
                     showToast(requireContext(), it)
                 }
@@ -302,8 +336,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
             btnArtist.setOnClickListener {
                 if (item.artists.size > 1) {
-                    val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumArtistListBottomSheet()
-                    findNavController().navigate(action)
+                    val artistId = item.artists.joinToString(",") { it.id }
+                    showDialog(artistId)
+                    Log.i("ArtistId", artistId)
                 } else {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.artists[0].externalUrls.spotify)))
                 }
@@ -379,6 +414,23 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 }
             }
         }
+    }
+
+    private fun showDialog(artistId : String) {
+        artistViewModel.loadArtists(artistId)
+
+        val customView = layoutInflater.inflate(R.layout.bottom_sheet_album_artist_list, null)
+
+        val recyclerView = customView.findViewById<RecyclerView>(R.id.recyclerViewArtist)
+        recyclerView.apply {
+            adapter = artistAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setNeutralButton(R.string.close) { dialog, _ -> dialog.dismiss() }
+            .setView(customView)
+            .show()
     }
 
     private fun updateIcons(albumWithStates: AlbumWithStates) {

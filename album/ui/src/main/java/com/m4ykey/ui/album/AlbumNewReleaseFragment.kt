@@ -9,13 +9,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.core.Constants
+import com.m4ykey.core.network.UiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.album.adapter.NewReleaseAdapter
-import com.m4ykey.ui.album.helpers.PaginationType
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,26 +35,28 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 
         handleRecyclerViewButton()
 
-        if (viewModel.newRelease.value.isEmpty()) {
+        if (viewModel.newRelease.value !is UiState.Loading) {
             lifecycleScope.launch {
                 viewModel.getNewReleases()
             }
         }
 
         lifecycleScope.launch {
-            viewModel.newRelease.collect { releases ->
-                albumAdapter.submitList(releases)
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.isLoading.collect { binding.progressBar.isVisible = it }
-        }
-
-        lifecycleScope.launch {
-            viewModel.error.collect { errorMessage ->
-                errorMessage?.let {
-                    showToast(requireContext(), it)
+            viewModel.newRelease.collect { uiState ->
+                when (uiState) {
+                    is UiState.Success -> {
+                        binding.progressBar.isVisible = false
+                        albumAdapter.submitList(uiState.data, isAppend = true)
+                    }
+                    is UiState.Loading -> {
+                        binding.progressBar.isVisible = true
+                    }
+                    is UiState.Error -> {
+                        binding.progressBar.isVisible = false
+                        uiState.exception.message?.let {
+                            showToast(requireContext(), it)
+                        }
+                    }
                 }
             }
         }
@@ -93,7 +95,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (!recyclerView.canScrollVertically(1)) {
-                        viewModel.loadNewDataIfNeeded(PaginationType.NEW_RELEASE)
+                        lifecycleScope.launch { viewModel.getNewReleases() }
                     }
                 }
             })

@@ -21,12 +21,13 @@ class AlbumAdapter(
         private const val VIEW_TYPE_LIST = 1
     }
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onItemBindViewHolder(holder: RecyclerView.ViewHolder, item: AlbumEntity, position: Int) {
-        val album = differ.currentList[position]
-        when (holder) {
-            is AlbumGridViewHolder -> holder.bind(album)
-            is AlbumListViewHolder -> holder.bind(album)
-        }
+        (holder as? AlbumGridViewHolder)?.bind(item)
+        (holder as? AlbumListViewHolder)?.bind(item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -37,15 +38,14 @@ class AlbumAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (viewType) {
-            ViewType.GRID -> VIEW_TYPE_GRID
-            ViewType.LIST -> VIEW_TYPE_LIST
-        }
-    }
+    override fun getItemViewType(position: Int): Int = viewType.ordinal
+//        return when (viewType) {
+//            ViewType.GRID -> VIEW_TYPE_GRID
+//            ViewType.LIST -> VIEW_TYPE_LIST
+//        }
+
 
     override fun getItemForPosition(position: Int): Long {
-        val item = differ.currentList.getOrNull(position)
-        return item?.id?.toLong() ?: position.toLong()
+        return differ.currentList.getOrNull(position)?.id?.hashCode()?.toLong() ?: RecyclerView.NO_ID
     }
 }

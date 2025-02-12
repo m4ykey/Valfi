@@ -74,9 +74,6 @@
             app:popEnterAnim="@anim/slide_in_from_left"
             android:id="@+id/action_albumDetailFragment_to_albumCoverFragment"
             app:destination="@id/albumCoverFragment" />
-        <action
-            android:id="@+id/action_albumDetailFragment_to_albumArtistListBottomSheet"
-            app:destination="@id/albumArtistListBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/albumListenLaterFragment"
@@ -123,8 +120,4 @@
         android:name="com.m4ykey.ui.album.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics" />
-    <dialog
-        android:id="@+id/albumArtistListBottomSheet"
-        android:name="com.m4ykey.ui.artist.AlbumArtistListBottomSheet"
-        android:label="AlbumArtistListBottomSheet" />
 </navigation>

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
+import com.m4ykey.core.network.UiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -34,7 +35,6 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.SearchResult
 import com.m4ykey.ui.album.adapter.SearchAlbumAdapter
 import com.m4ykey.ui.album.adapter.SearchResultAdapter
-import com.m4ykey.ui.album.helpers.PaginationType
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import com.m4ykey.ui.album.viewmodel.SearchResultViewModel
@@ -87,32 +87,34 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         }
 
         lifecycleScope.launch {
+            viewModel.search.collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.progressBar.isVisible = true
+                    }
+                    is UiState.Success -> {
+                        uiState.data.let { albums ->
+                            searchAdapter.submitList(albums, isAppend = true)
+                        }
+                        binding.rvSearchAlbums.isVisible = true
+                        binding.linearLayoutSearchResult.isVisible = false
+                        binding.progressBar.isVisible = false
+                    }
+                    is UiState.Error -> {
+                        binding.progressBar.isVisible = false
+                        uiState.exception.message?.let {
+                            showToast(requireContext(), it)
+                        }
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
             searchResultViewModel.searchResult.collect { result ->
                 searchResultAdapter.submitList(result)
                 binding.rvSearchAlbums.isVisible = false
                 binding.linearLayoutSearchResult.isVisible = true
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.search.collect { albums ->
-                searchAdapter.submitList(albums)
-                binding.rvSearchAlbums.isVisible = true
-                binding.linearLayoutSearchResult.isVisible = false
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.isLoading.collect { loading ->
-                binding.progressBar.isVisible = loading
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.error.collect { errorMessage ->
-                errorMessage?.let { error ->
-                    showToast(requireContext(), error)
-                }
             }
         }
 
@@ -226,7 +228,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                         if (!recyclerView.canScrollVertically(1)) {
                             val searchQuery = etSearch.text.toString()
                             if (searchQuery.isNotEmpty()) {
-                                viewModel.loadNewDataIfNeeded(PaginationType.SEARCH, query = searchQuery)
+                                viewModel.searchAlbums(query = searchQuery)
                             }
                         }
                     }

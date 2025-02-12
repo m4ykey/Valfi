@@ -2,6 +2,7 @@ package com.m4ykey.ui.album.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.LayoutColorsBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.ui.album.adapter.callback.ColorCallback
@@ -13,13 +14,16 @@ class ColorAdapter(
     private val onColorClick : OnColorClick
 ) : BaseRecyclerView<ColorList, ColorViewHolder>(ColorCallback()){
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onItemBindViewHolder(holder: ColorViewHolder, item: ColorList, position: Int) {
         holder.bind(item)
     }
 
     override fun getItemForPosition(position: Int): Long {
-        val item = differ.currentList.getOrNull(position)
-        return item?.id?.toLong() ?: position.toLong()
+        return differ.currentList.getOrNull(position)?.id?.toLong() ?: RecyclerView.NO_ID
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {

@@ -49,16 +49,18 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 lifecycleScope.launch { getListenLaterCount() }
                 lifecycleScope.launch { getListenLaterAlbums() }
                 lifecycleScope.launch { getRandomAlbum() }
-                albumEntity.observe(viewLifecycleOwner) { albums ->
-                    if (albums.isEmpty()) {
-                        albumAdapter.submitList(emptyList())
-                        linearLayoutEmptyList.isVisible = true
-                        linearLayoutEmptySearch.isVisible = false
-                    } else {
-                        linearLayoutEmptyList.isVisible = false
-                        if (etSearch.text.isNullOrEmpty()) {
-                            albumAdapter.submitList(albums)
+                lifecycleScope.launch {
+                    albumEntity.collect { albums ->
+                        if (albums.isEmpty()) {
+                            albumAdapter.submitList(emptyList())
+                            linearLayoutEmptyList.isVisible = true
                             linearLayoutEmptySearch.isVisible = false
+                        } else {
+                            linearLayoutEmptyList.isVisible = false
+                            if (etSearch.text.isNullOrEmpty()) {
+                                albumAdapter.submitList(albums)
+                                linearLayoutEmptySearch.isVisible = false
+                            }
                         }
                     }
                 }
@@ -71,14 +73,16 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                     }
                 }
 
-                searchResult.observe(viewLifecycleOwner) { albums ->
-                    if (albums.isEmpty()) {
-                        albumAdapter.submitList(emptyList())
-                        linearLayoutEmptySearch.isVisible = true
-                        linearLayoutEmptyList.isVisible = false
-                    } else {
-                        albumAdapter.submitList(albums)
-                        linearLayoutEmptySearch.isVisible = false
+                lifecycleScope.launch {
+                    searchResult.collect { albums ->
+                        if (albums.isEmpty()) {
+                            albumAdapter.submitList(emptyList())
+                            linearLayoutEmptySearch.isVisible = true
+                            linearLayoutEmptyList.isVisible = false
+                        } else {
+                            albumAdapter.submitList(albums)
+                            linearLayoutEmptySearch.isVisible = false
+                        }
                     }
                 }
 

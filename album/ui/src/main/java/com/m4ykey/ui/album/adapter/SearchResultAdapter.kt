@@ -2,6 +2,7 @@ package com.m4ykey.ui.album.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.LayoutSearchResultBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.local.model.SearchResult
@@ -13,6 +14,10 @@ class SearchResultAdapter(
     private val onSearchClick: OnSearchClick
 ) : BaseRecyclerView<SearchResult, SearchResultViewHolder>(SearchResultCallback()) {
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onItemBindViewHolder(
         holder: SearchResultViewHolder,
         item: SearchResult,
@@ -22,8 +27,7 @@ class SearchResultAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        val item = differ.currentList.getOrNull(position)
-        return item?.id?.toLong() ?: position.toLong()
+        return differ.currentList.getOrNull(position)?.id?.hashCode()?.toLong() ?: RecyclerView.NO_ID
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
