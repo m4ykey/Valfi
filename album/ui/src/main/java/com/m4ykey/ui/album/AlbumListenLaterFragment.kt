@@ -3,7 +3,6 @@ package com.m4ykey.ui.album
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,6 +18,7 @@ import com.m4ykey.ui.album.adapter.AlbumAdapter
 import com.m4ykey.ui.album.helpers.BooleanWrapper
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.helpers.hideSearchEditText
+import com.m4ykey.ui.album.helpers.setupSearch
 import com.m4ykey.ui.album.helpers.showSearchEditText
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +34,8 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private var isSearchEditTextVisible = BooleanWrapper(false)
     private var isHidingAnimationRunning = BooleanWrapper(false)
 
+    private var savedSearchQuery : String? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,6 +45,12 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         setupRecyclerView()
         getRandomAlbum()
         handleRecyclerViewButton()
+        setupSearch(
+            etSearch = binding.etSearch,
+            viewModel = viewModel,
+            lifecycleScope = lifecycleScope,
+            savedSearchQuery = savedSearchQuery
+        )
 
         binding.apply {
             viewModel.apply {
@@ -56,20 +64,10 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                             linearLayoutEmptyList.isVisible = true
                             linearLayoutEmptySearch.isVisible = false
                         } else {
-                            linearLayoutEmptyList.isVisible = false
-                            if (etSearch.text.isNullOrEmpty()) {
-                                albumAdapter.submitList(albums)
-                                linearLayoutEmptySearch.isVisible = false
-                            }
+                            albumAdapter.submitList(albums)
+                            binding.linearLayoutEmptyList.isVisible = false
+                            binding.linearLayoutEmptySearch.isVisible = false
                         }
-                    }
-                }
-
-                etSearch.doOnTextChanged { text, _, _, _ ->
-                    if (text.isNullOrEmpty()) {
-                        lifecycleScope.launch { getListenLaterAlbums() }
-                    } else {
-                        lifecycleScope.launch { searchAlbumsListenLater(text.toString()) }
                     }
                 }
 
@@ -175,8 +173,16 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        savedSearchQuery = binding.etSearch.text.toString()
+    }
+
     override fun onResume() {
         super.onResume()
         resetSearchState()
+        savedSearchQuery?.let {
+            binding.etSearch.setText(it)
+        }
     }
 }

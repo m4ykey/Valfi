@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,6 +32,7 @@ import com.m4ykey.ui.album.adapter.AlbumAdapter
 import com.m4ykey.ui.album.helpers.BooleanWrapper
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.helpers.hideSearchEditText
+import com.m4ykey.ui.album.helpers.setupSearch
 import com.m4ykey.ui.album.helpers.showSearchEditText
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +60,8 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     lateinit var albumPreferences: AlbumPreferences
     private var selectedSortType : SortType = SortType.LATEST
 
+    private var savedSearchQuery : String? = null
+
     private val viewModel by viewModels<AlbumViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,6 +72,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         setupToolbar()
         setupChips()
         setupRecyclerView()
+        setupSearch(
+            etSearch = binding.etSearch,
+            viewModel = viewModel,
+            lifecycleScope = lifecycleScope,
+            savedSearchQuery = savedSearchQuery
+        )
         handleRecyclerViewButton()
 
         viewModel.apply {
@@ -78,38 +86,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             }
             lifecycleScope.launch {
                 albumEntity.collect { albums ->
-                    val filteredAlbums = filterAlbums(albums)
-                    if (filteredAlbums.isEmpty()) {
-                        albumAdapter.submitList(emptyList())
-                        binding.linearLayoutEmptyList.isVisible = true
-                        binding.linearLayoutEmptySearch.isVisible = false
-                    } else {
-                        binding.linearLayoutEmptyList.isVisible = false
-                        if (binding.etSearch.text.isNullOrEmpty()) {
-                            albumAdapter.submitList(filteredAlbums)
-                            binding.linearLayoutEmptySearch.isVisible = false
-                        }
-                    }
+                    handleAlbumDisplay(albums)
                 }
             }
             lifecycleScope.launch {
                 searchResult.collect { albums ->
-                    val filteredAlbums = filterAlbums(albums)
-                    if (filteredAlbums.isEmpty()) {
-                        albumAdapter.submitList(emptyList())
-                        binding.linearLayoutEmptySearch.isVisible = true
-                        binding.linearLayoutEmptyList.isVisible = false
-                    } else {
-                        albumAdapter.submitList(filteredAlbums)
-                        binding.linearLayoutEmptySearch.isVisible = false
-                    }
-                }
-            }
-            binding.etSearch.doOnTextChanged { text, _, _, _ ->
-                if (text.isNullOrEmpty()) {
-                    lifecycleScope.launch { getSavedAlbums() }
-                } else {
-                    lifecycleScope.launch { searchAlbumByName(text.toString()) }
+                    handleSearchResult(albums)
                 }
             }
         }
@@ -122,6 +104,31 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 translationYValue = -100f
             )
             binding.etSearch.setText(getString(R.string.empty_string))
+        }
+    }
+
+    private fun handleAlbumDisplay(albums: List<AlbumEntity>) {
+        val filteredAlbums = filterAlbums(albums)
+        if (filteredAlbums.isEmpty()) {
+            albumAdapter.submitList(emptyList())
+            binding.linearLayoutEmptyList.isVisible = true
+            binding.linearLayoutEmptySearch.isVisible = false
+        } else {
+            albumAdapter.submitList(filteredAlbums)
+            binding.linearLayoutEmptyList.isVisible = false
+            binding.linearLayoutEmptySearch.isVisible = false
+        }
+    }
+
+    private fun handleSearchResult(albums: List<AlbumEntity>) {
+        val filteredAlbums = filterAlbums(albums)
+        if (filteredAlbums.isEmpty()) {
+            albumAdapter.submitList(emptyList())
+            binding.linearLayoutEmptySearch.isVisible = true
+            binding.linearLayoutEmptyList.isVisible = false
+        } else {
+            albumAdapter.submitList(filteredAlbums)
+            binding.linearLayoutEmptySearch.isVisible = false
         }
     }
 
@@ -494,9 +501,17 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         readSelectedViewType()
     }
 
+    override fun onPause() {
+        super.onPause()
+        savedSearchQuery = binding.etSearch.text.toString()
+    }
+
     override fun onResume() {
         super.onResume()
         resetSearchState()
+        savedSearchQuery?.let {
+            binding.etSearch.setText(it)
+        }
     }
 
     companion object {

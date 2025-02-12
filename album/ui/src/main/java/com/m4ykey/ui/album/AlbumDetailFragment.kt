@@ -116,6 +116,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     }
                     is UiState.Success -> {
                         binding.progressbar.isVisible = false
+                        binding.nestedScrollView.isVisible = true
                         uiState.data?.let { displayAlbumDetail(it) }
                     }
                 }
@@ -123,37 +124,25 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
 
         lifecycleScope.launch {
-            albumViewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
-        }
-
-        lifecycleScope.launch {
-            trackViewModel.tracks.collect { trackAdapter.submitList(it) }
-        }
-
-        lifecycleScope.launch {
-            trackViewModel.isLoading.collect {
-                binding.progressBarTracks.isVisible = it
-            }
-        }
-
-        lifecycleScope.launch {
-            artistViewModel.artists.collect { artists ->
-                artistAdapter.submitList(artists)
-            }
-        }
-
-        lifecycleScope.launch {
-            artistViewModel.isLoading.collect { isLoading ->
-
-            }
-        }
-
-        lifecycleScope.launch {
-            artistViewModel.error.collect { errorMessage ->
-                errorMessage?.let {
-                    showToast(requireContext(), it)
+            trackViewModel.tracks.collect { uiState ->
+                when (uiState) {
+                    is UiState.Success -> {
+                        uiState.data.let { tracks ->
+                            trackAdapter.submitList(tracks, isAppend = true)
+                        }
+                    }
+                    is UiState.Loading -> {
+                        binding.progressBarTracks.isVisible = true
+                    }
+                    is UiState.Error -> {
+                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
+                    }
                 }
             }
+        }
+
+        lifecycleScope.launch {
+            albumViewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
         }
     }
 
@@ -260,7 +249,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     val totalItemCount = layoutManager.itemCount
 
                     if (lastVisibleItemPosition == totalItemCount - 1) {
-                        if (!trackViewModel.isPaginationEnded && !trackViewModel.isLoading.value) {
+                        if (!trackViewModel.isPaginationEnded && trackViewModel.tracks.value !is UiState.Loading) {
                             lifecycleScope.launch { trackViewModel.getAlbumTracks(args.albumId) }
                         }
                     }
