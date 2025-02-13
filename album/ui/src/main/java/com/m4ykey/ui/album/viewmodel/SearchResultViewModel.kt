@@ -7,6 +7,7 @@ import com.m4ykey.data.local.model.SearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class SearchResultViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _searchResult = MutableStateFlow<List<SearchResult>>(emptyList())
-    val searchResult : StateFlow<List<SearchResult>> get() = _searchResult
+    val searchResult : StateFlow<List<SearchResult>> = _searchResult.asStateFlow()
 
     fun getSearchResult() {
         viewModelScope.launch {

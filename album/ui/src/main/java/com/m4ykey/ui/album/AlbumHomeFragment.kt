@@ -6,8 +6,11 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,7 +35,6 @@ import com.m4ykey.ui.album.adapter.AlbumAdapter
 import com.m4ykey.ui.album.helpers.BooleanWrapper
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.helpers.hideSearchEditText
-import com.m4ykey.ui.album.helpers.setupSearch
 import com.m4ykey.ui.album.helpers.showSearchEditText
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,26 +74,24 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         setupToolbar()
         setupChips()
         setupRecyclerView()
-        setupSearch(
-            etSearch = binding.etSearch,
-            viewModel = viewModel,
-            lifecycleScope = lifecycleScope,
-            savedSearchQuery = savedSearchQuery
-        )
         handleRecyclerViewButton()
 
         viewModel.apply {
             lifecycleScope.launch {
                 getSavedAlbums()
             }
-            lifecycleScope.launch {
-                albumEntity.collect { albums ->
-                    handleAlbumDisplay(albums)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    albumEntity.collect { albums ->
+                        handleAlbumDisplay(albums)
+                    }
                 }
             }
-            lifecycleScope.launch {
-                searchResult.collect { albums ->
-                    handleSearchResult(albums)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    searchResult.collect { albums ->
+                        handleSearchResult(albums)
+                    }
                 }
             }
         }
@@ -104,6 +104,18 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 translationYValue = -100f
             )
             binding.etSearch.setText(getString(R.string.empty_string))
+        }
+
+        binding.etSearch.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                lifecycleScope.launch { viewModel.getSavedAlbums() }
+            } else {
+                lifecycleScope.launch { viewModel.searchAlbumByName(text.toString()) }
+            }
+        }
+        savedSearchQuery?.let {
+            binding.etSearch.setText(it)
+            lifecycleScope.launch { viewModel.searchAlbumByName(it) }
         }
     }
 

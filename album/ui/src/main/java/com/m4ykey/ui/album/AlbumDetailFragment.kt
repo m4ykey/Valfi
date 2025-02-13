@@ -130,6 +130,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                         uiState.data.let { tracks ->
                             trackAdapter.submitList(tracks, isAppend = true)
                         }
+                        binding.progressBarTracks.isVisible = false
                     }
                     is UiState.Loading -> {
                         binding.progressBarTracks.isVisible = true

@@ -9,6 +9,7 @@ import com.m4ykey.data.domain.repository.TrackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class TrackViewModel @Inject constructor(
     val totalTracksDuration: StateFlow<Long> = _totalTrackDurationMs
 
     private var _tracks = MutableStateFlow<UiState<List<TrackItem>>>(UiState.Success(emptyList()))
-    val tracks: StateFlow<UiState<List<TrackItem>>> get() = _tracks
+    val tracks: StateFlow<UiState<List<TrackItem>>> = _tracks.asStateFlow()
 
     private var offset = 0
     var isPaginationEnded = false
@@ -53,5 +54,4 @@ class TrackViewModel @Inject constructor(
             }
         }
     }
-
 }

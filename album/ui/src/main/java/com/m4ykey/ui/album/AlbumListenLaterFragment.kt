@@ -3,8 +3,11 @@ package com.m4ykey.ui.album
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumListenLaterBinding
@@ -18,7 +21,6 @@ import com.m4ykey.ui.album.adapter.AlbumAdapter
 import com.m4ykey.ui.album.helpers.BooleanWrapper
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.helpers.hideSearchEditText
-import com.m4ykey.ui.album.helpers.setupSearch
 import com.m4ykey.ui.album.helpers.showSearchEditText
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,41 +47,39 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         setupRecyclerView()
         getRandomAlbum()
         handleRecyclerViewButton()
-        setupSearch(
-            etSearch = binding.etSearch,
-            viewModel = viewModel,
-            lifecycleScope = lifecycleScope,
-            savedSearchQuery = savedSearchQuery
-        )
 
         binding.apply {
             viewModel.apply {
                 lifecycleScope.launch { getListenLaterCount() }
                 lifecycleScope.launch { getListenLaterAlbums() }
                 lifecycleScope.launch { getRandomAlbum() }
-                lifecycleScope.launch {
-                    albumEntity.collect { albums ->
-                        if (albums.isEmpty()) {
-                            albumAdapter.submitList(emptyList())
-                            linearLayoutEmptyList.isVisible = true
-                            linearLayoutEmptySearch.isVisible = false
-                        } else {
-                            albumAdapter.submitList(albums)
-                            binding.linearLayoutEmptyList.isVisible = false
-                            binding.linearLayoutEmptySearch.isVisible = false
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        albumEntity.collect { albums ->
+                            if (albums.isEmpty()) {
+                                albumAdapter.submitList(emptyList())
+                                linearLayoutEmptyList.isVisible = true
+                                linearLayoutEmptySearch.isVisible = false
+                            } else {
+                                albumAdapter.submitList(albums)
+                                binding.linearLayoutEmptyList.isVisible = false
+                                binding.linearLayoutEmptySearch.isVisible = false
+                            }
                         }
                     }
                 }
 
-                lifecycleScope.launch {
-                    searchResult.collect { albums ->
-                        if (albums.isEmpty()) {
-                            albumAdapter.submitList(emptyList())
-                            linearLayoutEmptySearch.isVisible = true
-                            linearLayoutEmptyList.isVisible = false
-                        } else {
-                            albumAdapter.submitList(albums)
-                            linearLayoutEmptySearch.isVisible = false
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        searchResult.collect { albums ->
+                            if (albums.isEmpty()) {
+                                albumAdapter.submitList(emptyList())
+                                linearLayoutEmptySearch.isVisible = true
+                                linearLayoutEmptyList.isVisible = false
+                            } else {
+                                albumAdapter.submitList(albums)
+                                linearLayoutEmptySearch.isVisible = false
+                            }
                         }
                     }
                 }
@@ -89,6 +89,18 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                         txtAlbumCount.text = getString(R.string.album_count, count)
                     }
                 }
+            }
+
+            binding.etSearch.doOnTextChanged { text, _, _, _ ->
+                if (text.isNullOrEmpty()) {
+                    lifecycleScope.launch { viewModel.getListenLaterAlbums() }
+                } else {
+                    lifecycleScope.launch { viewModel.searchAlbumsListenLater(text.toString()) }
+                }
+            }
+            savedSearchQuery?.let {
+                binding.etSearch.setText(it)
+                lifecycleScope.launch { viewModel.searchAlbumsListenLater(it) }
             }
 
             imgHide.setOnClickListener {
