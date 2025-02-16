@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -147,21 +146,21 @@ class AlbumViewModel @Inject constructor(
     fun searchAlbumByName(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumByName(albumName)
-            _searchResult.value = albums
+            loadAlbumsWithAdaptiveChunks(albums, _searchResult)
         }
     }
 
     fun searchAlbumsListenLater(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumsListenLater(albumName)
-            _searchResult.value = albums
+            loadAlbumsWithAdaptiveChunks(albums, _searchResult)
         }
     }
 
     fun getAlbumType(albumType: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumType(albumType)
-            _albumEntity.value = albums
+            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
         }
     }
 
@@ -226,50 +225,30 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun getSavedAlbums() {
-        viewModelScope.launch {
-            val albums = withContext(Dispatchers.IO) { repository.getSavedAlbums() }
-
-            _albumEntity.value = albums.take(20)
-
-            delay(2000L)
-
-            _albumEntity.value = albums
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getSavedAlbums()
+            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
         }
     }
 
     fun getSavedAlbumAsc() {
-        viewModelScope.launch {
-            val albums = withContext(Dispatchers.IO) { repository.getSavedAlbumAsc() }
-
-            _albumEntity.value = albums.take(20)
-
-            delay(2000L)
-
-            _albumEntity.value = albums
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getSavedAlbumAsc()
+            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
         }
     }
 
     fun getAlbumSortedByName() {
-        viewModelScope.launch {
-            val albums = withContext(Dispatchers.IO) { repository.getAlbumSortedByName() }
-
-            _albumEntity.value = albums.take(20)
-
-            delay(2000L)
-
-            _albumEntity.value = albums
+        viewModelScope.launch(Dispatchers.IO) {
+            val albums = repository.getAlbumSortedByName()
+            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
         }
     }
 
     fun getListenLaterAlbums() {
         viewModelScope.launch {
-            val albums = withContext(Dispatchers.IO) { repository.getListenLaterAlbums() }
-
-            _albumEntity.value = albums.take(20)
-
-            delay(2000L)
-
-            _albumEntity.value = albums
+            val albums = repository.getListenLaterAlbums()
+            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
         }
     }
 
@@ -297,4 +276,33 @@ class AlbumViewModel @Inject constructor(
     suspend fun deleteSavedAlbumState(albumId: String) = repository.deleteSavedAlbumState(albumId)
 
     suspend fun deleteListenLaterState(albumId: String) = repository.deleteListenLaterState(albumId)
+
+    private suspend fun loadAlbumsWithAdaptiveChunks(
+        albums : List<AlbumEntity>,
+        stateFlow: MutableStateFlow<List<AlbumEntity>>
+    ) {
+        val displayedAlbums = mutableListOf<AlbumEntity>()
+
+        val runtime = Runtime.getRuntime()
+        val availableProcessors = runtime.availableProcessors()
+        val freeMemory = runtime.freeMemory() / (1024 * 1024)
+
+        val chunkSize = when {
+            availableProcessors >= 8 && freeMemory > 4000 -> 20
+            availableProcessors >= 4 && freeMemory > 2000 -> 15
+            else -> 10
+        }
+
+        val delayTime = when {
+            availableProcessors >= 8 && freeMemory > 4000 -> 500L
+            availableProcessors >= 4 && freeMemory > 2000 -> 750L
+            else -> 1000L
+        }
+
+        for (chunk in albums.chunked(chunkSize)) {
+            displayedAlbums.addAll(chunk)
+            stateFlow.emit(displayedAlbums.toList())
+            delay(delayTime)
+        }
+    }
 }
