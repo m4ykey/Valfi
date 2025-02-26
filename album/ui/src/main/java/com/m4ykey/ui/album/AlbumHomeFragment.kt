@@ -63,8 +63,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     lateinit var albumPreferences: AlbumPreferences
     private var selectedSortType : SortType = SortType.LATEST
 
-    private var savedSearchQuery : String? = null
-
     private val viewModel by viewModels<AlbumViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -114,10 +112,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 lifecycleScope.launch { viewModel.searchAlbumByName(text.toString()) }
             }
         }
-        savedSearchQuery?.let {
-            binding.etSearch.setText(it)
-            lifecycleScope.launch { viewModel.searchAlbumByName(it) }
-        }
     }
 
     private fun handleAlbumDisplay(albums: List<AlbumEntity>) {
@@ -135,6 +129,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun handleSearchResult(albums: List<AlbumEntity>) {
         val filteredAlbums = filterAlbums(albums)
+
+        if (binding.etSearch.text.isNullOrEmpty()) return
+
         if (filteredAlbums.isEmpty()) {
             albumAdapter.submitList(emptyList())
             binding.linearLayoutEmptySearch.isVisible = true
@@ -521,17 +518,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         readSelectedViewType()
     }
 
-    override fun onPause() {
-        super.onPause()
-        savedSearchQuery = binding.etSearch.text.toString()
-    }
-
     override fun onResume() {
         super.onResume()
         resetSearchState()
-        savedSearchQuery?.let {
-            binding.etSearch.setText(it)
-        }
     }
 
     companion object {

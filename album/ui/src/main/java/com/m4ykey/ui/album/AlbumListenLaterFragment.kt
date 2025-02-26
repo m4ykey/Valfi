@@ -18,6 +18,7 @@ import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
 import com.m4ykey.core.views.utils.showToast
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.ui.album.adapter.AlbumAdapter
 import com.m4ykey.ui.album.helpers.BooleanWrapper
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
@@ -37,8 +38,6 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private var isSearchEditTextVisible = BooleanWrapper(false)
     private var isHidingAnimationRunning = BooleanWrapper(false)
 
-    private var savedSearchQuery : String? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,18 +53,11 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 lifecycleScope.launch { getListenLaterCount() }
                 lifecycleScope.launch { getListenLaterAlbums() }
                 lifecycleScope.launch { getRandomAlbum() }
+
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         albumEntity.collect { albums ->
-                            if (albums.isEmpty()) {
-                                albumAdapter.submitList(emptyList())
-                                linearLayoutEmptyList.isVisible = true
-                                linearLayoutEmptySearch.isVisible = false
-                            } else {
-                                albumAdapter.submitList(albums)
-                                binding.linearLayoutEmptyList.isVisible = false
-                                binding.linearLayoutEmptySearch.isVisible = false
-                            }
+                            handleAlbumDisplay(albums)
                         }
                     }
                 }
@@ -73,14 +65,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         searchResult.collect { albums ->
-                            if (albums.isEmpty()) {
-                                albumAdapter.submitList(emptyList())
-                                linearLayoutEmptySearch.isVisible = true
-                                linearLayoutEmptyList.isVisible = false
-                            } else {
-                                albumAdapter.submitList(albums)
-                                linearLayoutEmptySearch.isVisible = false
-                            }
+                            handleSearchResult(albums)
                         }
                     }
                 }
@@ -99,10 +84,6 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                     lifecycleScope.launch { viewModel.searchAlbumsListenLater(text.toString()) }
                 }
             }
-            savedSearchQuery?.let {
-                binding.etSearch.setText(it)
-                lifecycleScope.launch { viewModel.searchAlbumsListenLater(it) }
-            }
 
             imgHide.setOnClickListener {
                 hideSearchEditText(
@@ -118,6 +99,31 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
             chipSearch.setOnClickListener {
                 isSearchEditTextVisible = showSearchEditText(isSearchEditTextVisible, linearLayoutSearch, -30f)
             }
+        }
+    }
+
+    private fun handleSearchResult(albums : List<AlbumEntity>) {
+        if (binding.etSearch.text.isNullOrEmpty()) return
+
+        if (albums.isEmpty()) {
+            albumAdapter.submitList(emptyList())
+            binding.linearLayoutEmptySearch.isVisible = true
+            binding.linearLayoutEmptyList.isVisible = false
+        } else {
+            albumAdapter.submitList(albums)
+            binding.linearLayoutEmptySearch.isVisible = false
+        }
+    }
+
+    private fun handleAlbumDisplay(albums : List<AlbumEntity>) {
+        if (albums.isEmpty()) {
+            albumAdapter.submitList(emptyList())
+            binding.linearLayoutEmptyList.isVisible = true
+            binding.linearLayoutEmptySearch.isVisible = false
+        } else {
+            albumAdapter.submitList(albums)
+            binding.linearLayoutEmptyList.isVisible = false
+            binding.linearLayoutEmptySearch.isVisible = false
         }
     }
 
@@ -192,16 +198,8 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        savedSearchQuery = binding.etSearch.text.toString()
-    }
-
     override fun onResume() {
         super.onResume()
         resetSearchState()
-        savedSearchQuery?.let {
-            binding.etSearch.setText(it)
-        }
     }
 }

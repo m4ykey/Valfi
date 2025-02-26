@@ -151,6 +151,7 @@ class AlbumViewModel @Inject constructor(
 
     fun searchAlbumByName(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _searchResult.value = emptyList()
             val albums = repository.searchAlbumByName(albumName)
             loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
         }
@@ -158,6 +159,7 @@ class AlbumViewModel @Inject constructor(
 
     fun searchAlbumsListenLater(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _searchResult.value = emptyList()
             val albums = repository.searchAlbumsListenLater(albumName)
             loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
         }
