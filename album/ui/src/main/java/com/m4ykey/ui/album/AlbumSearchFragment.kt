@@ -81,9 +81,12 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
         searchResultViewModel.getSearchResult()
 
-        binding.txtClearList.setOnClickListener {
-            lifecycleScope.launch {
-                searchResultViewModel.deleteSearchResults()
+        binding.txtClearList.apply {
+            setOnClickListener {
+                lifecycleScope.launch {
+                    searchResultViewModel.deleteSearchResults()
+                }
+                isVisible = false
             }
         }
 
@@ -113,9 +116,16 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
         lifecycleScope.launch {
             searchResultViewModel.searchResult.collect { result ->
-                searchResultAdapter.submitList(result)
-                binding.rvSearchAlbums.isVisible = false
-                binding.linearLayoutSearchResult.isVisible = true
+                val isSearchActive = viewModel.search.value is UiState.Success &&
+                        (viewModel.search.value as UiState.Success).data.isNotEmpty()
+
+                binding.txtClearList.isVisible = result.isNotEmpty()
+
+                if (!isSearchActive) {
+                    searchResultAdapter.submitList(result)
+                    binding.rvSearchAlbums.isVisible = false
+                    binding.linearLayoutSearchResult.isVisible = true
+                }
             }
         }
 
