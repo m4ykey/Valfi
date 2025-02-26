@@ -14,7 +14,7 @@ import com.m4ykey.authentication.KeyActivity
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
 import com.m4ykey.core.views.utils.showToast
-import com.m4ykey.data.local.dao.AlbumDao
+import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.settings.data.file.generateJsonData
 import com.m4ykey.settings.data.file.insertAlbumData
 import com.m4ykey.settings.data.file.readJsonData
@@ -41,12 +41,12 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     lateinit var themePreferences: ThemePreferences
 
     @Inject
-    lateinit var albumDao: AlbumDao
+    lateinit var repository: AlbumRepository
 
     private val getContent = registerForActivityResult(CreateDocument("application/json")) { uri : Uri? ->
         uri?.let {
             lifecycleScope.launch {
-                saveJsonToFile(requireActivity(), it, generateJsonData(albumDao))
+                saveJsonToFile(requireActivity(), it, generateJsonData(repository))
             }
         }
     }
@@ -56,7 +56,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             lifecycleScope.launch {
                 val albumsData = readJsonData(requireContext(), it)
                 albumsData?.let { data ->
-                    insertAlbumData(albumDao, data)
+                    insertAlbumData(repository, data)
                 }
             }
         }

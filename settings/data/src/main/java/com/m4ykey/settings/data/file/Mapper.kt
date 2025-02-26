@@ -11,8 +11,6 @@ fun convertMapToAlbumEntity(map: Map<String, Any>): AlbumEntity {
     val releaseDate = map["releaseDate"] as? String ?: ""
     val images = map["images"] as? String ?: ""
     val totalTracks = (map["totalTracks"] as? Double)?.toInt() ?: 0
-    val year = (map["year"] as? Double)?.toInt() ?: 0
-    val month = (map["month"] as? Double)?.toInt() ?: 0
     val artistsMapList = map["artists"] as? List<Map<String, Any>> ?: emptyList()
     val artists = artistsMapList.map { convertMapToArtistEntity(it) }
     return AlbumEntity(
@@ -23,8 +21,6 @@ fun convertMapToAlbumEntity(map: Map<String, Any>): AlbumEntity {
         releaseDate = releaseDate,
         totalTracks = totalTracks,
         images = images,
-        year = year,
-        month = month,
         artists = artists
     )
 }

@@ -56,5 +56,7 @@ dependencies {
         implementation(androidxRoomKtx)
         ksp(androidxRoomCompiler)
         implementation(androidxDatastore)
+
+        implementation(gson)
     }
 }

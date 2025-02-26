@@ -5,7 +5,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 
 class AlbumEntityCallback : DiffUtil.ItemCallback<AlbumEntity>() {
     override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean =
-        oldItem.id == newItem.id
+        oldItem.id == newItem.id && oldItem.saveTime == newItem.saveTime
 
     override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
         return oldItem.albumType == newItem.albumType &&
@@ -15,6 +15,7 @@ class AlbumEntityCallback : DiffUtil.ItemCallback<AlbumEntity>() {
                 oldItem.images == newItem.images &&
                 oldItem.name == newItem.name &&
                 oldItem.releaseDate == newItem.releaseDate &&
-                oldItem.totalTracks == newItem.totalTracks
+                oldItem.totalTracks == newItem.totalTracks &&
+                oldItem.saveTime == newItem.saveTime
     }
 }

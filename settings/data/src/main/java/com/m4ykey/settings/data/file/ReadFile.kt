@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.m4ykey.data.local.dao.AlbumDao
+import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import kotlinx.coroutines.Dispatchers
@@ -41,17 +41,25 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
     }
 }
 
-suspend fun insertAlbumData(albumDao: AlbumDao, albumsData: AlbumsData) {
+suspend fun insertAlbumData(repository: AlbumRepository, albumsData: AlbumsData) {
     withContext(Dispatchers.IO) {
         try {
             albumsData.savedAlbums.forEach { album ->
-                albumDao.insertAlbum(album)
-                albumDao.insertSavedAlbum(IsAlbumSaved(album.id, true))
+                val existingAlbum = repository.getAlbum(album.id)
+                val albumToInsert = album.copy(
+                    saveTime = existingAlbum?.saveTime ?: System.currentTimeMillis()
+                )
+                repository.insertAlbum(albumToInsert)
+                repository.insertSavedAlbum(IsAlbumSaved(album.id, true))
             }
 
             albumsData.listenLaterAlbums.forEach { album ->
-                albumDao.insertAlbum(album)
-                albumDao.insertListenLaterAlbum(IsListenLaterSaved(album.id, true))
+                val existingAlbum = repository.getAlbum(album.id)
+                val albumToInsert = album.copy(
+                    saveTime = existingAlbum?.saveTime ?: System.currentTimeMillis()
+                )
+                repository.insertAlbum(albumToInsert)
+                repository.insertListenLaterAlbum(IsListenLaterSaved(album.id, true))
             }
         } catch (e: Exception) {
             e.printStackTrace()

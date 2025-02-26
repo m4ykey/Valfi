@@ -351,7 +351,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 images = item.getLargestImageUrl().toString(),
                 albumType = albumType,
                 artists = artistsEntity,
-                albumUrl = albumUrl
+                albumUrl = albumUrl,
+                saveTime = System.currentTimeMillis()
             )
 
             lifecycleScope.launch {

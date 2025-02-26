@@ -16,10 +16,16 @@ import com.m4ykey.data.local.model.relations.AlbumWithStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,8 +43,8 @@ class AlbumViewModel @Inject constructor(
     private val _detail = MutableStateFlow<UiState<AlbumDetail?>>(UiState.Success(null))
     val detail: StateFlow<UiState<AlbumDetail?>> = _detail.asStateFlow()
 
-    private val _albumEntity = MutableStateFlow<List<AlbumEntity>>(emptyList())
-    val albumEntity: StateFlow<List<AlbumEntity>> = _albumEntity.asStateFlow()
+    private val _albumEntity = MutableSharedFlow<List<AlbumEntity>>(replay = 1)
+    val albumEntity: SharedFlow<List<AlbumEntity>> = _albumEntity.asSharedFlow()
 
     private val _searchResult = MutableStateFlow<List<AlbumEntity>>(emptyList())
     val searchResult: StateFlow<List<AlbumEntity>> = _searchResult.asStateFlow()
@@ -146,21 +152,21 @@ class AlbumViewModel @Inject constructor(
     fun searchAlbumByName(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumByName(albumName)
-            loadAlbumsWithAdaptiveChunks(albums, _searchResult)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
         }
     }
 
     fun searchAlbumsListenLater(albumName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.searchAlbumsListenLater(albumName)
-            loadAlbumsWithAdaptiveChunks(albums, _searchResult)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
         }
     }
 
     fun getAlbumType(albumType: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumType(albumType)
-            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
         }
     }
 
@@ -227,28 +233,28 @@ class AlbumViewModel @Inject constructor(
     fun getSavedAlbums() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getSavedAlbums()
-            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
         }
     }
 
     fun getSavedAlbumAsc() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getSavedAlbumAsc()
-            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
         }
     }
 
     fun getAlbumSortedByName() {
         viewModelScope.launch(Dispatchers.IO) {
             val albums = repository.getAlbumSortedByName()
-            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
         }
     }
 
     fun getListenLaterAlbums() {
         viewModelScope.launch {
             val albums = repository.getListenLaterAlbums()
-            loadAlbumsWithAdaptiveChunks(albums, _albumEntity)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
         }
     }
 
@@ -277,10 +283,9 @@ class AlbumViewModel @Inject constructor(
 
     suspend fun deleteListenLaterState(albumId: String) = repository.deleteListenLaterState(albumId)
 
-    private suspend fun loadAlbumsWithAdaptiveChunks(
-        albums : List<AlbumEntity>,
-        stateFlow: MutableStateFlow<List<AlbumEntity>>
-    ) {
+    private fun loadAlbumsWithAdaptiveChunks(
+        albums : List<AlbumEntity>
+    ) : Flow<List<AlbumEntity>> = flow {
         val displayedAlbums = mutableListOf<AlbumEntity>()
 
         val runtime = Runtime.getRuntime()
@@ -301,7 +306,7 @@ class AlbumViewModel @Inject constructor(
 
         for (chunk in albums.chunked(chunkSize)) {
             displayedAlbums.addAll(chunk)
-            stateFlow.emit(displayedAlbums.toList())
+            emit(displayedAlbums.toList())
             delay(delayTime)
         }
     }

@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.core.Constants
@@ -86,10 +87,16 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 
     private fun setupRecyclerView() {
         binding.recyclerViewNewRelease.apply {
+            val currentScrollPosition = (binding.recyclerViewNewRelease.layoutManager as? GridLayoutManager)
+                ?.findFirstVisibleItemPosition()
+
             if (itemDecorationCount == 0) {
                 addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(Constants.SPACE_BETWEEN_ITEMS)))
             }
             adapter = albumAdapter
+            currentScrollPosition?.let { position ->
+                layoutManager?.scrollToPosition(position)
+            }
             layoutManager = createGridLayoutManager(requireContext())
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

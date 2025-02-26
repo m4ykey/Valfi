@@ -20,6 +20,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.R
@@ -209,6 +210,9 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
     private fun setupRecyclerView() {
         binding.apply {
+            val currentScrollPosition = (rvSearchAlbums.layoutManager as? GridLayoutManager)
+                ?.findFirstVisibleItemPosition()
+
             recyclerViewSearchResult.apply {
                 if (itemDecorationCount == 0) {
                     addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
@@ -222,6 +226,9 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 }
                 adapter = searchAdapter
                 layoutManager = createGridLayoutManager(requireContext())
+                currentScrollPosition?.let { position ->
+                    layoutManager?.scrollToPosition(position)
+                }
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)

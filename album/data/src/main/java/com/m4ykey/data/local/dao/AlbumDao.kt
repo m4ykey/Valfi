@@ -16,13 +16,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AlbumDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAlbum(album : AlbumEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved)
 
     @Query("SELECT * FROM album_table WHERE id = :albumId")

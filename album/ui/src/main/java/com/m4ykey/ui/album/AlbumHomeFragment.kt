@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -257,6 +258,10 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun setRecyclerViewLayout(isListView: Boolean) {
         val viewType = if (isListView) ViewType.LIST else ViewType.GRID
+
+        val currentScrollPosition = (binding.rvAlbums.layoutManager as? GridLayoutManager)
+            ?.findFirstVisibleItemPosition()
+
         binding.rvAlbums.apply {
             layoutManager = if (isListView) {
                 LinearLayoutManager(requireContext())
@@ -264,6 +269,9 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 createGridLayoutManager(requireContext())
             }
             albumAdapter.viewType = viewType
+            currentScrollPosition?.let { position ->
+                layoutManager?.scrollToPosition(position)
+            }
         }
     }
 

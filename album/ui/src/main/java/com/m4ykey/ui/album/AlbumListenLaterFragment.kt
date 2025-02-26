@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumListenLaterBinding
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
@@ -165,12 +166,18 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun setupRecyclerView() {
+        val currentScrollPosition = (binding.recyclerViewListenLater.layoutManager as? GridLayoutManager)
+            ?.findFirstVisibleItemPosition()
+
         binding.recyclerViewListenLater.apply {
             if (itemDecorationCount == 0) {
                 addItemDecoration(CenterSpaceItemDecoration(convertDpToPx(SPACE_BETWEEN_ITEMS)))
             }
             layoutManager = createGridLayoutManager(requireContext())
             adapter = albumAdapter
+            currentScrollPosition?.let { position ->
+                layoutManager?.scrollToPosition(position)
+            }
         }
     }
 

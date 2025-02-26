@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Calendar
 
 @Entity(
     tableName = "album_table",
@@ -19,7 +18,5 @@ data class AlbumEntity(
     @ColumnInfo(name = "name") val name : String,
     @ColumnInfo(name = "release_date") val releaseDate : String,
     @ColumnInfo(name = "total_tracks") val totalTracks : Int,
-    @ColumnInfo(name = "save_time") val saveTime : Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "month") val month : Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
-    @ColumnInfo(name = "year") val year : Int = Calendar.getInstance().get(Calendar.YEAR)
+    @ColumnInfo(name = "save_time") val saveTime : Long? = null
 )

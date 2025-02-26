@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.database.SearchResultDatabase
-import com.m4ykey.data.local.database.migration.MIGRATION_1_2
+import com.m4ykey.data.local.database.migration.AlbumEntityMigrations
+import com.m4ykey.data.local.database.migration.SearchResultMigrations
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +26,7 @@ object DatabaseModule {
             context.applicationContext,
             AlbumDatabase::class.java,
             "album_database"
-        ).build()
+        ).addMigrations(AlbumEntityMigrations.MIGRATION_2_3).build()
     }
 
     @Provides
@@ -37,7 +38,7 @@ object DatabaseModule {
             context.applicationContext,
             SearchResultDatabase::class.java,
             "search_result_database"
-        ).addMigrations(MIGRATION_1_2).build()
+        ).addMigrations(SearchResultMigrations.MIGRATION_1_2).build()
     }
 
 }
