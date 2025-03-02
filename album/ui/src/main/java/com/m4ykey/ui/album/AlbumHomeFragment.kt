@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -130,7 +131,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     private fun handleSearchResult(albums: List<AlbumEntity>) {
         val filteredAlbums = filterAlbums(albums)
 
-        if (binding.etSearch.text.isNullOrEmpty()) return
+        if (binding.etSearch.text.isNullOrEmpty()) {
+            albumAdapter.submitList(filteredAlbums)
+            binding.linearLayoutEmptySearch.isVisible = false
+            binding.linearLayoutEmptyList.isVisible = filteredAlbums.isEmpty()
+            return
+        }
 
         if (filteredAlbums.isEmpty()) {
             albumAdapter.submitList(emptyList())

@@ -15,6 +15,7 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -81,6 +82,8 @@ class AlbumViewModel @Inject constructor(
 
     private var offset = 0
     private var isPaginationEnded = false
+
+    private val job = Job()
 
     fun getAlbumById(id: String) = viewModelScope.launch {
         _detail.value = UiState.Loading
@@ -153,7 +156,7 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _searchResult.value = emptyList()
             val albums = repository.searchAlbumByName(albumName)
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+            _searchResult.value = albums
         }
     }
 
@@ -161,7 +164,7 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _searchResult.value = emptyList()
             val albums = repository.searchAlbumsListenLater(albumName)
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+            _searchResult.value = albums
         }
     }
 

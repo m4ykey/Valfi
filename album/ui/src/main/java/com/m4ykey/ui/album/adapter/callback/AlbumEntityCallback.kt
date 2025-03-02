@@ -5,7 +5,7 @@ import com.m4ykey.data.local.model.AlbumEntity
 
 class AlbumEntityCallback : DiffUtil.ItemCallback<AlbumEntity>() {
     override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean =
-        oldItem.id == newItem.id && oldItem.saveTime == newItem.saveTime
+        oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
         return oldItem.albumType == newItem.albumType &&

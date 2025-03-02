@@ -77,14 +77,6 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 }
             }
 
-            binding.etSearch.doOnTextChanged { text, _, _, _ ->
-                if (text.isNullOrEmpty()) {
-                    lifecycleScope.launch { viewModel.getListenLaterAlbums() }
-                } else {
-                    lifecycleScope.launch { viewModel.searchAlbumsListenLater(text.toString()) }
-                }
-            }
-
             imgHide.setOnClickListener {
                 hideSearchEditText(
                     coroutineScope = lifecycleScope,
@@ -96,6 +88,14 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 etSearch.setText(getString(R.string.empty_string))
             }
 
+            etSearch.doOnTextChanged { text, _, _, _ ->
+                if (text.isNullOrEmpty()) {
+                    lifecycleScope.launch { viewModel.getListenLaterAlbums() }
+                } else {
+                    lifecycleScope.launch { viewModel.searchAlbumsListenLater(text.toString()) }
+                }
+            }
+
             chipSearch.setOnClickListener {
                 isSearchEditTextVisible = showSearchEditText(isSearchEditTextVisible, linearLayoutSearch, -30f)
             }
@@ -103,7 +103,12 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun handleSearchResult(albums : List<AlbumEntity>) {
-        if (binding.etSearch.text.isNullOrEmpty()) return
+        if (binding.etSearch.text.isNullOrEmpty()) {
+            albumAdapter.submitList(albums)
+            binding.linearLayoutEmptySearch.isVisible = false
+            binding.linearLayoutEmptyList.isVisible = albums.isEmpty()
+            return
+        }
 
         if (albums.isEmpty()) {
             albumAdapter.submitList(emptyList())

@@ -39,10 +39,6 @@ class AlbumAdapter(
     }
 
     override fun getItemViewType(position: Int): Int = viewType.ordinal
-//        return when (viewType) {
-//            ViewType.GRID -> VIEW_TYPE_GRID
-//            ViewType.LIST -> VIEW_TYPE_LIST
-//        }
 
 
     override fun getItemForPosition(position: Int): Long {
