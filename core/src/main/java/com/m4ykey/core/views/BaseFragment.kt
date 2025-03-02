@@ -37,4 +37,9 @@ abstract class BaseFragment<T : ViewBinding>(
             throw RuntimeException("$context ${getString(R.string.must_implement_bottom_navigation)}")
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -6,6 +6,7 @@ import com.m4ykey.data.mapper.toTrackItem
 import com.m4ykey.data.remote.api.TrackApi
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.authentication.interceptor.getToken
+import com.m4ykey.core.network.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,17 +18,19 @@ class TrackRepositoryImpl @Inject constructor(
     private val tokenProvider : SpotifyTokenProvider
 ) : TrackRepository {
     override suspend fun getAlbumTracks(id : String, offset : Int, limit : Int): Flow<List<TrackItem>> = flow {
-        try {
-            val result = api.getAlbumTracks(
+        val result = safeApiCall {
+            api.getAlbumTracks(
                 token = getToken(tokenProvider),
+                id = id,
                 offset = offset,
-                limit = limit,
-                id = id
+                limit = limit
             )
-            val trackResult = result.items.map { it.toTrackItem() }
-            emit(trackResult)
-        } catch (e : Exception) {
-            emit(emptyList())
         }
+
+        val tracks = result.fold(
+            onSuccess = { it.items.map { item -> item.toTrackItem() } },
+            onFailure = { emptyList() }
+        )
+        emit(tracks)
     }.flowOn(Dispatchers.IO)
 }

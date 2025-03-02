@@ -5,22 +5,24 @@ import androidx.lifecycle.viewModelScope
 import com.m4ykey.data.domain.repository.SearchResultRepository
 import com.m4ykey.data.local.model.SearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
-    private val repository: SearchResultRepository
+    private val repository: SearchResultRepository,
+    private val dispatcherIO : CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _searchResult = MutableStateFlow<List<SearchResult>>(emptyList())
-    val searchResult : StateFlow<List<SearchResult>> = _searchResult.asStateFlow()
+    val searchResult = _searchResult.asStateFlow()
 
     fun getSearchResult() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherIO) {
             val searchResult = repository.getSearchResult()
             searchResult.collect { result ->
                 _searchResult.value = result.take(10)
@@ -29,13 +31,15 @@ class SearchResultViewModel @Inject constructor(
     }
 
     fun insertSearchResult(searchResult: SearchResult) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherIO) {
             repository.insertSearchResult(searchResult)
         }
     }
 
-    suspend fun deleteSearchResults() {
-        repository.deleteSearchResults()
+    fun deleteSearchResults() {
+        viewModelScope.launch(dispatcherIO) {
+            repository.deleteSearchResults()
+        }
     }
 
 }

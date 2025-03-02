@@ -14,110 +14,121 @@ import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val repository: AlbumRepository
+    private val repository: AlbumRepository,
+    private val dispatcherIO : CoroutineDispatcher
 ) : ViewModel() {
 
+    companion object {
+        val ALBUM = "Album"
+        val SINGLE = "Single"
+        val COMPILATION = "Compilation"
+        val EP = "EP"
+    }
+
     private val _search = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
-    val search: StateFlow<UiState<List<AlbumItem>>> = _search.asStateFlow()
+    val search = _search.asStateFlow()
 
     private val _newRelease = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
-    val newRelease: StateFlow<UiState<List<AlbumItem>>> = _newRelease.asStateFlow()
+    val newRelease = _newRelease.asStateFlow()
 
     private val _detail = MutableStateFlow<UiState<AlbumDetail?>>(UiState.Success(null))
-    val detail: StateFlow<UiState<AlbumDetail?>> = _detail.asStateFlow()
+    val detail = _detail.asStateFlow()
 
     private val _albumEntity = MutableSharedFlow<List<AlbumEntity>>(replay = 1)
-    val albumEntity: SharedFlow<List<AlbumEntity>> = _albumEntity.asSharedFlow()
+    val albumEntity = _albumEntity.asSharedFlow()
 
     private val _searchResult = MutableStateFlow<List<AlbumEntity>>(emptyList())
-    val searchResult: StateFlow<List<AlbumEntity>> = _searchResult.asStateFlow()
+    val searchResult = _searchResult.asStateFlow()
 
     private val _albumCount = MutableStateFlow(0)
-    val albumCount : StateFlow<Int> = _albumCount.asStateFlow()
+    val albumCount = _albumCount.asStateFlow()
 
     private val _totalTracksCount = MutableStateFlow(0)
-    val totalTracksCount : StateFlow<Int> = _totalTracksCount.asStateFlow()
+    val totalTracksCount = _totalTracksCount.asStateFlow()
 
     private val _listenLaterCount = MutableStateFlow(0)
-    val listenLaterCount : StateFlow<Int> = _listenLaterCount.asStateFlow()
+    val listenLaterCount = _listenLaterCount.asStateFlow()
 
     private val _randomAlbum = MutableStateFlow<AlbumEntity?>(null)
-    val randomAlbum : StateFlow<AlbumEntity?> = _randomAlbum.asStateFlow()
+    val randomAlbum = _randomAlbum.asStateFlow()
 
     private val _decadeResult = MutableStateFlow<DecadeResult?>(null)
-    val decadeResult : StateFlow<DecadeResult?> = _decadeResult.asStateFlow()
-
-    private val _albumType = MutableStateFlow(0)
-    val albumType : StateFlow<Int> = _albumType.asStateFlow()
-
-    private val _epType = MutableStateFlow(0)
-    val epType : StateFlow<Int> = _epType.asStateFlow()
-
-    private val _singleType = MutableStateFlow(0)
-    val singleType : StateFlow<Int> = _singleType.asStateFlow()
-
-    private val _compilationType = MutableStateFlow(0)
-    val compilationType : StateFlow<Int> = _compilationType.asStateFlow()
+    val decadeResult = _decadeResult.asStateFlow()
 
     private val _albumWithMostTracks = MutableStateFlow<AlbumWithDetails?>(null)
-    val albumWithMostTracks : StateFlow<AlbumWithDetails?> = _albumWithMostTracks.asStateFlow()
+    val albumWithMostTracks = _albumWithMostTracks.asStateFlow()
 
     private var offset = 0
-    private var isPaginationEnded = false
+    var isPaginationEnded = false
 
-    private val job = Job()
+    private val _albumTypes = MutableStateFlow(
+        mapOf(
+            ALBUM to 0,
+            SINGLE to 0,
+            COMPILATION to 0,
+            EP to 0
+        )
+    )
+
+    val albumType = _albumTypes.map { it[ALBUM] ?: 0 }.stateIn(
+        viewModelScope, SharingStarted.Eagerly, 0
+    )
+
+    val compilationType = _albumTypes.map { it[COMPILATION] ?: 0 }.stateIn(
+        viewModelScope, SharingStarted.Eagerly, 0
+    )
+
+    val singleType = _albumTypes.map { it[SINGLE] ?: 0 }.stateIn(
+        viewModelScope, SharingStarted.Eagerly, 0
+    )
+
+    val epType = _albumTypes.map { it[EP] ?: 0 }.stateIn(
+        viewModelScope, SharingStarted.Eagerly, 0
+    )
 
     fun getAlbumById(id: String) = viewModelScope.launch {
         _detail.value = UiState.Loading
 
-        try {
-            repository.getAlbumById(id).collect { result ->
-                _detail.value = UiState.Success(result)
-            }
-        } catch (e: Exception) {
-            _detail.value = UiState.Error(e)
-        }
+        repository.getAlbumById(id)
+            .catch { e -> _detail.value = UiState.Error(e) }
+            .collect { result -> _detail.value = UiState.Success(result) }
     }
 
     fun getNewReleases() {
-        if (_newRelease.value is UiState.Loading || isPaginationEnded) return
+        if (isPaginationEnded) {
+            _newRelease.value = UiState.Success(emptyList())
+            return
+        }
 
         viewModelScope.launch {
             _newRelease.value = UiState.Loading
 
-            try {
-                repository.getNewReleases(offset, PAGE_SIZE).collect { albums ->
-                    if (albums.isEmpty()) {
-                        isPaginationEnded = true
-                    } else {
-                        val currentList = (_newRelease.value as? UiState.Success)?.data ?: emptyList()
-                        val updatedList = currentList + albums
-                        _newRelease.value = UiState.Success(updatedList)
-                        offset += PAGE_SIZE
-                        isPaginationEnded = albums.size < PAGE_SIZE
-                    }
+            repository.getNewReleases(offset, PAGE_SIZE)
+                .catch { e -> _newRelease.value = UiState.Error(e) }
+                .collect { albums ->
+                    handlePaginatedResult(albums, _newRelease)
                 }
-            } catch (e: Exception) {
-                _newRelease.value = UiState.Error(e)
-            }
         }
     }
 
@@ -127,22 +138,11 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             _search.value = UiState.Loading
 
-            try {
-                repository.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
-                    .collect { albums ->
-                        if (albums.isEmpty()) {
-                            isPaginationEnded = true
-                        } else {
-                            val currentList = (_search.value as? UiState.Success)?.data ?: emptyList()
-                            val updatedList = currentList + albums
-                            _search.value = UiState.Success(updatedList)
-                            offset += PAGE_SIZE
-                            isPaginationEnded = albums.size < PAGE_SIZE
-                        }
-                    }
-            } catch (e: Exception) {
-                _search.value = UiState.Error(e)
-            }
+            repository.searchAlbums(query, offset, PAGE_SIZE)
+                .catch { e -> _search.value = UiState.Error(e) }
+                .collect { albums ->
+                    handlePaginatedResult(albums, _search)
+                }
         }
     }
 
@@ -152,27 +152,16 @@ class AlbumViewModel @Inject constructor(
         _search.value = UiState.Success(emptyList())
     }
 
-    fun searchAlbumByName(albumName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _searchResult.value = emptyList()
-            val albums = repository.searchAlbumByName(albumName)
-            _searchResult.value = albums
-        }
+    fun searchAlbumByName(albumName: String) = loadAlbumsWithSearch {
+        repository.searchAlbumByName(albumName)
     }
 
-    fun searchAlbumsListenLater(albumName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _searchResult.value = emptyList()
-            val albums = repository.searchAlbumsListenLater(albumName)
-            _searchResult.value = albums
-        }
+    fun searchAlbumsListenLater(albumName: String) = loadAlbumsWithSearch {
+        repository.searchAlbumsListenLater(albumName)
     }
 
-    fun getAlbumType(albumType: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val albums = repository.getAlbumType(albumType)
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
-        }
+    fun getAlbumType(albumType: String) = loadAlbums {
+        repository.getAlbumType(albumType)
     }
 
     fun getAlbumWithMostTracks() {
@@ -226,93 +215,127 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumTypeCount(albumType: String) {
         viewModelScope.launch {
             val count = repository.getAlbumCountByType(albumType).firstOrNull() ?: 0
-            when (albumType) {
-                "Album" -> _albumType.value = count
-                "Compilation" -> _compilationType.value = count
-                "Single" -> _singleType.value = count
-                "EP" -> _epType.value = count
+            _albumTypes.update { currentTypes ->
+                currentTypes.toMutableMap().apply {
+                    put(albumType, count)
+                }
             }
         }
     }
 
-    fun getSavedAlbums() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val albums = repository.getSavedAlbums()
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
-        }
+    fun getSavedAlbums() = loadAlbums {
+        repository.getSavedAlbums()
     }
 
-    fun getSavedAlbumAsc() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val albums = repository.getSavedAlbumAsc()
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
-        }
+    fun getSavedAlbumAsc() = loadAlbums {
+        repository.getSavedAlbumAsc()
     }
 
-    fun getAlbumSortedByName() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val albums = repository.getAlbumSortedByName()
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
-        }
+    fun getAlbumSortedByName() = loadAlbums {
+        repository.getAlbumSortedByName()
     }
 
-    fun getListenLaterAlbums() {
-        viewModelScope.launch {
-            val albums = repository.getListenLaterAlbums()
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
-        }
+    fun getListenLaterAlbums() = loadAlbums {
+        repository.getListenLaterAlbums()
     }
 
-    suspend fun insertAlbum(album: AlbumEntity) = repository.insertAlbum(album)
+    suspend fun insertAlbum(album: AlbumEntity) = withContext(dispatcherIO) {
+        repository.insertAlbum(album)
+    }
 
-    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) =
+    suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = withContext(dispatcherIO) {
         repository.insertSavedAlbum(isAlbumSaved)
+    }
 
-    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) =
+    suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) = withContext(dispatcherIO) {
         repository.insertListenLaterAlbum(isListenLaterSaved)
+    }
 
-    suspend fun getAlbum(albumId: String): AlbumEntity? = repository.getAlbum(albumId)
+    suspend fun getAlbum(albumId: String): AlbumEntity? = withContext(dispatcherIO) {
+        repository.getAlbum(albumId)
+    }
 
-    suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? =
+    suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? = withContext(dispatcherIO) {
         repository.getSavedAlbumState(albumId)
+    }
 
-    suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? =
+    suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? = withContext(dispatcherIO) {
         repository.getListenLaterState(albumId)
+    }
 
-    suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? =
+    suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? = withContext(dispatcherIO) {
         repository.getAlbumWithStates(albumId)
+    }
 
-    suspend fun deleteAlbum(albumId: String) = repository.deleteAlbum(albumId)
+    suspend fun deleteAlbum(albumId: String) = withContext(dispatcherIO) {
+        repository.deleteAlbum(albumId)
+    }
 
-    suspend fun deleteSavedAlbumState(albumId: String) = repository.deleteSavedAlbumState(albumId)
+    suspend fun deleteSavedAlbumState(albumId: String) = withContext(dispatcherIO) {
+        repository.deleteSavedAlbumState(albumId)
+    }
 
-    suspend fun deleteListenLaterState(albumId: String) = repository.deleteListenLaterState(albumId)
+    suspend fun deleteListenLaterState(albumId: String) = withContext(dispatcherIO) {
+        repository.deleteListenLaterState(albumId)
+    }
 
     private fun loadAlbumsWithAdaptiveChunks(
         albums : List<AlbumEntity>
     ) : Flow<List<AlbumEntity>> = flow {
         val displayedAlbums = mutableListOf<AlbumEntity>()
+        val config = getCacheConfig()
 
+        for (chunk in albums.chunked(config.chunkSize)) {
+            displayedAlbums.addAll(chunk)
+            emit(displayedAlbums.toList())
+            delay(config.delayTime)
+        }
+    }
+
+    private fun getCacheConfig() : CacheConfig {
         val runtime = Runtime.getRuntime()
         val availableProcessors = runtime.availableProcessors()
         val freeMemory = runtime.freeMemory() / (1024 * 1024)
 
-        val chunkSize = when {
-            availableProcessors >= 8 && freeMemory > 4000 -> 20
-            availableProcessors >= 4 && freeMemory > 2000 -> 15
-            else -> 10
+        return when {
+            availableProcessors >= 8 && freeMemory > 4000 -> CacheConfig(20, 500L)
+            availableProcessors >= 4 && freeMemory > 2000 -> CacheConfig(15, 750L)
+            else -> CacheConfig(10, 1000L)
         }
+    }
 
-        val delayTime = when {
-            availableProcessors >= 8 && freeMemory > 4000 -> 500L
-            availableProcessors >= 4 && freeMemory > 2000 -> 750L
-            else -> 1000L
+    private fun <T> handlePaginatedResult(
+        newItems : List<T>,
+        stateFlow : MutableStateFlow<UiState<List<T>>>
+    ) {
+        if (newItems.isEmpty()) {
+            isPaginationEnded = true
+        } else {
+            val currentList = (stateFlow.value as? UiState.Success)?.data ?: emptyList()
+            val updatedList = currentList + newItems
+            stateFlow.value = UiState.Success(updatedList)
+            offset += PAGE_SIZE
+            isPaginationEnded = newItems.size < PAGE_SIZE
         }
+    }
 
-        for (chunk in albums.chunked(chunkSize)) {
-            displayedAlbums.addAll(chunk)
-            emit(displayedAlbums.toList())
-            delay(delayTime)
+    private fun loadAlbumsWithSearch(search : suspend () -> List<AlbumEntity>) {
+        viewModelScope.launch(dispatcherIO) {
+            _searchResult.value = emptyList()
+            val albums = search()
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+        }
+    }
+
+    private fun loadAlbums(fetch : suspend () -> List<AlbumEntity>) {
+        viewModelScope.launch(dispatcherIO) {
+            val albums = fetch()
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
         }
     }
 }
+
+private data class CacheConfig(
+    val chunkSize : Int,
+    val delayTime : Long
+)

@@ -242,7 +242,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
-                        if (!recyclerView.canScrollVertically(1)) {
+                        if (!recyclerView.canScrollVertically(1) && !viewModel.isPaginationEnded) {
                             val searchQuery = etSearch.text.toString()
                             if (searchQuery.isNotEmpty()) {
                                 viewModel.searchAlbums(query = searchQuery)

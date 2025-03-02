@@ -2,7 +2,6 @@ package com.m4ykey.ui.album.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.LayoutColorsBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.ui.album.adapter.callback.ColorCallback
@@ -23,7 +22,7 @@ class ColorAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        return differ.currentList.getOrNull(position)?.id?.toLong() ?: RecyclerView.NO_ID
+        return differ.currentList.getOrNull(position)?.id?.toLong() ?: position.toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {

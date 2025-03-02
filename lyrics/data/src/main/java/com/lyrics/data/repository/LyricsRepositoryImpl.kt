@@ -11,6 +11,7 @@ import com.lyrics.data.remote.api.TrackApi
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.authentication.interceptor.getToken
 import com.m4ykey.core.network.safeApiCall
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class LyricsRepositoryImpl @Inject constructor(
     private val lyricsApi: LyricsApi,
     private val trackApi : TrackApi,
-    private val tokenProvider: SpotifyTokenProvider
+    private val tokenProvider: SpotifyTokenProvider,
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
 ) : LyricsRepository {
 
     override suspend fun getTrackById(id: String): Flow<Track> = flow {
@@ -31,10 +33,13 @@ class LyricsRepositoryImpl @Inject constructor(
                 id = id
             ).toTrack()
         }
-        result.getOrNull()?.let { tracks ->
-            emit(tracks)
-        } ?: throw Exception("Track not found")
-    }.flowOn(Dispatchers.IO).catch { e ->
+
+        val track = result.fold(
+            onSuccess = { it },
+            onFailure = { throw Exception("Track not found") }
+        )
+        emit(track)
+    }.flowOn(dispatcherIO).catch { e ->
         Log.i("LyricsRepository", "Error: ${e.message}", e)
     }
 
@@ -48,11 +53,12 @@ class LyricsRepositoryImpl @Inject constructor(
             lyricsList.firstOrNull() ?: throw Exception("Lyrics not found")
         }
 
-        result.getOrNull()?.let { lyrics ->
-            emit(lyrics)
-        } ?: throw Exception("Lyrics not found")
-
-    }.flowOn(Dispatchers.IO).catch { e ->
+        val lyrics = result.fold(
+            onSuccess = { it },
+            onFailure = { throw Exception("Lyrics not found") }
+        )
+        emit(lyrics)
+    }.flowOn(dispatcherIO).catch { e ->
         Log.i("LyricsRepository", "Error: ${e.message}", e)
     }
 }

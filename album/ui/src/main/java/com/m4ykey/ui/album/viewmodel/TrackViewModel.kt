@@ -7,8 +7,8 @@ import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.TrackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,10 +19,10 @@ class TrackViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
-    val totalTracksDuration: StateFlow<Long> = _totalTrackDurationMs
+    val totalTracksDuration = _totalTrackDurationMs
 
     private var _tracks = MutableStateFlow<UiState<List<TrackItem>>>(UiState.Success(emptyList()))
-    val tracks: StateFlow<UiState<List<TrackItem>>> = _tracks.asStateFlow()
+    val tracks = _tracks.asStateFlow()
 
     private var offset = 0
     var isPaginationEnded = false
@@ -30,7 +30,7 @@ class TrackViewModel @Inject constructor(
     fun getAlbumTracks(id: String) {
         if (_tracks.value is UiState.Loading || isPaginationEnded) return
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _tracks.value = UiState.Loading
 
             try {

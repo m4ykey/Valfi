@@ -17,11 +17,10 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     private var lastVisibleItemPosition = -1
 
     fun submitList(list : List<Item>, isAppend : Boolean = false) {
-        if (isAppend) {
-            differ.submitList(differ.currentList + list)
-        } else {
-            differ.submitList(list)
-        }
+        val differCurrentList = differ.currentList
+        if (list == differCurrentList) return
+        val newList = if (isAppend) differCurrentList.toMutableList().apply { addAll(list) } else list
+        differ.submitList(newList)
     }
 
     override fun getItemCount(): Int = differ.currentList.size
@@ -38,7 +37,7 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
     abstract fun onItemBindViewHolder(holder: VH, item : Item, position: Int)
 
     override fun getItemId(position: Int): Long {
-        return getItemForPosition(position)
+        return getItemForPosition(position).takeIf { it != RecyclerView.NO_ID } ?: position.toLong()
     }
 
     abstract fun getItemForPosition(position: Int) : Long
