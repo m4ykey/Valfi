@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -117,6 +116,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun handleAlbumDisplay(albums: List<AlbumEntity>) {
         val filteredAlbums = filterAlbums(albums)
+
         if (filteredAlbums.isEmpty()) {
             albumAdapter.submitList(emptyList())
             binding.linearLayoutEmptyList.isVisible = true
@@ -155,13 +155,14 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             albums
         } else {
             albums.filter { album ->
-                when {
+                val shouldInclude = when {
                     isAlbumSelected && album.albumType == ALBUM -> true
                     isEPSelected && album.albumType == EP -> true
                     isCompilationSelected && album.albumType == COMPILATION -> true
                     isSingleSelected && album.albumType == SINGLE -> true
                     else -> false
                 }
+                shouldInclude
             }
         }
     }
@@ -246,13 +247,17 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     }
 
     private fun handleChipClick(isSelected : Boolean, albumType : String) {
+        updateChipSelection()
+
         if (isSelected) {
             lifecycleScope.launch {
+                albumAdapter.submitList(emptyList())
                 viewModel.getAlbumType(albumType)
                 albumPreferences.saveSelectedAlbumType(albumType)
             }
         } else {
             lifecycleScope.launch {
+                albumAdapter.submitList(emptyList())
                 viewModel.getSavedAlbums()
                 albumPreferences.deleteSelectedAlbumType()
             }
@@ -492,6 +497,12 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun readSelectedAlbumType() {
         lifecycleScope.launch {
+
+            isAlbumSelected = false
+            isEPSelected = false
+            isCompilationSelected = false
+            isSingleSelected = false
+
             albumPreferences.getSelectedAlbumType().collect { selectedAlbum ->
                 when (selectedAlbum) {
                     ALBUM -> {

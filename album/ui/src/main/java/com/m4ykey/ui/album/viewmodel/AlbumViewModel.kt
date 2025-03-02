@@ -39,13 +39,6 @@ class AlbumViewModel @Inject constructor(
     private val dispatcherIO : CoroutineDispatcher
 ) : ViewModel() {
 
-    companion object {
-        val ALBUM = "Album"
-        val SINGLE = "Single"
-        val COMPILATION = "Compilation"
-        val EP = "EP"
-    }
-
     private val _search = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
     val search = _search.asStateFlow()
 
@@ -84,26 +77,26 @@ class AlbumViewModel @Inject constructor(
 
     private val _albumTypes = MutableStateFlow(
         mapOf(
-            ALBUM to 0,
-            SINGLE to 0,
-            COMPILATION to 0,
-            EP to 0
+            "Album" to 0,
+            "Single" to 0,
+            "Compilation" to 0,
+            "EP" to 0
         )
     )
 
-    val albumType = _albumTypes.map { it[ALBUM] ?: 0 }.stateIn(
+    val albumType = _albumTypes.map { it["Album"] ?: 0 }.stateIn(
         viewModelScope, SharingStarted.Eagerly, 0
     )
 
-    val compilationType = _albumTypes.map { it[COMPILATION] ?: 0 }.stateIn(
+    val compilationType = _albumTypes.map { it["Compilation"] ?: 0 }.stateIn(
         viewModelScope, SharingStarted.Eagerly, 0
     )
 
-    val singleType = _albumTypes.map { it[SINGLE] ?: 0 }.stateIn(
+    val singleType = _albumTypes.map { it["Single"] ?: 0 }.stateIn(
         viewModelScope, SharingStarted.Eagerly, 0
     )
 
-    val epType = _albumTypes.map { it[EP] ?: 0 }.stateIn(
+    val epType = _albumTypes.map { it["EP"] ?: 0 }.stateIn(
         viewModelScope, SharingStarted.Eagerly, 0
     )
 
