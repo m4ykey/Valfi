@@ -2,6 +2,7 @@ package com.m4ykey.settings.data.file
 
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ArtistEntity
+import com.m4ykey.data.local.model.CopyrightEntity
 
 fun convertMapToAlbumEntity(map: Map<String, Any>): AlbumEntity {
     val id = map["id"] as? String ?: ""
@@ -13,6 +14,8 @@ fun convertMapToAlbumEntity(map: Map<String, Any>): AlbumEntity {
     val totalTracks = (map["totalTracks"] as? Double)?.toInt() ?: 0
     val artistsMapList = map["artists"] as? List<Map<String, Any>> ?: emptyList()
     val artists = artistsMapList.map { convertMapToArtistEntity(it) }
+    val copyrightsMapList = map["copyrights"] as? List<Map<String, Any>> ?: emptyList()
+    val copyrights = copyrightsMapList.map { convertMapToCopyrightsEntity(it) }
     return AlbumEntity(
         id = id,
         name = name,
@@ -21,7 +24,15 @@ fun convertMapToAlbumEntity(map: Map<String, Any>): AlbumEntity {
         releaseDate = releaseDate,
         totalTracks = totalTracks,
         images = images,
-        artists = artists
+        artists = artists,
+        copyrights = copyrights
+    )
+}
+
+fun convertMapToCopyrightsEntity(map: Map<String, Any>) : CopyrightEntity {
+    val text = map["text"] as? String ?: ""
+    return CopyrightEntity(
+        text = text
     )
 }
 

@@ -2,6 +2,7 @@ package com.m4ykey.data.repository
 
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.authentication.interceptor.getToken
+import com.m4ykey.core.network.safeApiCall
 import com.m4ykey.data.domain.model.album.Artist
 import com.m4ykey.data.domain.repository.ArtistRepository
 import com.m4ykey.data.mapper.toArtist
@@ -18,15 +19,17 @@ class ArtistRepositoryImpl @Inject constructor(
 ) : ArtistRepository {
 
     override suspend fun getSeveralArtists(ids: String): Flow<List<Artist>> = flow {
-        try {
-            val result = api.getSeveralArtists(
-                token = getToken(tokenProvider),
-                ids = ids
+        val result = safeApiCall {
+            api.getSeveralArtists(
+                ids = ids,
+                token = getToken(tokenProvider)
             )
-            val artistResult = result.map { it.toArtist() }
-            emit(artistResult)
-        } catch (e : Exception) {
-            emit(emptyList())
         }
+
+        val artists = result.fold(
+            onSuccess = { it.map { item -> item.toArtist() } },
+            onFailure = { emptyList() }
+        )
+        emit(artists)
     }.flowOn(Dispatchers.IO)
 }

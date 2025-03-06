@@ -18,5 +18,6 @@ data class AlbumEntity(
     @ColumnInfo(name = "name") val name : String,
     @ColumnInfo(name = "release_date") val releaseDate : String,
     @ColumnInfo(name = "total_tracks") val totalTracks : Int,
-    @ColumnInfo(name = "save_time") val saveTime : Long? = null
+    @ColumnInfo(name = "save_time") val saveTime : Long? = null,
+    @ColumnInfo(name = "copyrights") val copyrights : List<CopyrightEntity>
 )

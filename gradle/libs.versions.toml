@@ -1,5 +1,5 @@
 [versions]
-application = "8.8.2"
+application = "8.9.0"
 navigation = "2.8.8"
 retrofit = "2.11.0"
 lifecycle = "2.8.7"
@@ -10,8 +10,8 @@ coroutines = "1.10.1"
 moshi = "1.15.2"
 
 [libraries]
-firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.4.0" }
-firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.2.0" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.4.1" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.3.0" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.4" }
 firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version = "24.1.0" }
 

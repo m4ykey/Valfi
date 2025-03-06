@@ -1,11 +1,11 @@
 package com.m4ykey.ui.album
 
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -29,8 +29,10 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.ArtistEntity
+import com.m4ykey.data.local.model.CopyrightEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.album.adapter.TrackAdapter
 import com.m4ykey.ui.album.helpers.animateColorTransition
@@ -76,8 +78,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun createArtistAdapter() : ArtistAdapter {
         return ArtistAdapter(
-            onArtistClick = {
-
+            onArtistClick = { item ->
+                startActivity(Intent(Intent.ACTION_VIEW, item.externalUrls.spotify.toUri()))
             }
         )
     }
@@ -155,13 +157,19 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     if (albumWithStates != null) {
                         updateIcons(albumWithStates)
                     }
+                    trackViewModel.getTracksById(album.id)
                 }
+
+                val copyrights = album.copyrights
+                    .map { it.text }
+                    .distinct()
+                    .joinToString(separator = "\n")
 
                 loadImage(imgAlbum, images, requireContext())
                 if (colorViewModel.selectedColor.value == null) {
                     getColorFromImage(images, context = requireContext()) { color ->
                         colorViewModel.setColor(color)
-                        animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+                        animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
                     }
                 } else {
                     colorViewModel.selectedColor.value?.let { color ->
@@ -174,6 +182,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(images)
                     findNavController().navigate(action)
                 }
+
+                txtCopyrights.text = copyrights
 
                 buttonsIntents(button = btnArtist, url = artists[0].url, requireContext())
                 buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())
@@ -314,7 +324,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             if (colorViewModel.selectedColor.value == null) {
                 getColorFromImage(item.getLargestImageUrl().toString(), context = requireContext()) { color ->
                     colorViewModel.setColor(color)
-                    animateColorTransition(Color.parseColor("#4FC3F7"), color, btnAlbum, btnArtist)
+                    animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
                 }
             } else {
                 colorViewModel.selectedColor.value?.let { color ->
@@ -330,7 +340,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     showDialog(artistId)
                     Log.i("ArtistId", artistId)
                 } else {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.artists[0].externalUrls.spotify)))
+                    startActivity(Intent(Intent.ACTION_VIEW,
+                        item.artists[0].externalUrls.spotify.toUri()))
                 }
             }
 
@@ -343,6 +354,10 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 )
             }
 
+            val copyrightEntity = item.copyrights.map { copyright ->
+                CopyrightEntity(text = copyright.text)
+            }
+
             val album = AlbumEntity(
                 id = item.id,
                 name = item.name,
@@ -352,8 +367,20 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 albumType = albumType,
                 artists = artistsEntity,
                 albumUrl = albumUrl,
-                saveTime = System.currentTimeMillis()
+                saveTime = System.currentTimeMillis(),
+                copyrights = copyrightEntity
             )
+
+            val trackEntity = trackAdapter.differ.currentList.map { track ->
+                TrackEntity(
+                    albumId = args.albumId,
+                    explicit = track.explicit,
+                    id = track.id,
+                    name = track.name,
+                    durationMs = track.durationMs,
+                    artists = track.artists.joinToString(", ") { it.name }
+                )
+            }
 
             lifecycleScope.launch {
                 val albumWithStates = albumViewModel.getAlbumWithStates(item.id)
@@ -370,6 +397,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                         albumViewModel.deleteListenLaterState(item.id)
                         if (isAlbumSaved == null) {
                             albumViewModel.deleteAlbum(item.id)
+                            trackViewModel.deleteTracksById(item.id)
                         }
                         imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
                     }
@@ -377,11 +405,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                         albumViewModel.deleteSavedAlbumState(item.id)
                         if (isListenLaterSaved == null) {
                             albumViewModel.deleteAlbum(item.id)
+                            trackViewModel.deleteTracksById(item.id)
                         }
                         imgSave.buttonAnimation(R.drawable.ic_favorite_border)
                     } else {
                         albumViewModel.insertAlbum(album)
                         albumViewModel.insertSavedAlbum(IsAlbumSaved(item.id, true))
+                        trackViewModel.insertTracks(trackEntity)
                         imgSave.buttonAnimation(R.drawable.ic_favorite)
                     }
                 }
@@ -395,11 +425,13 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                         val isAlbumSaved = albumViewModel.getSavedAlbumState(item.id)
                         if (isAlbumSaved == null) {
                             albumViewModel.deleteAlbum(item.id)
+                            trackViewModel.deleteTracksById(item.id)
                         }
                         imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
                     } else {
                         albumViewModel.insertAlbum(album)
                         albumViewModel.insertListenLaterAlbum(IsListenLaterSaved(item.id, true))
+                        trackViewModel.insertTracks(trackEntity)
                         imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
                     }
                 }
@@ -408,8 +440,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun showDialog(artistId : String) {
-        artistViewModel.loadArtists(artistId)
-
         val customView = layoutInflater.inflate(R.layout.bottom_sheet_album_artist_list, null)
 
         val recyclerView = customView.findViewById<RecyclerView>(R.id.recyclerViewArtist)
@@ -418,10 +448,29 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        MaterialAlertDialogBuilder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setNeutralButton(R.string.close) { dialog, _ -> dialog.dismiss() }
             .setView(customView)
             .show()
+
+        artistViewModel.loadArtists(artistId)
+
+        lifecycleScope.launch {
+            artistViewModel.artists.collect { uiState ->
+                when (uiState) {
+                    is UiState.Success -> {
+                        uiState.data.let { artists ->
+                            artistAdapter.submitList(artists)
+                        }
+                    }
+                    is UiState.Loading -> {}
+                    is UiState.Error -> {
+                        showToast(requireContext(), uiState.exception.message ?: "Failed to load artists")
+                        dialog.dismiss()
+                    }
+                }
+            }
+        }
     }
 
     private fun updateIcons(albumWithStates: AlbumWithStates) {

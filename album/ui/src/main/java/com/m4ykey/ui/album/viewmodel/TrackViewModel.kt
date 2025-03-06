@@ -6,11 +6,13 @@ import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.TrackRepository
+import com.m4ykey.data.local.model.TrackEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +28,21 @@ class TrackViewModel @Inject constructor(
 
     private var offset = 0
     var isPaginationEnded = false
+
+    private val _trackEntity = MutableStateFlow<List<TrackEntity>>(emptyList())
+    val trackEntity = _trackEntity.asStateFlow()
+
+    suspend fun getTracksById(albumId : String) : List<TrackEntity> = withContext(Dispatchers.IO) {
+        repository.getTracksById(albumId)
+    }
+
+    suspend fun insertTracks(track : List<TrackEntity>) = withContext(Dispatchers.IO) {
+        repository.insertTracks(track)
+    }
+
+    suspend fun deleteTracksById(albumId: String) = withContext(Dispatchers.IO) {
+        repository.deleteTracksById(albumId)
+    }
 
     fun getAlbumTracks(id: String) {
         if (_tracks.value is UiState.Loading || isPaginationEnded) return

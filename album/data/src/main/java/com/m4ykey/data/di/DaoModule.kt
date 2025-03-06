@@ -2,6 +2,7 @@ package com.m4ykey.data.di
 
 import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.dao.SearchResultDao
+import com.m4ykey.data.local.dao.TrackDao
 import com.m4ykey.data.local.database.AlbumDatabase
 import com.m4ykey.data.local.database.SearchResultDatabase
 import dagger.Module
@@ -21,5 +22,9 @@ object DaoModule {
     @Provides
     @Singleton
     fun provideSearchResultDao(database: SearchResultDatabase) : SearchResultDao = database.searchResultDao()
+
+    @Provides
+    @Singleton
+    fun provideTrackDao(database : AlbumDatabase) : TrackDao = database.trackDao()
 
 }

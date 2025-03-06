@@ -26,7 +26,7 @@ object DatabaseModule {
             context.applicationContext,
             AlbumDatabase::class.java,
             "album_database"
-        ).addMigrations(AlbumEntityMigrations.MIGRATION_2_3).build()
+        ).addMigrations(*AlbumEntityMigrations.albumMigrations.toTypedArray()).build()
     }
 
     @Provides

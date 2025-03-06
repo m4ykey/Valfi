@@ -7,6 +7,8 @@ import com.m4ykey.data.remote.api.TrackApi
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.authentication.interceptor.getToken
 import com.m4ykey.core.network.safeApiCall
+import com.m4ykey.data.local.dao.TrackDao
+import com.m4ykey.data.local.model.TrackEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 class TrackRepositoryImpl @Inject constructor(
     private val api : TrackApi,
-    private val tokenProvider : SpotifyTokenProvider
+    private val tokenProvider : SpotifyTokenProvider,
+    private val dao : TrackDao
 ) : TrackRepository {
     override suspend fun getAlbumTracks(id : String, offset : Int, limit : Int): Flow<List<TrackItem>> = flow {
         val result = safeApiCall {
@@ -33,4 +36,16 @@ class TrackRepositoryImpl @Inject constructor(
         )
         emit(tracks)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun insertTracks(track: List<TrackEntity>) {
+        return dao.insertTrack(track)
+    }
+
+    override fun getTracksById(albumId: String): List<TrackEntity> {
+        return dao.getTracksById(albumId)
+    }
+
+    override suspend fun deleteTracksById(albumId: String) {
+        return dao.deleteTracksById(albumId)
+    }
 }
