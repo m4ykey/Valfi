@@ -14,10 +14,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.lyrics.ui.LyricsActivity
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.core.network.UiState
+import com.m4ykey.core.network.isInternetAvailable
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -35,6 +37,7 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.TrackEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.album.adapter.TrackAdapter
+import com.m4ykey.ui.album.adapter.TrackEntityAdapter
 import com.m4ykey.ui.album.helpers.animateColorTransition
 import com.m4ykey.ui.album.helpers.getArtistList
 import com.m4ykey.ui.album.helpers.getLargestImageUrl
@@ -59,6 +62,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private val trackViewModel by viewModels<TrackViewModel>()
     private val artistViewModel by viewModels<ArtistViewModel>()
     private val trackAdapter by lazy { createTrackAdapter() }
+    private val trackEntityAdapter by lazy { createTrackEntityAdapter() }
     private val artistAdapter by lazy { createArtistAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,6 +78,10 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         lifecycleScope.launch {
             observeViewModel()
         }
+    }
+
+    private fun createTrackEntityAdapter() : TrackEntityAdapter {
+        return TrackEntityAdapter()
     }
 
     private fun createArtistAdapter() : ArtistAdapter {
@@ -102,25 +110,45 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     }
 
     private fun observeViewModel() {
-        albumViewModel.getAlbumById(args.albumId)
-        trackViewModel.getAlbumTracks(args.albumId)
-
         lifecycleScope.launch {
-            albumViewModel.detail.collect { uiState ->
-                when (uiState) {
-                    is UiState.Error -> {
-                        binding.progressbar.isVisible = false
-                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
+            if (isInternetAvailable(requireContext())) {
+                albumViewModel.getAlbumById(args.albumId)
+                trackViewModel.getAlbumTracks(args.albumId)
+
+                albumViewModel.detail.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Error -> {
+                            binding.progressbar.isVisible = false
+                            showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
+                        }
+                        is UiState.Loading -> {
+                            binding.progressbar.isVisible = true
+                            binding.nestedScrollView.isVisible = false
+                        }
+                        is UiState.Success -> {
+                            binding.progressbar.isVisible = false
+                            binding.nestedScrollView.isVisible = true
+                            uiState.data?.let { displayAlbumDetail(it) }
+                        }
                     }
-                    is UiState.Loading -> {
-                        binding.progressbar.isVisible = true
-                        binding.nestedScrollView.isVisible = false
-                    }
-                    is UiState.Success -> {
+                }
+            } else {
+                try {
+                    binding.progressbar.isVisible = true
+
+                    val album = albumViewModel.getAlbum(args.albumId)
+
+                    if (album != null) {
+                        displayAlbumFromDatabase(album)
                         binding.progressbar.isVisible = false
                         binding.nestedScrollView.isVisible = true
-                        uiState.data?.let { displayAlbumDetail(it) }
+                    } else {
+                        binding.progressbar.isVisible = false
+                        showToast(requireContext(), "Album not found in the database")
                     }
+                } catch (e : Exception) {
+                    binding.progressbar.isVisible = false
+                    showToast(requireContext(), e.message ?: "Error loading album from database")
                 }
             }
         }
@@ -143,10 +171,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 }
             }
         }
-
-        lifecycleScope.launch {
-            albumViewModel.getAlbum(args.albumId)?.let { item -> displayAlbumFromDatabase(item) }
-        }
     }
 
     private fun displayAlbumFromDatabase(album: AlbumEntity) {
@@ -157,7 +181,62 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     if (albumWithStates != null) {
                         updateIcons(albumWithStates)
                     }
-                    trackViewModel.getTracksById(album.id)
+
+                    val tracks = trackViewModel.getTracksById(album.id)
+                    trackEntityAdapter.differ.submitList(tracks)
+
+                    imgSave.setOnClickListener {
+                        lifecycleScope.launch {
+                            val isAlbumSaved = albumViewModel.getSavedAlbumState(id)
+                            val isListenLaterSaved = albumViewModel.getListenLaterState(id)
+                            if (isListenLaterSaved?.isListenLaterSaved == true) {
+                                albumViewModel.deleteListenLaterState(id)
+                                if (isAlbumSaved == null) {
+                                    albumViewModel.deleteAlbum(id)
+                                    trackViewModel.deleteTracksById(id)
+                                }
+                                imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                            }
+                            if (isAlbumSaved != null) {
+                                albumViewModel.deleteSavedAlbumState(id)
+                                if (isListenLaterSaved == null) {
+                                    albumViewModel.deleteAlbum(id)
+                                    trackViewModel.deleteTracksById(id)
+                                }
+                                imgSave.buttonAnimation(R.drawable.ic_favorite_border)
+                            } else {
+                                albumViewModel.insertAlbum(album)
+                                albumViewModel.insertSavedAlbum(IsAlbumSaved(id, true))
+                                trackViewModel.insertTracks(tracks)
+                                imgSave.buttonAnimation(R.drawable.ic_favorite)
+                            }
+                        }
+                    }
+
+                    imgListenLater.setOnClickListener {
+                        lifecycleScope.launch {
+                            val isListenLaterSaved = albumViewModel.getListenLaterState(id)
+                            if (isListenLaterSaved != null) {
+                                albumViewModel.deleteListenLaterState(id)
+                                val isAlbumSaved = albumViewModel.getSavedAlbumState(id)
+                                if (isAlbumSaved == null) {
+                                    albumViewModel.deleteAlbum(id)
+                                    trackViewModel.deleteTracksById(id)
+                                }
+                                imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
+                            } else {
+                                albumViewModel.insertAlbum(album)
+                                albumViewModel.insertListenLaterAlbum(IsListenLaterSaved(id, true))
+                                trackViewModel.insertTracks(tracks)
+                                imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
+                            }
+                        }
+                    }
+                }
+
+                binding.rvTrackList.apply {
+                    adapter = trackEntityAdapter
+                    layoutManager = LinearLayoutManager(requireContext())
                 }
 
                 val copyrights = album.copyrights
@@ -201,49 +280,24 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     getString(R.string.tracks)
                 )
 
-                imgSave.setOnClickListener {
-                    lifecycleScope.launch {
-                        val isAlbumSaved = albumViewModel.getSavedAlbumState(id)
-                        val isListenLaterSaved = albumViewModel.getListenLaterState(id)
-                        if (isListenLaterSaved?.isListenLaterSaved == true) {
-                            albumViewModel.deleteListenLaterState(id)
-                            if (isAlbumSaved == null) {
-                                albumViewModel.deleteAlbum(id)
-                            }
-                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
-                        }
-                        if (isAlbumSaved != null) {
-                            albumViewModel.deleteSavedAlbumState(id)
-                            if (isListenLaterSaved == null) {
-                                albumViewModel.deleteAlbum(id)
-                            }
-                            imgSave.buttonAnimation(R.drawable.ic_favorite_border)
-                        } else {
-                            albumViewModel.insertAlbum(album)
-                            albumViewModel.insertSavedAlbum(IsAlbumSaved(id, true))
-                            imgSave.buttonAnimation(R.drawable.ic_favorite)
-                        }
-                    }
-                }
-
-                imgListenLater.setOnClickListener {
-                    lifecycleScope.launch {
-                        val isListenLaterSaved = albumViewModel.getListenLaterState(id)
-                        if (isListenLaterSaved != null) {
-                            albumViewModel.deleteListenLaterState(id)
-                            val isAlbumSaved = albumViewModel.getSavedAlbumState(id)
-                            if (isAlbumSaved == null) {
-                                albumViewModel.deleteAlbum(id)
-                            }
-                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later_border)
-                        } else {
-                            albumViewModel.insertAlbum(album)
-                            albumViewModel.insertListenLaterAlbum(IsListenLaterSaved(id, true))
-                            imgListenLater.buttonAnimation(R.drawable.ic_listen_later)
-                        }
-                    }
-                }
+                progressBarTracks.isVisible = false
+                progressbar.isVisible = false
             }
+        }
+    }
+
+    private suspend fun displayTrackDuration() {
+        trackViewModel.totalTracksDuration.collect { totalDuration ->
+            val hours = (totalDuration / 1000) / 3600
+            val minutes = ((totalDuration / 1000) % 3600) / 60
+            val seconds = (totalDuration / 1000) % 60
+
+            val formattedDuration = when {
+                hours > 0 -> String.format(Locale.getDefault(), "%d ${getString(R.string.hour)} %d min", hours, minutes)
+                minutes > 0 -> String.format(Locale.getDefault(), "%d min %d ${getString(R.string.sec)}", minutes, seconds)
+                else -> String.format(Locale.getDefault(), "%d ${getString(R.string.sec)}", seconds)
+            }
+            binding.txtTotalDuration.text = getString(R.string.duration, formattedDuration)
         }
     }
 
@@ -269,18 +323,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             lifecycleScope.launch {
                 delay(500L)
-                trackViewModel.totalTracksDuration.collect { totalDuration ->
-                    val hours = (totalDuration / 1000) / 3600
-                    val minutes = ((totalDuration / 1000) % 3600) / 60
-                    val seconds = (totalDuration / 1000) % 60
-
-                    val formattedDuration = when {
-                        hours > 0 -> String.format(Locale.getDefault(), "%d ${getString(R.string.hour)} %d min", hours, minutes)
-                        minutes > 0 -> String.format(Locale.getDefault(), "%d min %d ${getString(R.string.sec)}", minutes, seconds)
-                        else -> String.format(Locale.getDefault(), "%d ${getString(R.string.sec)}", seconds)
-                    }
-                    binding.txtTotalDuration.text = getString(R.string.duration, formattedDuration)
-                }
+                displayTrackDuration()
             }
         }
     }
@@ -390,6 +433,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             imgSave.setOnClickListener {
+                if (!areAllTracksLoaded(item)) {
+                    showToast(requireContext(), getString(R.string.load_all_tracks_to_save_an_album))
+                    return@setOnClickListener
+                }
+
                 lifecycleScope.launch {
                     val isAlbumSaved = albumViewModel.getSavedAlbumState(item.id)
                     val isListenLaterSaved = albumViewModel.getListenLaterState(item.id)
@@ -418,6 +466,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             imgListenLater.setOnClickListener {
+                if (!areAllTracksLoaded(item)) {
+                    showToast(requireContext(), getString(R.string.load_all_tracks_to_save_an_album))
+                    return@setOnClickListener
+                }
+
                 lifecycleScope.launch {
                     val isListenLaterSaved = albumViewModel.getListenLaterState(item.id)
                     if (isListenLaterSaved != null) {
@@ -439,17 +492,24 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
     }
 
+    private fun areAllTracksLoaded(item : AlbumDetail) : Boolean {
+        val loadedTracks = trackAdapter.differ.currentList.size
+        return loadedTracks == item.totalTracks
+    }
+
     private fun showDialog(artistId : String) {
-        val customView = layoutInflater.inflate(R.layout.bottom_sheet_album_artist_list, null)
+        val customView = layoutInflater.inflate(R.layout.dialog_album_artist_list, null)
 
         val recyclerView = customView.findViewById<RecyclerView>(R.id.recyclerViewArtist)
+        val progressBarArtist = customView.findViewById<CircularProgressIndicator>(R.id.progressBarArtist)
+
         recyclerView.apply {
             adapter = artistAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setNeutralButton(R.string.close) { dialog, _ -> dialog.dismiss() }
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AttentionDialog)
+            .setPositiveButton(R.string.close) { dialog, _ -> dialog.dismiss() }
             .setView(customView)
             .show()
 
@@ -459,11 +519,14 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             artistViewModel.artists.collect { uiState ->
                 when (uiState) {
                     is UiState.Success -> {
+                        progressBarArtist.isVisible = false
                         uiState.data.let { artists ->
                             artistAdapter.submitList(artists)
                         }
                     }
-                    is UiState.Loading -> {}
+                    is UiState.Loading -> {
+                        progressBarArtist.isVisible = true
+                    }
                     is UiState.Error -> {
                         showToast(requireContext(), uiState.exception.message ?: "Failed to load artists")
                         dialog.dismiss()

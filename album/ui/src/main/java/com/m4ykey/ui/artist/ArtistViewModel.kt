@@ -3,7 +3,8 @@ package com.m4ykey.ui.artist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.network.UiState
-import com.m4ykey.data.domain.model.album.Artist
+import com.m4ykey.data.domain.model.artist.Artist
+import com.m4ykey.data.domain.model.artist.ArtistList
 import com.m4ykey.data.domain.repository.ArtistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,7 @@ class ArtistViewModel @Inject constructor(
     private val repository: ArtistRepository
 ) : ViewModel() {
 
-    private val _artists = MutableStateFlow<UiState<List<Artist>>>(UiState.Success(emptyList()))
+    private val _artists = MutableStateFlow<UiState<List<ArtistList>>>(UiState.Success(emptyList()))
     val artists = _artists.asStateFlow()
 
     fun loadArtists(id : String) = viewModelScope.launch {

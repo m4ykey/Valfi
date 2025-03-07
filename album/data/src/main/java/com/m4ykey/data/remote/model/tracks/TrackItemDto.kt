@@ -1,7 +1,7 @@
 package com.m4ykey.data.remote.model.tracks
 
 import androidx.annotation.Keep
-import com.m4ykey.data.remote.model.album.ArtistDto
+import com.m4ykey.data.remote.model.artist.ArtistDto
 import com.m4ykey.data.remote.model.album.ExternalUrlsDto
 
 @Keep

@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.m4ykey.album.ui.databinding.LayoutArtistListBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
-import com.m4ykey.data.domain.model.album.Artist
+import com.m4ykey.data.domain.model.artist.Artist
+import com.m4ykey.data.domain.model.artist.ArtistList
 
 class ArtistAdapter(
     private val onArtistClick : OnArtistClick
-) : BaseRecyclerView<Artist, ArtistViewHolder>(ArtistCallback()) {
+) : BaseRecyclerView<ArtistList, ArtistViewHolder>(ArtistCallback()) {
 
-    override fun onItemBindViewHolder(holder: ArtistViewHolder, item: Artist, position: Int) {
+    override fun onItemBindViewHolder(holder: ArtistViewHolder, item: ArtistList, position: Int) {
         holder.bind(item)
     }
 
@@ -26,4 +27,4 @@ class ArtistAdapter(
     }
 }
 
-typealias OnArtistClick = (Artist) -> Unit
+typealias OnArtistClick = (ArtistList) -> Unit

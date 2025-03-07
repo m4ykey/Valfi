@@ -21,16 +21,13 @@ class TrackViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
-    val totalTracksDuration = _totalTrackDurationMs
+    val totalTracksDuration = _totalTrackDurationMs.asStateFlow()
 
     private var _tracks = MutableStateFlow<UiState<List<TrackItem>>>(UiState.Success(emptyList()))
     val tracks = _tracks.asStateFlow()
 
     private var offset = 0
     var isPaginationEnded = false
-
-    private val _trackEntity = MutableStateFlow<List<TrackEntity>>(emptyList())
-    val trackEntity = _trackEntity.asStateFlow()
 
     suspend fun getTracksById(albumId : String) : List<TrackEntity> = withContext(Dispatchers.IO) {
         repository.getTracksById(albumId)

@@ -65,5 +65,6 @@
     <string name="total_number_of_tracks">Total number of tracks</string>
     <string name="most_popular_decade">Most popular decade</string>
     <string name="the_album_with_the_most_songs">The album with the most songs</string>
+    <string name="load_all_tracks_to_save_an_album">Load all songs to save an album</string>
 
 </resources>

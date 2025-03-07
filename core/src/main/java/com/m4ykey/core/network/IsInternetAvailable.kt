@@ -1,4 +1,4 @@
-package com.m4ykey.authentication.interceptor
+package com.m4ykey.core.network
 
 import android.content.Context
 import android.net.ConnectivityManager

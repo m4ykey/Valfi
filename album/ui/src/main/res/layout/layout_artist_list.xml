@@ -10,9 +10,9 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="70dp"
+        android:layout_width="60dp"
         app:cardCornerRadius="100dp"
-        android:layout_height="70dp">
+        android:layout_height="60dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
     <TextView
         android:layout_marginStart="10dp"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:fontFamily="@font/inter_medium"
         android:textColor="@color/textColor"
         tools:text="Kendrick Lamar"

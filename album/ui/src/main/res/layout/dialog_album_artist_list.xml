@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_margin="10dp"
         tools:listitem="@layout/layout_artist_list"
         android:id="@+id/recyclerViewArtist"
         app:layout_constraintTop_toTopOf="parent"
@@ -16,7 +17,7 @@
         android:layout_height="match_parent"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarArtist"
         style="@style/progressBarStyle"
         tools:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"

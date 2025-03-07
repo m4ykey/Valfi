@@ -1,6 +1,7 @@
-package com.m4ykey.data.remote.model.album
+package com.m4ykey.data.remote.model.artist
 
 import androidx.annotation.Keep
+import com.m4ykey.data.remote.model.album.ExternalUrlsDto
 
 @Keep
 data class ArtistDto(

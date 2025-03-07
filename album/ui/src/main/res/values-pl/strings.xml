@@ -56,4 +56,5 @@
     <string name="total_number_of_tracks">Łączna ilość utworów</string>
     <string name="most_popular_decade">Najpopularniejsza dekada</string>
     <string name="the_album_with_the_most_songs">Album z największą ilością utworów</string>
+    <string name="load_all_tracks_to_save_an_album">Wczytaj wszystkie utwory do zapisania albumu</string>
 </resources>

@@ -10,6 +10,7 @@ import com.m4ykey.authentication.api.AuthApi
 import com.m4ykey.authentication.data.repository.KeyRepository
 import com.m4ykey.authentication.interceptor.token.TokenProvider
 import com.m4ykey.authentication.interceptor.token.fetchAccessToken
+import com.m4ykey.core.network.isInternetAvailable
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
