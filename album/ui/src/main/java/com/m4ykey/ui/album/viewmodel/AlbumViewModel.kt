@@ -72,7 +72,7 @@ class AlbumViewModel @Inject constructor(
     private val _albumWithMostTracks = MutableStateFlow<AlbumWithDetails?>(null)
     val albumWithMostTracks = _albumWithMostTracks.asStateFlow()
 
-    private var offset = 0
+    var offset = 0
     var isPaginationEnded = false
 
     private val _albumTypes = MutableStateFlow(

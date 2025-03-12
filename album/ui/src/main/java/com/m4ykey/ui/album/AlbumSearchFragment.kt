@@ -98,7 +98,8 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                     }
                     is UiState.Success -> {
                         uiState.data.let { albums ->
-                            searchAdapter.submitList(albums, isAppend = true)
+                            val isAppend = viewModel.offset > 0
+                            searchAdapter.submitList(albums, isAppend = isAppend)
                         }
                         binding.rvSearchAlbums.isVisible = true
                         binding.linearLayoutSearchResult.isVisible = false
