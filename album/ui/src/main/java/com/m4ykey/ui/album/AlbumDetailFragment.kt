@@ -516,7 +516,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
     private fun areAllTracksLoaded(item : AlbumDetail) : Boolean {
         val loadedTracks = trackAdapter.differ.currentList.size
-        return loadedTracks == item.totalTracks
+        val totalTracks = item.totalTracks
+        return loadedTracks > 0 && loadedTracks == totalTracks
     }
 
     private fun showDialog(artistId : String) {
