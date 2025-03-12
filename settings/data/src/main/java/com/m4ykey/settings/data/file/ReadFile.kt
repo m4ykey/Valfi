@@ -3,8 +3,10 @@ package com.m4ykey.settings.data.file
 import android.content.Context
 import android.net.Uri
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import kotlinx.coroutines.Dispatchers
@@ -19,15 +21,17 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
                 val reader = BufferedReader(InputStreamReader(inputStream))
                 val gson = Gson()
 
-                val albumDataType = object : TypeToken<Map<String, Any>>() {}.type
-                val jsonData: Map<String, Any> = gson.fromJson(reader, albumDataType)
+                val albumDataType = object : TypeToken<Map<String, JsonElement>>() {}.type
+                val jsonData: Map<String, JsonElement> = gson.fromJson(reader, albumDataType)
 
-                val savedAlbums = (jsonData["savedAlbums"] as? List<Map<String, Any>>)?.map {
-                    convertMapToAlbumEntity(it)
+                val savedAlbums = jsonData["savedAlbums"]?.let { element ->
+                    val albumListType = object : TypeToken<List<AlbumEntity>>() {}.type
+                    gson.fromJson<List<AlbumEntity>>(element, albumListType)
                 } ?: emptyList()
 
-                val listenLaterAlbums = (jsonData["listenLaterAlbums"] as? List<Map<String, Any>>)?.map {
-                    convertMapToAlbumEntity(it)
+                val listenLaterAlbums = jsonData["listenLaterAlbums"]?.let { element ->
+                    val albumListType = object : TypeToken<List<AlbumEntity>>() {}.type
+                    gson.fromJson<List<AlbumEntity>>(element, albumListType)
                 } ?: emptyList()
 
                 val albumData = AlbumsData(savedAlbums, listenLaterAlbums)
