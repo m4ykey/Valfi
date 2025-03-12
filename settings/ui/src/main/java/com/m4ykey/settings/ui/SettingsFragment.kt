@@ -15,6 +15,7 @@ import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.openUrlBrowser
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.settings.data.file.generateJsonData
 import com.m4ykey.settings.data.file.insertAlbumData
 import com.m4ykey.settings.data.file.readJsonData
@@ -29,6 +30,7 @@ import com.m4ykey.settings.ui.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
@@ -42,11 +44,13 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
 
     @Inject
     lateinit var repository: AlbumRepository
+    @Inject
+    lateinit var trackRepository: TrackRepository
 
     private val getContent = registerForActivityResult(CreateDocument("application/json")) { uri : Uri? ->
         uri?.let {
             lifecycleScope.launch {
-                saveJsonToFile(requireActivity(), it, generateJsonData(repository))
+                saveJsonToFile(requireActivity(), it, generateJsonData(repository, trackRepository))
             }
         }
     }
@@ -56,7 +60,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             lifecycleScope.launch {
                 val albumsData = readJsonData(requireContext(), it)
                 albumsData?.let { data ->
-                    insertAlbumData(repository, data)
+                    insertAlbumData(repository, data, trackRepository)
                 }
             }
         }
@@ -85,7 +89,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
             linearLayoutEmail.setOnClickListener {
                 try {
                     val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:")
+                        data = "mailto:".toUri()
                         putExtra(Intent.EXTRA_EMAIL, arrayOf("valficontact@gmail.com"))
                         putExtra(Intent.EXTRA_SUBJECT, "Version: $APP_VERSION")
                     }

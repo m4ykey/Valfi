@@ -48,6 +48,8 @@ dependencies {
 
     implementation(libs.androidxDatastore)
 
+    implementation(libs.coroutines)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)

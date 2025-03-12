@@ -6,9 +6,11 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.TrackEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -34,7 +36,12 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
                     gson.fromJson<List<AlbumEntity>>(element, albumListType)
                 } ?: emptyList()
 
-                val albumData = AlbumsData(savedAlbums, listenLaterAlbums)
+                val tracksAlbum = jsonData["tracksAlbum"]?.let { element ->
+                    val trackListType = object : TypeToken<List<TrackEntity>>() {}.type
+                    gson.fromJson<List<TrackEntity>>(element, trackListType)
+                } ?: emptyList()
+
+                val albumData = AlbumsData(savedAlbums, listenLaterAlbums, tracksAlbum)
 
                 return@withContext albumData
             }
@@ -45,7 +52,11 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
     }
 }
 
-suspend fun insertAlbumData(repository: AlbumRepository, albumsData: AlbumsData) {
+suspend fun insertAlbumData(
+    repository: AlbumRepository,
+    albumsData: AlbumsData,
+    trackRepository: TrackRepository
+) {
     withContext(Dispatchers.IO) {
         try {
             albumsData.savedAlbums.forEach { album ->
@@ -65,6 +76,8 @@ suspend fun insertAlbumData(repository: AlbumRepository, albumsData: AlbumsData)
                 repository.insertAlbum(albumToInsert)
                 repository.insertListenLaterAlbum(IsListenLaterSaved(album.id, true))
             }
+
+            trackRepository.insertTracks(albumsData.trackEntity)
         } catch (e: Exception) {
             e.printStackTrace()
         }

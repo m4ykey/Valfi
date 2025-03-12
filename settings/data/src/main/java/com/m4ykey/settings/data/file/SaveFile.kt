@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.domain.repository.TrackRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -21,7 +22,10 @@ suspend fun saveJsonToFile(context: Context, uri : Uri, jsonData : String) {
     }
 }
 
-suspend fun generateJsonData(repository: AlbumRepository) : String {
+suspend fun generateJsonData(
+    repository: AlbumRepository,
+    trackRepository: TrackRepository
+) : String = withContext(Dispatchers.IO) {
     val savedAlbums = repository.getSavedAlbums().map { album ->
         album.copy(saveTime = album.saveTime)
     }
@@ -29,10 +33,17 @@ suspend fun generateJsonData(repository: AlbumRepository) : String {
         album.copy(saveTime = album.saveTime)
     }
 
+    val allAlbums = savedAlbums + listenLaterAlbums
+
+    val tracksAlbum = allAlbums.flatMap { album ->
+        trackRepository.getTracksById(album.id)
+    }
+
     val albumsData = AlbumsData(
         savedAlbums = savedAlbums,
-        listenLaterAlbums = listenLaterAlbums
+        listenLaterAlbums = listenLaterAlbums,
+        trackEntity = tracksAlbum
     )
 
-    return GsonBuilder().setPrettyPrinting().create().toJson(albumsData)
+    GsonBuilder().setPrettyPrinting().create().toJson(albumsData)
 }
