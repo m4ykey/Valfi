@@ -57,4 +57,6 @@
     <string name="most_popular_decade">Najpopularniejsza dekada</string>
     <string name="the_album_with_the_most_songs">Album z największą ilością utworów</string>
     <string name="load_all_tracks_to_save_an_album">Wczytaj wszystkie utwory do zapisania albumu</string>
+    <string name="error_with_saving_album">Błąd przy zapisywaniu albumu</string>
+    <string name="failed_to_load_artists">Nie udało się załadować artystów</string>
 </resources>

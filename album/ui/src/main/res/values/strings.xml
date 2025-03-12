@@ -66,5 +66,7 @@
     <string name="most_popular_decade">Most popular decade</string>
     <string name="the_album_with_the_most_songs">The album with the most songs</string>
     <string name="load_all_tracks_to_save_an_album">Load all songs to save an album</string>
+    <string name="error_with_saving_album">Error with saving album</string>
+    <string name="failed_to_load_artists">Failed to load artists</string>
 
 </resources>
