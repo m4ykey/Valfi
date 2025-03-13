@@ -9,7 +9,7 @@ import com.m4ykey.data.local.model.TrackEntity
 @Dao
 interface TrackDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(track : List<TrackEntity>)
 
     @Query("SELECT * FROM track_table WHERE albumId = :albumId")

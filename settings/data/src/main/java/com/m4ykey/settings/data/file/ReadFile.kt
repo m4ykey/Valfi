@@ -36,7 +36,7 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
                     gson.fromJson<List<AlbumEntity>>(element, albumListType)
                 } ?: emptyList()
 
-                val tracksAlbum = jsonData["tracksAlbum"]?.let { element ->
+                val tracksAlbum = jsonData["trackEntity"]?.let { element ->
                     val trackListType = object : TypeToken<List<TrackEntity>>() {}.type
                     gson.fromJson<List<TrackEntity>>(element, trackListType)
                 } ?: emptyList()
@@ -59,6 +59,8 @@ suspend fun insertAlbumData(
 ) {
     withContext(Dispatchers.IO) {
         try {
+            val albumIds = mutableSetOf<String>()
+
             albumsData.savedAlbums.forEach { album ->
                 val existingAlbum = repository.getAlbum(album.id)
                 val albumToInsert = album.copy(
@@ -66,6 +68,7 @@ suspend fun insertAlbumData(
                 )
                 repository.insertAlbum(albumToInsert)
                 repository.insertSavedAlbum(IsAlbumSaved(album.id, true))
+                albumIds.add(album.id)
             }
 
             albumsData.listenLaterAlbums.forEach { album ->
@@ -75,9 +78,14 @@ suspend fun insertAlbumData(
                 )
                 repository.insertAlbum(albumToInsert)
                 repository.insertListenLaterAlbum(IsListenLaterSaved(album.id, true))
+                albumIds.add(album.id)
             }
 
-            trackRepository.insertTracks(albumsData.trackEntity)
+            val trackToInsert = albumsData.trackEntity.filter { track ->
+                albumIds.contains(track.albumId)
+            }
+
+            trackRepository.insertTracks(trackToInsert)
         } catch (e: Exception) {
             e.printStackTrace()
         }
