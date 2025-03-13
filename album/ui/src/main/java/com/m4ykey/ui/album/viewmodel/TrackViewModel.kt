@@ -6,6 +6,8 @@ import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.data.domain.repository.TrackRepository
+import com.m4ykey.data.domain.usecase.track.GetLocalTrackUseCase
+import com.m4ykey.data.domain.usecase.track.GetRemoteTrackUseCase
 import com.m4ykey.data.local.model.TrackEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrackViewModel @Inject constructor(
-    private val repository : TrackRepository
+    private val getRemoteTrackUseCase: GetRemoteTrackUseCase,
+    private val getLocalTrackUseCase : GetLocalTrackUseCase
 ) : ViewModel() {
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
@@ -30,15 +33,15 @@ class TrackViewModel @Inject constructor(
     var isPaginationEnded = false
 
     suspend fun getTracksById(albumId : String) : List<TrackEntity> = withContext(Dispatchers.IO) {
-        repository.getTracksById(albumId)
+        getLocalTrackUseCase(GetLocalTrackUseCase.Params.GetTrack(albumId)) as List<TrackEntity>
     }
 
     suspend fun insertTracks(track : List<TrackEntity>) = withContext(Dispatchers.IO) {
-        repository.insertTracks(track)
+        getLocalTrackUseCase(GetLocalTrackUseCase.Params.InsertTracks(track))
     }
 
     suspend fun deleteTracksById(albumId: String) = withContext(Dispatchers.IO) {
-        repository.deleteTracksById(albumId)
+        getLocalTrackUseCase(GetLocalTrackUseCase.Params.DeleteTrack(albumId))
     }
 
     fun getAlbumTracks(id: String) {
@@ -48,7 +51,7 @@ class TrackViewModel @Inject constructor(
             _tracks.value = UiState.Loading
 
             try {
-                repository.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
+                getRemoteTrackUseCase.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
                     .collect { tracks ->
                         if (tracks.isEmpty()) {
                             isPaginationEnded = true

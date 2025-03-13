@@ -262,10 +262,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                         animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
                     }
                 } else {
-                    colorViewModel.selectedColor.value?.let { color ->
-                        btnAlbum.setBackgroundColor(color)
-                        btnArtist.setBackgroundColor(color)
-                    }
+                    val color = colorViewModel.selectedColor.value ?: return
+                    btnAlbum.setBackgroundColor(color)
+                    btnArtist.setBackgroundColor(color)
                 }
 
                 cardView.setOnClickListener {
@@ -381,10 +380,9 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
                 }
             } else {
-                colorViewModel.selectedColor.value?.let { color ->
-                    btnAlbum.setBackgroundColor(color)
-                    btnArtist.setBackgroundColor(color)
-                }
+                val color = colorViewModel.selectedColor.value ?: return
+                btnAlbum.setBackgroundColor(color)
+                btnArtist.setBackgroundColor(color)
             }
 
             buttonsIntents(button = btnAlbum, url = albumUrl, requireContext())

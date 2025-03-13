@@ -3,15 +3,16 @@ package com.lyrics.ui
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.lyrics.data.domain.model.LyricsItem
 import com.lyrics.data.domain.model.Track
 import com.lyrics.ui.databinding.FragmentLyricsBinding
+import com.m4ykey.core.network.UiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.utils.copyText
@@ -74,32 +75,47 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
         trackId?.let { track -> viewModel.getTrackById(track) }
 
         lifecycleScope.launch {
-            viewModel.isLoading.collect {
-                binding.progressbar.isVisible = it
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.error.collect { errorMessage ->
-                errorMessage?.let {
-                    showToast(requireContext(), it)
+            viewModel.lyrics.collect { uiState ->
+                when (uiState) {
+                    is UiState.Success -> {
+                        binding.progressbar.isVisible = false
+                        uiState.data?.let { item -> displayLyrics(item) }
+                    }
+                    is UiState.Error -> {
+                        binding.progressbar.isVisible = false
+                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
+                    }
+                    is UiState.Loading -> {
+                        binding.progressbar.isVisible = true
+                    }
                 }
             }
         }
 
         lifecycleScope.launch {
-            viewModel.lyrics.collect { item -> item?.let { displayLyrics(it) } }
-        }
-
-        lifecycleScope.launch {
-            viewModel.track.collect { item -> item?.let { displayTrackDetail(it) } }
+            viewModel.track.collect { uiState ->
+                when (uiState) {
+                    is UiState.Success -> {
+                        binding.progressbar.isVisible = false
+                        uiState.data?.let { item -> displayTrackDetail(item) }
+                    }
+                    is UiState.Error -> {
+                        binding.progressbar.isVisible = false
+                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
+                    }
+                    is UiState.Loading -> {
+                        binding.progressbar.isVisible = true
+                    }
+                }
+            }
         }
     }
 
     private fun displayTrackDetail(item : Track) {
         binding.apply {
             imgOpenTrack.setOnClickListener {
-                requireContext().startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.externalUrls.spotify)))
+                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
+                    item.externalUrls.spotify.toUri()))
             }
             loadImage(imgAlbumCover, item.album.getLargestImageUrl().toString(), requireContext())
             getColorFromImage(

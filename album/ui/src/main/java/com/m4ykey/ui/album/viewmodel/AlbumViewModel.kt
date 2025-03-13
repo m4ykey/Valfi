@@ -6,7 +6,12 @@ import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
-import com.m4ykey.data.domain.repository.AlbumRepository
+import com.m4ykey.data.domain.usecase.album.DeleteAlbumUseCase
+import com.m4ykey.data.domain.usecase.album.GetAlbumUseCase
+import com.m4ykey.data.domain.usecase.album.GetLocalAlbumUseCase
+import com.m4ykey.data.domain.usecase.album.GetRemoteAlbumUseCase
+import com.m4ykey.data.domain.usecase.album.SaveAlbumUseCase
+import com.m4ykey.data.domain.usecase.album.StatisticsAlbumUseCase
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.AlbumWithDetails
 import com.m4ykey.data.local.model.DecadeResult
@@ -35,7 +40,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val repository: AlbumRepository,
+    private val deleteAlbumUseCase: DeleteAlbumUseCase,
+    private val getLocalAlbumUseCase: GetLocalAlbumUseCase,
+    private val getRemoteAlbumUseCase : GetRemoteAlbumUseCase,
+    private val saveAlbumUseCase : SaveAlbumUseCase,
+    private val getAlbumUseCase : GetAlbumUseCase,
+    private val statisticsAlbumUseCase: StatisticsAlbumUseCase,
     private val dispatcherIO : CoroutineDispatcher
 ) : ViewModel() {
 
@@ -103,7 +113,7 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumById(id: String) = viewModelScope.launch {
         _detail.value = UiState.Loading
 
-        repository.getAlbumById(id)
+        getRemoteAlbumUseCase.getAlbumById(id)
             .catch { e -> _detail.value = UiState.Error(e) }
             .collect { result -> _detail.value = UiState.Success(result) }
     }
@@ -117,7 +127,7 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             _newRelease.value = UiState.Loading
 
-            repository.getNewReleases(offset, PAGE_SIZE)
+            getRemoteAlbumUseCase.getNewReleases(offset, PAGE_SIZE)
                 .catch { e -> _newRelease.value = UiState.Error(e) }
                 .collect { albums ->
                     handlePaginatedResult(albums, _newRelease)
@@ -131,7 +141,7 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             _search.value = UiState.Loading
 
-            repository.searchAlbums(query, offset, PAGE_SIZE)
+            getRemoteAlbumUseCase.searchAlbums(query, offset, PAGE_SIZE)
                 .catch { e -> _search.value = UiState.Error(e) }
                 .collect { albums ->
                     handlePaginatedResult(albums, _search)
@@ -146,20 +156,20 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun searchAlbumByName(albumName: String) = loadAlbumsWithSearch {
-        repository.searchAlbumByName(albumName)
+        getLocalAlbumUseCase.searchAlbumByName(albumName)
     }
 
     fun searchAlbumsListenLater(albumName: String) = loadAlbumsWithSearch {
-        repository.searchAlbumsListenLater(albumName)
+        getLocalAlbumUseCase.searchAlbumsListenLater(albumName)
     }
 
     fun getAlbumType(albumType: String) = loadAlbums {
-        repository.getAlbumType(albumType)
+        getLocalAlbumUseCase.getAlbumsByType(albumType)
     }
 
     fun getAlbumWithMostTracks() {
         viewModelScope.launch {
-            repository.getAlbumWithMostTracks().collect { album ->
+            statisticsAlbumUseCase.getAlbumWithMostTracks().collect { album ->
                 _albumWithMostTracks.value = album
             }
         }
@@ -167,7 +177,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getMostPopularDecade() {
         viewModelScope.launch {
-            repository.getMostPopularDecade().collect { decade ->
+            statisticsAlbumUseCase.getMostPopularDecade().collect { decade ->
                 _decadeResult.value = decade
             }
         }
@@ -175,7 +185,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getListenLaterCount() {
         viewModelScope.launch {
-            repository.getListenLaterCount().collect { count ->
+            statisticsAlbumUseCase.getListenLaterCount().collect { count ->
                 _listenLaterCount.value = count
             }
         }
@@ -183,7 +193,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getRandomAlbum() {
         viewModelScope.launch {
-            repository.getRandomAlbum().collect { random ->
+            getLocalAlbumUseCase.getRandomAlbum().collect { random ->
                 _randomAlbum.value = random
             }
         }
@@ -191,7 +201,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumCount() {
         viewModelScope.launch {
-            repository.getAlbumCount().collect { count ->
+            statisticsAlbumUseCase.getAlbumCount().collect { count ->
                 _albumCount.value = count
             }
         }
@@ -199,7 +209,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getTotalTracksCount()  {
         viewModelScope.launch {
-            repository.getTotalTracksCount().collect { count ->
+            statisticsAlbumUseCase.getTotalTracksCount().collect { count ->
                 _totalTracksCount.value = count
             }
         }
@@ -207,7 +217,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumTypeCount(albumType: String) {
         viewModelScope.launch {
-            val count = repository.getAlbumCountByType(albumType).firstOrNull() ?: 0
+            val count = statisticsAlbumUseCase.getAlbumTypeCount(albumType).firstOrNull() ?: 0
             _albumTypes.update { currentTypes ->
                 currentTypes.toMutableMap().apply {
                     put(albumType, count)
@@ -217,59 +227,59 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun getSavedAlbums() = loadAlbums {
-        repository.getSavedAlbums()
+        getLocalAlbumUseCase.getSavedAlbums()
     }
 
     fun getSavedAlbumAsc() = loadAlbums {
-        repository.getSavedAlbumAsc()
+        getLocalAlbumUseCase.getSavedAlbumAsc()
     }
 
     fun getAlbumSortedByName() = loadAlbums {
-        repository.getAlbumSortedByName()
+        getLocalAlbumUseCase.getAlbumSortedByName()
     }
 
     fun getListenLaterAlbums() = loadAlbums {
-        repository.getListenLaterAlbums()
+        getLocalAlbumUseCase.getListenLaterAlbums()
     }
 
     suspend fun insertAlbum(album: AlbumEntity) = withContext(dispatcherIO) {
-        repository.insertAlbum(album)
+        saveAlbumUseCase(SaveAlbumUseCase.Params.SaveAlbum(album))
     }
 
     suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = withContext(dispatcherIO) {
-        repository.insertSavedAlbum(isAlbumSaved)
+        saveAlbumUseCase(SaveAlbumUseCase.Params.MarkAsSaved(isAlbumSaved))
     }
 
     suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved) = withContext(dispatcherIO) {
-        repository.insertListenLaterAlbum(isListenLaterSaved)
+        saveAlbumUseCase(SaveAlbumUseCase.Params.AddToListenLater(isListenLaterSaved))
     }
 
     suspend fun getAlbum(albumId: String): AlbumEntity? = withContext(dispatcherIO) {
-        repository.getAlbum(albumId)
+        getAlbumUseCase(GetAlbumUseCase.Params.GetAlbum(albumId)) as? AlbumEntity?
     }
 
     suspend fun getSavedAlbumState(albumId: String): IsAlbumSaved? = withContext(dispatcherIO) {
-        repository.getSavedAlbumState(albumId)
+        getAlbumUseCase(GetAlbumUseCase.Params.GetSavedAlbumState(albumId)) as? IsAlbumSaved?
     }
 
     suspend fun getListenLaterState(albumId: String): IsListenLaterSaved? = withContext(dispatcherIO) {
-        repository.getListenLaterState(albumId)
+        getAlbumUseCase(GetAlbumUseCase.Params.GetListenLaterState(albumId)) as? IsListenLaterSaved?
     }
 
     suspend fun getAlbumWithStates(albumId: String): AlbumWithStates? = withContext(dispatcherIO) {
-        repository.getAlbumWithStates(albumId)
+        getAlbumUseCase(GetAlbumUseCase.Params.GetAlbumWithStates(albumId)) as? AlbumWithStates?
     }
 
     suspend fun deleteAlbum(albumId: String) = withContext(dispatcherIO) {
-        repository.deleteAlbum(albumId)
+        deleteAlbumUseCase(DeleteAlbumUseCase.Params.DeleteAlbum(albumId))
     }
 
     suspend fun deleteSavedAlbumState(albumId: String) = withContext(dispatcherIO) {
-        repository.deleteSavedAlbumState(albumId)
+        deleteAlbumUseCase(DeleteAlbumUseCase.Params.RemoveFromSaved(albumId))
     }
 
     suspend fun deleteListenLaterState(albumId: String) = withContext(dispatcherIO) {
-        repository.deleteListenLaterState(albumId)
+        deleteAlbumUseCase(DeleteAlbumUseCase.Params.RemoveFromListenLater(albumId))
     }
 
     private fun loadAlbumsWithAdaptiveChunks(
