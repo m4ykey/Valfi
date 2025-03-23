@@ -1,6 +1,13 @@
 package com.m4ykey.authentication
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class KeyActivity : AppCompatActivity() {
@@ -43,7 +51,7 @@ class KeyActivity : AppCompatActivity() {
 
         binding.toolbar.setOnClickListener { this.finish() }
 
-        binding.btnSave.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             val clientId = binding.etClientId.text.toString()
             val clientSecret = binding.etClientSecret.text.toString()
 
@@ -56,13 +64,36 @@ class KeyActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnDelete.setOnClickListener {
+        binding.btnCancel.setOnClickListener {
             lifecycleScope.launch {
                 binding.etClientSecret.setText("")
                 binding.etClientId.setText("")
 
                 repository.deleteKeys()
             }
+        }
+
+        val text = getString(R.string.enter_your_keys)
+
+        val linkText = "Spotify API"
+        val startIndex = text.indexOf(linkText)
+
+        if (startIndex != -1) {
+            val endIndex = startIndex + linkText.length
+
+            val spannableString = SpannableString(text)
+
+            spannableString.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://developer.spotify.com/".toUri())
+                    startActivity(intent)
+                }
+            }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            binding.txtSpotifyLink.text = spannableString
+            binding.txtSpotifyLink.movementMethod = LinkMovementMethod.getInstance()
+        } else {
+            binding.txtSpotifyLink.text = text
         }
     }
 }

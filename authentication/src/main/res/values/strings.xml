@@ -1,4 +1,5 @@
 <resources>
-    <string name="delete_keys">Delete Keys</string>
-    <string name="save_keys">Save Keys</string>
+    <string name="enter_your_keys">For the app to work properly, you need to add your keys from the Spotify API. \nYou need to go to the Dashboard there to register the project and put your keys here.</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

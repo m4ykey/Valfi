@@ -77,19 +77,34 @@
         <com.google.android.material.button.MaterialButton
             android:layout_weight="1"
             android:layout_marginEnd="10dp"
-            android:id="@+id/btnDelete"
-            android:text="@string/delete_keys"
+            android:id="@+id/btnSubmit"
+            android:backgroundTint="@color/buttonColor"
+            android:textColor="@color/white"
+            android:text="@string/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_weight="1"
             android:layout_marginStart="10dp"
-            android:id="@+id/btnSave"
+            android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
-            android:text="@string/save_keys"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/buttonColor"
+            android:text="@string/cancel"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
+    <TextView
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter_medium"
+        android:textColor="@color/textColor2"
+        tools:text="For the app to work properly, you need to add your keys from the [link]Spotify API.
+You need to go to the Dashboard there to register the project and put your keys here."
+        android:id="@+id/txtSpotifyLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

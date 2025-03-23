@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
+    <string name="enter_your_keys">Aby aplikacja działała poprawnie, musisz dodać swoje klucze z Spotify API. \nTrzeba wejść w Dashboard tam zarejestrować projekt i umieścić tutaj swoje klucze.</string>
+</resources>
