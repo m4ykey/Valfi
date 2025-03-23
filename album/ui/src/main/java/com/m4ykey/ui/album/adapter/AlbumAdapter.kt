@@ -9,6 +9,7 @@ import com.m4ykey.ui.album.adapter.callback.AlbumEntityCallback
 import com.m4ykey.ui.album.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.album.adapter.viewholder.AlbumListViewHolder
 import com.m4ykey.ui.album.helpers.OnAlbumEntityClick
+import java.util.UUID
 
 class AlbumAdapter(
     private val onAlbumClick : OnAlbumEntityClick
@@ -38,10 +39,12 @@ class AlbumAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int = viewType.ordinal
+    override fun getItemViewType(position: Int): Int {
+        return if (viewType == ViewType.GRID) VIEW_TYPE_GRID else VIEW_TYPE_LIST
+    }
 
 
     override fun getItemForPosition(position: Int): Long {
-        return differ.currentList.getOrNull(position)?.id?.hashCode()?.toLong() ?: RecyclerView.NO_ID
+        return differ.currentList.getOrNull(position)?.longId ?: RecyclerView.NO_ID
     }
 }

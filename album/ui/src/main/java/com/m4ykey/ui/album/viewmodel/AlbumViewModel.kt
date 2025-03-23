@@ -1,5 +1,6 @@
 package com.m4ykey.ui.album.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
@@ -18,6 +19,7 @@ import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.relations.AlbumWithStates
+import com.m4ykey.ui.album.helpers.CacheConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -155,12 +157,20 @@ class AlbumViewModel @Inject constructor(
         _search.value = UiState.Success(emptyList())
     }
 
-    fun searchAlbumByName(albumName: String) = loadAlbumsWithSearch {
-        getLocalAlbumUseCase.searchAlbumByName(albumName)
+    fun searchAlbumByName(query: String) {
+        viewModelScope.launch(dispatcherIO) {
+            _searchResult.emit(emptyList())
+            val albums = getLocalAlbumUseCase.searchAlbumByName(query)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+        }
     }
 
-    fun searchAlbumsListenLater(albumName: String) = loadAlbumsWithSearch {
-        getLocalAlbumUseCase.searchAlbumsListenLater(albumName)
+    fun searchAlbumsListenLater(query: String) {
+        viewModelScope.launch(dispatcherIO) {
+            _searchResult.emit(emptyList())
+            val albums = getLocalAlbumUseCase.searchAlbumsListenLater(query)
+            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+        }
     }
 
     fun getAlbumType(albumType: String) = loadAlbums {
@@ -322,14 +332,6 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    private fun loadAlbumsWithSearch(search : suspend () -> List<AlbumEntity>) {
-        viewModelScope.launch(dispatcherIO) {
-            _searchResult.value = emptyList()
-            val albums = search()
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
-        }
-    }
-
     private fun loadAlbums(fetch : suspend () -> List<AlbumEntity>) {
         viewModelScope.launch(dispatcherIO) {
             val albums = fetch()
@@ -337,8 +339,3 @@ class AlbumViewModel @Inject constructor(
         }
     }
 }
-
-private data class CacheConfig(
-    val chunkSize : Int,
-    val delayTime : Long
-)

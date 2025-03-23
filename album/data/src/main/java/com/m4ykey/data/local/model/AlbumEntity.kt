@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(
     tableName = "album_table",
@@ -20,4 +21,7 @@ data class AlbumEntity(
     @ColumnInfo(name = "total_tracks") val totalTracks : Int,
     @ColumnInfo(name = "save_time") val saveTime : Long? = null,
     @ColumnInfo(name = "copyrights") val copyrights : List<CopyrightEntity>
-)
+) {
+    val longId : Long
+        get() = UUID.nameUUIDFromBytes(id.toByteArray()).mostSignificantBits
+}

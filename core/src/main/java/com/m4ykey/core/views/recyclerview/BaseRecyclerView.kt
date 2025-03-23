@@ -18,8 +18,9 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
 
     fun submitList(list : List<Item>, isAppend : Boolean = false) {
         val differCurrentList = differ.currentList
-        if (list == differCurrentList) return
-        val newList = if (isAppend) differCurrentList.toMutableList().apply { addAll(list) } else list
+        if (isAppend && list.size == differCurrentList.size) return
+
+        val newList = if (isAppend) differCurrentList.toMutableList().apply { addAll(list) } else list.toList()
         differ.submitList(newList)
     }
 

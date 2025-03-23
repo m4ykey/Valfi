@@ -86,7 +86,9 @@ interface AlbumDao {
         SELECT album_table.* FROM album_table 
         INNER JOIN album_saved_table ON album_table.id = album_saved_table.albumId
         WHERE album_saved_table.isAlbumSaved = 1 
-        AND album_table.name LIKE '%' || :searchQuery || '%'
+        AND (
+            album_table.name LIKE '%' || :searchQuery || '%' COLLATE NOCASE
+        )
     """)
     suspend fun searchAlbumsByName(searchQuery : String) : List<AlbumEntity>
 
@@ -94,7 +96,7 @@ interface AlbumDao {
         SELECT album_table.* FROM album_table
         INNER JOIN listen_later_table ON album_table.id = listen_later_table.albumId 
         WHERE listen_later_table.isListenLaterSaved = 1 
-        AND album_table.name LIKE '%' || :searchQuery || '%'
+        AND album_table.name LIKE '%' || :searchQuery || '%' COLLATE NOCASE
     """)
     suspend fun searchAlbumsListenLater(searchQuery: String) : List<AlbumEntity>
 

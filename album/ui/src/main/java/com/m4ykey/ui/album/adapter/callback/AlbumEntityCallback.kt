@@ -8,14 +8,6 @@ class AlbumEntityCallback : DiffUtil.ItemCallback<AlbumEntity>() {
         oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
-        return oldItem.albumType == newItem.albumType &&
-                oldItem.artists.toTypedArray().contentEquals(newItem.artists.toTypedArray()) &&
-                oldItem.albumUrl == newItem.albumUrl &&
-                oldItem.id == newItem.id &&
-                oldItem.images == newItem.images &&
-                oldItem.name == newItem.name &&
-                oldItem.releaseDate == newItem.releaseDate &&
-                oldItem.totalTracks == newItem.totalTracks &&
-                oldItem.saveTime == newItem.saveTime
+        return oldItem == newItem
     }
 }

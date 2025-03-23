@@ -1,9 +1,10 @@
 package com.m4ykey.ui.album
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -65,7 +66,9 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         searchResult.collect { albums ->
-                            handleSearchResult(albums)
+                            if (!binding.etSearch.text.isNullOrEmpty()) {
+                                handleSearchResult(albums)
+                            }
                         }
                     }
                 }
@@ -88,11 +91,17 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
                 etSearch.setText(getString(R.string.empty_string))
             }
 
-            etSearch.doOnTextChanged { text, _, _, _ ->
-                if (text.isNullOrEmpty()) {
-                    lifecycleScope.launch { viewModel.getListenLaterAlbums() }
+            etSearch.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    val query = etSearch.text.toString()
+                    if (query.isEmpty()) {
+                        lifecycleScope.launch { viewModel.getListenLaterAlbums() }
+                    } else {
+                        lifecycleScope.launch { viewModel.searchAlbumsListenLater(query) }
+                    }
+                    true
                 } else {
-                    lifecycleScope.launch { viewModel.searchAlbumsListenLater(text.toString()) }
+                    false
                 }
             }
 
@@ -103,30 +112,39 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     }
 
     private fun handleSearchResult(albums : List<AlbumEntity>) {
+        val newList = ArrayList(albums)
+
         if (binding.etSearch.text.isNullOrEmpty()) {
-            albumAdapter.submitList(albums)
+            binding.recyclerViewListenLater.post {
+                albumAdapter.submitList(newList)
+            }
             binding.linearLayoutEmptySearch.isVisible = false
-            binding.linearLayoutEmptyList.isVisible = albums.isEmpty()
+            binding.linearLayoutEmptyList.isVisible = newList.isEmpty()
             return
         }
-
-        if (albums.isEmpty()) {
+        if (newList.isEmpty()) {
             albumAdapter.submitList(emptyList())
             binding.linearLayoutEmptySearch.isVisible = true
             binding.linearLayoutEmptyList.isVisible = false
         } else {
-            albumAdapter.submitList(albums)
+            binding.recyclerViewListenLater.post {
+                albumAdapter.submitList(newList)
+            }
             binding.linearLayoutEmptySearch.isVisible = false
         }
     }
 
     private fun handleAlbumDisplay(albums : List<AlbumEntity>) {
-        if (albums.isEmpty()) {
+        val newList = ArrayList(albums)
+
+        if (newList.isEmpty()) {
             albumAdapter.submitList(emptyList())
             binding.linearLayoutEmptyList.isVisible = true
             binding.linearLayoutEmptySearch.isVisible = false
         } else {
-            albumAdapter.submitList(albums)
+            binding.recyclerViewListenLater.post {
+                albumAdapter.submitList(newList)
+            }
             binding.linearLayoutEmptyList.isVisible = false
             binding.linearLayoutEmptySearch.isVisible = false
         }
@@ -136,7 +154,15 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         return AlbumAdapter(
             onAlbumClick = { album ->
                 val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
+                if (findNavController().currentDestination?.id == R.id.albumListenLaterFragment) {
+                    try {
+                        findNavController().navigate(action)
+                    } catch (e : IllegalArgumentException) {
+                        Log.e("NavigationError", "Navigation error: ${e.message}")
+                    }
+                } else {
+                    Log.e("NavigationError", "Cannot navigate")
+                }
             }
         )
     }

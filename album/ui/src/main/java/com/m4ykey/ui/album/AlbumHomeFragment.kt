@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -105,11 +105,17 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
             binding.etSearch.setText(getString(R.string.empty_string))
         }
 
-        binding.etSearch.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                lifecycleScope.launch { viewModel.getSavedAlbums() }
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val query = binding.etSearch.text.toString()
+                if (query.isEmpty()) {
+                    lifecycleScope.launch { viewModel.getSavedAlbums() }
+                } else {
+                    lifecycleScope.launch { viewModel.searchAlbumByName(query) }
+                }
+                true
             } else {
-                lifecycleScope.launch { viewModel.searchAlbumByName(text.toString()) }
+                false
             }
         }
     }
