@@ -50,6 +50,8 @@ dependencies {
 
     implementation(libs.coroutines)
 
+    implementation(libs.okio)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)

@@ -8,13 +8,15 @@ import com.m4ykey.data.domain.repository.AlbumRepository
 import com.m4ykey.data.domain.repository.TrackRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okio.buffer
+import okio.sink
 import java.io.IOException
 
 suspend fun saveJsonToFile(context: Context, uri : Uri, jsonData : String) {
     withContext(Dispatchers.IO) {
         try {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                outputStream.write(jsonData.toByteArray())
+            context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.use { sink ->
+                sink.writeUtf8(jsonData)
             } ?: throw IOException("Failed to create save file.")
         } catch (e : Exception) {
             Log.i("saveJsonToFile", "Error writing JSON to file", e)

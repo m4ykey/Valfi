@@ -13,6 +13,8 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.TrackEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okio.buffer
+import okio.source
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -20,11 +22,11 @@ suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
     return withContext(Dispatchers.IO) {
         try {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                val reader = BufferedReader(InputStreamReader(inputStream))
+                val bufferedSource = inputStream.source().buffer()
                 val gson = Gson()
 
                 val albumDataType = object : TypeToken<Map<String, JsonElement>>() {}.type
-                val jsonData: Map<String, JsonElement> = gson.fromJson(reader, albumDataType)
+                val jsonData: Map<String, JsonElement> = gson.fromJson(bufferedSource.readUtf8(), albumDataType)
 
                 val savedAlbums = jsonData["savedAlbums"]?.let { element ->
                     val albumListType = object : TypeToken<List<AlbumEntity>>() {}.type

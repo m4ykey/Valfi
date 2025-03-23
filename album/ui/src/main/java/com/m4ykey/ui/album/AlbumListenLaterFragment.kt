@@ -164,13 +164,12 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun getRandomAlbum() {
         binding.btnListenLater.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.randomAlbum.collect { randomAlbum ->
-                    if (randomAlbum != null) {
-                        val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
-                        findNavController().navigate(action)
-                    } else {
-                        showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
-                    }
+                val randomAlbum = viewModel.randomAlbum.value
+                if (randomAlbum != null) {
+                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
+                    findNavController().navigate(action)
+                } else {
+                    showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
                 }
             }
         }
