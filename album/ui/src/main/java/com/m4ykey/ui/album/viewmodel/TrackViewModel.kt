@@ -5,12 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.track.TrackItem
-import com.m4ykey.data.domain.repository.TrackRepository
 import com.m4ykey.data.domain.usecase.track.GetLocalTrackUseCase
 import com.m4ykey.data.domain.usecase.track.GetRemoteTrackUseCase
 import com.m4ykey.data.local.model.TrackEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TrackViewModel @Inject constructor(
     private val getRemoteTrackUseCase: GetRemoteTrackUseCase,
-    private val getLocalTrackUseCase : GetLocalTrackUseCase
+    private val getLocalTrackUseCase : GetLocalTrackUseCase,
+    private val dispatcherIO : CoroutineDispatcher
 ) : ViewModel() {
 
     private var _totalTrackDurationMs = MutableStateFlow(0L)
@@ -32,22 +32,22 @@ class TrackViewModel @Inject constructor(
     private var offset = 0
     var isPaginationEnded = false
 
-    suspend fun getTracksById(albumId : String) : List<TrackEntity> = withContext(Dispatchers.IO) {
+    suspend fun getTracksById(albumId : String) : List<TrackEntity> = withContext(dispatcherIO) {
         getLocalTrackUseCase(GetLocalTrackUseCase.Params.GetTrack(albumId)) as List<TrackEntity>
     }
 
-    suspend fun insertTracks(track : List<TrackEntity>) = withContext(Dispatchers.IO) {
+    suspend fun insertTracks(track : List<TrackEntity>) = withContext(dispatcherIO) {
         getLocalTrackUseCase(GetLocalTrackUseCase.Params.InsertTracks(track))
     }
 
-    suspend fun deleteTracksById(albumId: String) = withContext(Dispatchers.IO) {
+    suspend fun deleteTracksById(albumId: String) = withContext(dispatcherIO) {
         getLocalTrackUseCase(GetLocalTrackUseCase.Params.DeleteTrack(albumId))
     }
 
     fun getAlbumTracks(id: String) {
         if (_tracks.value is UiState.Loading || isPaginationEnded) return
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             _tracks.value = UiState.Loading
 
             try {

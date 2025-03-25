@@ -12,6 +12,7 @@ import com.m4ykey.data.local.model.AlbumWithDetails
 import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toAlbumDetail
 import com.m4ykey.data.mapper.toAlbumItem
@@ -169,4 +170,14 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getMostPopularDecade(): Flow<DecadeResult> = dao.getMostPopularDecade()
         .flowOn(dispatcherIO)
+
+    override suspend fun insertStars(stars: List<StarsEntity>) = withContext(dispatcherIO) {
+        dao.insertStars(stars)
+    }
+
+    override fun getStarsById(albumId: String): List<StarsEntity> =  dao.getStarsById(albumId)
+
+    override suspend fun deleteStarsById(albumId: String) = withContext(dispatcherIO) {
+        dao.deleteStarsById(albumId)
+    }
 }

@@ -7,6 +7,7 @@ import com.m4ykey.data.local.model.AlbumWithDetails
 import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import kotlinx.coroutines.flow.Flow
 
@@ -45,5 +46,9 @@ interface AlbumRepository {
     fun getMostPopularDecade() : Flow<DecadeResult>
     fun getAlbumCountByType(albumType: String) : Flow<Int>
     fun getAlbumWithMostTracks() : Flow<AlbumWithDetails>
+
+    suspend fun insertStars(stars : List<StarsEntity>)
+    fun getStarsById(albumId: String) : List<StarsEntity>
+    suspend fun deleteStarsById(albumId: String)
 
 }

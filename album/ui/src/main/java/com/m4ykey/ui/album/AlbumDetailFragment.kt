@@ -72,6 +72,15 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         setupRecyclerView()
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+            toolbar.menu.findItem(R.id.imgStar)?.setOnMenuItemClickListener {
+                val bottomSheet = AlbumStarBottomSheetFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("albumId", args.albumId)
+                    }
+                }
+                bottomSheet.show(childFragmentManager, bottomSheet.tag)
+                true
+            }
         }
 
         lifecycleScope.launch {

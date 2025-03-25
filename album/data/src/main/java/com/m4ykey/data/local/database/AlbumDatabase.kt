@@ -11,18 +11,18 @@ import com.m4ykey.data.local.model.ArtistEntity
 import com.m4ykey.data.local.model.CopyrightEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.TrackEntity
 
 @Database(
-    version = 4,
+    version = 5,
     exportSchema = false,
     entities = [
         AlbumEntity::class,
         IsAlbumSaved::class,
         IsListenLaterSaved::class,
-        ArtistEntity::class,
         TrackEntity::class,
-        CopyrightEntity::class
+        StarsEntity::class
     ]
 )
 @TypeConverters(Converters::class)

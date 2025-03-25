@@ -110,8 +110,28 @@ object AlbumEntityMigrations {
         }
     }
 
+    private val MIGRATION_4_5 = object : Migration(4, 5) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("""
+                DROP TABLE IF EXISTS artist_table
+            """.trimIndent())
+
+            db.execSQL("""
+                DROP TABLE IF EXISTS copyright_table
+            """.trimIndent())
+
+            db.execSQL("""
+                CREATE TABLE IF NOT EXISTS `stars_table` (
+                    `albumId` TEXT NOT NULL PRIMARY KEY,
+                    `stars` REAL NOT NULL
+                )
+            """.trimIndent())
+        }
+    }
+
     val albumMigrations = listOf(
         MIGRATION_2_3,
-        MIGRATION_3_4
+        MIGRATION_3_4,
+        MIGRATION_4_5
     )
 }

@@ -10,6 +10,7 @@ import com.m4ykey.data.local.model.AlbumWithDetails
 import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import kotlinx.coroutines.flow.Flow
 
@@ -25,6 +26,12 @@ interface AlbumDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertListenLaterAlbum(isListenLaterSaved: IsListenLaterSaved)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertStars(stars : List<StarsEntity>)
+
+    @Query("SELECT * FROM stars_table WHERE albumId = :albumId")
+    fun getStarsById(albumId: String) : List<StarsEntity>
+
     @Query("SELECT * FROM album_table WHERE id = :albumId")
     suspend fun getAlbum(albumId : String) : AlbumEntity?
 
@@ -37,6 +44,9 @@ interface AlbumDao {
     @Transaction
     @Query("SELECT * FROM album_table WHERE id = :albumId")
     suspend fun getAlbumWithStates(albumId: String) : AlbumWithStates?
+
+    @Query("DELETE FROM stars_table WHERE albumId = :albumId")
+    suspend fun deleteStarsById(albumId: String)
 
     @Query("DELETE FROM album_table WHERE id = :albumId")
     suspend fun deleteAlbum(albumId: String)

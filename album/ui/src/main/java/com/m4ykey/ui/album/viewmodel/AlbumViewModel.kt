@@ -1,6 +1,5 @@
 package com.m4ykey.ui.album.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m4ykey.core.Constants.PAGE_SIZE
@@ -13,11 +12,13 @@ import com.m4ykey.data.domain.usecase.album.GetLocalAlbumUseCase
 import com.m4ykey.data.domain.usecase.album.GetRemoteAlbumUseCase
 import com.m4ykey.data.domain.usecase.album.SaveAlbumUseCase
 import com.m4ykey.data.domain.usecase.album.StatisticsAlbumUseCase
+import com.m4ykey.data.domain.usecase.stars.GetStarsUseCase
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.local.model.AlbumWithDetails
 import com.m4ykey.data.local.model.DecadeResult
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
+import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.ui.album.helpers.CacheConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,6 +49,7 @@ class AlbumViewModel @Inject constructor(
     private val saveAlbumUseCase : SaveAlbumUseCase,
     private val getAlbumUseCase : GetAlbumUseCase,
     private val statisticsAlbumUseCase: StatisticsAlbumUseCase,
+    private val getStarsUseCase : GetStarsUseCase,
     private val dispatcherIO : CoroutineDispatcher
 ) : ViewModel() {
 
@@ -234,6 +236,18 @@ class AlbumViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun getStarsById(albumId: String) : List<StarsEntity> = withContext(dispatcherIO) {
+        getStarsUseCase(GetStarsUseCase.Params.GetStars(albumId)) as List<StarsEntity>
+    }
+
+    suspend fun insertStars(star : List<StarsEntity>) = withContext(dispatcherIO) {
+        getStarsUseCase(GetStarsUseCase.Params.InsertStars(star))
+    }
+
+    suspend fun deleteStars(albumId: String) = withContext(dispatcherIO) {
+        getStarsUseCase(GetStarsUseCase.Params.DeleteStars(albumId))
     }
 
     fun getSavedAlbums() = loadAlbums {
