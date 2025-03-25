@@ -131,7 +131,7 @@ class AlbumViewModel @Inject constructor(
         viewModelScope.launch {
             _newRelease.value = UiState.Loading
 
-            getRemoteAlbumUseCase.getNewReleases(offset, PAGE_SIZE)
+            getRemoteAlbumUseCase.getNewReleases(offset = offset, limit = PAGE_SIZE)
                 .catch { e -> _newRelease.value = UiState.Error(e) }
                 .collect { albums ->
                     handlePaginatedResult(albums, _newRelease)
@@ -140,12 +140,15 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun searchAlbums(query: String) {
-        if (_search.value is UiState.Loading || isPaginationEnded) return
+        if (isPaginationEnded) {
+            _search.value = UiState.Success(emptyList())
+            return
+        }
 
         viewModelScope.launch {
             _search.value = UiState.Loading
 
-            getRemoteAlbumUseCase.searchAlbums(query, offset, PAGE_SIZE)
+            getRemoteAlbumUseCase.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
                 .catch { e -> _search.value = UiState.Error(e) }
                 .collect { albums ->
                     handlePaginatedResult(albums, _search)
