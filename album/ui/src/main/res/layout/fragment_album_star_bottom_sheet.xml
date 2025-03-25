@@ -3,9 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/rounded_corner"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/txtStars"
@@ -17,7 +22,7 @@
         android:layout_height="wrap_content"/>
 
     <RatingBar
-        style="@style/Widget.AppCompat.RatingBar"
+        android:progressTint="@color/buttonColor"
         android:rating="1"
         android:stepSize="0.5"
         android:id="@+id/ratingBar"
