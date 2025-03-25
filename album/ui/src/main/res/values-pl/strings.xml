@@ -51,10 +51,10 @@
     <string name="good_evening">Dobry wieczór</string>
     <string name="query_to_short">Wyszukiwanie jest zbyt krótkie</string>
     <string name="clear_recent_searches">Wyczyść ostatnio wyszukiwane</string>
-    <string name="number_of_albums">Ilość albumów</string>
+    <string name="total_albums">Ilość albumów</string>
     <string name="saved_albums_according_to_type">Zapisane albumy w zależności od typu</string>
-    <string name="total_number_of_tracks">Łączna ilość utworów</string>
-    <string name="most_popular_decade">Najpopularniejsza dekada</string>
+    <string name="total_songs">Łączna ilość utworów</string>
+    <string name="favorite_decade">Ulubiona dekada</string>
     <string name="the_album_with_the_most_songs">Album z największą ilością utworów</string>
     <string name="load_all_tracks_to_save_an_album">Wczytaj wszystkie utwory do zapisania albumu</string>
     <string name="error_with_saving_album">Błąd przy zapisywaniu albumu</string>
