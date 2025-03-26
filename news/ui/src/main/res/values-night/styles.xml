@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="MenuColor" parent="android:style/TextAppearance.Widget.IconMenu.Item">
-        <item name="android:textColor">@color/textColor</item>
-        <item name="fontFamily">@font/outfit_regular</item>
-    </style>
-</resources>
