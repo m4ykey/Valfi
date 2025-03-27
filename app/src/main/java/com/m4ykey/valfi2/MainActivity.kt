@@ -116,8 +116,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         } else {
             binding.layoutCurrentlyPlaying.apply {
                 root.isVisible = true
-                txtTitle.text = title
-                txtArtist.text = artist
+                txtTitle.apply {
+                    text = title
+                    isSelected = true
+                }
+                txtArtist.apply {
+                    text = artist
+                    isSelected = true
+                }
 
                 val currentAppPackageName = getCurrentMusicPackage()
                 when (currentAppPackageName) {

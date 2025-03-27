@@ -181,6 +181,15 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
         }
     }
 
+    private fun shareUrl(url : String) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+        }
+        val chooser = Intent.createChooser(shareIntent, url)
+        context?.startActivity(chooser)
+    }
+
     private fun displayAlbumFromDatabase(album: AlbumEntity) {
         binding.apply {
             with(album) {
@@ -192,6 +201,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
                     val tracks = trackViewModel.getTracksById(id)
                     trackEntityAdapter.differ.submitList(tracks)
+
+                    toolbar.menu.findItem(R.id.imgShare)?.setOnMenuItemClickListener {
+                        shareUrl(albumUrl)
+                        true
+                    }
 
                     imgSave.setOnClickListener {
                         try {
@@ -363,6 +377,11 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 .map { it.text }
                 .distinct()
                 .joinToString(separator = "\n")
+
+            toolbar.menu.findItem(R.id.imgShare)?.setOnMenuItemClickListener {
+                shareUrl(albumUrl)
+                true
+            }
 
             txtAlbumName.apply {
                 text = item.name

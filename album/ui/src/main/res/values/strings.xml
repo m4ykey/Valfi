@@ -68,5 +68,6 @@
     <string name="load_all_tracks_to_save_an_album">Load all songs to save an album</string>
     <string name="error_with_saving_album">Error with saving album</string>
     <string name="failed_to_load_artists">Failed to load artists</string>
+    <string name="share">Share</string>
 
 </resources>

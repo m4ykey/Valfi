@@ -59,4 +59,5 @@
     <string name="load_all_tracks_to_save_an_album">Wczytaj wszystkie utwory do zapisania albumu</string>
     <string name="error_with_saving_album">Błąd przy zapisywaniu albumu</string>
     <string name="failed_to_load_artists">Nie udało się załadować artystów</string>
+    <string name="share">Share</string>
 </resources>
