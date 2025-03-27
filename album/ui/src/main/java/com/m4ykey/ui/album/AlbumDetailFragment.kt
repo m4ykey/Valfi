@@ -45,10 +45,12 @@ import com.m4ykey.ui.album.viewmodel.ColorViewModel
 import com.m4ykey.ui.album.viewmodel.TrackViewModel
 import com.m4ykey.ui.artist.ArtistViewModel
 import com.m4ykey.ui.artist.adapter.ArtistAdapter
+import com.m4ykey.ui.navigation.AlbumNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
@@ -63,6 +65,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     private val trackAdapter by lazy { createTrackAdapter() }
     private val trackEntityAdapter by lazy { createTrackEntityAdapter() }
     private val artistAdapter by lazy { createArtistAdapter() }
+    @Inject
+    lateinit var navigator : AlbumNavigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -291,8 +295,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 }
 
                 cardView.setOnClickListener {
-                    val action = AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(images)
-                    findNavController().navigate(action)
+                    navigator.navigateToAlbumCover(images)
                 }
 
                 txtCopyrights.text = copyrights
@@ -391,11 +394,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             txtInfo.text = albumInfo
 
             cardView.setOnClickListener {
-                val action =
-                    AlbumDetailFragmentDirections.actionAlbumDetailFragmentToAlbumCoverFragment(
-                        item.getLargestImageUrl().toString()
-                    )
-                findNavController().navigate(action)
+                navigator.navigateToAlbumCover(item.getLargestImageUrl().toString())
             }
 
             txtCopyrights.text = copyrights

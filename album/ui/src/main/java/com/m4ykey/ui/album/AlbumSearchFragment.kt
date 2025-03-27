@@ -39,9 +39,11 @@ import com.m4ykey.ui.album.adapter.SearchResultAdapter
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
 import com.m4ykey.ui.album.viewmodel.SearchResultViewModel
+import com.m4ykey.ui.navigation.AlbumNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
@@ -53,6 +55,9 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     private val searchAdapter by lazy { createSearchAdapter() }
     private val searchResultAdapter by lazy { createSearchResultAdapter() }
     private val searchResultViewModel by viewModels<SearchResultViewModel>()
+
+    @Inject
+    lateinit var navigator : AlbumNavigator
 
     private val speechRecognizerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK && result.data != null) {
@@ -175,8 +180,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 val searchResult = SearchResult(name = album.name)
                 searchResultViewModel.insertSearchResult(searchResult)
 
-                val action = AlbumSearchFragmentDirections.actionAlbumSearchFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
+                navigator.navigateToAlbumDetail(album.id)
             }
         )
     }
@@ -203,7 +207,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
-                        val searchQuery = etSearch.text?.toString()
+                        val searchQuery = etSearch.text?.toString()?.trim()
                         if (searchQuery?.isNotEmpty() == true) {
                             binding.linearLayoutSearchResult.isVisible = false
                             binding.rvSearchAlbums.isVisible = true

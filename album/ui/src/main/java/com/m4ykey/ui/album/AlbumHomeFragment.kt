@@ -23,6 +23,7 @@ import com.m4ykey.core.Constants.COMPILATION
 import com.m4ykey.core.Constants.EP
 import com.m4ykey.core.Constants.SINGLE
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
+import com.m4ykey.core.Navigator
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
@@ -32,12 +33,14 @@ import com.m4ykey.core.views.sorting.ViewType
 import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.data.local.model.AlbumEntity
 import com.m4ykey.data.preferences.AlbumPreferences
+import com.m4ykey.settings.ui.SettingsActivity
 import com.m4ykey.ui.album.adapter.AlbumAdapter
 import com.m4ykey.ui.album.helpers.BooleanWrapper
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.helpers.hideSearchEditText
 import com.m4ykey.ui.album.helpers.showSearchEditText
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
+import com.m4ykey.ui.navigation.AlbumNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
@@ -62,6 +65,8 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     @Inject
     lateinit var albumPreferences: AlbumPreferences
     private var selectedSortType : SortType = SortType.LATEST
+    @Inject
+    lateinit var navigator : AlbumNavigator
 
     private val viewModel by viewModels<AlbumViewModel>()
 
@@ -107,7 +112,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = binding.etSearch.text.toString()
+                val query = binding.etSearch.text.toString().trim()
                 if (query.isEmpty()) {
                     lifecycleScope.launch { viewModel.getSavedAlbums() }
                 } else {
@@ -193,10 +198,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
     private fun createAlbumAdapter() : AlbumAdapter {
         return AlbumAdapter(
-            onAlbumClick = { album ->
-                val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
-            }
+            onAlbumClick = { id -> navigator.navigateToAlbumDetail(id.id) }
         )
     }
 
@@ -359,15 +361,13 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         binding.apply {
             val buttons = listOf(
                 Pair(R.id.imgSearch) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumSearchFragment()
-                    findNavController().navigate(action)
+                    navigator.navigateToAlbumSearch()
                 },
                 Pair(R.id.imgLink) {
                     showInsertAlbumLinkDialog()
                 },
                 Pair(R.id.imgStatistics) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumStatisticsFragment()
-                    findNavController().navigate(action)
+                    navigator.navigateToStatistics()
                 }
             )
             for ((itemId, action) in buttons) {
@@ -379,18 +379,16 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
 
             val drawerButtons = listOf(
                 Pair(R.id.imgSettings) {
-                    val intent = Intent(requireContext(), com.m4ykey.settings.ui.SettingsActivity::class.java)
+                    val intent = Intent(requireContext(), SettingsActivity::class.java)
                     startActivity(intent)
                     drawerLayout.close()
                 },
                 Pair(R.id.imgListenLater) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumListenLaterFragment()
-                    findNavController().navigate(action)
+                    navigator.navigateToListenLater()
                     drawerLayout.close()
                 },
                 Pair(R.id.imgNewReleases) {
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumNewReleaseFragment()
-                    findNavController().navigate(action)
+                    navigator.navigateToNewRelease()
                     drawerLayout.close()
                 }
             )
@@ -423,8 +421,7 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
                 val albumUrl = etInputLink.text.toString()
                 if (isValidAlbumUrl(albumUrl)) {
                     val albumId = getAlbumIdFromUrl(albumUrl)
-                    val action = AlbumHomeFragmentDirections.actionAlbumHomeFragmentToAlbumDetailFragment(albumId ?: "")
-                    findNavController().navigate(action)
+                    navigator.navigateToAlbumDetail(albumId ?: "")
                 } else {
                     showToast(requireContext(), getString(R.string.invalid_album_url))
                 }

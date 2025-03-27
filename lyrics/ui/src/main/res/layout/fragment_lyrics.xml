@@ -103,8 +103,7 @@
             <TextView
                 tools:text="Lashing out the action, returning the reaction\nWeak are ripped and torn away\nHypnotizing power, crushing all that cower\nBattery is here to stay\n\nSmashing through the boundaries, lunacy has found me\nCannot stop the battery\nPounding out aggression, turns into obsession\nCannot kill the battery\nCannot kill the family, battery is found in me\nBattery, battery\n\nCrushing all deceivers, mashing non-believers\nNever-ending potency\nHungry violence-seeker, feeding off the weaker\nBreeding on insanity\n\nSmashing through the boundaries, lunacy has found me\nCannot stop the battery\nPounding out aggression, turns into obsession\nCannot kill the battery\nCannot kill the family, battery is found in me\nBattery, battery\n\nCircle of destruction, hammer comes crushing\nPowerhouse of energy\nWhipping up a fury, dominating flurry\nWe create the battery\n\nSmashing through the boundaries, lunacy has found me\nCannot stop the battery\nPounding out aggression, turns into obsession\nCannot kill the battery\nCannot kill the family, battery is found in me\nBattery, battery\nBattery, battery"
                 android:fontFamily="@font/inter_medium"
-                android:textSize="16sp"
-                tools:visibility="gone"
+                android:textSize="21sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:id="@+id/txtLyrics"

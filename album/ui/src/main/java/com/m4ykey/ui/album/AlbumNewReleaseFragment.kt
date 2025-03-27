@@ -19,8 +19,10 @@ import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.album.adapter.NewReleaseAdapter
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
+import com.m4ykey.ui.navigation.AlbumNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
@@ -28,6 +30,8 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 ) {
     private val viewModel by viewModels<AlbumViewModel>()
     private val albumAdapter by lazy { createNewReleaseAdapter() }
+    @Inject
+    lateinit var navigator : AlbumNavigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,10 +73,7 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
 
     private fun createNewReleaseAdapter() : NewReleaseAdapter {
         return NewReleaseAdapter(
-            onAlbumClick = { album ->
-                val action = AlbumNewReleaseFragmentDirections.actionAlbumNewReleaseFragmentToAlbumDetailFragment(album.id)
-                findNavController().navigate(action)
-            }
+            onAlbumClick = { album -> navigator.navigateToAlbumDetail(album.id) }
         )
     }
 

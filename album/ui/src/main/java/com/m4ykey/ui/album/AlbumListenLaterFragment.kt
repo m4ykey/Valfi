@@ -26,8 +26,10 @@ import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.helpers.hideSearchEditText
 import com.m4ykey.ui.album.helpers.showSearchEditText
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
+import com.m4ykey.ui.navigation.AlbumNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
@@ -38,6 +40,8 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private val albumAdapter by lazy { createAlbumAdapter() }
     private var isSearchEditTextVisible = BooleanWrapper(false)
     private var isHidingAnimationRunning = BooleanWrapper(false)
+    @Inject
+    lateinit var navigator : AlbumNavigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,7 +97,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val query = etSearch.text.toString()
+                    val query = etSearch.text.toString().trim()
                     if (query.isEmpty()) {
                         lifecycleScope.launch { viewModel.getListenLaterAlbums() }
                     } else {
@@ -153,10 +157,9 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     private fun createAlbumAdapter() : AlbumAdapter {
         return AlbumAdapter(
             onAlbumClick = { album ->
-                val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(album.id)
                 if (findNavController().currentDestination?.id == R.id.albumListenLaterFragment) {
                     try {
-                        findNavController().navigate(action)
+                        navigator.navigateToAlbumDetail(album.id)
                     } catch (e : IllegalArgumentException) {
                         Log.e("NavigationError", "Navigation error: ${e.message}")
                     }
@@ -192,8 +195,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
             lifecycleScope.launch {
                 val randomAlbum = viewModel.randomAlbum.value
                 if (randomAlbum != null) {
-                    val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumDetailFragment(randomAlbum.id)
-                    findNavController().navigate(action)
+                    navigator.navigateToAlbumDetail(randomAlbum.id)
                 } else {
                     showToast(requireContext(), requireContext().getString(R.string.first_add_something_to_list))
                 }
@@ -221,8 +223,7 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         binding.toolbar.apply {
             setNavigationOnClickListener { findNavController().navigateUp() }
             menu.findItem(R.id.imgAdd).setOnMenuItemClickListener {
-                val action = AlbumListenLaterFragmentDirections.actionAlbumListenLaterFragmentToAlbumSearchFragment()
-                findNavController().navigate(action)
+                navigator.navigateToAlbumSearch()
                 true
             }
         }
