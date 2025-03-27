@@ -26,7 +26,7 @@ class SearchResultAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        return differ.currentList.getOrNull(position)?.id?.hashCode()?.toLong() ?: position.toLong()
+        return differ.currentList.getOrNull(position)?.id?.toLong() ?: position.toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {

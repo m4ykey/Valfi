@@ -2,6 +2,7 @@ package com.m4ykey.ui.album.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.LayoutTracksBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -28,6 +29,6 @@ class TrackAdapter(
     }
 
     override fun getItemForPosition(position: Int): Long {
-        return differ.currentList.getOrNull(position)?.id?.hashCode()?.toLong() ?: position.toLong()
+        return differ.currentList.getOrNull(position)?.longId ?: RecyclerView.NO_ID
     }
 }
