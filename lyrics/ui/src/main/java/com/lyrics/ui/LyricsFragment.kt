@@ -13,13 +13,16 @@ import com.lyrics.data.domain.model.LyricsItem
 import com.lyrics.data.domain.model.Track
 import com.lyrics.ui.databinding.FragmentLyricsBinding
 import com.m4ykey.core.network.UiState
+import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.core.views.utils.getColorFromImage
 import com.m4ykey.core.views.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.pow
 
 @AndroidEntryPoint
@@ -66,49 +69,39 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
             txtTrack.text = trackName
         }
 
-        trackName?.let { track ->
-            artistName?.let { artist ->
-                viewModel.searchLyrics(artistName = artist, trackName = track)
-            }
-        }
+        loadData()
+        observeViewModelStates()
 
-        trackId?.let { track -> viewModel.getTrackById(track) }
+    }
 
-        lifecycleScope.launch {
-            viewModel.lyrics.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        binding.progressbar.isVisible = false
-                        uiState.data?.let { item -> displayLyrics(item) }
-                    }
-                    is UiState.Error -> {
-                        binding.progressbar.isVisible = false
-                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
-                    }
-                    is UiState.Loading -> {
-                        binding.progressbar.isVisible = true
-                    }
-                }
-            }
+    private fun loadData() {
+        if (trackName?.isNotBlank() == true && artistName?.isNotBlank() == true) {
+            viewModel.searchLyrics(artistName = artistName!!, trackName = trackName!!)
         }
+        if (trackId?.isNotBlank() == true) {
+            viewModel.getTrackById(trackId!!)
+        }
+    }
 
-        lifecycleScope.launch {
-            viewModel.track.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        binding.progressbar.isVisible = false
-                        uiState.data?.let { item -> displayTrackDetail(item) }
-                    }
-                    is UiState.Error -> {
-                        binding.progressbar.isVisible = false
-                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
-                    }
-                    is UiState.Loading -> {
-                        binding.progressbar.isVisible = true
-                    }
-                }
+    private fun observeViewModelStates() {
+        observeUiState(
+            progressBar = binding.progressbar,
+            lifecycleScope = lifecycleScope,
+            context = requireContext(),
+            flow = viewModel.track,
+            onSuccess = { trackDetail ->
+                trackDetail?.let { displayTrackDetail(it) }
             }
-        }
+        )
+        observeUiState(
+            progressBar = binding.progressbar,
+            lifecycleScope = lifecycleScope,
+            context = requireContext(),
+            flow = viewModel.lyrics,
+            onSuccess = { lyricsDetail ->
+                lyricsDetail?.let { displayLyrics(it) }
+            }
+        )
     }
 
     private fun displayTrackDetail(item : Track) {
@@ -118,30 +111,32 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
                     item.externalUrls.spotify.toUri()))
             }
             loadImage(imgAlbumCover, item.album.getLargestImageUrl().toString(), requireContext())
-            getColorFromImage(
-                imageUrl = item.album.getLargestImageUrl().toString(),
-                context = requireContext()
-            ) { color ->
-                constraintLayout.setBackgroundColor(color)
-                val luminance = calculateLuminance(color)
-                if (luminance > 0.5) {
-                    txtTrack.setTextColor(Color.BLACK)
-                    txtArtist.setTextColor(Color.BLACK)
-                    imgCopyLyrics.imageTintList = ColorStateList.valueOf(Color.BLACK)
-                    imgOpenTrack.imageTintList = ColorStateList.valueOf(Color.BLACK)
-                    txtLyrics.setTextColor(Color.BLACK)
-                    txtNotFoundLyrics.setTextColor(Color.BLACK)
-                    toolbar.setNavigationIconTint(Color.BLACK)
-                } else {
-                    txtTrack.setTextColor(Color.WHITE)
-                    txtArtist.setTextColor(Color.WHITE)
-                    imgCopyLyrics.imageTintList = ColorStateList.valueOf(Color.WHITE)
-                    imgOpenTrack.imageTintList = ColorStateList.valueOf(Color.WHITE)
-                    txtLyrics.setTextColor(Color.WHITE)
-                    txtNotFoundLyrics.setTextColor(Color.WHITE)
-                    toolbar.setNavigationIconTint(Color.WHITE)
+
+            lifecycleScope.launch {
+                withContext(Dispatchers.Default) {
+                    getColorFromImage(
+                        imageUrl = item.album.getLargestImageUrl().toString(),
+                        context = requireContext()
+                    ) { color ->
+                        constraintLayout.setBackgroundColor(color)
+                        applyTextColors(color)
+                    }
                 }
             }
+        }
+    }
+
+    private fun applyTextColors(backgroundColor : Int) {
+        val textColor = if (calculateLuminance(backgroundColor) > 0.5) Color.BLACK else Color.WHITE
+
+        binding.apply {
+            txtTrack.setTextColor(textColor)
+            txtArtist.setTextColor(textColor)
+            imgCopyLyrics.imageTintList = ColorStateList.valueOf(textColor)
+            imgOpenTrack.imageTintList = ColorStateList.valueOf(textColor)
+            txtLyrics.setTextColor(textColor)
+            txtNotFoundLyrics.setTextColor(textColor)
+            toolbar.setNavigationIconTint(textColor)
         }
     }
 

@@ -27,6 +27,7 @@ import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
 import com.m4ykey.core.network.UiState
+import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -83,6 +84,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         setupRecyclerView()
         searchAlbums()
         handleRecyclerViewButton()
+        observeViewModelStates()
 
         searchResultViewModel.getSearchResult()
 
@@ -92,31 +94,6 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                     searchResultViewModel.deleteSearchResults()
                 }
                 isVisible = false
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.search.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {
-                        binding.progressBar.isVisible = true
-                    }
-                    is UiState.Success -> {
-                        uiState.data.let { albums ->
-                            val isAppend = viewModel.offset > 0
-                            searchAdapter.submitList(albums, isAppend = isAppend)
-                        }
-                        binding.rvSearchAlbums.isVisible = true
-                        binding.linearLayoutSearchResult.isVisible = false
-                        binding.progressBar.isVisible = false
-                    }
-                    is UiState.Error -> {
-                        binding.progressBar.isVisible = false
-                        uiState.exception.message?.let {
-                            showToast(requireContext(), it)
-                        }
-                    }
-                }
             }
         }
 
@@ -148,6 +125,19 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 showToast(requireContext(), getString(R.string.permission_not_granted))
             }
         }
+    }
+
+    private fun observeViewModelStates() {
+        observeUiState(
+            context = requireContext(),
+            progressBar = binding.progressBar,
+            lifecycleScope = lifecycleScope,
+            flow = viewModel.search,
+            onSuccess = {
+                val isAppend = viewModel.offset > 0
+                searchAdapter.submitList(it, isAppend = isAppend)
+            }
+        )
     }
 
     private fun createSearchResultAdapter() : SearchResultAdapter {

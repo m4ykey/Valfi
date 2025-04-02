@@ -10,7 +10,7 @@
     <item android:id="@+id/imgShare"
         android:title="@string/share"
         app:showAsAction="ifRoom"
-        android:iconTint="@color/navigationIconColor"
+        app:iconTint="@color/navigationIconColor"
         android:icon="@drawable/ic_share"/>
 
 </menu>

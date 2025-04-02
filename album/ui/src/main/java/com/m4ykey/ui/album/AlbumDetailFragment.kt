@@ -19,6 +19,7 @@ import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumDetailBinding
 import com.m4ykey.core.network.UiState
 import com.m4ykey.core.network.isInternetAvailable
+import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.buttonAnimation
 import com.m4ykey.core.views.buttonsIntents
@@ -127,23 +128,16 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 albumViewModel.getAlbumById(args.albumId)
                 trackViewModel.getAlbumTracks(args.albumId)
 
-                albumViewModel.detail.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Error -> {
-                            binding.progressbar.isVisible = false
-                            showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
-                        }
-                        is UiState.Loading -> {
-                            binding.progressbar.isVisible = true
-                            binding.nestedScrollView.isVisible = false
-                        }
-                        is UiState.Success -> {
-                            binding.progressbar.isVisible = false
-                            binding.nestedScrollView.isVisible = true
-                            uiState.data?.let { displayAlbumDetail(it) }
-                        }
-                    }
-                }
+                observeUiState(
+                    flow = albumViewModel.detail,
+                    progressBar = binding.progressbar,
+                    context = requireContext(),
+                    onSuccess = { detail ->
+                        detail?.let { displayAlbumDetail(it) }
+                        binding.nestedScrollView.isVisible = true
+                    },
+                    lifecycleScope = lifecycleScope
+                )
             } else {
                 try {
                     binding.progressbar.isVisible = true
@@ -165,24 +159,16 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
         }
 
-        lifecycleScope.launch {
-            trackViewModel.tracks.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        uiState.data.let { tracks ->
-                            trackAdapter.submitList(tracks, isAppend = true)
-                        }
-                        binding.progressBarTracks.isVisible = false
-                    }
-                    is UiState.Loading -> {
-                        binding.progressBarTracks.isVisible = true
-                    }
-                    is UiState.Error -> {
-                        showToast(requireContext(), uiState.exception.message ?: "An unknown error occurred")
-                    }
-                }
+        observeUiState(
+            flow = trackViewModel.tracks,
+            context = requireContext(),
+            progressBar = binding.progressBarTracks,
+            lifecycleScope = lifecycleScope,
+            onSuccess = { tracks ->
+                trackAdapter.submitList(tracks, isAppend = true)
+                binding.progressBarTracks.isVisible = false
             }
-        }
+        )
     }
 
     private fun shareUrl(url : String) {
@@ -563,25 +549,16 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
         artistViewModel.loadArtists(artistId)
 
-        lifecycleScope.launch {
-            artistViewModel.artists.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        progressBarArtist.isVisible = false
-                        uiState.data.let { artists ->
-                            artistAdapter.submitList(artists)
-                        }
-                    }
-                    is UiState.Loading -> {
-                        progressBarArtist.isVisible = true
-                    }
-                    is UiState.Error -> {
-                        showToast(requireContext(), uiState.exception.message ?: getString(R.string.failed_to_load_artists))
-                        dialog.dismiss()
-                    }
-                }
-            }
-        }
+        observeUiState(
+            flow = artistViewModel.artists,
+            context = requireContext(),
+            lifecycleScope = lifecycleScope,
+            onSuccess = { artists ->
+                artistAdapter.submitList(artists)
+            },
+            progressBar = progressBarArtist,
+            message = getString(R.string.failed_to_load_artists)
+        )
     }
 
     private fun updateIcons(albumWithStates: AlbumWithStates) {

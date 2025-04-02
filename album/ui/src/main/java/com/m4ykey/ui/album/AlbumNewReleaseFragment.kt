@@ -2,7 +2,6 @@ package com.m4ykey.ui.album
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -11,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.core.Constants
 import com.m4ykey.core.network.UiState
+import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx
 import com.m4ykey.core.views.recyclerview.scrollListener
-import com.m4ykey.core.views.utils.showToast
 import com.m4ykey.ui.album.adapter.NewReleaseAdapter
 import com.m4ykey.ui.album.helpers.createGridLayoutManager
 import com.m4ykey.ui.album.viewmodel.AlbumViewModel
@@ -39,36 +38,32 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         bottomNavigationVisibility?.hideBottomNavigation()
 
         handleRecyclerViewButton()
+        loadData()
+        observeViewModelStates()
 
+        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        setupRecyclerView()
+
+    }
+
+    private fun observeViewModelStates() {
+        observeUiState(
+            progressBar = binding.progressBar,
+            lifecycleScope = lifecycleScope,
+            context = requireContext(),
+            flow = viewModel.newRelease,
+            onSuccess = { newRelease ->
+                newRelease.let { albumAdapter.submitList(it, isAppend = true) }
+            }
+        )
+    }
+
+    private fun loadData() {
         if (viewModel.newRelease.value !is UiState.Loading) {
             lifecycleScope.launch {
                 viewModel.getNewReleases()
             }
         }
-
-        lifecycleScope.launch {
-            viewModel.newRelease.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        binding.progressBar.isVisible = false
-                        albumAdapter.submitList(uiState.data, isAppend = true)
-                    }
-                    is UiState.Loading -> {
-                        binding.progressBar.isVisible = true
-                    }
-                    is UiState.Error -> {
-                        binding.progressBar.isVisible = false
-                        uiState.exception.message?.let {
-                            showToast(requireContext(), it)
-                        }
-                    }
-                }
-            }
-        }
-
-        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-        setupRecyclerView()
-
     }
 
     private fun createNewReleaseAdapter() : NewReleaseAdapter {
