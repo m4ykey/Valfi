@@ -11,6 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.show
+import com.m4ykey.settings.data.theme.ThemeOptions
 import com.m4ykey.settings.data.theme.ThemePreferences
 import com.m4ykey.valfi2.Utils.APPLE_MUSIC_PACKAGE_NAME
 import com.m4ykey.valfi2.Utils.CUSTOM_START_SERVICE_ACTION
@@ -63,15 +64,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         lifecycleScope.launch {
             combine(
                 MusicNotificationState.artist,
-                MusicNotificationState.title,
-                MusicNotificationState.backgroundColor,
-                MusicNotificationState.strokeColor
-            ) { artist, title, background, stroke ->
+                MusicNotificationState.title
+            ) { artist, title ->
                 updateCurrentlyPlayingSong(
                     artist = artist,
-                    title = title,
-                    backgroundColor = background,
-                    strokeColor = stroke
+                    title = title
                 )
             }.collect {  }
         }
@@ -104,9 +101,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     private fun updateCurrentlyPlayingSong(
         title : String?,
-        artist : String?,
-        backgroundColor : Int?,
-        strokeColor : Int?
+        artist : String?
     ) {
         if (title.isNullOrBlank() && artist.isNullOrBlank()) {
             binding.apply {
@@ -125,45 +120,29 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
                     isSelected = true
                 }
 
-                val currentAppPackageName = getCurrentMusicPackage()
-                when (currentAppPackageName) {
-                    SPOTIFY_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.spotify_background))
-                        root.strokeColor = getColor(R.color.spotify_stroke_color)
-                    }
-                    APPLE_MUSIC_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.apple_music_background))
-                        root.strokeColor = getColor(R.color.apple_music_stroke_color)
-                    }
-                    TIDAL_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.tidal_background))
-                        root.strokeColor = getColor(R.color.tidal_stroke_color)
-                    }
-                    YOUTUBE_MUSIC_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.yt_music_background))
-                        root.strokeColor = getColor(R.color.yt_music_stroke_color)
-                    }
-                    DEEZER_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.deezer_background))
-                        root.strokeColor = getColor(R.color.deezer_stroke_color)
-                    }
-                    SOUNDCLOUD_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.soundcloud_background))
-                        root.strokeColor = getColor(R.color.soundcloud_stroke_color)
-                    }
-                    PANDORA_PACKAGE_NAME -> {
-                        root.setCardBackgroundColor(getColor(R.color.pandora_background))
-                        root.strokeColor = getColor(R.color.pandora_stroke_color)
-                    }
-                    else -> {
-                        root.setCardBackgroundColor(backgroundColor ?: getColor(R.color.gray))
-                        root.strokeColor = getColor(strokeColor ?: getColor(R.color.white))
-                    }
-                }
+                val currentAppPackageName = getCurrentMusicPackage() ?: ""
+
+                val (bgColorFromPackage, strokeColorFromPackage) = getPackageColors(currentAppPackageName)
+
+                root.setCardBackgroundColor(getColor(bgColorFromPackage))
+                root.strokeColor = getColor(strokeColorFromPackage)
             }
             binding.imgArrowUp.isVisible = true
 
         }
+    }
+
+    private fun getPackageColors(packageName : String) : Pair<Int, Int> {
+        val packageColors = mapOf(
+            SPOTIFY_PACKAGE_NAME to Pair(R.color.spotify_background, R.color.spotify_stroke_color),
+            APPLE_MUSIC_PACKAGE_NAME to Pair(R.color.apple_music_background, R.color.apple_music_stroke_color),
+            TIDAL_PACKAGE_NAME to Pair(R.color.tidal_background, R.color.tidal_stroke_color),
+            YOUTUBE_MUSIC_PACKAGE_NAME to Pair(R.color.yt_music_background, R.color.yt_music_stroke_color),
+            DEEZER_PACKAGE_NAME to Pair(R.color.deezer_background, R.color.deezer_stroke_color),
+            SOUNDCLOUD_PACKAGE_NAME to Pair(R.color.soundcloud_background, R.color.soundcloud_stroke_color),
+            PANDORA_PACKAGE_NAME to Pair(R.color.pandora_background, R.color.pandora_stroke_color)
+        )
+        return packageColors[packageName] ?: Pair(R.color.gray, R.color.white)
     }
 
     private fun setupNavigation() {
@@ -185,9 +164,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         lifecycleScope.launch {
             themePreferences.getSelectedThemeOptions().collect { themeOptions ->
                 when (themeOptions) {
-                    com.m4ykey.settings.data.theme.ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    com.m4ykey.settings.data.theme.ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    com.m4ykey.settings.data.theme.ThemeOptions.Default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    ThemeOptions.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    ThemeOptions.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    ThemeOptions.Default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 }
             }
         }
