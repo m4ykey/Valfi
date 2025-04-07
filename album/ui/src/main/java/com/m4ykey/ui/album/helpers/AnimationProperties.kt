@@ -2,23 +2,14 @@ package com.m4ykey.ui.album.helpers
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.Interpolator
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
+import com.m4ykey.core.views.animation.animationPropertiesY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-fun View.animationPropertiesY(translationYValue : Float, alphaValue : Float, interpolator : Interpolator) {
-    animate()
-        .translationY(translationYValue)
-        .alpha(alphaValue)
-        .setInterpolator(interpolator)
-        .start()
-}
 
 fun animateColorTransition(
     startColor: Int,

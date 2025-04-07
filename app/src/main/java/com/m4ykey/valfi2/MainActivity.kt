@@ -2,6 +2,7 @@ package com.m4ykey.valfi2
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -9,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
+import com.m4ykey.core.views.animation.animationPropertiesY
 import com.m4ykey.core.views.hide
 import com.m4ykey.core.views.show
 import com.m4ykey.settings.data.theme.ThemeOptions
@@ -28,6 +30,7 @@ import com.m4ykey.valfi2.notification.StartServiceReceiver
 import com.m4ykey.valfi2.notification.checkNotificationListenerPermission
 import com.m4ykey.valfi2.preferences.DialogPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -72,14 +75,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.apply {
+            imgArrowUp.hide()
             layoutCurrentlyPlaying.imgArrowDown.setOnClickListener {
-                layoutCurrentlyPlaying.root.isVisible = false
-                imgArrowUp.show()
+                layoutCurrentlyPlaying.root.animationPropertiesY(200f, 1f, DecelerateInterpolator())
+                lifecycleScope.launch {
+                    delay(1250L)
+                    imgArrowUp.apply {
+                        animationPropertiesY(-15f, 1f, DecelerateInterpolator())
+                        show()
+                    }
+                }
             }
 
             imgArrowUp.setOnClickListener {
-                layoutCurrentlyPlaying.root.isVisible = true
-                imgArrowUp.hide()
+                lifecycleScope.launch {
+                    delay(1000L)
+                    layoutCurrentlyPlaying.root.animationPropertiesY(-5f, 1f, DecelerateInterpolator())
+                }
+                imgArrowUp.animationPropertiesY(100f, 1f, DecelerateInterpolator())
             }
         }
     }
