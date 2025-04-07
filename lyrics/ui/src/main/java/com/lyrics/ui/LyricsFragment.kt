@@ -12,13 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import com.lyrics.data.domain.model.LyricsItem
 import com.lyrics.data.domain.model.Track
 import com.lyrics.ui.databinding.FragmentLyricsBinding
-import com.m4ykey.core.network.UiState
 import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.core.views.utils.getColorFromImage
-import com.m4ykey.core.views.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

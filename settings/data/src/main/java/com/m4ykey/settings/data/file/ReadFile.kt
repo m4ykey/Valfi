@@ -15,8 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.buffer
 import okio.source
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 suspend fun readJsonData(context: Context, uri: Uri): AlbumsData? {
     return withContext(Dispatchers.IO) {

@@ -1,6 +1,5 @@
 package com.m4ykey.data.remote.api
 
-import com.m4ykey.data.remote.model.artist.ArtistDto
 import com.m4ykey.data.remote.model.artist.ArtistResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Header

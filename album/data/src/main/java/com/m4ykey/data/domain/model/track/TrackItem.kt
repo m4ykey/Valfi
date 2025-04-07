@@ -1,7 +1,7 @@
 package com.m4ykey.data.domain.model.track
 
-import com.m4ykey.data.domain.model.artist.Artist
 import com.m4ykey.data.domain.model.album.ExternalUrls
+import com.m4ykey.data.domain.model.artist.Artist
 import java.util.UUID
 
 data class TrackItem(

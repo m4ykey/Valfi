@@ -3,10 +3,8 @@ package com.m4ykey.data.repository
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.authentication.interceptor.getToken
 import com.m4ykey.core.network.safeApiCall
-import com.m4ykey.data.domain.model.artist.Artist
 import com.m4ykey.data.domain.model.artist.ArtistList
 import com.m4ykey.data.domain.repository.ArtistRepository
-import com.m4ykey.data.mapper.toArtist
 import com.m4ykey.data.mapper.toArtistList
 import com.m4ykey.data.remote.api.ArtistApi
 import kotlinx.coroutines.Dispatchers

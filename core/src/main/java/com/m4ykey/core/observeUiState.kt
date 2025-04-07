@@ -30,7 +30,7 @@ fun <T> observeUiState(
                     uiState.data?.let(onSuccess)
                 }
                 is UiState.Loading -> {
-                    progressBar.isVisible = false
+                    progressBar.isVisible = true
                 }
             }
         }

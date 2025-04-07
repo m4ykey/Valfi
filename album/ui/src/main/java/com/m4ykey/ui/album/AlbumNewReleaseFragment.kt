@@ -6,10 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.FragmentAlbumNewReleaseBinding
 import com.m4ykey.core.Constants
-import com.m4ykey.core.network.UiState
 import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
@@ -53,16 +51,18 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
             context = requireContext(),
             flow = viewModel.newRelease,
             onSuccess = { newRelease ->
-                newRelease.let { albumAdapter.submitList(it, isAppend = true) }
+                newRelease.let {
+                    lifecycleScope.launch {
+                        albumAdapter.submitData(it)
+                    }
+                }
             }
         )
     }
 
     private fun loadData() {
-        if (viewModel.newRelease.value !is UiState.Loading) {
-            lifecycleScope.launch {
-                viewModel.getNewReleases()
-            }
+        lifecycleScope.launch {
+            viewModel.getNewReleases()
         }
     }
 
@@ -94,14 +94,6 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
                 layoutManager?.scrollToPosition(position)
             }
             layoutManager = createGridLayoutManager(requireContext())
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (!recyclerView.canScrollVertically(1) && !viewModel.isPaginationEnded) {
-                        lifecycleScope.launch { viewModel.getNewReleases() }
-                    }
-                }
-            })
         }
     }
 }

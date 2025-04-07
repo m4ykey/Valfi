@@ -4,13 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lyrics.data.domain.model.LyricsItem
 import com.lyrics.data.domain.model.Track
-import com.lyrics.data.domain.repository.LyricsRepository
 import com.lyrics.data.domain.usecase.LyricsUseCase
 import com.m4ykey.core.network.UiState
-import com.m4ykey.core.views.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch

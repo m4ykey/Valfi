@@ -3,9 +3,9 @@ package com.m4ykey.ui.album.adapter.viewholder
 import androidx.core.view.isVisible
 import com.m4ykey.album.ui.databinding.LayoutTracksBinding
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
+import com.m4ykey.core.views.utils.formatDuration
 import com.m4ykey.data.domain.model.track.TrackItem
 import com.m4ykey.ui.album.helpers.OnTrackClick
-import com.m4ykey.core.views.utils.formatDuration
 import com.m4ykey.ui.album.helpers.getArtistList
 
 class TrackListViewHolder(

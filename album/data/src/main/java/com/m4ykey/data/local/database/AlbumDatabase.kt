@@ -7,8 +7,6 @@ import com.m4ykey.data.local.dao.AlbumDao
 import com.m4ykey.data.local.dao.TrackDao
 import com.m4ykey.data.local.database.converter.Converters
 import com.m4ykey.data.local.model.AlbumEntity
-import com.m4ykey.data.local.model.ArtistEntity
-import com.m4ykey.data.local.model.CopyrightEntity
 import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.StarsEntity

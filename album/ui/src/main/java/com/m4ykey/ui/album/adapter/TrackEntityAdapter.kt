@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.LayoutTracksBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
 import com.m4ykey.data.local.model.TrackEntity
-import com.m4ykey.ui.album.adapter.viewholder.TrackEntityViewHolder
 import com.m4ykey.ui.album.adapter.callback.TrackEntityCallback
+import com.m4ykey.ui.album.adapter.viewholder.TrackEntityViewHolder
 
 class TrackEntityAdapter : BaseRecyclerView<TrackEntity, TrackEntityViewHolder>(TrackEntityCallback()) {
 

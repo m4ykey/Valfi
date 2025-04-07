@@ -58,5 +58,8 @@ dependencies {
         implementation(androidxDatastore)
 
         implementation(gson)
+
+        implementation(androidxPagingRuntime)
+        implementation(androidxRoomPaging)
     }
 }

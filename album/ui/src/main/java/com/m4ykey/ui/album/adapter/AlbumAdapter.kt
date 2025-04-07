@@ -9,7 +9,6 @@ import com.m4ykey.ui.album.adapter.callback.AlbumEntityCallback
 import com.m4ykey.ui.album.adapter.viewholder.AlbumGridViewHolder
 import com.m4ykey.ui.album.adapter.viewholder.AlbumListViewHolder
 import com.m4ykey.ui.album.helpers.OnAlbumEntityClick
-import java.util.UUID
 
 class AlbumAdapter(
     private val onAlbumClick : OnAlbumEntityClick

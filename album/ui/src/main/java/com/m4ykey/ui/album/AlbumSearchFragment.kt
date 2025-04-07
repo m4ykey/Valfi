@@ -22,11 +22,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.R
 import com.m4ykey.album.ui.databinding.FragmentAlbumSearchBinding
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
-import com.m4ykey.core.network.UiState
 import com.m4ykey.core.observeUiState
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.hide
@@ -99,8 +97,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
         lifecycleScope.launch {
             searchResultViewModel.searchResult.collect { result ->
-                val isSearchActive = viewModel.search.value is UiState.Success &&
-                        (viewModel.search.value as UiState.Success).data.isNotEmpty()
+                val isSearchActive = viewModel.hasSearchResults.value
 
                 binding.txtClearList.isVisible = result.isNotEmpty()
 
@@ -129,13 +126,16 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
     private fun observeViewModelStates() {
         observeUiState(
-            context = requireContext(),
             progressBar = binding.progressBar,
             lifecycleScope = lifecycleScope,
+            context = requireContext(),
             flow = viewModel.search,
-            onSuccess = {
-                val isAppend = viewModel.offset > 0
-                searchAdapter.submitList(it, isAppend = isAppend)
+            onSuccess = { search ->
+                search.let {
+                    lifecycleScope.launch {
+                        searchAdapter.submitData(it)
+                    }
+                }
             }
         )
     }
@@ -201,7 +201,7 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                         if (searchQuery?.isNotEmpty() == true) {
                             binding.linearLayoutSearchResult.isVisible = false
                             binding.rvSearchAlbums.isVisible = true
-                            viewModel.resetSearch()
+                            viewModel.clearSearch()
                             lifecycleScope.launch { viewModel.searchAlbums(searchQuery) }
                         } else {
                             showToast(requireContext(), getString(R.string.empty_search))
@@ -234,17 +234,6 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
                 currentScrollPosition?.let { position ->
                     layoutManager?.scrollToPosition(position)
                 }
-                addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        super.onScrolled(recyclerView, dx, dy)
-                        if (!recyclerView.canScrollVertically(1) && !viewModel.isPaginationEnded) {
-                            val searchQuery = etSearch.text.toString()
-                            if (searchQuery.isNotEmpty()) {
-                                viewModel.searchAlbums(query = searchQuery)
-                            }
-                        }
-                    }
-                })
             }
         }
     }

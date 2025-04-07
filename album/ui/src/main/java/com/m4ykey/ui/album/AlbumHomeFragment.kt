@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,7 +22,6 @@ import com.m4ykey.core.Constants.COMPILATION
 import com.m4ykey.core.Constants.EP
 import com.m4ykey.core.Constants.SINGLE
 import com.m4ykey.core.Constants.SPACE_BETWEEN_ITEMS
-import com.m4ykey.core.Navigator
 import com.m4ykey.core.views.BaseFragment
 import com.m4ykey.core.views.recyclerview.CenterSpaceItemDecoration
 import com.m4ykey.core.views.recyclerview.convertDpToPx

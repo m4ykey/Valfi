@@ -2,6 +2,8 @@ package com.m4ykey.ui.album.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.album.AlbumDetail
@@ -53,10 +55,17 @@ class AlbumViewModel @Inject constructor(
     private val dispatcherIO : CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _search = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
+    private val _searchQuery = MutableStateFlow("")
+
+    private val _error = MutableStateFlow<String?>(null)
+
+    private val _hasSearchResults = MutableStateFlow(false)
+    val hasSearchResults = _hasSearchResults.asStateFlow()
+
+    private val _search = MutableStateFlow<UiState<PagingData<AlbumItem>>>(UiState.Success(PagingData.empty()))
     val search = _search.asStateFlow()
 
-    private val _newRelease = MutableStateFlow<UiState<List<AlbumItem>>>(UiState.Success(emptyList()))
+    private val _newRelease = MutableStateFlow<UiState<PagingData<AlbumItem>>>(UiState.Success(PagingData.empty()))
     val newRelease = _newRelease.asStateFlow()
 
     private val _detail = MutableStateFlow<UiState<AlbumDetail?>>(UiState.Success(null))
@@ -123,43 +132,53 @@ class AlbumViewModel @Inject constructor(
     }
 
     fun getNewReleases() {
-        if (isPaginationEnded) {
-            _newRelease.value = UiState.Success(emptyList())
-            return
-        }
+        _newRelease.value = UiState.Loading
 
         viewModelScope.launch {
-            _newRelease.value = UiState.Loading
+            try {
+                delay(1000L)
 
-            getRemoteAlbumUseCase.getNewReleases(offset = offset, limit = PAGE_SIZE)
-                .catch { e -> _newRelease.value = UiState.Error(e) }
-                .collect { albums ->
-                    handlePaginatedResult(albums, _newRelease)
-                }
+                getRemoteAlbumUseCase.getNewReleases()
+                    .cachedIn(viewModelScope)
+                    .collect { pagingData ->
+                        _newRelease.value = UiState.Success(pagingData)
+                    }
+            } catch (e : Exception) {
+                _error.value = e.message ?: "Unknown error occurred"
+            }
         }
     }
 
     fun searchAlbums(query: String) {
-        if (isPaginationEnded) {
-            _search.value = UiState.Success(emptyList())
+        if (query.isBlank()) {
+            _search.value = UiState.Success(PagingData.empty())
+            _hasSearchResults.value = false
             return
         }
 
-        viewModelScope.launch {
-            _search.value = UiState.Loading
+        _searchQuery.value = query
+        _search.value = UiState.Loading
 
-            getRemoteAlbumUseCase.searchAlbums(query = query, offset = offset, limit = PAGE_SIZE)
-                .catch { e -> _search.value = UiState.Error(e) }
-                .collect { albums ->
-                    handlePaginatedResult(albums, _search)
-                }
+        viewModelScope.launch {
+            try {
+                delay(1000L)
+
+                getRemoteAlbumUseCase.searchAlbums(query)
+                    .cachedIn(viewModelScope)
+                    .collect { pagingData ->
+                        _search.value = UiState.Success(pagingData)
+                        _hasSearchResults.value = query.isNotBlank()
+                    }
+            } catch (e : Exception) {
+                _error.value = e.message ?: "Unknown error occurred"
+            }
         }
     }
 
-    fun resetSearch() {
-        offset = 0
-        isPaginationEnded = false
-        _search.value = UiState.Success(emptyList())
+    fun clearSearch() {
+        _searchQuery.value = ""
+        _search.value = UiState.Success(PagingData.empty())
+        _hasSearchResults.value = false
     }
 
     fun searchAlbumByName(query: String) {

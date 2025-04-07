@@ -3,7 +3,6 @@ package com.m4ykey.ui.artist.adapter
 import com.m4ykey.album.ui.databinding.LayoutArtistListBinding
 import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.recyclerview.BaseViewHolder
-import com.m4ykey.data.domain.model.artist.Artist
 import com.m4ykey.data.domain.model.artist.ArtistList
 
 class ArtistViewHolder(

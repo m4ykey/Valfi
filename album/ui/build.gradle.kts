@@ -67,5 +67,7 @@ dependencies {
 
         implementation(glide)
 
+        implementation(androidxPagingRuntime)
+
     }
 }

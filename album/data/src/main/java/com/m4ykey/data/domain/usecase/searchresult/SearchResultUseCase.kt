@@ -1,6 +1,5 @@
 package com.m4ykey.data.domain.usecase.searchresult
 
-import com.m4ykey.core.UseCase
 import com.m4ykey.data.domain.repository.SearchResultRepository
 import com.m4ykey.data.local.model.SearchResult
 import kotlinx.coroutines.flow.Flow

@@ -2,7 +2,6 @@ package com.m4ykey.ui.album.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.m4ykey.data.domain.repository.SearchResultRepository
 import com.m4ykey.data.domain.usecase.searchresult.DeleteSearchResultUseCase
 import com.m4ykey.data.domain.usecase.searchresult.SaveSearchResultUseCase
 import com.m4ykey.data.domain.usecase.searchresult.SearchResultUseCase

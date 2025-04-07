@@ -1,8 +1,11 @@
 package com.m4ykey.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingData
 import com.m4ykey.authentication.interceptor.SpotifyTokenProvider
 import com.m4ykey.authentication.interceptor.getToken
 import com.m4ykey.core.network.safeApiCall
+import com.m4ykey.core.paging.pagingConfig
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
 import com.m4ykey.data.domain.repository.AlbumRepository
@@ -15,8 +18,9 @@ import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
 import com.m4ykey.data.mapper.toAlbumDetail
-import com.m4ykey.data.mapper.toAlbumItem
 import com.m4ykey.data.remote.api.AlbumApi
+import com.m4ykey.data.remote.paging.NewReleasePagingSource
+import com.m4ykey.data.remote.paging.SearchAlbumPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -31,42 +35,23 @@ class AlbumRepositoryImpl @Inject constructor(
     private val dispatcherIO : CoroutineDispatcher
 ) : AlbumRepository {
 
-    override suspend fun getNewReleases(offset: Int, limit: Int): Flow<List<AlbumItem>> = flow {
-        val result = safeApiCall {
-            api.getNewReleases(
-                token = getToken(tokenProvider),
-                offset = offset,
-                limit = limit
-            )
-        }
-
-        val albums = result.fold(
-            onSuccess = { it.albums.items?.map { item -> item.toAlbumItem() } ?: emptyList() },
-            onFailure = {
-                emptyList()
+    override suspend fun getNewReleases(offset: Int, limit: Int): Flow<PagingData<AlbumItem>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = {
+                NewReleasePagingSource(api, tokenProvider)
             }
-        )
-        emit(albums)
-    }.flowOn(dispatcherIO)
+        ).flow.flowOn(dispatcherIO)
+    }
 
-    override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<List<AlbumItem>> = flow {
-        val result = safeApiCall {
-            api.searchAlbums(
-                token = getToken(tokenProvider),
-                limit = limit,
-                offset = offset,
-                query = query
-            )
-        }
-
-        val albums = result.fold(
-            onSuccess = { it.albums.items?.map { item -> item.toAlbumItem() } ?: emptyList() },
-            onFailure = {
-                emptyList()
+    override suspend fun searchAlbums(query: String, offset : Int, limit : Int) : Flow<PagingData<AlbumItem>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = {
+                SearchAlbumPagingSource(api, tokenProvider, query)
             }
-        )
-        emit(albums)
-    }.flowOn(dispatcherIO)
+        ).flow.flowOn(dispatcherIO)
+    }
 
     override suspend fun getAlbumById(id: String): Flow<AlbumDetail> = flow {
         val result = safeApiCall {
