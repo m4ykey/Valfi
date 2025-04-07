@@ -46,8 +46,6 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.hideBottomNavigation()
-
         setupToolbar()
         setupRecyclerView()
         getRandomAlbum()

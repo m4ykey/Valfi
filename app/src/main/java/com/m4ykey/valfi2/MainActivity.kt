@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var themePreferences : ThemePreferences
@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        setupNavigation()
 
         val intent = Intent(this, StartServiceReceiver::class.java)
         intent.action = CUSTOM_START_SERVICE_ACTION
@@ -143,21 +141,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
             PANDORA_PACKAGE_NAME to Pair(R.color.pandora_background, R.color.pandora_stroke_color)
         )
         return packageColors[packageName] ?: Pair(R.color.gray, R.color.white)
-    }
-
-    private fun setupNavigation() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        //findViewById<BottomNavigationView>(R.id.bottomnavigation)?.setupWithNavController(navController)
-    }
-
-    override fun showBottomNavigation() {
-        //findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = true
-    }
-
-    override fun hideBottomNavigation() {
-        //findViewById<BottomNavigationView>(R.id.bottomnavigation)?.isVisible = false
     }
 
     private fun readSelectedThemeOption() {

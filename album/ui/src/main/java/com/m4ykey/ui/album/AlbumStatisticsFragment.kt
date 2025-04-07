@@ -24,8 +24,6 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.hideBottomNavigation()
-
         viewModel.getAlbumCount()
         viewModel.getTotalTracksCount()
         viewModel.getMostPopularDecade()

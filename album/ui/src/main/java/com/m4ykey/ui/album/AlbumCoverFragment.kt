@@ -26,8 +26,6 @@ class AlbumCoverFragment : BaseFragment<FragmentAlbumCoverBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.hideBottomNavigation()
-
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             loadImageWithColors(imgAlbum, args.imgUrl, requireContext()) { bitmap ->

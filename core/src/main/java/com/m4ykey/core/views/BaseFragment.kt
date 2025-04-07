@@ -16,8 +16,6 @@ abstract class BaseFragment<T : ViewBinding>(
     private var _binding : T? = null
     protected val binding get() = _binding!!
 
-    protected var bottomNavigationVisibility : BottomNavigationVisibility? = null
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,15 +25,6 @@ abstract class BaseFragment<T : ViewBinding>(
             _binding = layoutInflater(inflater, container, false)
         }
         return binding.root
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is BottomNavigationVisibility) {
-            bottomNavigationVisibility = context
-        } else {
-            throw RuntimeException("$context ${getString(R.string.must_implement_bottom_navigation)}")
-        }
     }
 
     override fun onDestroyView() {

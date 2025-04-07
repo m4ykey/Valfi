@@ -71,8 +71,6 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.showBottomNavigation()
-
         setupToolbar()
         setupChips()
         setupRecyclerView()

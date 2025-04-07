@@ -76,8 +76,6 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNavigationVisibility?.hideBottomNavigation()
-
         setupToolbar()
         setupRecyclerView()
         searchAlbums()
