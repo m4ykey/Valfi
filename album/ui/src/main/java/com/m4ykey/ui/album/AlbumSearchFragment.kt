@@ -84,12 +84,16 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
 
         searchResultViewModel.getSearchResult()
 
-        binding.txtClearList.apply {
-            setOnClickListener {
-                lifecycleScope.launch {
-                    searchResultViewModel.deleteSearchResults()
-                }
-                isVisible = false
+        lifecycleScope.launch {
+            viewModel.hasSearchResults.collect { hasResults ->
+                if (hasResults) showSearchResults() else showSearchHistory()
+            }
+        }
+
+        lifecycleScope.launch {
+            searchResultViewModel.searchResult.collect { result ->
+                searchResultAdapter.submitList(result)
+                binding.txtClearList.isVisible = result.isNotEmpty()
             }
         }
 
@@ -122,6 +126,20 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         }
     }
 
+    private fun showSearchResults() {
+        binding.apply {
+            rvSearchAlbums.isVisible = true
+            linearLayoutSearchResult.isVisible = false
+        }
+    }
+
+    private fun showSearchHistory() {
+        binding.apply {
+            linearLayoutSearchResult.isVisible = false
+            rvSearchAlbums.isVisible = false
+        }
+    }
+
     private fun observeViewModelStates() {
         observeUiState(
             progressBar = binding.progressBar,
@@ -143,6 +161,11 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             onSearchClick = { item ->
                 val searchResult = item.name
                 binding.etSearch.setText(searchResult)
+
+                lifecycleScope.launch {
+                    viewModel.searchAlbums(searchResult)
+                    showSearchResults()
+                }
             }
         )
     }
@@ -311,9 +334,19 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
             if (etSearch.text.isNullOrBlank()) {
                 imgClear.isVisible = false
                 isClearButtonVisible = false
+
+                if (!viewModel.hasSearchResults.value) {
+                    showSearchHistory()
+                }
             } else {
                 imgClear.isVisible = true
                 isClearButtonVisible = true
+
+                if (viewModel.hasSearchResults.value) {
+                    showSearchResults()
+                } else {
+                    showSearchHistory()
+                }
             }
         }
     }

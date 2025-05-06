@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -22,6 +23,7 @@ class AlbumStarBottomSheetFragment : BottomSheetDialogFragment() {
     private val viewModel by viewModels<AlbumViewModel>()
 
     private var albumId : String? = null
+    private var existingStars : StarsEntity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,51 +35,81 @@ class AlbumStarBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRatingTranslations()
         albumId = arguments?.getString("albumId")
+        loadExistingRating()
+        setupDeleteButton()
+    }
 
+    private fun setupRatingTranslations() {
+        binding.ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
+            val ratingToText = when (rating) {
+                0.5F -> "0.5"
+                1F -> "1"
+                1.5F -> "1.5"
+                2F -> "2"
+                2.5F -> "2.5"
+                3F -> "3"
+                3.5F -> "3.5"
+                4F -> "4"
+                4.5F -> "4.5"
+                5F -> "5"
+                else -> "0"
+            }
+
+            binding.txtStars.text = ratingToText
+
+            if (fromUser) {
+                saveRating(rating)
+            }
+        }
+    }
+
+    private fun loadExistingRating() {
         albumId?.let { id ->
             lifecycleScope.launch {
                 val starsList = viewModel.getStarsById(id)
 
-                val starsEntity = starsList.firstOrNull()
-                starsEntity?.let {
+                if (starsList.isNotEmpty()) {
+                    existingStars = starsList.first()
                     binding.apply {
-                        txtStars.text = it.stars.toString()
-                        ratingBar.rating = it.stars
+                        txtStars.text = existingStars?.stars?.toString() ?: "0"
+                        ratingBar.rating = existingStars?.stars ?: 0F
+
+                        btnDelete.isVisible = true
+                    }
+                } else {
+                    binding.apply {
+                        txtStars.text = "0"
+                        ratingBar.rating = 0F
+                        btnDelete.isVisible = false
                     }
                 }
             }
         }
+    }
 
-        val ratingToText = mapOf(
-            0.5F to "0.5",
-            1F to "1",
-            1.5F to "1.5",
-            2F to "2",
-            2.5F to "2.5",
-            3F to "3",
-            3.5F to "3.5",
-            4F to "4",
-            4.5F to "4.5",
-            5F to "5"
-        )
-
-        binding.apply {
-            txtStars.text = "1"
-            ratingBar.rating = 1F
-            ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
-                txtStars.text = ratingToText[rating] ?: ""
-
-                val stars = StarsEntity(
-                    albumId = albumId.toString(),
-                    stars = rating
-                )
-
-                albumId?.let {
-                    lifecycleScope.launch {
-                        viewModel.insertStars(listOf(stars))
-                    }
+    private fun setupDeleteButton() {
+        binding.btnDelete.setOnClickListener {
+            albumId?.let { id ->
+                lifecycleScope.launch {
+                    viewModel.deleteStars(id)
+                    dismiss()
                 }
+            }
+        }
+    }
+
+    private fun saveRating(rating : Float) {
+        albumId?.let { id ->
+            val stars = StarsEntity(
+                albumId = id,
+                stars = rating
+            )
+
+            lifecycleScope.launch {
+                viewModel.insertStars(listOf(stars))
+                binding.btnDelete.isVisible = false
             }
         }
     }

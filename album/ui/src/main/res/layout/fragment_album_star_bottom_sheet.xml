@@ -30,4 +30,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:visibility="gone"
+        android:theme="@style/Theme.Material3.Dark"
+        android:id="@+id/btnDelete"
+        android:text="@string/delete"
+        android:backgroundTint="@color/buttonColor"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
