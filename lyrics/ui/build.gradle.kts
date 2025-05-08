@@ -62,5 +62,5 @@ dependencies {
     ksp(libs.hiltCompiler)
     implementation(libs.hiltAndroid)
 
-    implementation(libs.coroutines)
+    implementation(libs.bundles.coroutines)
 }

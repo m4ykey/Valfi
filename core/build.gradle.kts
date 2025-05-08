@@ -39,7 +39,7 @@ dependencies {
         implementation(androidxAppCompat)
         implementation(androidxCore)
         implementation(androidxPalette)
-        implementation(androidxDatastore)
+        implementation(bundles.datastore)
         implementation(androidxBrowser)
         implementation(androidxLifecycleRuntime)
         implementation(androidxLifecycleViewmodel)
@@ -49,9 +49,10 @@ dependencies {
         implementation(moshiKotlin)
         implementation(converterMoshi)
         implementation(retrofit)
-        implementation(okhttp)
-        implementation(okhttpLoggingInterceptor)
+        implementation(bundles.okhttp)
         ksp(moshiCodegen)
+
+        implementation(bundles.coroutines)
 
         ksp(hiltCompiler)
         implementation(hiltAndroid)

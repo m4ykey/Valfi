@@ -1,5 +1,5 @@
 [versions]
-application = "8.9.2"
+application = "8.10.0"
 navigation = "2.8.9"
 retrofit = "2.11.0"
 lifecycle = "2.8.7"
@@ -9,8 +9,17 @@ room = "2.7.1"
 coroutines = "1.10.1"
 moshi = "1.15.2"
 paging3 = "3.3.6"
+datastore = "1.1.4"
 
 [libraries]
+mockk = { group = "io.mockk", name = "mockk", version = "1.14.2" }
+
+turbine = { group = "app.cash.turbine", name = "turbine", version = "1.2.0" }
+
+truth = { group = "com.google.truth", name = "truth", version = "1.4.4" }
+
+mockito = { group = "org.mockito.kotlin", name = "mockito-kotlin", version = "5.4.0" }
+
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.4.3" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.4.0" }
 firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.5" }
@@ -26,7 +35,8 @@ androidxNavigationUI = { group = "androidx.navigation", name = "navigation-ui-kt
 androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.16.0" }
 androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
 androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.1" }
-androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.5" }
+androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidxDatastoreCoreAndroid = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastore" }
 androidxLifecycleViewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidxLifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -47,6 +57,8 @@ moshiKotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref
 moshiCodegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -72,3 +84,19 @@ safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigati
 gms = { id = "com.google.gms.google-services", version = "4.4.2" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.3" }
 performance = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
+
+[bundles]
+datastore = [
+    "androidxDatastore",
+    "androidxDatastoreCoreAndroid"
+]
+
+okhttp = [
+    "okhttpLoggingInterceptor",
+    "okhttp"
+]
+
+coroutines = [
+    "coroutines",
+    "coroutines-core"
+]

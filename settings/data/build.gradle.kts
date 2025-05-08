@@ -41,18 +41,19 @@ dependencies {
 
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)
-
     implementation(libs.gson)
-
     implementation(libs.androidxAppCompat)
-
-    implementation(libs.androidxDatastore)
-
-    implementation(libs.coroutines)
-
+    implementation(libs.bundles.datastore)
+    implementation(libs.bundles.coroutines)
     implementation(libs.okio)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockito)
+    testImplementation(libs.coroutines.test)
+
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)
 }

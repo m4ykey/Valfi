@@ -63,7 +63,7 @@ dependencies {
         ksp(hiltCompiler)
         implementation(hiltAndroid)
 
-        implementation(coroutines)
+        implementation(bundles.coroutines)
 
         implementation(glide)
 

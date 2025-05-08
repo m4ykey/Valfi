@@ -41,16 +41,15 @@ dependencies {
 
     implementation(project(":core"))
 
-    implementation(libs.okhttp)
-    implementation(libs.okhttpLoggingInterceptor)
+    implementation(libs.bundles.okhttp)
 
     implementation(libs.retrofit)
 
-    implementation(libs.androidxDatastore)
+    implementation(libs.bundles.datastore)
 
     implementation(libs.moshiKotlin)
 
-    implementation(libs.coroutines)
+    implementation(libs.bundles.coroutines)
 
     implementation(libs.androidxRoomRuntime)
     implementation(libs.androidxRoomKtx)

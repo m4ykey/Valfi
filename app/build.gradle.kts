@@ -100,6 +100,8 @@ dependencies {
 
         //debugImplementation(leakcanary)
 
+        implementation(bundles.coroutines)
+
         implementation(hiltAndroid)
         ksp(hiltCompiler)
 

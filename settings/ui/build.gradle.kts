@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)
 
+    implementation(libs.bundles.coroutines)
+
     implementation(libs.androidxNavigationUI)
     implementation(libs.androidxNavigationFragment)
     implementation(libs.androidxCore)

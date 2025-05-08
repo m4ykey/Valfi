@@ -44,10 +44,11 @@ dependencies {
         implementation(retrofit)
         implementation(converterMoshi)
         implementation(moshiKotlin)
-        implementation(okhttp)
-        implementation(okhttpLoggingInterceptor)
 
-        implementation(coroutines)
+        implementation(bundles.okhttp)
+        implementation(bundles.datastore)
+
+        implementation(bundles.coroutines)
 
         implementation(hiltAndroid)
         ksp(hiltCompiler)
@@ -55,7 +56,6 @@ dependencies {
         implementation(androidxRoomRuntime)
         implementation(androidxRoomKtx)
         ksp(androidxRoomCompiler)
-        implementation(androidxDatastore)
 
         implementation(gson)
 

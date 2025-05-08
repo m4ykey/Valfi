@@ -3,10 +3,11 @@ package com.m4ykey.core
 import java.io.IOException
 
 suspend fun <T> safeDataStoreOperations(operation : suspend () -> T) : T? {
-    return try {
+    return runCatching {
         operation()
-    } catch (e : IOException) {
-        e.printStackTrace()
-        null
-    }
+    }.onFailure { exception ->
+        if (exception is IOException) {
+            exception.printStackTrace()
+        }
+    }.getOrNull()
 }

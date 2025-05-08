@@ -42,10 +42,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converterMoshi)
     implementation(libs.moshiKotlin)
-    implementation(libs.okhttp)
-    implementation(libs.okhttpLoggingInterceptor)
+    implementation(libs.bundles.okhttp)
 
-    implementation(libs.coroutines)
+    implementation(libs.bundles.coroutines)
 
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)

@@ -35,7 +35,7 @@ suspend fun generateJsonData(
         album.copy(saveTime = album.saveTime)
     }
 
-    val allAlbums = savedAlbums + listenLaterAlbums
+    val allAlbums = (savedAlbums + listenLaterAlbums).distinctBy { it.id }
 
     val tracksAlbum = allAlbums.flatMap { album ->
         trackRepository.getTracksById(album.id)
