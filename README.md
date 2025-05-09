@@ -12,11 +12,10 @@ The app integrates with **Spotify** 🎵 to enhance music recommendations and ne
 1. Clone repository and open project in the latest version of Android Studio.
 2. Generate and import your `google-services.json` file and put it in the `/app`
 3. Create `local.properties` and import it to `/app`
-4. Add your [Spotify](https://developer.spotify.com/) SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and [NewsApi](https://newsapi.org/) NEWS_API_KEY key in `local.properties`
+4. Add your [Spotify](https://developer.spotify.com/) SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET key in `local.properties`
 ```
 SPOTIFY_CLIENT_ID = "YOUR_SPOTIFY_CLIENT_ID"
 SPOTIFY_CLIENT_SECRET = "YOUR_SPOTIFY_CLIENT_SECRET"
-NEWS_API_KEY = "YOUR_NEWS_API_KEY"
 ```
 
 1. Create `keystore.properties` file and import it to `/app`
@@ -33,18 +32,9 @@ storeFile=Dir:\\XYZ\\XYZ
 - [x] Option to import and export data to file
 - [ ] Integration with additional data sources for interesting music propositions
 - [ ] Add playlist creation and management features
-- [ ] Add album rating system
+- [x] Add album rating system
 - [ ] Implement home screen widgets for quick access to favorite albums
-- [ ] Add an option to randomly get an album 
-
-## Music news providers
-- [RollingStone](https://www.rollingstone.com/)
-- [Billboard](https://www.billboard.com/)
-- [Pitchfork](https://pitchfork.com/)
-- [NME](https://www.nme.com/)
-- [Consequence](https://consequence.net/)
-- [Stereogum](https://www.stereogum.com/)
-- [The FADER](https://www.thefader.com/)
+- [ ] Add an option to randomly get an album
 
 ## Resources
 The icons used in the application are from the website [svgrepo.com](https://www.svgrepo.com/) and [Google Icons](https://fonts.google.com/icons)

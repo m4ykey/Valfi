@@ -46,6 +46,13 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
 
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockito)
+    testImplementation(libs.coroutines.test)
+
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)
 
