@@ -266,12 +266,17 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                     .distinct()
                     .joinToString(separator = "\n")
 
-                loadImage(imgAlbum, images, requireContext())
+                loadImage(imgAlbum, images)
                 if (colorViewModel.selectedColor.value == null) {
-                    getColorFromImage(images, context = requireContext()) { color ->
-                        colorViewModel.setColor(color)
-                        animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
-                    }
+                    getColorFromImage(
+                        imageUrl = images,
+                        imageView = imgAlbum,
+                        onColorReady = { color ->
+                            colorViewModel.setColor(color)
+                            animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
+
+                        }
+                    )
                 } else {
                     val color = colorViewModel.selectedColor.value ?: return
                     btnAlbum.setBackgroundColor(color)
@@ -383,13 +388,18 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
 
             txtCopyrights.text = copyrights
 
-            loadImage(imgAlbum, item.getLargestImageUrl().toString(), requireContext())
+            loadImage(imgAlbum, item.getLargestImageUrl().toString())
 
             if (colorViewModel.selectedColor.value == null) {
-                getColorFromImage(item.getLargestImageUrl().toString(), context = requireContext()) { color ->
-                    colorViewModel.setColor(color)
-                    animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
-                }
+                getColorFromImage(
+                    imageUrl = item.getLargestImageUrl().toString(),
+                    imageView = imgAlbum,
+                    onColorReady = { color ->
+                        colorViewModel.setColor(color)
+                        animateColorTransition("#4FC3F7".toColorInt(), color, btnAlbum, btnArtist)
+
+                    }
+                )
             } else {
                 val color = colorViewModel.selectedColor.value ?: return
                 btnAlbum.setBackgroundColor(color)
@@ -540,7 +550,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AttentionDialog)
+        MaterialAlertDialogBuilder(requireContext(), R.style.AttentionDialog)
             .setPositiveButton(R.string.close) { dialog, _ -> dialog.dismiss() }
             .setView(customView)
             .show()

@@ -65,7 +65,7 @@ dependencies {
 
         implementation(bundles.coroutines)
 
-        implementation(glide)
+        implementation(bundles.coil3)
 
         implementation(androidxPagingRuntime)
 

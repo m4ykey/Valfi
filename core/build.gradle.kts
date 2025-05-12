@@ -57,7 +57,7 @@ dependencies {
         ksp(hiltCompiler)
         implementation(hiltAndroid)
 
-        implementation(glide)
+        implementation(bundles.coil3)
 
         implementation(androidxPagingRuntime)
 

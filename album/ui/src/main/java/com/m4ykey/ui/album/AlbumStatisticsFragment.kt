@@ -84,7 +84,7 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
                 viewModel.albumWithMostTracks.collect { album ->
                     album?.let {
                         txtAlbum.text = "${it.albumName} - ${it.albumTotalTracks} ${getString(R.string.tracks)}"
-                        loadImage(imgAlbumCover, it.albumImage, requireContext())
+                        loadImage(imgAlbumCover, it.albumImage)
 
                         cardViewMostSongs.isVisible = true
                     } ?: run {

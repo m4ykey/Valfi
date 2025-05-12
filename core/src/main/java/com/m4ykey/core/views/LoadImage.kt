@@ -1,17 +1,14 @@
 package com.m4ykey.core.views
 
-import android.content.Context
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.m4ykey.core.R
+import coil3.load
+import coil3.request.CachePolicy
+import coil3.request.crossfade
 
-fun loadImage(imageView: ImageView, imageUrl : String, context : Context) {
-    Glide.with(context)
-        .load(imageUrl)
-        .error(R.drawable.album_error)
-        .transition(DrawableTransitionOptions.withCrossFade(500))
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(imageView)
+fun loadImage(imageView: ImageView, imageUrl : String) {
+    imageView.load(imageUrl) {
+        crossfade(true)
+        diskCachePolicy(CachePolicy.ENABLED)
+        networkCachePolicy(CachePolicy.ENABLED)
+    }
 }

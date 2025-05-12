@@ -14,7 +14,7 @@ class ArtistViewHolder(
         binding.apply {
             linearLayoutArtistList.setOnClickListener { onArtistClick(item) }
             txtArtist.text = item.name
-            loadImage(imgArtist, item.images[0].url, imgArtist.context)
+            loadImage(imgArtist, item.images[0].url)
         }
     }
 }

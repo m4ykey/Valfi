@@ -17,7 +17,7 @@ class NewReleaseViewHolder(
         with(binding) {
             layoutAlbum.setOnClickListener { onAlbumClick(item) }
 
-            loadImage(imgAlbum, item.getLargestImageUrl().toString(), imgAlbum.context)
+            loadImage(imgAlbum, item.getLargestImageUrl().toString())
             txtAlbum.text = item.name
             txtArtist.text = item.getArtistList()
         }

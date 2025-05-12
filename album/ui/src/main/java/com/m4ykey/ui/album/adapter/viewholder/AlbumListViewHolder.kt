@@ -32,7 +32,7 @@ class AlbumListViewHolder(
 
             txtArtist.text = item.getArtistList()
             txtAlbum.text = item.name
-            loadImage(imgAlbum, item.images, imgAlbum.context)
+            loadImage(imgAlbum, item.images)
         }
     }
 }

@@ -108,17 +108,18 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
                 requireContext().startActivity(Intent(Intent.ACTION_VIEW,
                     item.externalUrls.spotify.toUri()))
             }
-            loadImage(imgAlbumCover, item.album.getLargestImageUrl().toString(), requireContext())
+            loadImage(imgAlbumCover, item.album.getLargestImageUrl().toString())
 
             lifecycleScope.launch {
                 withContext(Dispatchers.Default) {
                     getColorFromImage(
                         imageUrl = item.album.getLargestImageUrl().toString(),
-                        context = requireContext()
-                    ) { color ->
-                        constraintLayout.setBackgroundColor(color)
-                        applyTextColors(color)
-                    }
+                        imageView = imgAlbumCover,
+                        onColorReady = { color ->
+                            constraintLayout.setBackgroundColor(color)
+                            applyTextColors(color)
+                        }
+                    )
                 }
             }
         }

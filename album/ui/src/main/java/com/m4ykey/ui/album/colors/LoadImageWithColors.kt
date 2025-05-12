@@ -2,26 +2,32 @@ package com.m4ykey.ui.album.colors
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.toBitmap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 fun loadImageWithColors(
     imageView: ImageView,
-    url : String,
+    url: String,
     context : Context,
-    callback : (Bitmap) -> Unit
+    callback: (Bitmap) -> Unit
 ) {
-    Glide.with(context)
-        .asBitmap()
-        .load(url)
-        .into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                imageView.setImageBitmap(resource)
-                callback(resource)
+    val request = ImageRequest.Builder(context)
+        .data(url)
+        .target(
+            onSuccess = { result ->
+                val bitmap = result.toBitmap()
+                imageView.setImageBitmap(bitmap)
+                callback(bitmap)
             }
-            override fun onLoadCleared(placeholder: Drawable?) {}
-        })
+        )
+        .build()
+
+    CoroutineScope(Dispatchers.Main).launch {
+        context.imageLoader.enqueue(request)
+    }
 }

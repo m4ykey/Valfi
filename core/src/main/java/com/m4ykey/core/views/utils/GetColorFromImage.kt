@@ -1,20 +1,21 @@
 package com.m4ykey.core.views.utils
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.widget.ImageView
 import androidx.palette.graphics.Palette
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import coil3.load
+import coil3.request.allowHardware
+import coil3.toBitmap
 
-fun getColorFromImage(imageUrl : String, context : Context, onColorReady : (Int) -> Unit) {
-    Glide.with(context)
-        .asBitmap()
-        .load(imageUrl)
-        .into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                Palette.from(resource).generate { palette ->
+fun getColorFromImage(
+    imageUrl : String,
+    onColorReady : (Int) -> Unit,
+    imageView : ImageView
+) {
+    imageView.load(imageUrl) {
+        allowHardware(false)
+        listener(
+            onSuccess = { _, result ->
+                Palette.Builder(result.image.toBitmap()).generate { palette ->
                     val mutedSwatchColor = palette?.mutedSwatch?.rgb
                     val dominantColor = palette?.dominantSwatch?.rgb
                     if (mutedSwatchColor != null) {
@@ -24,6 +25,6 @@ fun getColorFromImage(imageUrl : String, context : Context, onColorReady : (Int)
                     }
                 }
             }
-            override fun onLoadCleared(placeholder: Drawable?) {}
-        })
+        )
+    }
 }
