@@ -95,9 +95,6 @@ class AlbumViewModel @Inject constructor(
     private val _albumWithMostTracks = MutableStateFlow<AlbumWithDetails?>(null)
     val albumWithMostTracks = _albumWithMostTracks.asStateFlow()
 
-    var offset = 0
-    var isPaginationEnded = false
-
     private val _albumTypes = MutableStateFlow(
         mapOf(
             "Album" to 0,
@@ -236,7 +233,9 @@ class AlbumViewModel @Inject constructor(
     fun getAlbumCount() {
         viewModelScope.launch {
             statisticsAlbumUseCase.getAlbumCount().collect { count ->
-                _albumCount.value = count
+                if (count != null) {
+                    _albumCount.value = count
+                }
             }
         }
     }
@@ -244,14 +243,16 @@ class AlbumViewModel @Inject constructor(
     fun getTotalTracksCount()  {
         viewModelScope.launch {
             statisticsAlbumUseCase.getTotalTracksCount().collect { count ->
-                _totalTracksCount.value = count
+                if (count != null) {
+                    _totalTracksCount.value = count
+                }
             }
         }
     }
 
     fun getAlbumTypeCount(albumType: String) {
         viewModelScope.launch {
-            val count = statisticsAlbumUseCase.getAlbumTypeCount(albumType).firstOrNull() ?: 0
+            val count = statisticsAlbumUseCase.getAlbumTypeCount(albumType)?.firstOrNull() ?: 0
             _albumTypes.update { currentTypes ->
                 currentTypes.toMutableMap().apply {
                     put(albumType, count)
@@ -350,21 +351,6 @@ class AlbumViewModel @Inject constructor(
             availableProcessors >= 8 && freeMemory > 4000 -> CacheConfig(20, 500L)
             availableProcessors >= 4 && freeMemory > 2000 -> CacheConfig(15, 750L)
             else -> CacheConfig(10, 1000L)
-        }
-    }
-
-    private fun <T> handlePaginatedResult(
-        newItems : List<T>,
-        stateFlow : MutableStateFlow<UiState<List<T>>>
-    ) {
-        if (newItems.isEmpty()) {
-            isPaginationEnded = true
-        } else {
-            val currentList = (stateFlow.value as? UiState.Success)?.data ?: emptyList()
-            val updatedList = currentList + newItems
-            stateFlow.value = UiState.Success(updatedList)
-            offset += PAGE_SIZE
-            isPaginationEnded = newItems.size < PAGE_SIZE
         }
     }
 

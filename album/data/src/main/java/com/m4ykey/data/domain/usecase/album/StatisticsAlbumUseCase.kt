@@ -10,16 +10,16 @@ class StatisticsAlbumUseCase @Inject constructor(
     private val repository: AlbumRepository
 ) {
 
-    fun getAlbumWithMostTracks() : Flow<AlbumWithDetails> = repository.getAlbumWithMostTracks()
+    fun getAlbumWithMostTracks() : Flow<AlbumWithDetails?> = repository.getAlbumWithMostTracks()
 
-    fun getMostPopularDecade() : Flow<DecadeResult> = repository.getMostPopularDecade()
+    fun getMostPopularDecade() : Flow<DecadeResult?> = repository.getMostPopularDecade()
 
     fun getListenLaterCount() : Flow<Int> = repository.getListenLaterCount()
 
-    fun getAlbumCount() : Flow<Int> = repository.getAlbumCount()
+    fun getAlbumCount() : Flow<Int?> = repository.getAlbumCount()
 
-    fun getTotalTracksCount() : Flow<Int> = repository.getTotalTracksCount()
+    fun getTotalTracksCount() : Flow<Int?> = repository.getTotalTracksCount()
 
-    fun getAlbumTypeCount(albumType : String) : Flow<Int> = repository.getAlbumCountByType(albumType)
+    fun getAlbumTypeCount(albumType : String) : Flow<Int?> = repository.getAlbumCountByType(albumType)
 
 }

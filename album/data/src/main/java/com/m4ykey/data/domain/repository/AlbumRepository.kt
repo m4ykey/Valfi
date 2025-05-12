@@ -42,11 +42,11 @@ interface AlbumRepository {
     suspend fun searchAlbumByName(searchQuery : String) : List<AlbumEntity>
     suspend fun searchAlbumsListenLater(searchQuery: String) : List<AlbumEntity>
 
-    fun getAlbumCount() : Flow<Int>
-    fun getTotalTracksCount() : Flow<Int>
-    fun getMostPopularDecade() : Flow<DecadeResult>
-    fun getAlbumCountByType(albumType: String) : Flow<Int>
-    fun getAlbumWithMostTracks() : Flow<AlbumWithDetails>
+    fun getAlbumCount() : Flow<Int?>
+    fun getTotalTracksCount() : Flow<Int?>
+    fun getMostPopularDecade() : Flow<DecadeResult?>
+    fun getAlbumCountByType(albumType: String) : Flow<Int?>
+    fun getAlbumWithMostTracks() : Flow<AlbumWithDetails?>
 
     suspend fun insertStars(stars : List<StarsEntity>)
     fun getStarsById(albumId: String) : List<StarsEntity>

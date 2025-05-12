@@ -102,17 +102,21 @@ class AlbumRepositoryImpl @Inject constructor(
         dao.getSavedAlbumAsc()
     }
 
-    override fun getAlbumCount(): Flow<Int> = dao.getAlbumCount()
-        .flowOn(dispatcherIO)
+    override fun getAlbumCount(): Flow<Int?> {
+        return dao.getAlbumCount().flowOn(dispatcherIO)
+    }
 
-    override fun getTotalTracksCount(): Flow<Int> = dao.getTotalTracksCount()
-        .flowOn(dispatcherIO)
+    override fun getTotalTracksCount(): Flow<Int?> {
+        return dao.getTotalTracksCount().flowOn(dispatcherIO)
+    }
 
-    override fun getAlbumCountByType(albumType: String): Flow<Int> = dao.getAlbumCountByType(albumType)
-        .flowOn(dispatcherIO)
+    override fun getAlbumCountByType(albumType: String): Flow<Int?> {
+        return dao.getAlbumCountByType(albumType).flowOn(dispatcherIO)
+    }
 
-    override fun getAlbumWithMostTracks(): Flow<AlbumWithDetails> = dao.getAlbumWithMostTracks()
-        .flowOn(dispatcherIO)
+    override fun getAlbumWithMostTracks(): Flow<AlbumWithDetails?> {
+        return dao.getAlbumWithMostTracks().flowOn(dispatcherIO)
+    }
 
     override suspend fun insertSavedAlbum(isAlbumSaved: IsAlbumSaved) = withContext(dispatcherIO) {
         dao.insertSavedAlbum(isAlbumSaved)
@@ -153,8 +157,9 @@ class AlbumRepositoryImpl @Inject constructor(
         dao.getAlbumWithStates(albumId)
     }
 
-    override fun getMostPopularDecade(): Flow<DecadeResult> = dao.getMostPopularDecade()
-        .flowOn(dispatcherIO)
+    override fun getMostPopularDecade(): Flow<DecadeResult?> {
+        return dao.getMostPopularDecade().flowOn(dispatcherIO)
+    }
 
     override suspend fun insertStars(stars: List<StarsEntity>) = withContext(dispatcherIO) {
         dao.insertStars(stars)

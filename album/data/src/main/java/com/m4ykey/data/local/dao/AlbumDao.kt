@@ -131,14 +131,14 @@ interface AlbumDao {
         INNER JOIN album_saved_table ON album_table.id = album_saved_table.albumId
         WHERE album_saved_table.isAlbumSaved = 1
     """)
-    fun getAlbumCount() : Flow<Int>
+    fun getAlbumCount() : Flow<Int?>
 
     @Query("""
         SELECT SUM(album_table.total_tracks) FROM album_table 
         INNER JOIN album_saved_table ON album_table.id = album_saved_table.albumId  
         WHERE album_saved_table.isAlbumSaved = 1
     """)
-    fun getTotalTracksCount() : Flow<Int>
+    fun getTotalTracksCount() : Flow<Int?>
 
     @Query("""
         SELECT
@@ -151,7 +151,7 @@ interface AlbumDao {
         ORDER BY album_count DESC
         LIMIT 1
     """)
-    fun getMostPopularDecade() : Flow<DecadeResult>
+    fun getMostPopularDecade() : Flow<DecadeResult?>
 
     @Query("""
         SELECT COUNT(*) AS album_count
@@ -160,7 +160,7 @@ interface AlbumDao {
         ON album_table.id = album_saved_table.albumId 
         WHERE album_saved_table.isAlbumSaved = 1 AND album_table.album_type = :albumType
     """)
-    fun getAlbumCountByType(albumType : String) : Flow<Int>
+    fun getAlbumCountByType(albumType : String) : Flow<Int?>
 
     @Query("""
         SELECT album_table.name AS album_name, 
@@ -172,5 +172,5 @@ interface AlbumDao {
         ORDER BY album_table.total_tracks DESC
         LIMIT 1
     """)
-    fun getAlbumWithMostTracks(): Flow<AlbumWithDetails>
+    fun getAlbumWithMostTracks(): Flow<AlbumWithDetails?>
 }
