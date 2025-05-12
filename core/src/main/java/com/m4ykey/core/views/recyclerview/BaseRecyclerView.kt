@@ -31,7 +31,7 @@ abstract class BaseRecyclerView<Item, VH : RecyclerView.ViewHolder>(
         item?.let {
             onItemBindViewHolder(holder, it, position)
             holder.applyAnimation(position, lastVisibleItemPosition)
-            lastVisibleItemPosition = holder.adapterPosition
+            lastVisibleItemPosition = holder.bindingAdapterPosition
         }
     }
 

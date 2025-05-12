@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -18,6 +19,7 @@ object ThemePreferencesModule {
 
     @Provides
     @Singleton
+    @Named("theme")
     fun provideThemeDataStore(@ApplicationContext context: Context) : DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             produceFile = {
