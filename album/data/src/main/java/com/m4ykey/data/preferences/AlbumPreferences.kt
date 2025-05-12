@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.m4ykey.core.di.Prefs
 import com.m4ykey.core.safeDataStoreOperations
 import com.m4ykey.core.views.sorting.SortType
 import com.m4ykey.core.views.sorting.ViewType
@@ -19,6 +20,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@Prefs.AlbumPrefs
 class AlbumPreferences @Inject constructor(@ApplicationContext private val context: Context) {
 
     private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = "album_preferences")

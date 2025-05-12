@@ -60,6 +60,7 @@ class ThemePreferencesTest {
         val preferences =
             preferencesOf(intPreferencesKey("selected_theme") to ThemeOptions.Light.index)
         every { mockDataStore.data } returns flowOf(preferences)
+        println(preferences)
 
         val result = themePreferences.getSelectedThemeOptions().first()
         Truth.assertThat(result).isEqualTo(ThemeOptions.Light)

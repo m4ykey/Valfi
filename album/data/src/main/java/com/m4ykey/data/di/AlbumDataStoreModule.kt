@@ -1,22 +1,24 @@
 package com.m4ykey.data.di
 
 import android.content.Context
+import com.m4ykey.core.di.Prefs
 import com.m4ykey.data.preferences.AlbumPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataStoreModule {
+object AlbumDataStoreModule {
 
     @Provides
     @Singleton
-    @Named("album")
-    fun provideAlbumPreferences(@ApplicationContext context : Context) : AlbumPreferences = AlbumPreferences(context)
+    @Prefs.AlbumPrefs
+    fun provideAlbumPreferences(@ApplicationContext context : Context) : AlbumPreferences {
+        return AlbumPreferences(context)
+    }
 
 }
