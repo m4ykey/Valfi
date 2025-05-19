@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.gms) apply false
     alias(libs.plugins.crashlytics) apply false
     alias(libs.plugins.performance) apply false
+    alias(libs.plugins.serialization) apply false
 }
 
 extra["compileSdkVersion"] = 35

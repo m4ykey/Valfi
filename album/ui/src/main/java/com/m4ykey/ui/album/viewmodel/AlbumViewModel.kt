@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.album.AlbumDetail
 import com.m4ykey.data.domain.model.album.AlbumItem
@@ -22,20 +21,15 @@ import com.m4ykey.data.local.model.IsAlbumSaved
 import com.m4ykey.data.local.model.IsListenLaterSaved
 import com.m4ykey.data.local.model.StarsEntity
 import com.m4ykey.data.local.model.relations.AlbumWithStates
-import com.m4ykey.ui.album.helpers.CacheConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -71,7 +65,7 @@ class AlbumViewModel @Inject constructor(
     private val _detail = MutableStateFlow<UiState<AlbumDetail?>>(UiState.Success(null))
     val detail = _detail.asStateFlow()
 
-    private val _albumEntity = MutableSharedFlow<List<AlbumEntity>>(replay = 1)
+    private val _albumEntity = MutableStateFlow<List<AlbumEntity>>(emptyList())
     val albumEntity = _albumEntity.asSharedFlow()
 
     private val _searchResult = MutableStateFlow<List<AlbumEntity>>(emptyList())
@@ -180,17 +174,15 @@ class AlbumViewModel @Inject constructor(
 
     fun searchAlbumByName(query: String) {
         viewModelScope.launch(dispatcherIO) {
-            _searchResult.emit(emptyList())
             val albums = getLocalAlbumUseCase.searchAlbumByName(query)
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+            _searchResult.emit(albums)
         }
     }
 
     fun searchAlbumsListenLater(query: String) {
         viewModelScope.launch(dispatcherIO) {
-            _searchResult.emit(emptyList())
             val albums = getLocalAlbumUseCase.searchAlbumsListenLater(query)
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _searchResult.emit(it) }
+            _searchResult.emit(albums)
         }
     }
 
@@ -252,7 +244,7 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumTypeCount(albumType: String) {
         viewModelScope.launch {
-            val count = statisticsAlbumUseCase.getAlbumTypeCount(albumType)?.firstOrNull() ?: 0
+            val count = statisticsAlbumUseCase.getAlbumTypeCount(albumType).firstOrNull() ?: 0
             _albumTypes.update { currentTypes ->
                 currentTypes.toMutableMap().apply {
                     put(albumType, count)
@@ -329,35 +321,10 @@ class AlbumViewModel @Inject constructor(
         deleteAlbumUseCase(DeleteAlbumUseCase.Params.RemoveFromListenLater(albumId))
     }
 
-    private fun loadAlbumsWithAdaptiveChunks(
-        albums : List<AlbumEntity>
-    ) : Flow<List<AlbumEntity>> = flow {
-        val displayedAlbums = mutableListOf<AlbumEntity>()
-        val config = getCacheConfig()
-
-        for (chunk in albums.chunked(config.chunkSize)) {
-            displayedAlbums.addAll(chunk)
-            emit(displayedAlbums.toList())
-            delay(config.delayTime)
-        }
-    }
-
-    private fun getCacheConfig() : CacheConfig {
-        val runtime = Runtime.getRuntime()
-        val availableProcessors = runtime.availableProcessors()
-        val freeMemory = runtime.freeMemory() / (1024 * 1024)
-
-        return when {
-            availableProcessors >= 8 && freeMemory > 4000 -> CacheConfig(20, 500L)
-            availableProcessors >= 4 && freeMemory > 2000 -> CacheConfig(15, 750L)
-            else -> CacheConfig(10, 1000L)
-        }
-    }
-
     private fun loadAlbums(fetch : suspend () -> List<AlbumEntity>) {
         viewModelScope.launch(dispatcherIO) {
             val albums = fetch()
-            loadAlbumsWithAdaptiveChunks(albums).collectLatest { _albumEntity.emit(it) }
+            _albumEntity.value = albums
         }
     }
 }

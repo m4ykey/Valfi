@@ -163,7 +163,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             progressBar = binding.progressBarTracks,
             lifecycleScope = lifecycleScope,
             onSuccess = { tracks ->
-                trackAdapter.submitList(tracks, isAppend = true)
+                trackAdapter.submitList(tracks)
                 binding.progressBarTracks.isVisible = false
             }
         )

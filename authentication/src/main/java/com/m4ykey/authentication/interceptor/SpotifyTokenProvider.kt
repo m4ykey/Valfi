@@ -38,7 +38,7 @@ class SpotifyTokenProvider @Inject constructor(
                     val newAccessToken = fetchAccessToken(
                         api = api,
                         clientId = keyEntity?.clientId ?: return "",
-                        clientSecret = keyEntity.clientSecret ?: return ""
+                        clientSecret = keyEntity.clientSecret
                     )
 
                     val newExpireTime = System.currentTimeMillis() + 3600 * 1000

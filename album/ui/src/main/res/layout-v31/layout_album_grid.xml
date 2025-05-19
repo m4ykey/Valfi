@@ -11,6 +11,7 @@
         android:layout_width="@dimen/grid_card_view_size"
         android:layout_height="@dimen/grid_card_view_size"
         app:cardCornerRadius="10dp"
+        android:clipToOutline="true"
         app:cardUseCompatPadding="false"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
