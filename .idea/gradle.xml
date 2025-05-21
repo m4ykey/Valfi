@@ -19,6 +19,9 @@
             <option value="$PROJECT_DIR$/lyrics" />
             <option value="$PROJECT_DIR$/lyrics/data" />
             <option value="$PROJECT_DIR$/lyrics/ui" />
+            <option value="$PROJECT_DIR$/rss" />
+            <option value="$PROJECT_DIR$/rss/data" />
+            <option value="$PROJECT_DIR$/rss/ui" />
             <option value="$PROJECT_DIR$/settings" />
             <option value="$PROJECT_DIR$/settings/data" />
             <option value="$PROJECT_DIR$/settings/ui" />
