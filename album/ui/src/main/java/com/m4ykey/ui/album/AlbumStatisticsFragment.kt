@@ -33,6 +33,8 @@ class AlbumStatisticsFragment : BaseFragment<FragmentAlbumStatisticsBinding>(
         viewModel.getAlbumTypeCount("Compilation")
         viewModel.getAlbumWithMostTracks()
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
         binding.apply {
             toolbar.setOnClickListener { findNavController().navigateUp() }
 

@@ -82,6 +82,8 @@ class AlbumSearchFragment : BaseFragment<FragmentAlbumSearchBinding>(
         handleRecyclerViewButton()
         observeViewModelStates()
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
         searchResultViewModel.getSearchResult()
 
         lifecycleScope.launch {

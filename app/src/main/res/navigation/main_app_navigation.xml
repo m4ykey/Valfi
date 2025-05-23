@@ -2,8 +2,16 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/album_nav_graph">
+    app:startDestination="@id/albumHomeFragment">
 
-    <include app:graph="@navigation/album_nav_graph"/>
+    <fragment
+        android:id="@+id/albumHomeFragment"
+        android:name="com.m4ykey.ui.album.AlbumHomeFragment"
+        android:label="Album"/>
+
+    <fragment
+        android:label="@string/news"
+        android:name="com.m4ykey.ui.RssHomeFragment"
+        android:id="@+id/rssHomeFragment"/>
 
 </navigation>

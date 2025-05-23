@@ -69,6 +69,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
         binding.apply {
             toolbar.setOnClickListener { activity?.finish() }
             linearLayoutTheme.setOnClickListener { showThemeDialog() }

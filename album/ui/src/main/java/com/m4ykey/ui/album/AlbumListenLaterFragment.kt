@@ -51,6 +51,8 @@ class AlbumListenLaterFragment : BaseFragment<FragmentAlbumListenLaterBinding>(
         getRandomAlbum()
         handleRecyclerViewButton()
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
         binding.apply {
             viewModel.apply {
                 lifecycleScope.launch { getListenLaterCount() }

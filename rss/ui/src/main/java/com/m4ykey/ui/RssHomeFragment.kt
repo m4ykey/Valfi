@@ -9,7 +9,6 @@ import com.m4ykey.ui.databinding.FragmentRssHomeBinding
 class RssHomeFragment : BaseFragment<FragmentRssHomeBinding>(
     FragmentRssHomeBinding::inflate
 ) {
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -25,10 +24,8 @@ class RssHomeFragment : BaseFragment<FragmentRssHomeBinding>(
                         chipGroup.removeView(this)
                     }
                 }
-
                 chipGroup.addView(chip)
             }
         }
     }
-
 }

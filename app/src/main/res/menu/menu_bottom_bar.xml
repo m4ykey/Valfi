@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/albumHomeFragment"
+        android:enabled="true"
+        android:icon="@drawable/selector_album"
+        android:title="@string/album"/>
+
+    <item android:id="@+id/rssHomeFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_news"
+        android:title="@string/news"/>
+
+</menu>

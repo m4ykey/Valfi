@@ -72,6 +72,8 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
         setupRecyclerView()
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }

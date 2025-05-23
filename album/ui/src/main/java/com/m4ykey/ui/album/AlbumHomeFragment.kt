@@ -76,6 +76,8 @@ class AlbumHomeFragment : BaseFragment<FragmentAlbumHomeBinding>(
         setupRecyclerView()
         handleRecyclerViewButton()
 
+        bottomNavigationVisibility?.showBottomNavigation()
+
         viewModel.apply {
             lifecycleScope.launch {
                 getSavedAlbums()

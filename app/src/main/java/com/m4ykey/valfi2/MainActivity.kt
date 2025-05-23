@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m4ykey.core.views.BottomNavigationVisibility
 import com.m4ykey.core.views.animation.animationPropertiesY
@@ -36,7 +38,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
 
     @Inject
     lateinit var themePreferences : ThemePreferences
@@ -50,11 +52,28 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupNavigation()
+
         val intent = Intent(this, StartServiceReceiver::class.java)
         intent.action = CUSTOM_START_SERVICE_ACTION
         sendBroadcast(intent)
 
         displayCurrentlyPlayingSong()
+    }
+
+    private fun setupNavigation() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.setupWithNavController(navController)
+    }
+
+    override fun showBottomNavigation() {
+        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = true
+    }
+
+    override fun hideBottomNavigation() {
+        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = false
     }
 
     private fun getCurrentMusicPackage() : String? {
@@ -77,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             imgArrowUp.hide()
             layoutCurrentlyPlaying.imgArrowDown.setOnClickListener {
-                layoutCurrentlyPlaying.root.animationPropertiesY(200f, 1f, DecelerateInterpolator())
+                layoutCurrentlyPlaying.root.animationPropertiesY(225f, 1f, DecelerateInterpolator())
                 lifecycleScope.launch {
                     delay(1250L)
                     imgArrowUp.apply {

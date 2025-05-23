@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:defaultNavHost="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
         android:id="@+id/imgArrowUp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/nav_host_fragment"
         android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,12 +33,25 @@
         app:tint="@color/textColor" />
 
     <include layout="@layout/layout_currently_playing"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/nav_host_fragment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/layoutCurrentlyPlaying"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:menu="@menu/menu_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:itemActiveIndicatorStyle="@style/BottomNavigationCustom.Indicator"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:itemIconTint="@color/bottom_nav_selector"
+        android:background="@color/bottomNavigationColor"
+        android:id="@+id/bottomNavigation"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

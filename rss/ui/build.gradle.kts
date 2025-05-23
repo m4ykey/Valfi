@@ -42,7 +42,11 @@ dependencies {
     implementation(libs.androidxCore)
     implementation(libs.androidxAppCompat)
     implementation(libs.androidMaterial)
+    implementation(libs.androidxNavigationUI)
+    implementation(libs.androidxNavigationFragment)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.extJunit)
     androidTestImplementation(libs.espresso)
 }

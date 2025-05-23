@@ -40,6 +40,8 @@ class AlbumNewReleaseFragment : BaseFragment<FragmentAlbumNewReleaseBinding>(
         binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         setupRecyclerView()
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
     }
 
     private fun observeViewModelStates() {

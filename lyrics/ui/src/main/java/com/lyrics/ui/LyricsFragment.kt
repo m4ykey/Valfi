@@ -70,6 +70,8 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
         loadData()
         observeViewModelStates()
 
+        bottomNavigationVisibility?.hideBottomNavigation()
+
     }
 
     private fun loadData() {
