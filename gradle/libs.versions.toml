@@ -3,7 +3,7 @@ application = "8.10.1"
 navigation = "2.9.0"
 retrofit = "3.0.0"
 lifecycle = "2.9.1"
-hilt = "2.56.1"
+hilt = "2.56.2"
 okhttp = "4.12.0"
 room = "2.7.1"
 coroutines = "1.10.2"
@@ -27,7 +27,7 @@ core = "1.16.0"
 appcompat = "1.7.1"
 palette = "1.0.0"
 browser = "1.8.0"
-gson = "2.12.1"
+gson = "2.13.1"
 constraintlayout = "2.2.1"
 material = "1.12.0"
 preference = "1.2.1"
@@ -36,11 +36,14 @@ serialization = "1.8.1"
 lottie = "6.6.6"
 kotlin = "2.1.21"
 gms = "4.4.2"
-okio = "3.10.2"
+okio = "3.12.0"
 ksp = "2.1.21-2.0.1"
 crashlyticsPlugin = "3.0.4"
 performancePlugin = "1.4.2"
 serializationPlugin = "2.1.21"
+spotless = "7.0.4"
+ktlint = "1.6.0"
+detekt = "1.23.8"
 
 [libraries]
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
@@ -119,6 +122,7 @@ gms = { id = "com.google.gms.google-services", version.ref = "gms" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
 performance = { id = "com.google.firebase.firebase-perf", version.ref = "performancePlugin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationPlugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [bundles]
 datastore = [
