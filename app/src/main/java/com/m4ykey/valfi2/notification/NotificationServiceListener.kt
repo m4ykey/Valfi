@@ -27,31 +27,33 @@ class NotificationServiceListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
-        val extras = sbn?.notification?.extras
-        val packageName = sbn?.packageName
 
-        if (packageName?.let { isMusicApp(it) } == true) {
+        if (sbn == null) return
+
+        val packageName = sbn.packageName
+        val extras = sbn.notification?.extras
+        val category = sbn.notification?.category
+
+        if (!isMusicApp(packageName)) return
+
+        val title = extras?.getCharSequence(Notification.EXTRA_TITLE)?.toString()?.trim()
+        val artist = extras?.getCharSequence(Notification.EXTRA_TEXT)?.toString()?.trim()
+
+        if (!title.isNullOrEmpty() && !artist.isNullOrEmpty() && category == Notification.CATEGORY_TRANSPORT) {
             currentMusicAppPackage = packageName
-            val category = sbn.notification.category
-            val title = extras?.getCharSequence(Notification.EXTRA_TITLE, "")?.toString()
-            val artist = extras?.getCharSequence(Notification.EXTRA_TEXT, "")?.toString()
 
             val appBackgroundRes = appBackground[packageName] ?: R.color.white
             val appStrokeColor = appStrokeColor[packageName] ?: R.color.gray
 
-            if (category == Notification.CATEGORY_TRANSPORT
-                && !artist.isNullOrEmpty() && !title.isNullOrEmpty()) {
-                MusicNotificationState.updateTitle(title)
-                MusicNotificationState.updateArtist(artist)
-                MusicNotificationState.updateBackgroundColor(appBackgroundRes)
-                MusicNotificationState.updateStrokeColor(appStrokeColor)
-            } else {
-                Log.i(TAG, "Notification does not contain music data.")
-            }
+            MusicNotificationState.updateTitle(title)
+            MusicNotificationState.updateArtist(artist)
+            MusicNotificationState.updateBackgroundColor(appBackgroundRes)
+            MusicNotificationState.updateStrokeColor(appStrokeColor)
         }
     }
 
-    private fun isMusicApp(packageName : String) : Boolean {
+    private fun isMusicApp(packageName : String?) : Boolean {
+        if (packageName == null) return false
         return packageName in listOf(
             SPOTIFY_PACKAGE_NAME,
             APPLE_MUSIC_PACKAGE_NAME,

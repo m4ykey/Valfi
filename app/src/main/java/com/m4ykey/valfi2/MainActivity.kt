@@ -1,10 +1,16 @@
 package com.m4ykey.valfi2
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.DecelerateInterpolator
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -38,19 +44,34 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
-
+class MainActivity :
+    AppCompatActivity(),
+    BottomNavigationVisibility {
     @Inject
-    lateinit var themePreferences : ThemePreferences
+    lateinit var themePreferences: ThemePreferences
+
     @Inject
     lateinit var dialogPreferences: DialogPreferences
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+
+    private val requestLauncherPermission =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                Log.w("Permission", "Notifications: granted")
+            } else {
+                Log.w("Permission", "Notifications: not granted")
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        askNotificationPermissionLauncher()
 
         setupNavigation()
 
@@ -59,6 +80,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         sendBroadcast(intent)
 
         displayCurrentlyPlayingSong()
+    }
+
+    private fun askNotificationPermissionLauncher() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestLauncherPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     private fun setupNavigation() {
@@ -76,9 +109,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
         findViewById<BottomNavigationView>(R.id.bottomNavigation)?.isVisible = false
     }
 
-    private fun getCurrentMusicPackage() : String? {
-        return NotificationServiceListener.currentMusicAppPackage
-    }
+    private fun getCurrentMusicPackage(): String? = NotificationServiceListener.currentMusicAppPackage
 
     private fun displayCurrentlyPlayingSong() {
         lifecycleScope.launch {
@@ -90,7 +121,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
                     artist = artist,
                     title = title
                 )
-            }.collect {  }
+            }.collect { }
         }
 
         binding.apply {
@@ -122,16 +153,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
             .setMessage(R.string.app_need_to_notification_display_music)
             .setPositiveButton(R.string.grant_access) { _, _ ->
                 checkNotificationListenerPermission(this@MainActivity)
-            }
-            .setNegativeButton(R.string.dont_access_grant) { dialog, _ -> dialog.dismiss() }
+            }.setNegativeButton(R.string.dont_access_grant) { dialog, _ -> dialog.dismiss() }
             .setCancelable(false)
             .show()
         lifecycleScope.launch { dialogPreferences.setIsPermissionGranted() }
     }
 
     private fun updateCurrentlyPlayingSong(
-        title : String?,
-        artist : String?
+        title: String?,
+        artist: String?
     ) {
         if (title.isNullOrBlank() && artist.isNullOrBlank()) {
             binding.apply {
@@ -158,20 +188,20 @@ class MainActivity : AppCompatActivity(), BottomNavigationVisibility {
                 root.strokeColor = getColor(strokeColorFromPackage)
             }
             binding.imgArrowUp.isVisible = true
-
         }
     }
 
-    private fun getPackageColors(packageName : String) : Pair<Int, Int> {
-        val packageColors = mapOf(
-            SPOTIFY_PACKAGE_NAME to Pair(R.color.spotify_background, R.color.spotify_stroke_color),
-            APPLE_MUSIC_PACKAGE_NAME to Pair(R.color.apple_music_background, R.color.apple_music_stroke_color),
-            TIDAL_PACKAGE_NAME to Pair(R.color.tidal_background, R.color.tidal_stroke_color),
-            YOUTUBE_MUSIC_PACKAGE_NAME to Pair(R.color.yt_music_background, R.color.yt_music_stroke_color),
-            DEEZER_PACKAGE_NAME to Pair(R.color.deezer_background, R.color.deezer_stroke_color),
-            SOUNDCLOUD_PACKAGE_NAME to Pair(R.color.soundcloud_background, R.color.soundcloud_stroke_color),
-            PANDORA_PACKAGE_NAME to Pair(R.color.pandora_background, R.color.pandora_stroke_color)
-        )
+    private fun getPackageColors(packageName: String): Pair<Int, Int> {
+        val packageColors =
+            mapOf(
+                SPOTIFY_PACKAGE_NAME to Pair(R.color.spotify_background, R.color.spotify_stroke_color),
+                APPLE_MUSIC_PACKAGE_NAME to Pair(R.color.apple_music_background, R.color.apple_music_stroke_color),
+                TIDAL_PACKAGE_NAME to Pair(R.color.tidal_background, R.color.tidal_stroke_color),
+                YOUTUBE_MUSIC_PACKAGE_NAME to Pair(R.color.yt_music_background, R.color.yt_music_stroke_color),
+                DEEZER_PACKAGE_NAME to Pair(R.color.deezer_background, R.color.deezer_stroke_color),
+                SOUNDCLOUD_PACKAGE_NAME to Pair(R.color.soundcloud_background, R.color.soundcloud_stroke_color),
+                PANDORA_PACKAGE_NAME to Pair(R.color.pandora_background, R.color.pandora_stroke_color)
+            )
         return packageColors[packageName] ?: Pair(R.color.gray, R.color.white)
     }
 

@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -28,7 +29,6 @@ class FCMService : FirebaseMessagingService() {
         createNotificationChannel()
 
         val (title, body) = getNotificationTitleAndBody(message)
-
         val pendingIntent = createPendingIntent()
 
         sendNotification(title, body, pendingIntent)
@@ -43,11 +43,16 @@ class FCMService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
-        if (ActivityCompat.checkSelfPermission(
-                this@FCMService,
+        val shouldSend = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.checkSelfPermission(
+                this,
                 Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+
+        if (shouldSend) {
             with(NotificationManagerCompat.from(this)) {
                 notify(1, notificationBuilder.build())
             }
@@ -55,14 +60,16 @@ class FCMService : FirebaseMessagingService() {
     }
 
     private fun createPendingIntent() : PendingIntent {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         return PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     private fun getNotificationTitleAndBody(message : RemoteMessage) : Pair<String?, String?> {
-        val title = message.notification?.title
-        val body = message.notification?.body
-        return title to (body ?: message.data["body"])
+        val title = message.notification?.title ?: message.data["title"]
+        val body = message.notification?.body ?: message.data["body"]
+        return title to body
     }
 
     private fun createNotificationChannel() {
@@ -70,7 +77,9 @@ class FCMService : FirebaseMessagingService() {
             CHANNEL_ID,
             "New Release",
             NotificationManager.IMPORTANCE_DEFAULT
-        ).apply { description = "Channel for new releases" }
+        ).apply {
+            description = "Channel for new releases"
+        }
 
         val notificationManager : NotificationManager =
             getSystemService(NOTIFICATION_SERVICE) as NotificationManager

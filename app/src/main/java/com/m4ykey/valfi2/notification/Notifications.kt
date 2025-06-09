@@ -1,42 +1,37 @@
 package com.m4ykey.valfi2.notification
 
-import android.Manifest
-import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.m4ykey.core.views.utils.showToast
 
 private fun openNotificationAccessSettings(context: Context) {
-    context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+    try {
+        context.startActivity(
+            Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        )
+    } catch (_ : ActivityNotFoundException) {
+        showToast(context, "")
+    }
 }
 
 private fun isNotificationListenerEnabled(context: Context) : Boolean {
-    val flat = Settings.Secure.getString(
+    val pkgName = context.packageName
+    val enabledListeners = Settings.Secure.getString(
         context.contentResolver,
         "enabled_notification_listeners"
     )
-    return flat?.contains(context.packageName) == true
+    return enabledListeners?.contains(pkgName) == true
 }
 
 fun checkNotificationListenerPermission(context: Context) : Boolean {
-    val permission = Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE
-
-    if (!isNotificationListenerEnabled(context)) {
+    return if (!isNotificationListenerEnabled(context)) {
         openNotificationAccessSettings(context)
-        return false
+        false
     } else {
-        val isPermissionGranted = ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
-        if (!isPermissionGranted) {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(permission),
-                1
-            )
-            return false
-        }
+        true
     }
-    return true
 }
