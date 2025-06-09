@@ -1,6 +1,7 @@
 package com.m4ykey.core.views.recyclerview
 
-import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.m4ykey.core.views.recyclerview.animations.slideInFromRight
@@ -13,9 +14,9 @@ fun scrollListener(button : FloatingActionButton) = object : RecyclerView.OnScro
         val shouldShowButton = recyclerView.computeVerticalScrollOffset() > 5000
         button.let {
             if (shouldShowButton) {
-                if (it.visibility == View.GONE) it.slideInFromRight()
+                if (it.isGone) it.slideInFromRight()
             } else {
-                if (it.visibility == View.VISIBLE) it.slideOutToRight()
+                if (it.isVisible) it.slideOutToRight()
             }
         }
     }

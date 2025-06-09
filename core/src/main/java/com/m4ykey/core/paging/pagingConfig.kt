@@ -5,5 +5,6 @@ import com.m4ykey.core.Constants.PAGE_SIZE
 
 val pagingConfig = PagingConfig(
     pageSize = PAGE_SIZE,
-    enablePlaceholders = false
+    enablePlaceholders = false,
+    initialLoadSize = 10
 )

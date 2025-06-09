@@ -4,19 +4,21 @@ import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+private val datePatterns = listOf("yyyy-MM-dd", "yyyy/MM/dd", "yyyy.MM.dd", "yyyy")
+
 fun formatAirDate(airDate: String?): String? {
-    return airDate?.let {
-        val inputFormatter = if (it.length > 4) DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
-        else DateTimeFormatter.ofPattern("yyyy", Locale.getDefault())
+    if (airDate.isNullOrBlank()) return null
 
-        val outputFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.getDefault())
-
+    for (pattern in datePatterns) {
         try {
-            val temporalAccessor = inputFormatter.parse(it)
-            val year = Year.from(temporalAccessor)
-            outputFormatter.format(year)
-        } catch (e: Exception) {
-            null
+            val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+            val parsed = formatter.parse(airDate)
+            val year = Year.from(parsed)
+            return year.toString()
+        } catch (_ : Exception) {
+            continue
         }
     }
+
+    return null
 }

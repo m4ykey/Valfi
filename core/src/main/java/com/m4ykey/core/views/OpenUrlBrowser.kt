@@ -13,7 +13,7 @@ fun openUrlBrowser(context : Context, url : String) {
 
     try {
         customTabsIntent.launchUrl(context, url.toUri())
-    } catch (e : ActivityNotFoundException) {
+    } catch (_ : ActivityNotFoundException) {
         val browser = Intent(Intent.ACTION_VIEW, url.toUri())
         context.startActivity(browser)
     }
