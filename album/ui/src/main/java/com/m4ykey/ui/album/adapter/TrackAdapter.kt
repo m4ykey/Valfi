@@ -2,6 +2,7 @@ package com.m4ykey.ui.album.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.m4ykey.album.ui.databinding.LayoutTracksBinding
 import com.m4ykey.core.views.recyclerview.BaseRecyclerView
@@ -12,11 +13,7 @@ import com.m4ykey.ui.album.helpers.OnTrackClick
 
 class TrackAdapter(
     private val onTrackClick: OnTrackClick
-) : BaseRecyclerView<TrackItem, TrackListViewHolder>(TrackCallback()) {
-
-    init {
-        setHasStableIds(true)
-    }
+) : PagingDataAdapter<TrackItem, TrackListViewHolder>(TrackCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,11 +21,8 @@ class TrackAdapter(
         return TrackListViewHolder(binding, onTrackClick)
     }
 
-    override fun onItemBindViewHolder(holder: TrackListViewHolder, item : TrackItem, position: Int) {
-        holder.bind(item)
-    }
-
-    override fun getItemForPosition(position: Int): Long {
-        return differ.currentList.getOrNull(position)?.longId ?: RecyclerView.NO_ID
+    override fun onBindViewHolder(holder: TrackListViewHolder, position: Int) {
+        val track = getItem(position)
+        track?.let { holder.bind(it) }
     }
 }

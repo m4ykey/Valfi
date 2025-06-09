@@ -2,6 +2,8 @@ package com.m4ykey.ui.album.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.m4ykey.core.Constants.PAGE_SIZE
 import com.m4ykey.core.network.UiState
 import com.m4ykey.data.domain.model.track.TrackItem
@@ -10,6 +12,7 @@ import com.m4ykey.data.domain.usecase.track.GetRemoteTrackUseCase
 import com.m4ykey.data.local.model.TrackEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -26,10 +29,9 @@ class TrackViewModel @Inject constructor(
     private var _totalTrackDurationMs = MutableStateFlow(0L)
     val totalTracksDuration = _totalTrackDurationMs.asStateFlow()
 
-    private var _tracks = MutableStateFlow<UiState<List<TrackItem>>>(UiState.Success(emptyList()))
+    private val _tracks = MutableStateFlow<UiState<PagingData<TrackItem>>>(UiState.Success(PagingData.empty()))
     val tracks = _tracks.asStateFlow()
 
-    private var offset = 0
     var isPaginationEnded = false
 
     suspend fun getTracksById(albumId : String) : List<TrackEntity> = withContext(dispatcherIO) {
@@ -45,29 +47,19 @@ class TrackViewModel @Inject constructor(
     }
 
     fun getAlbumTracks(id: String) {
-        if (_tracks.value is UiState.Loading || isPaginationEnded) return
+        _tracks.value = UiState.Loading
 
-        viewModelScope.launch(dispatcherIO) {
-            _tracks.value = UiState.Loading
-
+        viewModelScope.launch {
             try {
-                getRemoteTrackUseCase.getAlbumTracks(offset = offset, limit = PAGE_SIZE, id = id)
-                    .collect { tracks ->
-                        if (tracks.isEmpty()) {
-                            isPaginationEnded = true
-                        } else {
-                            val currentList = (_tracks.value as? UiState.Success)?.data ?: emptyList()
-                            val updatedList = currentList + tracks
-                            _tracks.value = UiState.Success(updatedList)
-                            offset += PAGE_SIZE
-                            isPaginationEnded = tracks.size < PAGE_SIZE
+                delay(1000L)
 
-                            val totalDuration = tracks.sumOf { it.durationMs.toLong() }
-                            _totalTrackDurationMs.value += totalDuration
-                        }
+                getRemoteTrackUseCase.getAlbumTracks(id = id)
+                    .cachedIn(viewModelScope)
+                    .collect { pagingData ->
+                        _tracks.value = UiState.Success(pagingData)
                     }
-            } catch (e: Exception) {
-                _tracks.value = UiState.Error(e)
+            } catch (e : Exception) {
+                _tracks.value = e.message ?: "Unknown error occurred"
             }
         }
     }

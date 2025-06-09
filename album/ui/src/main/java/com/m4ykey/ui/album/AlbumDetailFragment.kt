@@ -165,8 +165,12 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             progressBar = binding.progressBarTracks,
             lifecycleScope = lifecycleScope,
             onSuccess = { tracks ->
-                trackAdapter.submitList(tracks)
-                binding.progressBarTracks.isVisible = false
+                tracks.let {
+                    lifecycleScope.launch {
+                        trackAdapter.submitData(tracks)
+                        binding.progressBarTracks.isVisible = false
+                    }
+                }
             }
         )
     }
@@ -445,7 +449,7 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 copyrights = copyrightEntity
             )
 
-            val trackEntity = trackAdapter.differ.currentList.map { track ->
+            val trackEntity = trackAdapter.snapshot().items.map { track ->
                 TrackEntity(
                     albumId = args.albumId,
                     explicit = track.explicit,
@@ -464,11 +468,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             imgSave.setOnClickListener {
-                if (!areAllTracksLoaded(item)) {
-                    showToast(requireContext(), getString(R.string.load_all_tracks_to_save_an_album))
-                    return@setOnClickListener
-                }
-
                 lifecycleScope.launch {
                     try {
                         val isAlbumSaved = albumViewModel.getSavedAlbumState(item.id)
@@ -503,11 +502,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
             }
 
             imgListenLater.setOnClickListener {
-                if (!areAllTracksLoaded(item)) {
-                    showToast(requireContext(), getString(R.string.load_all_tracks_to_save_an_album))
-                    return@setOnClickListener
-                }
-
                 lifecycleScope.launch {
                     try {
                         val isListenLaterSaved = albumViewModel.getListenLaterState(item.id)
@@ -533,12 +527,6 @@ class AlbumDetailFragment : BaseFragment<FragmentAlbumDetailBinding>(
                 }
             }
         }
-    }
-
-    private fun areAllTracksLoaded(item : AlbumDetail) : Boolean {
-        val loadedTracks = trackAdapter.differ.currentList.size
-        val totalTracks = item.totalTracks
-        return loadedTracks > 0 && loadedTracks == totalTracks
     }
 
     private fun showDialog(artistId : String) {
