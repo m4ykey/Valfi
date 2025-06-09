@@ -1,41 +1,71 @@
 [versions]
-application = "8.10.0"
-navigation = "2.8.9"
-retrofit = "2.11.0"
-lifecycle = "2.8.7"
+application = "8.10.1"
+navigation = "2.9.0"
+retrofit = "3.0.0"
+lifecycle = "2.9.1"
 hilt = "2.56.1"
 okhttp = "4.12.0"
 room = "2.7.1"
-coroutines = "1.10.1"
+coroutines = "1.10.2"
 moshi = "1.15.2"
 paging3 = "3.3.6"
 coil3 = "3.1.0"
-datastore = "1.1.4"
+datastore = "1.1.7"
+mockk = "1.14.2"
+turbine = "1.2.0"
+truth = "1.4.4"
+mockito = "5.4.0"
+crashlytics = "19.4.4"
+analytics = "22.4.0"
+performance = "21.0.5"
+messaging = "24.1.1"
+junit = "4.13.2"
+extJunit = "1.2.1"
+espresso = "3.6.1"
+leakcanary = "3.0-alpha-8"
+core = "1.16.0"
+appcompat = "1.7.1"
+palette = "1.0.0"
+browser = "1.8.0"
+gson = "2.12.1"
+constraintlayout = "2.2.1"
+material = "1.12.0"
+preference = "1.2.1"
+activity = "1.10.1"
+serialization = "1.8.1"
+lottie = "6.6.6"
+kotlin = "2.1.21"
+gms = "4.4.2"
+okio = "3.10.2"
+ksp = "2.1.21-2.0.1"
+crashlyticsPlugin = "3.0.4"
+performancePlugin = "1.4.2"
+serializationPlugin = "2.1.21"
 
 [libraries]
-mockk = { group = "io.mockk", name = "mockk", version = "1.14.2" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
-turbine = { group = "app.cash.turbine", name = "turbine", version = "1.2.0" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
-truth = { group = "com.google.truth", name = "truth", version = "1.4.4" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
-mockito = { group = "org.mockito.kotlin", name = "mockito-kotlin", version = "5.4.0" }
+mockito = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 
-firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version = "19.4.3" }
-firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version = "22.4.0" }
-firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version = "21.0.5" }
-firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version = "24.1.1" }
+firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "crashlytics" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "analytics" }
+firebasePerformance = { group = "com.google.firebase", name = "firebase-perf", version.ref = "performance" }
+firebaseMessaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "messaging" }
 
-junit = { group = "junit", name = "junit", version = "4.13.2" }
-extJunit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
-espresso = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "3.0-alpha-8" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+extJunit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
+espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 
 androidxNavigationFragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidxNavigationUI = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
-androidxCore = { group = "androidx.core", name = "core-ktx", version = "1.16.0" }
-androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
-androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.1" }
+androidxCore = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidxDatastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidxDatastoreCoreAndroid = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastore" }
 androidxLifecycleViewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -43,14 +73,14 @@ androidxLifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-run
 androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidxPalette = { group = "androidx.palette", name = "palette", version = "1.0.0" }
-androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
-androidxPreference = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
-androidxActivity = { group = "androidx.activity", name = "activity", version = "1.10.1" }
+androidxPalette = { group = "androidx.palette", name = "palette", version.ref = "palette" }
+androidxBrowser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+androidxPreference = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
+androidxActivity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidxPagingRuntime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging3" }
 androidxRoomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 
-androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }
+androidMaterial = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converterMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
@@ -67,28 +97,28 @@ hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", ve
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
-kotlinxSerialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.7.3" }
+kotlinxSerialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 
-gson = { group = "com.google.code.gson", name = "gson", version = "2.12.1" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
-lottie = { group = "com.airbnb.android", name = "lottie", version = "6.6.2" }
+lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 
-okio = { group = "com.squareup.okio", name = "okio", version = "3.10.2" }
+okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 
 coil3 = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil3" }
 coil3-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "application" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.1.20" }
-ksp = { id = "com.google.devtools.ksp", version = "2.1.20-2.0.1" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidLibrary = { id = "com.android.library", version.ref = "application" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
-gms = { id = "com.google.gms.google-services", version = "4.4.2" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.3" }
-performance = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.1.20" }
+gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
+performance = { id = "com.google.firebase.firebase-perf", version.ref = "performancePlugin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationPlugin" }
 
 [bundles]
 datastore = [
