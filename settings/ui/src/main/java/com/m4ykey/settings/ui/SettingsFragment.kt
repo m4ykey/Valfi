@@ -96,9 +96,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(
                         putExtra(Intent.EXTRA_SUBJECT, "Version: $APP_VERSION")
                     }
                     startActivity(intent)
-                } catch (e : ActivityNotFoundException) {
+                } catch (_ : ActivityNotFoundException) {
                     showToast(requireContext(), getString(R.string.no_email_app))
-                } catch (e : Exception) {
+                } catch (_ : Exception) {
                     showToast(requireContext(), getString(R.string.error_occurred))
                 }
             }

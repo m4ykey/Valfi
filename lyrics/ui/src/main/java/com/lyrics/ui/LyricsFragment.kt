@@ -18,9 +18,7 @@ import com.m4ykey.core.views.loadImage
 import com.m4ykey.core.views.utils.copyText
 import com.m4ykey.core.views.utils.getColorFromImage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.math.pow
 
 @AndroidEntryPoint
@@ -104,26 +102,23 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
         )
     }
 
-    private fun displayTrackDetail(item : Track) {
-        binding.apply {
-            imgOpenTrack.setOnClickListener {
-                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                    item.externalUrls.spotify.toUri()))
-            }
-            loadImage(imgAlbumCover, item.album.getLargestImageUrl().toString())
+    private fun displayTrackDetail(item : Track) = with(binding) {
+        imgOpenTrack.setOnClickListener {
+            requireContext().startActivity(Intent(Intent.ACTION_VIEW,
+                item.externalUrls.spotify.toUri()))
+        }
 
-            lifecycleScope.launch {
-                withContext(Dispatchers.Default) {
-                    getColorFromImage(
-                        imageUrl = item.album.getLargestImageUrl().toString(),
-                        imageView = imgAlbumCover,
-                        onColorReady = { color ->
-                            constraintLayout.setBackgroundColor(color)
-                            applyTextColors(color)
-                        }
-                    )
+        loadImage(imgAlbumCover, item.album.getLargestImageUrl().toString())
+
+        lifecycleScope.launch {
+            getColorFromImage(
+                imageUrl = item.album.getLargestImageUrl().toString(),
+                imageView = imgAlbumCover,
+                onColorReady = { color ->
+                    constraintLayout.setBackgroundColor(color)
+                    applyTextColors(color)
                 }
-            }
+            )
         }
     }
 
@@ -153,21 +148,20 @@ class LyricsFragment : BaseFragment<FragmentLyricsBinding>(
         return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL
     }
 
-    private fun displayLyrics(item : LyricsItem) {
-        binding.apply {
-            if (item.plainLyrics.isEmpty()) {
-                linearLayoutEmptyLyrics.isVisible = true
-                txtLyrics.isVisible = false
-            } else {
-                txtLyrics.text = item.plainLyrics
-                linearLayoutEmptyLyrics.isVisible = false
-            }
-            imgCopyLyrics.setOnClickListener {
-                copyText(
-                    context = requireContext(),
-                    text = item.plainLyrics
-                )
-            }
+    private fun displayLyrics(item : LyricsItem) = with(binding) {
+        val hasLyrics = item.plainLyrics.isNotBlank()
+        val lyrics = item.plainLyrics.toString()
+
+        txtLyrics.apply {
+            isVisible = hasLyrics
+            text = lyrics
+            setTextIsSelectable(true)
+        }
+
+        linearLayoutEmptyLyrics.isVisible = !hasLyrics
+
+        imgCopyLyrics.setOnClickListener {
+            copyText(text = lyrics, context = requireContext())
         }
     }
 }
